@@ -1,0 +1,287 @@
+# WebToApp 專案逆向分析
+
+研究對象：https://github.com/shiaho777/web-to-app
+研究基準：GitHub `main` 分支；分析時讀取的原始碼提交樹 SHA：`25937cb8c14f467603276dd1dfaedb9bd7d55560`。
+
+## 重要摘要
+
+**WebToApp 的核心價值不是把網站包進 WebView，而是將 Android 手機本身變成一套應用程式建置、執行環境整合、APK 修改與簽章工作站。** 這是根據其原始碼、建置設定及架構文件得出的判斷，不代表所有功能均已經過實機驗證。
+
+## 一、先還原整個系統
+
+概念架構分為四層：
+
+1. **應用程式定義與編輯器**：Kotlin、Jetpack Compose、Room；管理應用類型、設定、資源及匯出選項。
+2. **建置與匯出引擎**：ApkBuilder、ApkConfigJsonFactory、APK 結構修改、簽章；把應用設定轉換成可安裝的套件。
+3. **Shell 執行環境**：獨立 runtime host、WebView、本地伺服器；讀取匯出設定，實際執行生成的應用。
+4. **平台與執行能力**：Android API、原生程式庫、網路層、Node.js／PHP／Python／Go 等執行環境。
+
+這是概念架構圖，並非原始碼中的實際類別圖。
+
+這個架構最值得研究的地方，是它將「開發工具」與「生成後的應用」分開：`:app` 負責完整建置功能，`:shell` 提供生成應用所需的執行環境，`:clone-host` 則負責應用複製相關的 Host 程式碼。原始碼中的 runtime 會從 `app` 同步至 `shell`，而不是維護兩套完全獨立的執行邏輯。
+
+參考：
+- https://github.com/shiaho777/web-to-app
+- https://github.com/shiaho777/web-to-app/blob/main/settings.gradle.kts
+- https://github.com/shiaho777/web-to-app/blob/main/app/build.gradle.kts
+- https://github.com/shiaho777/web-to-app/blob/main/shell/build.gradle.kts
+
+## 二、核心程式的逆向追蹤
+
+這個專案最重要的分析方法，是順著一個應用程式從建立到生成 APK 的生命週期，逐層檢查資料如何流動，而不是單純按照資料夾分類。
+
+### 2.1 資料模型：所有功能從哪裡開始
+
+核心資料模型是 [WebApp.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/data/model/WebApp.kt)。
+
+它不是單純儲存網址，而是儲存一份完整的應用程式定義，涵蓋：
+
+| 資料領域 | 主要內容 |
+|---|---|
+| 應用身分 | 名稱、網址、套件名稱、應用類型 |
+| 網頁行為 | JavaScript、快取、User-Agent、瀏覽器設定 |
+| 原生與伺服器執行環境 | Node.js、PHP、Python、Go、WordPress |
+| 資源 | HTML、圖片、影片、音訊及圖庫 |
+| 網路 | Proxy、DNS、TLS、網路存取設定 |
+| 功能擴充 | 外掛、廣告攔截、啟動畫面、通知、分享等 |
+| 匯出 | APK 設定、版本號、SDK、簽章及加密選項 |
+
+資料模型使用 Room 的 `@Entity`，並透過索引支援常見資料查詢。這份模型同時是編輯器的資料基礎，也是打包引擎的輸入。
+
+**架構判斷：** 將整個應用收斂成統一的資料模型，能使不同的編輯畫面及匯出入口共用同一套設定；相對的，任何新增功能都必須確保資料模型、儲存、匯出及執行端同步更新。
+
+### 2.2 設定轉換：最容易出現隱性錯誤的環節
+
+這條路徑是專案最值得深入研究的部分。
+
+資料鏈：
+
+1. `WebApp`：使用者在編輯器設定的原始資料。
+2. `WebApp.toApkConfig()`：將應用資料映射成匯出設定。
+3. `ApkConfigJsonFactory`：產生 `app_config.json`，並執行設定驗證。
+4. `ShellModeManager`：生成的 APK 讀取設定並反序列化。
+5. `Runtime`：WebView、伺服器或其他功能真正執行。
+
+原始碼依據：
+- [ApkBuilder.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/apkbuilder/ApkBuilder.kt)
+- [ApkConfigJsonFactory.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/apkbuilder/ApkConfigJsonFactory.kt)
+- [ShellModeManager.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/shell/ShellModeManager.kt)
+
+這條資料鏈存在一個已被專案文件明確記載的問題類型：JSON 欄位名稱不一致。
+
+例如，匯出端輸出的欄位名稱和執行端 `@SerializedName` 指定的名稱若不匹配，Gson 可能直接忽略未知欄位或保留預設值，而不一定讓 APK 建置失敗。最終結果就可能是：編輯器顯示功能已啟用，生成的 APK 卻沒有按照設定執行。
+
+專案已針對此問題建立 [config-drift.md](https://github.com/shiaho777/web-to-app/blob/main/docs/developer/config-drift.md) 所描述的自動檢查，並透過 `scripts/check_config_field_drift.py` 及 `:app:checkConfigFieldDrift` 驗證欄位對應。
+
+這是合理的防線，但仍有一個區別：
+
+- 欄位名稱檢查，可以發現部分資料契約不一致。
+- JSON 往返測試，可以驗證序列化與反序列化結果。
+- 實際執行測試，才可以確認功能是否依據該設定產生預期行為。
+
+三者不能互相取代。
+
+### 2.3 APK 建置：它不是一般的網站包裝器
+
+核心位於 [core/apkbuilder](https://github.com/shiaho777/web-to-app/tree/main/app/src/main/java/com/webtoapp/core/apkbuilder)。
+
+按照原始碼及開發文件，建置流程如下：
+
+```text
+WebApp 應用定義
+  -> 建立 ApkConfig
+  -> 檢查 SDK、權限與輸入
+  -> 選擇 Shell APK 模板
+  -> 判斷增量建置模式
+  -> 改寫 AndroidManifest / resources.arsc
+  -> 注入 app_config.json 與應用資源
+  -> 注入所需原生程式庫與執行環境
+  -> 驗證 APK 內容
+  -> 簽署 APK
+  -> 驗證簽章與輸出
+  -> 交付生成的 APK
+```
+
+主要元件：
+
+| 元件 | 實際職責 |
+|---|---|
+| `ApkBuilder.kt` | 統籌完整建置流程 |
+| `AxmlEditor`、`AxmlRebuilder` | 編輯與重建二進位 AndroidManifest |
+| `ArscEditor`、`ArscRebuilder` | 處理 Android 資源表 |
+| `RuntimeAssetEmbedder.kt` | 注入伺服器型應用的執行資源 |
+| `ElfAligner16k.kt` | 處理原生 ELF 程式庫的 16 KB 對齊 |
+| `ApkArtifactVerifier.kt` | 檢查生成套件中必要的資源與檔案 |
+| `JarSigner.kt` | 執行 APK 簽章 |
+
+以上職責可在 [export-pipeline.md](https://github.com/shiaho777/web-to-app/blob/main/docs/developer/export-pipeline.md) 和對應原始碼中確認。
+
+這套系統會修改既有套件結構、注入應用專屬內容，再重新簽署。它的工程難度與單純使用 Android WebView 載入網址有根本差異。
+
+### 2.4 增量建置：如何減少重複工作
+
+[ApkBuildCache.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/apkbuilder/ApkBuildCache.kt) 有三種主要建置模式：
+
+| 模式 | 作用 |
+|---|---|
+| `FULL` | 從模板重新建置 |
+| `CONTENT_OVERLAY` | 在先前的未簽章 APK 上更新應用內容 |
+| `REUSE_UNSIGNED` | 直接重用內容和身分指紋均符合的未簽章 APK，再進行簽章 |
+
+專案不是只依靠檔案修改時間判斷快取，而是使用 SHA-256 模板身分及應用內容指紋，同時納入原生程式庫、Manifest 權限與元件、可選功能套件等會影響產物的因素。加密建置則強制採用完整重建。
+
+另外，`ApkBuilder` 透過以套件名稱為鍵的 Mutex，避免多個匯出入口同時建置同一套件時互相破壞暫存檔。
+
+這些設計說明作者已經處理了建置工具常見的效能和併發問題。但**快取指紋是否涵蓋所有會改變產物的輸入，仍然需要透過完整測試和持續追蹤驗證**，不能只因為存在指紋機制就認定快取完全正確。
+
+## 三、架構品質：成熟之處與真正的風險
+
+### 3.1 已經做得較完整的地方
+
+第一，**開發端與生成端分離**。`:app` 負責建立與編輯，`:shell` 負責提供生成應用需要的執行環境，而共享 Runtime 原始碼由 `app` 同步至 `shell`。這比長期維護兩套相似但逐漸分歧的實作更容易控制。
+
+第二，**針對跨層錯誤建立自動防線**。專案有設定欄位漂移檢查、匯出接線測試、產物驗證及多個 APK 重建相關測試，並在 CI 執行編譯與單元測試。
+
+第三，**產物層面的工程考量相當深入**。權限和元件的動態注入、原生函式庫處理、簽章身分、加密、資源表重建與快取指紋，都不是普通網站封裝工具所必需的內容。
+
+第四，**已考慮不同分發渠道的差異**。專案有 Standard 和 Google Play 版本，也有 F-Droid 建置路徑，並試圖在產生 APK 前排除不適用的功能組合。
+
+### 3.2 主要的維護風險：功能越多，跨層一致性越難保證
+
+從原始碼規模可以直接確認，`ApkBuilder.kt` 約有 258,519 個字元，`WebViewManager.kt` 約有 332,411 個字元。
+
+**這是推論：** 如此龐大的單檔實作，會增加程式碼審查、局部修改、錯誤定位及回歸測試的難度，尤其是 APK 建置涉及多種應用類型與原生程式庫。這不代表目前已有特定缺陷，但意味著重構時應優先降低各功能之間的隱性耦合。
+
+建議未來將建置職責清楚拆分為：
+
+- 建置協調與生命週期管理。
+- Manifest、資源表及 ZIP 結構處理。
+- 各類 Runtime 的資源注入。
+- 快取計畫與指紋計算。
+- 產物驗證、簽章及輸出交付。
+
+重點不是為了縮短檔案而拆檔，而是讓每個子系統具有明確的輸入、輸出、錯誤責任及可獨立測試的契約。
+
+### 3.3 應用複製功能有值得核實的限制
+
+`AGENTS.md` 記載，`clone-host` 模組的 `syncCloneHostDex` 產生工作目前被刻意停用，理由包含降低防毒軟體誤報；同一份文件也指出，`AppCloner` 在缺少該資產時會採取 fail-soft 路徑。
+
+因此，不能單憑存在 `clone-host` 資料夾與 `AppCloner.kt`，便認定所有應用複製能力都已完整交付。
+
+後續驗證應追蹤：實際呼叫路徑、是否依賴該 DEX 資產、缺少資產時有哪些功能被停用，以及對使用者呈現的結果是否清楚。這屬於**需要進一步追蹤的功能完整性項目**，不是已證實的整體功能失效。
+
+## 四、外部研究：Android 平台對它施加的硬限制
+
+這部分是理解 WebToApp 實際產品價值與邊界的關鍵。
+
+### 4.1 Google Play 發布與本機伺服器 Runtime 存在衝突
+
+同一套工具有兩種不同的發布能力：
+
+- **一般 WebView／HTML 類應用**：可依照應用需求處理 target SDK、權限與套件產物，再走適用的 Play 發布流程。
+- **依賴本機原生程式執行的應用**：Node.js、PHP、Python、Go、WordPress 等類型受限於可執行檔政策，不能直接套用相同的 Google Play AAB 流程。
+
+依據 [Android Developers 的 Android 10 變更文件](https://developer.android.com/about/versions/10/behavior-changes-10)，針對 Android 10（API 29）以上 target SDK 的應用，平台會限制從應用可寫入的 Home 目錄執行檔案。WebToApp 將受此限制影響的伺服器 Runtime 類型設為 `targetSdk 28`，並使用 [GeneratedSdkLevels.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/apkbuilder/GeneratedSdkLevels.kt) 集中處理 SDK 規則。
+
+而專案的 [AabExportCoordinator.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/playstore/aab/AabExportCoordinator.kt) 會拒絕這些 `requiresProcessExec` 類型的 AAB 匯出，避免將 SDK 提升到要求值後，生成不能正常執行本機 Runtime 的產物。
+
+截至 **2026 年 10 月 19 日**，Google Play 要求新應用程式及更新至少以 Android 16（API 36）為目標的政策期限，已於 2026 年 8 月 31 日到期。
+
+這產生一個很重要的產品邊界：
+
+**WebToApp 可以支援本機 Node.js、PHP、Python 或 Go Runtime，不代表這些應用類型也能直接走 Google Play 發布管線。** 工具的執行能力與平台分發資格是兩件不同的事。
+
+參考：
+- https://developer.android.com/about/versions/10/behavior-changes-10
+- https://developer.android.com/google/play/requirements/target-sdk
+
+### 4.2 16 KB 記憶體頁面對原生程式庫的要求
+
+WebToApp 包含 Node.js、Go 等原生程式庫，也包含用於 APK 產物處理的 16 KB ELF 對齊邏輯。
+
+Android 官方文件指出，使用原生程式庫的應用必須考慮 16 KB 記憶體頁面的相容性；Google Play 對 64 位元裝置及相應 target SDK 的要求也已將此列為重要條件。
+
+因此，`ElfAligner16k.kt` 不只是建置最佳化，而是相容性工作的一部分。真正的驗收應包含生成的 APK、各 ABI 的 `.so`、實際安裝與執行結果，而非只檢查 Kotlin 編譯成功。
+
+參考：
+- https://developer.android.com/guide/practices/page-sizes
+
+## 五、安全逆向：WebView、TLS 與擴充功能
+
+以下是靜態程式碼審查的重點。沒有完成完整的動態滲透測試，因此不會直接將待驗證項目定性為已確認漏洞。
+
+### 5.1 JavaScript 與原生橋接
+
+[WebViewManager.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/webview/WebViewManager.kt) 會依應用設定控制 JavaScript、檔案存取、內容存取及混合內容等 WebView 行為；分享及接收分享資料的原生 JavaScript bridge 則有獨立啟用條件。
+
+這種設計具有彈性，但 Android 官方文件特別警告，`addJavascriptInterface()` 會把原生介面暴露給網頁中的 JavaScript，對不受信任的網頁內容尤其需要謹慎。
+
+應進一步驗證：
+
+1. 啟用 bridge 後，能否被其他網域、重新導向後的網頁或彈出視窗存取。
+2. 權限是否按應用及來源限制，而不是只根據某個全域開關。
+3. 本機 HTML、`file://` 與遠端網頁之間是否存在不必要的跨來源存取。
+
+Android 也明確警告，未妥善配置的 WebView 本機檔案存取會形成資料暴露風險；應審查 `allowFileAccess` 等選項及其配套限制。
+
+參考：
+- https://developer.android.com/develop/ui/views/layout/webapps/webview
+- https://developer.android.com/privacy-and-security/risks/webview-unsafe-file-inclusion
+
+### 5.2 TLS 中介代理：不要誤判 `AcceptAllTrustManager`
+
+這個專案具有 TLS 指紋調整及本機 TLS 中介橋接功能，值得將其拆成兩條連線分別審查。
+
+- **瀏覽器到本機橋接端：** `TlsMitmBridge.kt` 建立本機 TLS 伺服器端連線，為其提供本機產生的憑證。
+- **本機橋接端到上游網站：** `TlsUpstreamConnector.kt` 使用系統信任來源與使用者匯入的 CA，並額外檢查上游憑證與目標主機名稱是否匹配。
+
+`TlsMitmBridge.kt` 中存在 `AcceptAllTrustManager`，但它出現在本機 TLS 伺服器端的握手實作中；**不能僅因為找到這個類別，就斷言它會接受所有上游網站的錯誤憑證**。上游連線的程式碼明確採取另一套信任驗證路徑。
+
+還有一項值得獨立驗證的差異：橋接端以主機白名單限制未經授權的連線，避免本機迴圈代理變成開放代理；程式碼也指出，在 GeckoView 引擎下，由於缺少相應的每請求回呼，白名單強制機制有不同的設定。
+
+這不是已確認的漏洞，但屬於必須以威脅模型和實際請求測試確認的安全差異。
+
+### 5.3 Chrome MV3 擴充功能的隔離限制
+
+專案的 [Chrome MV3 文件](https://github.com/shiaho777/web-to-app/blob/main/docs/extensions/chrome-mv3.md) 說明，Android WebView 只有單一 JavaScript 執行環境。擴充功能的 `world: "ISOLATED"` 與 `world: "MAIN"` 由注入機制模擬，並不等於 Chromium 桌面環境中的真正隔離世界。
+
+這會影響擴充功能的安全邊界及相容性。若某個擴充功能把隔離世界當成防止網頁讀取敏感資料的安全保證，就不能直接假設它在 WebToApp 中仍具有相同保障。
+
+這是產品架構本身的限制，而不是單純增加 API 函式就能消除的問題。
+
+## 六、測試與品質保證：目前能證明什麼
+
+目前的 repository tree 包含約 287 個 `src/test` 下的 Kotlin 測試檔案，其中約 44 個位於 `apkbuilder` 測試目錄。這些數字是檔案數量，不代表獨立測試案例數量，也不代表所有測試都已通過。
+
+CI 的 `.github/workflows/android-ci.yml` 會執行主要編譯、單元測試、設定欄位漂移檢查，以及 F-Droid 相關編譯檢查；另有手動觸發的打包流程，會執行 `DemoApkExportTest`，透過 Robolectric 驗證 APK 生成流程並產生測試產物。
+
+這意味著專案具備相當完整的靜態與自動化建置防線，但仍不能據此確認：
+
+- 各應用類型在實際 Android 手機上都可啟動。
+- 每種 ABI、SDK 與原生 Runtime 組合都能正常工作。
+- 使用者匯入的所有網站和擴充功能均相容。
+- Proxy、DNS、TLS 中介或檔案權限在各種真實網路情境下皆正確。
+
+本次進行的是公開原始碼與文件的靜態逆向分析，沒有實際編譯、安裝 APK 或執行裝置測試。因此，上述動態行為的可靠性目前沒有足夠資料可作出確認。
+
+## 七、建議的後續現代化路線
+
+基於上述程式碼與架構依賴，若將此專案當作長期維護或 Modernization 的研究案例，建議依以下順序推進。
+
+1. **先建立可追蹤的設定契約。** 將 `WebApp → ApkConfig → JSON → ShellConfig → Runtime` 視為同一個契約。進一步自動產生欄位映射或 schema，並對每個應用類型建立設定往返測試與匯出接線測試。
+2. **拆解大型協調元件，而非先重寫全部程式。** 優先切分 `ApkBuilder.kt` 的責任，明確隔離建置計畫、資源處理、原生程式庫注入、簽章與產物驗證。先建立既有行為測試，再逐段遷移。
+3. **建立應用類型 × 平台能力矩陣。** 每一種應用類型都應記錄最低 SDK、target SDK、原生 Runtime 需求、ABI 相容性、Play 發布資格及網路引擎限制，讓 UI、預檢與最終匯出共用同一套能力判斷。
+4. **補強實機驗收矩陣。** 對生成 APK 進行安裝、啟動、升級、權限請求、離線啟動、原生程式庫載入及長時間執行測試，並涵蓋 WebView 與 GeckoView 的差異。
+5. **將高風險安全路徑獨立測試。** 對 JavaScript bridge 的來源限制、本機檔案存取、TLS 上游憑證驗證、迴圈代理白名單及 MV3 擴充功能隔離建立回歸測試。
+
+以上是依現有架構提出的改善建議，不代表所有列出的機制目前均存在缺陷。
+
+## 八、最終判斷
+
+WebToApp 的技術價值，來自將行動端應用程式建置、二進位 APK 處理、Runtime 整合及簽章流程放在同一套工具中。從原始碼可以確認，它不只是展示性的網站封裝程式，而是一個具有多種應用類型、獨立執行模板、原生程式庫注入、增量建置及自動化驗證機制的複雜工程專案。
+
+它的主要優勢是功能整合深度與跨層工程能力；主要風險則是大量跨層設定、極大的協調元件、平台限制，以及靜態測試無法完全涵蓋的執行期差異。
+
+最重要的結論是：**不要以功能數量評估它是否成熟，而應以每一種應用類型能否從設定、打包、簽章到真實裝置執行完整閉環，作為驗收標準。**
+
+本次分析只讀取了指定的公開 repository，沒有修改該專案的任何檔案。
