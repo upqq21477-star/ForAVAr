@@ -22,9 +22,9 @@
 
 參考：
 - https://github.com/shiaho777/web-to-app
-- https://github.com/shiaho777/web-to-app/blob/main/settings.gradle.kts
-- https://github.com/shiaho777/web-to-app/blob/main/app/build.gradle.kts
-- https://github.com/shiaho777/web-to-app/blob/main/shell/build.gradle.kts
+- https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/settings.gradle.kts
+- https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/build.gradle.kts
+- https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/shell/build.gradle.kts
 
 ## 二、核心程式的逆向追蹤
 
@@ -32,7 +32,7 @@
 
 ### 2.1 資料模型：所有功能從哪裡開始
 
-核心資料模型是 [WebApp.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/data/model/WebApp.kt)。
+核心資料模型是 [WebApp.kt](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/data/model/WebApp.kt)。
 
 它不是單純儲存網址，而是儲存一份完整的應用程式定義，涵蓋：
 
@@ -63,15 +63,15 @@
 5. `Runtime`：WebView、伺服器或其他功能真正執行。
 
 原始碼依據：
-- [ApkBuilder.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/apkbuilder/ApkBuilder.kt)
-- [ApkConfigJsonFactory.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/apkbuilder/ApkConfigJsonFactory.kt)
-- [ShellModeManager.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/shell/ShellModeManager.kt)
+- [ApkBuilder.kt](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/core/apkbuilder/ApkBuilder.kt)
+- [ApkConfigJsonFactory.kt](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/core/apkbuilder/ApkConfigJsonFactory.kt)
+- [ShellModeManager.kt](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/core/shell/ShellModeManager.kt)
 
 這條資料鏈存在一個已被專案文件明確記載的問題類型：JSON 欄位名稱不一致。
 
 例如，匯出端輸出的欄位名稱和執行端 `@SerializedName` 指定的名稱若不匹配，Gson 可能直接忽略未知欄位或保留預設值，而不一定讓 APK 建置失敗。最終結果就可能是：編輯器顯示功能已啟用，生成的 APK 卻沒有按照設定執行。
 
-專案已針對此問題建立 [config-drift.md](https://github.com/shiaho777/web-to-app/blob/main/docs/developer/config-drift.md) 所描述的自動檢查，並透過 `scripts/check_config_field_drift.py` 及 `:app:checkConfigFieldDrift` 驗證欄位對應。
+專案已針對此問題建立 [config-drift.md](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/docs/developer/config-drift.md) 所描述的自動檢查，並透過 `scripts/check_config_field_drift.py` 及 `:app:checkConfigFieldDrift` 驗證欄位對應。
 
 這是合理的防線，但仍有一個區別：
 
@@ -83,7 +83,7 @@
 
 ### 2.3 APK 建置：它不是一般的網站包裝器
 
-核心位於 [core/apkbuilder](https://github.com/shiaho777/web-to-app/tree/main/app/src/main/java/com/webtoapp/core/apkbuilder)。
+核心位於 [core/apkbuilder](https://github.com/shiaho777/web-to-app/tree/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/core/apkbuilder)。
 
 按照原始碼及開發文件，建置流程如下：
 
@@ -114,13 +114,13 @@ WebApp 應用定義
 | `ApkArtifactVerifier.kt` | 檢查生成套件中必要的資源與檔案 |
 | `JarSigner.kt` | 執行 APK 簽章 |
 
-以上職責可在 [export-pipeline.md](https://github.com/shiaho777/web-to-app/blob/main/docs/developer/export-pipeline.md) 和對應原始碼中確認。
+以上職責可在 [export-pipeline.md](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/docs/developer/export-pipeline.md) 和對應原始碼中確認。
 
 這套系統會修改既有套件結構、注入應用專屬內容，再重新簽署。它的工程難度與單純使用 Android WebView 載入網址有根本差異。
 
 ### 2.4 增量建置：如何減少重複工作
 
-[ApkBuildCache.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/apkbuilder/ApkBuildCache.kt) 有三種主要建置模式：
+[ApkBuildCache.kt](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/core/apkbuilder/ApkBuildCache.kt) 有三種主要建置模式：
 
 | 模式 | 作用 |
 |---|---|
@@ -181,9 +181,9 @@ WebApp 應用定義
 - **一般 WebView／HTML 類應用**：可依照應用需求處理 target SDK、權限與套件產物，再走適用的 Play 發布流程。
 - **依賴本機原生程式執行的應用**：Node.js、PHP、Python、Go、WordPress 等類型受限於可執行檔政策，不能直接套用相同的 Google Play AAB 流程。
 
-依據 [Android Developers 的 Android 10 變更文件](https://developer.android.com/about/versions/10/behavior-changes-10)，針對 Android 10（API 29）以上 target SDK 的應用，平台會限制從應用可寫入的 Home 目錄執行檔案。WebToApp 將受此限制影響的伺服器 Runtime 類型設為 `targetSdk 28`，並使用 [GeneratedSdkLevels.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/apkbuilder/GeneratedSdkLevels.kt) 集中處理 SDK 規則。
+依據 [Android Developers 的 Android 10 變更文件](https://developer.android.com/about/versions/10/behavior-changes-10)，針對 Android 10（API 29）以上 target SDK 的應用，平台會限制從應用可寫入的 Home 目錄執行檔案。WebToApp 將受此限制影響的伺服器 Runtime 類型設為 `targetSdk 28`，並使用 [GeneratedSdkLevels.kt](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/core/apkbuilder/GeneratedSdkLevels.kt) 集中處理 SDK 規則。
 
-而專案的 [AabExportCoordinator.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/playstore/aab/AabExportCoordinator.kt) 會拒絕這些 `requiresProcessExec` 類型的 AAB 匯出，避免將 SDK 提升到要求值後，生成不能正常執行本機 Runtime 的產物。
+而專案的 [AabExportCoordinator.kt](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/core/playstore/aab/AabExportCoordinator.kt) 會拒絕這些 `requiresProcessExec` 類型的 AAB 匯出，避免將 SDK 提升到要求值後，生成不能正常執行本機 Runtime 的產物。
 
 截至 **2026 年 10 月 19 日**，Google Play 要求新應用程式及更新至少以 Android 16（API 36）為目標的政策期限，已於 2026 年 8 月 31 日到期。
 
@@ -212,7 +212,7 @@ Android 官方文件指出，使用原生程式庫的應用必須考慮 16 KB �
 
 ### 5.1 JavaScript 與原生橋接
 
-[WebViewManager.kt](https://github.com/shiaho777/web-to-app/blob/main/app/src/main/java/com/webtoapp/core/webview/WebViewManager.kt) 會依應用設定控制 JavaScript、檔案存取、內容存取及混合內容等 WebView 行為；分享及接收分享資料的原生 JavaScript bridge 則有獨立啟用條件。
+[WebViewManager.kt](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/app/src/main/java/com/webtoapp/core/webview/WebViewManager.kt) 會依應用設定控制 JavaScript、檔案存取、內容存取及混合內容等 WebView 行為；分享及接收分享資料的原生 JavaScript bridge 則有獨立啟用條件。
 
 這種設計具有彈性，但 Android 官方文件特別警告，`addJavascriptInterface()` 會把原生介面暴露給網頁中的 JavaScript，對不受信任的網頁內容尤其需要謹慎。
 
@@ -243,7 +243,7 @@ Android 也明確警告，未妥善配置的 WebView 本機檔案存取會形成
 
 ### 5.3 Chrome MV3 擴充功能的隔離限制
 
-專案的 [Chrome MV3 文件](https://github.com/shiaho777/web-to-app/blob/main/docs/extensions/chrome-mv3.md) 說明，Android WebView 只有單一 JavaScript 執行環境。擴充功能的 `world: "ISOLATED"` 與 `world: "MAIN"` 由注入機制模擬，並不等於 Chromium 桌面環境中的真正隔離世界。
+專案的 [Chrome MV3 文件](https://github.com/shiaho777/web-to-app/blob/25937cb8c14f467603276dd1dfaedb9bd7d55560/docs/extensions/chrome-mv3.md) 說明，Android WebView 只有單一 JavaScript 執行環境。擴充功能的 `world: "ISOLATED"` 與 `world: "MAIN"` 由注入機制模擬，並不等於 Chromium 桌面環境中的真正隔離世界。
 
 這會影響擴充功能的安全邊界及相容性。若某個擴充功能把隔離世界當成防止網頁讀取敏感資料的安全保證，就不能直接假設它在 WebToApp 中仍具有相同保障。
 
