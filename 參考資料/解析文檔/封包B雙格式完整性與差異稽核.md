@@ -3,7 +3,7 @@
 - **稽核更新日期：** 2026-10-20
 - **來源封包：** 參考資料/原始檔案/壓縮檔/P2_封包式問題解決架構_文件套件.zip
 - **Git Blob SHA：** 184508e9def34ff546caac580533b6210aae3344
-- **目前判定：** ZIP 四個成員的內部完整性通過；標題覆蓋與表格逐格比對通過；整份 Markdown／DOCX 的非表格正文語意等價仍未完全驗收。
+- **目前判定：** ZIP 四個成員、兩份 DOCX 的 OOXML CRC、每份 14 個關係目標及 Content Types 覆蓋均通過；標題與表格逐格比對通過；整份 Markdown／DOCX 的非表格正文語意等價仍未完全驗收。
 
 ## 1. 封包結構與內部完整性
 
@@ -64,7 +64,7 @@
 
 - 對話紀錄 Markdown 有 5 個歷史 sandbox 連結；其 DOCX 主文件沒有 w:hyperlink 元素，Word 版本未保留可點擊連結行為。這些歷史 sandbox 路徑不應直接當成目前可用的 GitHub 下載連結。
 - 企劃書 Markdown 沒有標準格式的外部連結；其 DOCX 有 20 個文件內部 anchor，OOXML relationship 中未發現 TargetMode="External" 的外部連結。
-- 兩份 DOCX 各有 17 個 OOXML 套件成員。本次正文文字比對主要針對 word/document.xml；未把頁首頁尾、文字方塊、註解與所有其他 OOXML 中繼資料逐項作語意對帳。
+- 兩份 DOCX 各有 17 個 OOXML 套件成員；每份 14 個 relationship targets 均存在，Content Types 部件覆蓋完整，沒有外部 relationship。主文件以外的頁首頁尾、註腳、註解等部件目前只通過結構／關係檢查，尚未逐項作語意對帳。
 
 ## 4. 已完成、未完成與禁止推論
 
@@ -144,3 +144,19 @@
 - **FALSE-001｜假陽性已排除：** 企劃書標題 `12.1 FAIL 與 BLOCKED 的差異` 經移除 Markdown 行內標記後可在 DOCX 找到；不應標為實際缺章。
 
 不要把 `FALSE-001` 當成來源缺陷；也不要因外層或內層 CRC 通過，就將 `GAP-002` 升級為全文完整。
+
+
+## 8. OOXML 關係與 Content Types 補驗（2026-10-20）
+
+本節補上先前尚未做完的結構檢查，取代前文中將 relationship targets／Content Types 列為「尚未檢查」的舊狀態。正文語意驗收仍按 GAP-002 保留。
+
+| DOCX | OOXML 部件 | 成員 CRC／大小 | Relationship | 內部目標缺失 | Content Types 缺失／孤立覆寫 |
+|---|---:|---|---|---:|---|
+| 對話原文紀錄 | 17 | 17/17 PASS | 14 個；14 內部、0 外部 | 0 | 0 / 0 |
+| 企劃書 v0.1 | 17 | 17/17 PASS | 14 個；14 內部、0 外部 | 0 | 0 / 0 |
+
+- 兩份 DOCX 的 `word/document.xml` 與 `word/_rels/document.xml.rels` 均存在。
+- 每份 `[Content_Types].xml` 有 2 種 Default（`rels`、`xml`）及 14 個 Override；所有實際部件均有可用 Content Type，所有 Override 均指向存在的部件。
+- 每份 14 個內部 relationship target 均按來源關係檔位置解析並在 ZIP 成員中找到。兩份文件合計 28 個內部目標、缺失目標 0；OOXML 外部關係合計 0。
+- 對話紀錄 DOCX 的主文件有 444 個含文字段落、9 張表、59 列、123 格；企劃書有 591 個含文字段落、4 張表、78 列、256 格。段落數與 Markdown 區塊數不同不等於缺文，須看正規化後的逐段內容。
+- 本次結構檢查未對註腳、註解、頁首頁尾內容做全文語意比對；非表格正文逐段語意等價亦未完成。不得把結構 PASS 擴大解讀為全文零遺漏。
