@@ -348,3 +348,225 @@ manifest 的使用計數設定預設為開啟，但外掛說明其資料經 Clau
 7. [Verification command（驗證操作及證據收集要求）](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/commands/modernize-verify.md)
 8. [Anthropic：AI 驅動的程式現代化專案準備方式，2026-09-23](https://claude.com/resources/articles/how-to-prepare-for-ai-driven-code-modernization-projects?fcdaa149_sort_date=desc)
 9. [forAVAr 既有交接：R3d130j-HANDOFF.md](https://github.com/upqq21477-star/forAVAr/blob/main/R3d130j-HANDOFF.md)
+
+
+---
+
+## 12. Proof Pack 的更深一層逆向：它如何避免被「看起來像證據」的內容騙過
+
+檢查 `scripts/proof_pack.py`、`scripts/compare.py`、`scripts/trace_rules.py` 及其測試後，可以將驗證管線拆成以下步驟：
+
+```text
+讀取證據檔
+  ├─ 僅接受一般檔案
+  ├─ 拒絕符號連結與超出工作區的路徑
+  ├─ 拒絕超出大小上限、格式錯誤或無法解析的內容
+  └─ 對每種輸入記錄缺失、衝突或過期狀態
+       ↓
+解析測試報告與原始 runner 紀錄
+  ├─ 判斷是否真的執行
+  ├─ 解析通過、失敗、跳過與個別測試狀態
+  └─ 對比程式修改時間，排除舊報告冒充新結果
+       ↓
+重新計算規則追蹤、行為等價、新輸入與 canary
+       ↓
+Uplift 額外檢查：基線是否量測、測試是否保留、靜默行為差異是否有測試
+       ↓
+由固定規則重新計算每個模組的狀態
+       ↓
+寫出 VERIFICATION.json 與 VERIFICATION.md
+```
+
+### 12.1 驗收器拒絕哪些「假證據」
+
+從 `proof_pack.py` 的讀取與檢查函式，以及 `scripts/tests/test_proof_tools.py` 的測試案例，可以確認它特別處理：
+
+- 只有手填測試數字、沒有可解析測試結果或原始日誌。
+- 結果檔早於最新程式碼，或留下了舊的測試報告。
+- 測試被 skip、pending，或根本沒有執行。
+- `VERIFICATION.json` 被人手動修改成較好的判定；下一次計算要回到原始證據重新判斷。
+- 規則只出現在報告摘要、轉換備註或未執行的測試中。
+- 比對案例不存在、輸出檔缺失、舊新輸出不同，或聲稱有新輸入但實際重複了原本的輸入。
+- canary 只在文字註記中宣稱測試失敗，卻沒有自己的測試結果檔或可解析日誌佐證。
+- 惡意或損壞的 JSON、XML、日誌、大型檔案、連結及工作區外路徑。
+
+這些限制不是文件上的承諾而已；測試套件包含針對「手填數字不算」、「舊報告不算」、「手改判定不能保留」、「工作區外連結不讀取」等情境的專門測試。
+
+### 12.2 判定條件其實不是所有策略完全相同
+
+`proof_pack.py` 定義六個通用驗證檢查：測試確實執行、規則追蹤、相同行為、新輸入、canary，以及來源未被改動。Uplift 另外加入三個檢查：基線量測、舊測試保留程度、版本差異目錄覆蓋情況。因此 Uplift 的最高判定需要通過九項，而不只是六項。
+
+Uplift 的三項特殊檢查進一步降低「升級後舊測試變少，結果卻更綠」的風險：
+
+- 逐檔對照舊測試與工作副本的測試檔案，將刪除測試或超過四分之一的舊測試檔被修改列為缺口。
+- 檢查標為 Behavioral-silent 的版本差異是否被測試檔提及；沒有測試提及時，列出缺口。
+- 若差異發生於建置或設定檔這類測試本身不容易直接提及的位置，列給人審查而非假稱已覆蓋。
+
+**限制必須一起記錄：** 這個 uplift 檢查能辨認測試檔有無改動，但原始碼說明它無法單靠檔案差異判斷 assertion 是否被弱化；「測試檔提及某個 delta」也不等於測試一定充分執行了該行為。
+
+### 12.3 規則追蹤仍是啟發式，不是語意證明
+
+`trace_rules.py` 會將規則 ID（例如 `RULE-017`）與原始程式、測試檔及測試結果連接。它判讀：
+
+- `tested`：有實際執行且通過的測試證據支持規則。
+- `named, not run`：測試提到規則，但沒有執行成功的證據。
+- `code only`：只在主程式找到提及。
+- `claimed only`：只在轉換／升級備註提及。
+- `none`：沒有找到相關引用。
+
+但此處的規則 ID 關聯是以測試命名、識別符與測試結果為依據；它不是完整的語意分析，也不等同於 branch coverage、mutation score 或形式化驗證。因此，P2 可以移植「證據等級與追溯表」，但若要宣稱測試真的覆蓋到某條核心規則，仍應搭配 assertion 檢查、覆蓋率或 mutation testing 等獨立方法，按專案需要選用。
+
+原始碼：
+- [proof_pack.py](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/proof_pack.py)
+- [trace_rules.py](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/trace_rules.py)
+- [Proof Pack 測試](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/tests/test_proof_tools.py)
+
+## 13. 輸出比較器的具體保護與限制
+
+`scripts/compare.py` 的比較基準是輸出檔案的實際位元組，不是模型對輸出的文字評語。其輸入案例可指定舊程式輸出、新程式輸出、遮罩、容差及人工批准的差異理由。
+
+### 13.1 路徑與資源邊界
+
+- 預設輸入輸出路徑必須留在案例檔所在資料夾；只有明確的 `--allow-outside` 才放寬。
+- 缺失、無法讀取或超出允許範圍的檔案會被標示為 missing，不會當成相等。
+- 原始碼為普通檔案讀取及輸出寫入設定大小限制，避免無上限讀取大型或惡意輸出。
+- 它會執行比較器自身的自我檢查：刻意改動一個輸出位元組，確認該修改會被偵測為差異。
+- 遮罩範圍會替換成固定標記，避免只靠變動長度遮罩掩蓋後續差異的位置。
+
+### 13.2 數值容差的設計
+
+數值容差需要給定理由；預設允許的誤差幅度有上限。比較器只對符合其數字格式規則的數值套用容差，整數和一般文字仍要求一致，像版本號或 IP 類的多段數字也不會一概當成浮點數。比對結果會記錄使用了哪些容差與遮罩。
+
+這種設計適用於編譯器或數學函式庫引入末位浮點差異的案例，但**不適合用過大的容差來掩蓋實際業務變更**。當 P2 引入通用輸出比對時，也應要求每一個遮罩／容差都有說明與審批記錄，並為可遮罩區段設定最大範圍。
+
+來源：[compare.py](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3)
+
+## 14. 大型工作流的續作、確定性與規模控制
+
+### 14.1 分塊不是單純拆檔
+
+`modernize-map` 對超過約 2,000 個來源檔或 500,000 行的系統，要求按 domain 或頂層目錄分塊，將每個 chunk 寫成獨立 JSON；重新執行時可以跳過已完成的 chunk，最後合併為總拓撲。仍未完成或跨 chunk 無法解析的邊應被明確列出，不能假稱整張圖完整。
+
+它也明確要求優先使用語言生態已有的機器可讀圖譜，例如 Java 的 `jdeps`、.NET 的 project graph、JavaScript 的依賴分析工具、Python 的依賴圖，以及 Go／Rust 的套件圖；再人工抽查部分邊，並補上外部設定、入口、資料庫與業務流程等一般工具容易漏掉的關係。
+
+這是重要的工具使用原則：**先重用可信既有的結構化輸出，再補缺口；不要為了看起來自動化，重新打造已存在的分析工具。**
+
+### 14.2 可續作工作流需要固定呼叫順序
+
+業務規則工作流記錄工作日誌，並要求同一組輸入重播時，代理的 spawn 順序也可預測。原因是完成代理結果能被重播利用；如果流程依代理完成時間決定下一步，重跑順序會變，已完成結果便較難重用。
+
+Uplift 工作流以相依關係分批，並在擴大下一批之前檢查前一批成功率。這裡的關鍵不是「重試多少次」，而是把結果分類為可重跑的不同集合：
+
+- 未嘗試的單元。
+- 已嘗試但建置失敗的單元。
+- 因依賴失敗而被阻擋的單元。
+
+三類清單可重新輸入工作流，避免將錯誤擴散到整個任務。
+
+### 14.3 可移植到 P2 的協調契約
+
+如果 P2 要借鑑此方法，工作單元至少要有下列欄位：
+
+| 欄位 | 用途 |
+|---|---|
+| `unit_id`、版本與來源 | 穩定識別本次工作 |
+| `inputs`、`outputs` | 固定輸入與產出契約 |
+| `depends_on` | 定義先後關係與批次可執行性 |
+| `read_scope`、`write_scope` | 限制代理可讀、可寫的位置 |
+| `attempt`、`state`、`failure_class` | 管理失敗、重跑與退場 |
+| `evidence_refs` | 指向真實測試或其他可重算的證據 |
+| `exit_criteria` | 明定什麼條件能結束，不能由代理臨時改標準 |
+
+這是根據外掛的流程機制所做的設計建議，不代表 P2 目前沒有相同欄位。正式施工前仍須比對 P2 的既有 schema、呼叫者與 lifecycle 能力，優先 REUSE／MODIFY／MERGE。
+
+來源：
+- [modernize-map.md](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/commands/modernize-map.md)
+- [extract-rules.js](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/workflows/extract-rules.js)
+- [uplift-migrate.js](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/workflows/uplift-migrate.js)
+
+## 15. 報告與即時面板：呈現層不等於治理層
+
+### 15.1 單頁報告的安全實作
+
+`scripts/build_report.py` 的文件說明指出：分析檔案可能來自不可信程式碼，因此報告不把檔案內容直接當成 HTML 執行，而是將內容作為經跳脫的 JSON、以 `textContent` 方式建立 DOM，並用 Content Security Policy 限制頁面允許執行的腳本與外部請求。報告也拒讀 `*.local.*`、`SECRETS*` 和透過符號連結抵達的檔案，並設單檔與總讀取量上限。
+
+這讓離線報告不只是美觀 UI，而是具備基本的不可信資料輸出處理策略。不過，HTML 安全仍須依具體來源、瀏覽器與腳本變更做持續測試，不能僅因使用 CSP 就宣稱完全安全。
+
+### 15.2 即時面板的權責很有限
+
+外掛 hook README 對面板的非職責說明得很清楚：
+
+- 它讀取分析目錄、新程式與驗證 JSON 來顯示狀態，不自行再呼叫模型。
+- 它不會自動執行下一個命令；按鈕只是把命令放進提示欄，仍由人員確認與執行。
+- 它不攔截、不改寫命令或檔案修改。
+- 它本身不是權限沙盒；保護舊程式寫入範圍的是工作區權限設定。
+- 它對升級差異的部分可視化比較以檔名與大小為基礎，同大小的內容修改可能不會被該視圖直接發現。
+- live traffic diff、自動 fallback 及手機核准等能力並未實作完成。
+- 即時面板使用的 function hooks 被官方標註為 early access，且需手動開啟；官方 README 記載其面板測試版本為 Claude Code 2.1.280，不能在沒有再查版本的前提下宣稱各版本均相容。
+
+因此，面板只負責呈現「已存在的狀態」，並不構成流程完整性的證據。P2 若建立進度介面，應把它視為 Current 與驗收資料的唯讀投影；真正的安全限制、退場與阻擋規則必須在執行層實現。
+
+來源：
+- [build_report.py](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/build_report.py)
+- [hooks/README.md](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/hooks/README.md)
+
+## 16. 對官方案例的修正性解讀
+
+官方列舉的案例同時包括通過與未通過的實例，因此不能只選擇成功案例評估效益。
+
+| 觀察 | 證據支持的判斷 | 不能因此推論 |
+|---|---|---|
+| CardDemo 在多次驗證後，新增輸入仍找到多個差異，最終為 NOT PROVEN | 迭代測試與反例搜尋能繼續揭露隱藏行為差異；工具願意輸出負面判定 | 整個 COBOL 系統已成功等價改寫 |
+| osCommerce 產品頁的某一切片通過獨立驗證 | 在可執行的舊程式、對照輸出及測試證據充分時，切片級等價驗證可成功 | 整個商城或其他業務頁面都已證明 |
+| JPetStore 重建服務仍有新舊差異，驗證為 NOT PROVEN | 新架構即使有通過的測試，仍可能保留沒有被測試抓到的行為差異 | 重建只要測試數多就等於完成 |
+| beets 因環境無法取得套件，測試無法執行 | 工具鏈和環境本身是驗收前置條件；不能把不可執行轉成成功 | 靜態分析能完全替代實際執行 |
+| 官方 README 自述數字可因重跑而不同，且早期案例曾出現判讀缺陷 | 此工具仍是持續演進的工程產品；其驗證腳本也需要自身測試與修正 | 單一版本的宣傳數字是普遍、固定的效能保證 |
+
+**這些案例的最大價值是顯示工具的失敗處理原則，而不是證明它能自動成功改寫任意軟體。**
+
+## 17. 結合 forAVAr/P2 的深度差距分析
+
+依本次已閱讀的 `R3d130j-HANDOFF.md`，forAVAr/P2 的既有交接原則已強調：新增之前先比對舊能力、常設規則應有單一來源、工作需要依生命週期閉環、模擬通過不得冒充實際執行。這些方向和 Modernization 的核心設計相似，因此實作策略應優先研究如何擴充既有機制。
+
+| 項目 | Modernization 展示的具體做法 | forAVAr/P2 建議行動 | 目前可確認程度 |
+|---|---|---|---|
+| 能力重疊管理 | Map 與 Preflight 先利用已有圖譜及工具，再補缺口 | 先完成交接文件所列的 W0 剩餘重疊分析，再裁定 REUSE／MODIFY／MERGE／NEW | 交接文件有記載，尚不能由本次研究斷定現有程式都已實作 |
+| 業務規則轉機器可檢查規則 | 規則卡、原始碼引用、獨立引用覆核、人工判定 | 為 P2 的常設規則建立單一權威來源與可驗證的消費者清單 | 可移植原理，需核對目前規則儲存與產生方式 |
+| 工作閉環 | 前置輸入、階段產物、批准門、建置與驗證 | 把 F30 作為既有整合候選，不另創另一套同功能生命週期 | 交接文件明載 F30；實際接線須重新驗收 |
+| 失敗後續作 | 依賴感知的批次、可重跑工作清單、工作日誌 | 在現有 Work Unit 與 Current 流程上核對失敗分類、重跑與退場是否閉合 | 需依 P2 schema／呼叫鏈核對 |
+| 驗收證據 | 實際 runner 產物、等價性案例、canary 與獨立判定 | 保持 P2 的證據標記並增加可重算證據；不以文字狀態取代真實執行 | 可直接借鑑，仍需選定每種能力的證據來源 |
+| UI／報告 | 報告讀取產物而不創造狀態 | 面板只呈現權威 Current，不另存第二份進度真相 | 移植原則；未對 P2 UI 做完整檢查 |
+
+### 17.1 建議排序
+
+1. **先收完 W0 盤點。** 交接文件明確指出部分重疊判斷依檔頭與函式名，並要求完成剩餘逐項閱讀前不要刪除或合併。不能因 Modernization 有相似機制，就直接新增同名模組。
+2. **選一個小型工作單元作為試點。** 將輸入契約、可寫範圍、產物、證據與失敗退場全部寫清楚；不要一開始就啟動大規模平行代理。
+3. **先驗證驗收器，後擴大施工。** 建立成功、失敗、缺證據與被依賴阻擋的案例，確認判定不會只信任人工填寫的狀態字串。
+4. **在已有 Current／lifecycle 能力中做接線。** 若缺失的是呼叫關係、狀態轉移或機械驗收，就先補那個缺口，而非再造完整的新工作流系統。
+5. **保留真實與模擬的語義區隔。** 只有程式或測試實際執行且保存證據，才能使用實際執行通過的狀態；模擬結果只代表模擬。
+
+### 17.2 目前尚未完成的工作
+
+- 尚未安裝、執行或量測外掛的 token／時間／成本；官方僅提供典型時間與代理數字，並提醒工作量因系統而異。
+- 尚未對外掛執行完整動態安全檢測、效能基準或逐檔程式測試。
+- 尚未掃描 P2 的全部程式、schema、呼叫者與測試；本次對 P2 的映射限於目前讀得的交接資料。
+- 尚未將移植建議寫入 P2，且本專案的寫入邊界不允許這麼做；任何 P2 實作都必須在其相應施工專案中獨立進行。
+
+---
+
+## 18. 本次追加研究的主要來源
+
+以下連結指向研究快照的具體實作或官方文件，供後續接手者直接核查：
+
+1. [Proof Pack 判定器](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/proof_pack.py)
+2. [Proof Pack 自動化測試](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/tests/test_proof_tools.py)
+3. [輸出等價比較器](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/compare.py)
+4. [業務規則測試追蹤器](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/trace_rules.py)
+5. [Uplift 專屬檢查器](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/uplift_checks.py)
+6. [離線報告建置器](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/build_report.py)
+7. [拓撲圖建立命令](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/commands/modernize-map.md)
+8. [面板權責與相容性說明](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/hooks/README.md)
+9. [官方主 README](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/README.md)
+10. [forAVAr 交接依據：R3d130j-HANDOFF.md](https://github.com/upqq21477-star/forAVAr/blob/main/R3d130j-HANDOFF.md)
+
+追加部分屬於源碼靜態分析；除非明確標註為官方 README 記錄的案例，本文沒有聲稱自行執行成功、效能提升或完整驗收。
