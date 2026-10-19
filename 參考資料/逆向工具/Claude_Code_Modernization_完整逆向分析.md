@@ -347,7 +347,7 @@ manifest 的使用計數設定預設為開啟，但外掛說明其資料經 Clau
 6. [Output comparator（輸出差異、遮罩與數值容差）](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/scripts/compare.py)
 7. [Verification command（驗證操作及證據收集要求）](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/commands/modernize-verify.md)
 8. [Anthropic：AI 驅動的程式現代化專案準備方式，2026-09-23](https://claude.com/resources/articles/how-to-prepare-for-ai-driven-code-modernization-projects?fcdaa149_sort_date=desc)
-9. [forAVAr 既有交接：R3d130j-HANDOFF.md](https://github.com/upqq21477-star/forAVAr/blob/main/R3d130j-HANDOFF.md)
+9. [forAVAr 既有交接：R3d130j-HANDOFF.md](https://github.com/upqq21477-star/forAVAr/blob/main/%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99/%E5%8E%9F%E5%A7%8B%E6%AA%94%E6%A1%88/%E4%BA%A4%E6%8E%A5/R3d130j-HANDOFF.md)
 
 
 ---
@@ -567,6 +567,6 @@ Uplift 工作流以相依關係分批，並在擴大下一批之前檢查前一�
 7. [拓撲圖建立命令](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/commands/modernize-map.md)
 8. [面板權責與相容性說明](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/hooks/README.md)
 9. [官方主 README](https://github.com/anthropics/claude-plugins-official/blob/ea10b213686c90bb1984b2016937310e05336cf3/plugins/code-modernization/README.md)
-10. [forAVAr 交接依據：R3d130j-HANDOFF.md](https://github.com/upqq21477-star/forAVAr/blob/main/R3d130j-HANDOFF.md)
+10. [forAVAr 交接依據：R3d130j-HANDOFF.md](https://github.com/upqq21477-star/forAVAr/blob/main/%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99/%E5%8E%9F%E5%A7%8B%E6%AA%94%E6%A1%88/%E4%BA%A4%E6%8E%A5/R3d130j-HANDOFF.md)
 
 追加部分屬於源碼靜態分析；除非明確標註為官方 README 記錄的案例，本文沒有聲稱自行執行成功、效能提升或完整驗收。
