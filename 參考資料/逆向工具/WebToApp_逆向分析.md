@@ -1,5 +1,7 @@
 # WebToApp 專案逆向分析
 
+> 主軸回鏈：[WebToApp｜主軸彙整](../WebToApp_主軸彙整.md) ｜ 分支 ID：WEBTOAPP-BR-001 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
+
 研究對象：https://github.com/shiaho777/web-to-app
 研究基準：GitHub `main` 分支；分析時讀取的原始碼提交樹 SHA：`25937cb8c14f467603276dd1dfaedb9bd7d55560`。
 
