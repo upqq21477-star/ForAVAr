@@ -1,5 +1,7 @@
 # Claude Code Modernization｜蒸餾摘要
 
+> 主軸回鏈：[Claude Code Modernization｜主軸彙整](../Claude_Code_Modernization_主軸彙整.md) ｜ 分支 ID：CLAUDE-MOD-BR-002 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
+
 - **研究來源：** Anthropic 官方 code-modernization 外掛。
 - **源碼基準：** claude-plugins-official commit `ea10b213686c90bb1984b2016937310e05336cf3`（2026-10-16）；manifest 版本 1.0.0。
 - **證據範圍：** 靜態讀取原始碼、命令、工作流、腳本、測試與官方案例；未安裝或執行外掛，不是執行效能報告。
