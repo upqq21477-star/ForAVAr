@@ -1,5 +1,7 @@
 # State Bundle 實例初次結構核對紀錄（2026-10-21）
 
+> 主軸回鏈：[State Bundle｜主軸彙整](../StateBundle_主軸彙整.md) ｜ 分支 ID：STATE-BR-003 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
+
 - 紀錄 ID：FORAVAR-STATE-BUNDLE-AUDIT-20261021-01
 - 對象：`StateBundle_實例_P2-relay-R3d130j_2026-10-21.json`
 - 狀態：**結構核對 19/19 通過；行為驗收未執行**
