@@ -1,5 +1,7 @@
 # RRSI 代理自我改進治理與 forAVAr 方法整合研究紀錄
 
+> 主軸回鏈：[RRSI｜主軸彙整](../RRSI_主軸彙整.md) ｜ 分支 ID：RRSI-BR-001 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
+
 - 文件 ID：FORAVAR-RESEARCH-RRSI-GOVERNANCE-20261020-01
 - 日期：2026-10-20
 - 性質：第二輪研究紀錄／討論紀錄
