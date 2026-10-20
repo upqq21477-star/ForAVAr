@@ -160,7 +160,7 @@ Git Blob SHA 是 Git 物件識別碼，不等於裸檔 SHA-256 或 ZIP 成員 CR
 
 ## 5. 全庫現況
 
-- 最新 GitHub recursive tree 於 2026-10-21 重新取得：85 個 tree entries（67 個檔案、18 個目錄），其中 54 個 Markdown、2 個 ZIP、2 個 DOCX、8 個 `.gitkeep`、1 個 JSON；66 個檔案位於「參考資料」目錄，另有根目錄 README。新增流程文件後的全庫 Blob 重複掃描待重跑。
+- 最新 GitHub recursive tree 於 2026-10-21 重新取得：85 個 tree entries（67 個檔案、18 個目錄），其中 54 個 Markdown、2 個 ZIP、2 個 DOCX、8 個 `.gitkeep`、1 個 JSON；66 個檔案位於「參考資料」目錄，另有根目錄 README。以 Git Blob SHA 比對 67 個檔案，未發現重複 Blob。
 - 索引與責任矩陣已更新，並完成本輪新增／重整之核心文件的讀回檢查；全庫 54 個 Markdown 的完整相對連結及語意重複掃描尚未完成，不把局部檢查稱為全庫連結驗收。
 - 封包 A：ZIP／Manifest 完整性與適用的靜態格式檢查已通過；完整性、檔案分布與狀態簡述見封包 A 主分析報告，問題細節見問題清單。未把 774 個檔案複製成第二份解壓樹，也未執行 P2 程式或測試。舊的 BLOCKED 文件現標為歷史紀錄。封包 B 的四個成員、兩份 DOCX 各 17 個 OOXML 成員、28 個關係目標及 Content Types 均通過；非表格正文差異已逐項分類，未發現未解釋的實質內容缺失。保留 `ERR-001` 範圍歧義、`GAP-001` 前置來源缺口與 `FMT-001` 連結功能損失。
 - P1、P2 僅作唯讀參照。本專案所有新增或修改僅限 forAVAr。
