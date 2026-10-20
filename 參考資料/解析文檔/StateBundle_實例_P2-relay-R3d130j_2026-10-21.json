@@ -45,7 +45,7 @@
       "以此快照直接批准或執行 P2 寫入",
       "宣稱未執行測試或 Runtime 通過"
     ],
-    "required_sources_present": true,
+    "required_sources_present": false,
     "missing_sources": [
       {
         "id": "REF-01",
@@ -105,7 +105,9 @@
         "response": "不可將程式存在、測試檔存在或歷史結果轉成目前 PASS。"
       }
     ],
-    "stale_context_policy": "因為是 2026-10-21 對封存 ZIP 的離線檢視，不能證明之後 repository 未再變更。任何需要證明當前 HEAD 的操作需重新取得可驗證來源；無法取得時維持 UNKNOWN／BLOCKED。"
+    "stale_context_policy": "因為是 2026-10-21 對封存 ZIP 的離線檢視，不能證明之後 repository 未再變更。任何需要證明當前 HEAD 的操作需重新取得可驗證來源；無法取得時維持 UNKNOWN／BLOCKED。",
+    "core_state_sources_present": true,
+    "required_sources_note": "Current、Active Work、Feature Batch、Construction、唯一目標藍圖與 HANDOFF 均已取得；但引用的必要測試路徑 REF-01 及測試策略文件 REF-03 不在快照內，所以不能把本 Bundle 視為 READY_FOR_CONSTRUCTION。"
   },
   "core_anchor": {
     "objective": {
