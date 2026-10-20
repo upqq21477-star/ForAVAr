@@ -1,30 +1,10 @@
-# Claude Code Modernization｜主軸彙整
+# Claude Code Modernization｜舊主軸入口相容指標
 
-- 文件 ID：FORAVAR-TOPIC-CLAUDE-MODERNIZATION-001
-- 類型：MASTER
-- 版本：v1.0
-- 狀態：CURRENT／外部程式碼靜態逆向研究
-- 唯一責任：統一外部專案的完整研究與蒸餾摘要，確保摘要只保留結論和導航，不取代詳細證據。
-- 上層索引：[文件與分支索引](./文件與分支索引.md)
+- 文件 ID：FORAVAR-TOPIC-CLAUDE-MODERNIZATION-ALIAS-001
+- 類型：ALIAS
+- 狀態：SUPERSEDED／不承擔第二份主軸內容
+- 現行唯一主軸：[Claude Code Modernization 逆向分析主軸](./逆向工具/Claude_Code_Modernization_完整逆向分析.md)
+- 全域索引：[文件與分支索引](./文件與分支索引.md)
 - 追溯：[變更追溯總表](./變更追溯總表.md)
 
-## 目錄與索引
-
-1. [核心結論](#1-核心結論)
-2. [分支登錄](#2-分支登錄)
-3. [證據邊界](#3-證據邊界)
-
-## 1. 核心結論
-
-外部 Code Modernization 專案的可借鑑價值主要在於：將流程步驟、前置條件、輸出產物、失敗分類及獨立驗收證據明確化；把不同任務角色分責；並允許部分通過、未證明或阻塞，不單憑代理自述裁定成功。這些是外部專案的觀察，不等於 forAVAr／P2 已經具有相同實作。
-
-## 2. 分支登錄
-
-| BRANCH_ID | 唯一責任 | 路徑 |
-|---|---|---|
-| CLAUDE-MOD-BR-001 | 詳細程式結構、工作流、腳本與限制的逆向分析 | [完整逆向分析](./逆向工具/Claude_Code_Modernization_完整逆向分析.md)；長度超過 8,000 字元，待分流 |
-| CLAUDE-MOD-BR-002 | 核心摘要、可移植原則與完整報告導航 | [蒸餾摘要](./逆向工具/Claude_Code_Modernization_蒸餾摘要.md) |
-
-## 3. 證據邊界
-
-研究以指定 commit 的原始碼和公開文件進行靜態分析，沒有安裝或實際執行外掛。完整報告是細節證據來源；摘要只作主軸結論和快速導航。主索引只引用本彙整；完整報告／摘要由本文件的分支表調閱。
+本檔只維持舊路徑相容性。日常引用、AI 啟動與新分析一律進入 canonical 主軸，再由該主軸按需載入五個 CURRENT BRANCH；舊完整正文只作 BACKUP_ONLY 恢復／差異核對。
