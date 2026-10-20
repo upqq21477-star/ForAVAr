@@ -1,5 +1,7 @@
 # Claude Code Modernization 逆向分析
 
+> 主軸回鏈：[Claude Code Modernization｜主軸彙整](../Claude_Code_Modernization_主軸彙整.md) ｜ 分支 ID：CLAUDE-MOD-BR-001 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
+
 > 研究日期：2026-10-19  
 > 對象：Anthropic 官方公開倉庫 `anthropics/claude-plugins-official/plugins/code-modernization`  
 > 源碼基準：`claude-plugins-official` 的 `main` 分支快照，commit `ea10b213686c90bb1984b2016937310e05336cf3`（commit 日期：2026-10-16），外掛 manifest 標示版本 `1.0.0`。  
