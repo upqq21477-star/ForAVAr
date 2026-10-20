@@ -1,5 +1,7 @@
 # 可攜式 State Bundle｜最小資料契約與防漂移反例驗收草案 v0.1
 
+> 主軸回鏈：[State Bundle｜主軸彙整](../StateBundle_主軸彙整.md) ｜ 分支 ID：STATE-BR-001 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
+
 - 文件 ID：FORAVAR-STATE-BUNDLE-CONTRACT-001
 - 日期：2026-10-21
 - 狀態：PROPOSAL / NOT_APPROVED / NOT_IMPLEMENTED
