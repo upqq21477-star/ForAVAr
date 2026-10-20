@@ -3,7 +3,7 @@
 - 文件 ID：FORAVAR-CLAUDE-MOD-BR-001
 - 類型：BRANCH
 - 狀態：CURRENT／外部專案靜態逆向分析；非實機／Runtime 驗收
-- 唯一責任：保存原報告中 0–4 節的完整細節、來源和限制。
+- 唯一責任：保存原報告中第 0–4 節完整細節、來源和限制。
 - 主軸回鏈：[Claude Code Modernization 逆向分析主軸](./Claude_Code_Modernization_完整逆向分析.md)
 - 變更追溯：[變更追溯總表](../變更追溯總表.md)
 
@@ -17,17 +17,7 @@
 
 ---
 
-# Claude Code Modernization 逆向分析
-
-> 主軸回鏈：[Claude Code Modernization｜主軸彙整](../Claude_Code_Modernization_主軸彙整.md) ｜ 分支 ID：CLAUDE-MOD-BR-001 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
-
-> 研究日期：2026-10-19  
-> 對象：Anthropic 官方公開倉庫 `anthropics/claude-plugins-official/plugins/code-modernization`  
-> 源碼基準：`claude-plugins-official` 的 `main` 分支快照，commit `ea10b213686c90bb1984b2016937310e05336cf3`（commit 日期：2026-10-16），外掛 manifest 標示版本 `1.0.0`。  
-> 研究方式：原始碼、命令文件、工作流、測試與官方說明的靜態逆向分析；本文件未安裝或實際執行該外掛。  
-> 施工邊界：本次只新增 forAVAr 根目錄研究文件；不修改 README、不寫入 P1 或 P2。
-
-## 來源前言（原始前置內容）
+## 原始前置內容
 
 # Claude Code Modernization 逆向分析
 
