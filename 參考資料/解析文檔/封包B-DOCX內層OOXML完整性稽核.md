@@ -1,5 +1,7 @@
 # 封包 B｜DOCX 內層 OOXML 結構與範圍驗收
 
+> 主軸回鏈：[壓縮檔解析總覽與文件導航](./壓縮檔逆向分析與蒸餾紀錄.md) ｜ 分支 ID：ARCHIVE-B-BR-004 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
+
 - **稽核日期：** 2026-10-20
 - **範圍：** 兩份 DOCX 的內層 ZIP、CRC、OOXML 部件、relationship targets、Content Types、主文件表格／正文抽取範圍，以及文件內部目錄連結。
 - **來源 DOCX Blob SHA：** 對話紀錄 `6dccf5c5921f5d78087b4b20226c598dda616688`；企劃書 v0.1 `ae17de3f93355554c6d9c472bee7c1aa87fa94f4`.
