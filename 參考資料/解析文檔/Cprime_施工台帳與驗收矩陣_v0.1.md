@@ -1,5 +1,7 @@
 # C′ 施工台帳與驗收矩陣 v0.1
 
+> 主軸回鏈：[C′ 薄核心混合架構｜主軸索引](../Cprime_主軸索引.md) ｜ 分支 ID：CPRIME-BR-002 ｜ 本回鏈只提供導航，不改變本文件的證據邊界。
+
 - 文件 ID：FORAVAR-CPRIME-IMPLEMENTATION-LEDGER-001
 - 版本：v0.1
 - 建立日期：2026-10-20
