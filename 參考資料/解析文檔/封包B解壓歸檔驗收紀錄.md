@@ -10,9 +10,11 @@
 
 ## 2. 原始來源
 
-- 路徑：`參考資料/原始檔案/壓縮檔/P2_封包式問題解決架構_文件套件.zip`
+- 退場前路徑：`參考資料/原始檔案/壓縮檔/P2_封包式問題解決架構_文件套件.zip`
+- 原件回查：[固定歷史來源（退場前提交）](https://github.com/upqq21477-star/ForAVAr/blob/d9b55cc3e7df5584b898ce190b7baa8bdefa14f5/%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99/%E5%8E%9F%E5%A7%8B%E6%AA%94%E6%A1%88/%E5%A3%93%E7%B8%AE%E6%AA%94/P2_%E5%B0%81%E5%8C%85%E5%BC%8F%E5%95%8F%E9%A1%8C%E8%A7%A3%E6%B1%BA%E6%9E%B6%E6%A7%8B_%E6%96%87%E4%BB%B6%E5%A5%97%E4%BB%B6.zip)
 - Git Blob SHA：`184508e9def34ff546caac580533b6210aae3344`
 - 大小：100,694 bytes
+- 目前工作樹狀態：`REMOVED_FROM_WORKTREE`（EVT-0029）；四個成員與全部驗收記錄仍保留。
 - 中央目錄成員數：4
 - 壓縮方法：DEFLATE（method 8）
 - 驗證：實際解壓長度與中央目錄一致，CRC32 全部一致。

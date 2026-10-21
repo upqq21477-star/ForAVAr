@@ -4,7 +4,9 @@
 
 ## 1. 來源與證據邊界
 
-- 原始 ZIP：`參考資料/原始檔案/壓縮檔/P2_封包式問題解決架構_文件套件.zip`
+- 原始 ZIP（退場前工作樹路徑）：`參考資料/原始檔案/壓縮檔/P2_封包式問題解決架構_文件套件.zip`
+- 固定歷史原件：[封包 B ZIP](https://github.com/upqq21477-star/ForAVAr/blob/d9b55cc3e7df5584b898ce190b7baa8bdefa14f5/%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99/%E5%8E%9F%E5%A7%8B%E6%AA%94%E6%A1%88/%E5%A3%93%E7%B8%AE%E6%AA%94/P2_%E5%B0%81%E5%8C%85%E5%BC%8F%E5%95%8F%E9%A1%8C%E8%A7%A3%E6%B1%BA%E6%9E%B6%E6%A7%8B_%E6%96%87%E4%BB%B6%E5%A5%97%E4%BB%B6.zip)
+- 目前狀態：`REMOVED_FROM_WORKTREE`（EVT-0029）；四個已驗證成員及差異稽核保留。
 - Git Blob SHA：`184508e9def34ff546caac580533b6210aae3344`；大小 100,694 bytes。
 - ZIP 含 4 個成員：對話紀錄 Markdown／DOCX、企劃書 v0.1 Markdown／DOCX。四個成員的解壓大小與 CRC32 均通過。
 - 兩份 DOCX 各 17 個 OOXML 部件，內層大小／CRC 均通過；28 個內部 relationship targets 全部存在；Content Types 缺少宣告 0、孤立 Override 0。
