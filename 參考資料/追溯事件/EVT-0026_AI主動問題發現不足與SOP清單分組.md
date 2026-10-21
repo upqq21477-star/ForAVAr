@@ -4,7 +4,7 @@
 - 日期：2026-10-21（Asia/Taipei）
 - TOPIC_ID：PROACTIVE-GOVERNANCE-AND-SOP-CATALOG
 - OP：ADD_DIAGNOSTIC_RECORD_PROBLEM_AND_CATALOG
-- 狀態：APPLIED；待完成最終讀回與索引對帳
+- 狀態：VERIFIED（限定文件、問題映射、索引及字元長度範圍）
 - 變更原因：使用者要求將前次對 AI 主動思考不足及 forAVAr 治理缺口的回覆完整獨立記錄、把其中問題更新進問題清單，並將 SOP／固定流程清單按落實狀態分為三組。
 - 根因診斷：[AI 主動問題發現不足與治理閉環缺口](../解析文檔/AI主動問題發現不足與治理閉環缺口_根因診斷紀錄_2026-10-21.md)
 - SOP 清單：[SOP 清單與落實狀態分組](../SOP清單與落實狀態分組.md)
@@ -57,6 +57,6 @@ SOP 清單是狀態目錄；候選 SOP 只表示待辦規劃，不等於正式�
 
 ## 5. 驗收與限制
 
-預定驗收包括兩份新文件可讀回、PR-053 在主軸和分支可定位、S/A/BCD／近期問題映射一致、SOP 清單三組完整、README／全域索引／責任矩陣與台帳同步，以及所有受檢文件低於 8,000 字元。
+驗收完成：根因診斷與 SOP 清單可讀回；PR-053 在問題主軸與 BCD 分支可定位；相關既有問題映射已補入；SOP 清單三組完整；README／全域索引／責任矩陣／台帳／主追溯表已同步；所有受檢文件均低於 8,000 字元。
 
-本事件不宣稱全 repository 的遞迴連結掃描、Runtime 自動執行或跨任務 SOP 效能已驗證。任何未執行的檢查須保留 NOT_VERIFIED／PARTIAL 狀態。
+本事件的 VERIFIED 僅限前述文件和索引範圍；不宣稱全 repository 遞迴連結掃描、Runtime 自動執行或跨任務 SOP 效能已驗證。任何未執行的檢查須保留 NOT_VERIFIED／PARTIAL 狀態。
