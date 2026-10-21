@@ -21,7 +21,11 @@
     "archive_entries": 774,
     "expanded_size_bytes": 5479985,
     "repository": "upqq21477-star/P2",
-    "branch": null,
+    "branch": "main",
+    "source_path": "參考資料/P2-relay-R3d130j.zip",
+    "source_url": "https://github.com/upqq21477-star/P2/blob/main/%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99/P2-relay-R3d130j.zip",
+    "forAVAr_local_copy_status": "REMOVED_FROM_WORKTREE",
+    "forAVAr_historical_path": "參考資料/原始檔案/壓縮檔/P2-relay-R3d130j.zip",
     "commit_sha": null,
     "commit_sha_status": "UNKNOWN_NOT_EMBEDDED_AS_A_CONFIRMED_ARCHIVE_BASELINE",
     "captured_at": "2026-10-21",
@@ -29,7 +33,8 @@
     "notes": [
       "ZIP CRC 檢查通過。",
       "773 筆 manifest 內容檔 SHA-256 全數通過；manifest 不計自身。",
-      "封包完整性不等於程式、測試或 Runtime 已通過。"
+      "封包完整性不等於程式、測試或 Runtime 已通過。",
+      "原始 ZIP 目前由 P2 main 的唯讀路徑提供；forAVAr 本地副本退場不代表原始來源或 Git 歷史已清除。"
     ]
   },
   "load_status": {

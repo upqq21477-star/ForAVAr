@@ -25,7 +25,8 @@
 | 原始檔 | `P2-relay-R3d130j.zip` |
 | 壓縮大小 | 1,885,519 bytes |
 | 裸檔 SHA-256 | `f38cc51fcd443500d63e5693bd2946dfd099ee03e57bb105c9e7d86cf96cb521` |
-| forAVAr 原始檔 Git Blob SHA-1 | `0e58526bd35c30a25f3b27033a4952ec5f25bf10` |
+| 退場前 forAVAr 原始檔 Git Blob SHA-1（與 P2 現行來源相同） | `0e58526bd35c30a25f3b27033a4952ec5f25bf10` |
+| 目前來源位置 | [P2 唯讀原始 ZIP](https://github.com/upqq21477-star/P2/blob/main/%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99/P2-relay-R3d130j.zip)；forAVAr `main` 不再保存本地 ZIP 副本（EVT-0028） |
 | ZIP 成員項目 | 774；唯一路徑 774；沒有重複項目名稱 |
 | 展開總大小 | 5,479,985 bytes |
 | 內附 Manifest | `MANIFEST.sha256`，773 筆內容檔紀錄 |
