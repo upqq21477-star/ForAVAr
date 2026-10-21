@@ -12,6 +12,7 @@
 | EVENT_ID | 日期 | OP／主題 | 摘要 | 詳細事件 | VERIFY |
 |---|---|---|---|---|---|
 | EVT-0039 | 2026-10-21 | REASSESS_CPRIME_ARCHITECTURE_WITH_EXTERNAL_EVIDENCE | 比較問題清單、SOP、C′ 與外部架構研究；提出收斂原型和 A／B／C′ 驗證方案。 | [EVT-0039](./EVT-0039_Cprime架構選型研究.md) | PARTIAL |
+| EVT-0040 | 2026-10-21 | COMPARE_CPRIME_PACKET_P1_ROLE_SYSTEM_PLUGIN_ARCHITECTURES | 比較五種架構，建議 C′ 作上層並條件式採用封包、角色、獨立系統和插件工作流。 | [EVT-0040](./EVT-0040_Cprime五種架構對比研究.md) | PARTIAL |
 
 ## 使用規則
 
