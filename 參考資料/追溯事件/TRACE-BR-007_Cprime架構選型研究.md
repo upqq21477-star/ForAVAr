@@ -14,6 +14,7 @@
 | EVT-0039 | 2026-10-21 | REASSESS_CPRIME_ARCHITECTURE_WITH_EXTERNAL_EVIDENCE | 比較問題清單、SOP、C′ 與外部架構研究；提出收斂原型和 A／B／C′ 驗證方案。 | [EVT-0039](./EVT-0039_Cprime架構選型研究.md) | PARTIAL |
 | EVT-0040 | 2026-10-21 | COMPARE_CPRIME_PACKET_P1_ROLE_SYSTEM_PLUGIN_ARCHITECTURES | 比較五種架構，建議 C′ 作上層並條件式採用封包、角色、獨立系統和插件工作流。 | [EVT-0040](./EVT-0040_Cprime五種架構對比研究.md) | PARTIAL |
 | EVT-0041 | 2026-10-21 | CREATE_APSGA_FIRST_AND_SECOND_RENDER_BLUEPRINT | 建立 APSGA 核心骨架、總體藍圖及 X01–X12 擴充模組地圖。 | [EVT-0041](./EVT-0041_APSGA核心骨架首輪渲染.md) | PARTIAL |
+| EVT-0042 | 2026-10-21 | ADD_APSGA_GLOBAL_CLOSURE_AND_SELECTION_RULES | 建立 S01–S16 情境基線、全局閉環、擴充方案比較程序及反製造問題 Gate。 | [EVT-0042](./EVT-0042_APSGA全局情境閉環與架構選擇規則.md) | PARTIAL |
 
 ## 使用規則
 
