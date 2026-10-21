@@ -96,6 +96,8 @@ P2 AI 工程大腦
 - **固定做法：** 每個新增或修改前先寫比對（REUSE／MODIFY／MERGE／NEW）；收尾 `close_session.py R3d130k --code`；測試用 `python3 -B -m unittest`。
 
 
+> **來源位置更新（2026-10-21；後加註記，不改寫下方原始交接提示詞）：** 封包 A 原始 ZIP 目前由 [P2 main 唯讀來源](https://github.com/upqq21477-star/P2/blob/main/%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99/P2-relay-R3d130j.zip) 提供；forAVAr 本地二進位副本已依 EVT-0028 退場。若依下方提示詞開啟新會話，請先從上述來源取得 ZIP 並作為附件提供；本檔內原先的附件要求與工具命令是交接當時的內容，實際可用成員及工具仍需以封包內容核對。
+
 ## 9. 啟動提示詞
 
 新對話貼下面這段，並附 `P2-relay-R3d130j.zip` 與 `R3d130j-HANDOFF.md`（規程都在壓縮檔內）：

@@ -8,7 +8,8 @@
 
 ## 1. 來源身分
 
-- 原始檔：`P2-relay-R3d130j.zip`
+- 原始檔：[P2-relay-R3d130j.zip（P2 main 唯讀來源）](https://github.com/upqq21477-star/P2/blob/main/%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99/P2-relay-R3d130j.zip)
+- forAVAr 本地 ZIP 副本：`REMOVED_FROM_WORKTREE`（EVT-0028）；本摘要保留已驗證的來源指紋與快照結果。
 - SHA-256：`f38cc51fcd443500d63e5693bd2946dfd099ee03e57bb105c9e7d86cf96cb521`
 - Git Blob SHA-1：`0e58526bd35c30a25f3b27033a4952ec5f25bf10`
 - ZIP 項目：774；展開大小：5,479,985 bytes
