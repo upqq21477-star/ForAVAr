@@ -2,7 +2,7 @@
 
 - 文件 ID：FORAVAR-TOPIC-CPRIME-001
 - 類型：MASTER_INDEX
-- 版本：v1.2
+- 版本：v1.3
 - 狀態：CURRENT_INDEX／APSGA 新藍圖草案；C′ 為歷史基線，不表示實作或 Runtime 已通過
 - 唯一責任：統一入口、區分舊 C′ 正式企劃、施工台帳與 APSGA 新藍圖。
 - 上層索引：[文件與分支索引](./文件與分支索引.md)
