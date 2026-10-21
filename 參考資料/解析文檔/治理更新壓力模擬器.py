@@ -87,7 +87,7 @@ def run(pol,ev,seed):
     all_lengths=lengths+logs+(src if source else [])+(cases if exc else [])+(ix if index else [])
     audit=sum(logs)+(sum(src) if source else 0)+(sum(cases) if exc else 0)+sum(ix)
     return {"name":name,"preflight_pct":100*m["gate"]/len(ev],"blocked":m["blocked"],
-        "duplicates":m["dup"],"conflicts":m["conflict"],"unsupported":m["unsup"],
+        "duplicates":m["dup"],"conflicts":m["conflict"],"unsupported":m["unverified"],
         "refinement_mismerge":m["mismerge"],"partial":m["partial"],"rollback":m["rollback"],
         "files":files,"oversized":sum(x>8000 for x in all_lengths),"maxfile":max(all_lengths),
         "chars":sum(lengths)+audit,"active_chars":sum(lengths),"audit_chars":audit}
