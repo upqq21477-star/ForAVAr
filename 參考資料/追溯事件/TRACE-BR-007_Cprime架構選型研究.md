@@ -17,6 +17,7 @@
 | EVT-0042 | 2026-10-21 | ADD_APSGA_GLOBAL_CLOSURE_AND_SELECTION_RULES | 建立 S01–S16 情境基線、全局閉環、擴充方案比較程序及反製造問題 Gate。 | [EVT-0042](./EVT-0042_APSGA全局情境閉環與架構選擇規則.md) | PARTIAL |
 | EVT-0043 | 2026-10-21 | AUDIT_APSGA_COVERAGE_AGAINST_PROBLEM_REGISTER | 對照 PR-001–PR-054；確認 Preflight、分類／回寫、基線及 Runtime 證據缺口。 | [EVT-0043](./EVT-0043_APSGA問題清單覆蓋驗收與缺口審查.md) | PARTIAL |
 | EVT-0044 | 2026-10-21 | ADD_APSGA_PROBLEM_STATUS_AND_TEST_READINESS_SUPPLEMENT | 補充問題清單現行狀態分布、逐項殘餘驗收條件與 S01–S16 測試就緒度。 | [EVT-0044](./EVT-0044_APSGA問題清單狀態分布補充稽核.md) | PARTIAL |
+| EVT-0045 | 2026-10-21 | ASSESS_APSGA_COGNITIVE_CORE_DRIFT | 判定認知原則未被正式推翻，但架構展開重心偏向治理、控制、狀態與生命週期；思考核心規格仍未充分展開。 | [EVT-0045](./EVT-0045_APSGA核心偏移評估.md) | RECORDED |
 
 ## 使用規則
 
