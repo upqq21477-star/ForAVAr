@@ -25,7 +25,7 @@
 
 | 文件 | 變更 | 提交 |
 |---|---|---|
-| [SOP 文件標準欄位與蒸餾建置流程](../SOP文件標準欄位與蒸餾建置流程.md) | 新增 SOP-DOC-001、完整欄位表、模板及建置流程 | [3ec347d](https://github.com/upqq21477-star/ForAVAr/commit/3ec347d96ce99a8d9421282538436fbb3828be88) |
+| [SOP 文件標準欄位與蒸餾建置流程](../SOP文件標準欄位與蒸餾建置流程.md) | 新增 SOP-DOC-001、完整欄位表、模板及建置流程；後續修正 Markdown 模板圍欄 | [3ec347d 建立](https://github.com/upqq21477-star/ForAVAr/commit/3ec347d96ce99a8d9421282538436fbb3828be88)、[9677c06 修正](https://github.com/upqq21477-star/ForAVAr/commit/9677c06ae64562b85f10f1d0f836ba0a8bc374bc) |
 | [SOP 規範對談紀錄](../SOP規範對談紀錄_2026-10-21.md) | 保存需求原句、決策背景和來源限制 | [a775ec1](https://github.com/upqq21477-star/ForAVAr/commit/a775ec1905250cee2cca5335011b7335ef83504a) |
 | [SOP 固定流程與演化管理](../SOP固定流程與演化管理.md) | v0.3；連結 SOP 建檔專用規格 | [1535635](https://github.com/upqq21477-star/ForAVAr/commit/1535635ad478d412e1e6fbb5475e496fe7e83196) |
 | [對話流程列表](../對話流程列表.md) | 新增 CF-010，並精簡入口摘要以符合文件字元上限 | [f294afb](https://github.com/upqq21477-star/ForAVAr/commit/f294afb242142fe2c918d7dffbc343939257acbb) |
