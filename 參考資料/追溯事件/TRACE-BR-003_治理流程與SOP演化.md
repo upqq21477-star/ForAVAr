@@ -19,6 +19,7 @@
 | EVT-0034 | 2026-10-21 | OPTIMIZE_SOP_META_001 | SOP v0.4 加入 L0–L3 精簡路徑；效益未測。 | [SOP](../SOP固定流程與演化管理.md)；[問題](../問題清單_近期補入與ID對照.md#sop-efficiency-review-2026-10-21) | PARTIAL |
 | EVT-0035 | 2026-10-21 | SIMULATE_KEY_RULE_GATE | 桌上比較三種閘門；淨效率未證實，不改 SOP，列 DISC-SOP-008。 | [問題紀錄](../問題清單_近期補入與ID對照.md#key-change-simulation-gate-2026-10-21) | PARTIAL |
 | EVT-0036 | 2026-10-21 | SIM_GATE_ACTIVE | SOP v0.5 模擬閘門生效。 | [裁定](../問題清單_近期補入與ID對照.md#key-change-simulation-gate-2026-10-21) | PARTIAL（效益／Runtime 未測） |
+| EVT-0038 | 2026-10-21 | `RECORD_GOVERNANCE_CLOSED_LOOP_AND_INFORMATION_ROUTING_STUDY` | 新增 PR-054 與資訊整合研討紀錄；候選修正與 Runtime 驗證仍未完成。 | [EVT-0038](./EVT-0038_治理閉環與資訊自動整合研討紀錄.md) | PARTIAL |
 
 ## 使用規則
 
