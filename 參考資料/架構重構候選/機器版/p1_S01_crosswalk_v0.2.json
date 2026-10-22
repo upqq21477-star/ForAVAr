@@ -118,10 +118,10 @@
       "nm": "資料缺口辨識",
       "src": "TOOL_GUARD",
       "grp": "S01 Runtime）",
-      "ax": "AX4",
+      "ax": "AX2",
       "node": "KG-09",
       "sp": "SP5",
-      "why": "缺口驅動路由",
+      "why": "證據缺口偵測由 AX2 所有；路由優先級由 AX4 決定",
       "map": "CANDIDATE",
       "decision": "UNASSESSED"
     }
