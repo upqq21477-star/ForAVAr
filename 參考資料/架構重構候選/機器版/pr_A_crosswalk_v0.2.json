@@ -1,0 +1,178 @@
+{
+  "v": "0.2",
+  "branch": "PR-A",
+  "source": "FORAVAR_PR_REGISTER",
+  "rule": "Candidate route only; authoritative issue title/status/root-cause/evidence remain in existing PR branch.",
+  "items": [
+    {
+      "id": "PR-014",
+      "nm": "變更波及面過大、依賴爆炸",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "來源／知識狀態",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-015",
+      "nm": "接口過多、隱性耦合、Schema／語意漂移",
+      "status": "PARTIAL",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "來源／知識狀態",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-016",
+      "nm": "能力選錯、能力描述被誤當成可執行功能",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "來源／知識狀態",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-017",
+      "nm": "升級不相容、部分發布或回退失敗",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "L4",
+      "node": "S5",
+      "sp": "SP5,SP6",
+      "why": "文件／流程／生命週期",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-018",
+      "nm": "權限過大、插件副作用或供應鏈風險",
+      "status": "PARTIAL",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "來源／知識狀態",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-019",
+      "nm": "Current、藍圖、索引與派生視圖衝突",
+      "status": "PARTIAL",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "來源／知識狀態",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-020",
+      "nm": "確認過的差異與實際寫入內容不一致",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "AX6",
+      "node": "KG-23",
+      "sp": "SP5",
+      "why": "驗收／修正候選",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-021",
+      "nm": "規則寫入文件，但新會話沒有載入或遵守",
+      "status": "OPEN",
+      "owner": "AX5",
+      "node": "KG-20",
+      "sp": "SP1,SP4,SP5",
+      "why": "執行／工具／控制",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-022",
+      "nm": "角色分工名義獨立，實際權限與認知不獨立",
+      "status": "PARTIAL",
+      "owner": "AX3",
+      "node": "KG-13",
+      "sp": "SP2,SP5",
+      "why": "問題模型／根因",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-023",
+      "nm": "測試集錯誤、基準過擬合或指標被美化",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "AX6",
+      "node": "KG-23",
+      "sp": "SP5",
+      "why": "驗收／修正候選",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-024",
+      "nm": "無限研究、遞迴重試、成本失控或任務卡死",
+      "status": "PARTIAL",
+      "owner": "AX4",
+      "node": "KG-17",
+      "sp": "SP4,SP5",
+      "why": "方法選擇／診斷",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-025",
+      "nm": "能力關係分析規模爆炸或未知關係被當成相容",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "來源／知識狀態",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-026",
+      "nm": "有版本紀錄但不能真正恢復",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "來源／知識狀態",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-027",
+      "nm": "無基線，無法證明新框架比簡單方案更好",
+      "status": "OPEN",
+      "owner": "AX1",
+      "node": "KG-04",
+      "sp": "SP1,SP6",
+      "why": "意圖／範圍",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-028",
+      "nm": "多檔更新只完成一部分，形成不一致版本",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "L4",
+      "node": "S1",
+      "sp": "SP3,SP6",
+      "why": "狀態／恢復",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-029",
+      "nm": "外部資料／工具行為改變而本地知識未更新",
+      "status": "PARTIAL",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "來源／知識狀態",
+      "map": "CANDIDATE_BY_SUMMARY"
+    },
+    {
+      "id": "PR-030",
+      "nm": "風險分級、變更優先序缺乏一致判準",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "L4",
+      "node": "S5",
+      "sp": "SP5,SP6",
+      "why": "文件／流程／生命週期",
+      "map": "CANDIDATE_BY_SUMMARY"
+    }
+  ]
+}
