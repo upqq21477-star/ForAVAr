@@ -1,0 +1,73 @@
+{
+  "schema_version": "0.1",
+  "branch_id": "SOP-CF-006-010",
+  "title": "CF-006–010",
+  "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
+  "rules": [
+    "詳細證據仍以來源權威為準。",
+    "source_status、mapping、decision 是不同狀態維度。",
+    "來源功能列入清單不代表 forAVAr 已實作。"
+  ],
+  "items": [
+    {
+      "id": "CF-006",
+      "name": "版本治理與備份輪替",
+      "type": "FIXED_PROCESS",
+      "reason": "此條目屬於 forAVAr 現有 SOP／固定流程索引。",
+      "function": "管理 Current、分支、來源備份、變更、移除與恢復。",
+      "logic": "依現有 SOP／流程權威文件操作。尚未被跨任務證據證實的項目，不得宣告為已驗收。",
+      "source_status": "已有 [版本治理與分流規範](./版本治理與分流規範.md)。",
+      "source": "SOP_CATALOG",
+      "mapping": "SOP_TO_FRAMEWORK_MAPPING_NOT_VALIDATED",
+      "decision": "REFERENCE_CURRENTNESS_FROM_SOURCE_ONLY"
+    },
+    {
+      "id": "CF-007",
+      "name": "主軸彙整與長度分流",
+      "type": "FIXED_PROCESS",
+      "reason": "此條目屬於 forAVAr 現有 SOP／固定流程索引。",
+      "function": "同主題彙整，超過閾值後按唯一職責分支。",
+      "logic": "依現有 SOP／流程權威文件操作。尚未被跨任務證據證實的項目，不得宣告為已驗收。",
+      "source_status": "有流程入口及全域索引／版本治理支援。",
+      "source": "SOP_CATALOG",
+      "mapping": "SOP_TO_FRAMEWORK_MAPPING_NOT_VALIDATED",
+      "decision": "REFERENCE_CURRENTNESS_FROM_SOURCE_ONLY"
+    },
+    {
+      "id": "CF-008",
+      "name": "雙向引用與追溯更新",
+      "type": "FIXED_PROCESS",
+      "reason": "此條目屬於 forAVAr 現有 SOP／固定流程索引。",
+      "function": "管理引用來源／目標、incoming／outgoing 及變更事件。",
+      "logic": "依現有 SOP／流程權威文件操作。尚未被跨任務證據證實的項目，不得宣告為已驗收。",
+      "source_status": "有流程入口、索引引用圖與變更追溯總表。",
+      "source": "SOP_CATALOG",
+      "mapping": "SOP_TO_FRAMEWORK_MAPPING_NOT_VALIDATED",
+      "decision": "REFERENCE_CURRENTNESS_FROM_SOURCE_ONLY"
+    },
+    {
+      "id": "CF-009",
+      "name": "SOP 固定流程與演化管理",
+      "type": "FIXED_PROCESS",
+      "reason": "此條目屬於 forAVAr 現有 SOP／固定流程索引。",
+      "function": "將重複有效做法納入 SOP，管理試行和生命週期。",
+      "logic": "依現有 SOP／流程權威文件操作。尚未被跨任務證據證實的項目，不得宣告為已驗收。",
+      "source_status": "流程目錄已有入口，連至 SOP-META-001。",
+      "source": "SOP_CATALOG",
+      "mapping": "SOP_TO_FRAMEWORK_MAPPING_NOT_VALIDATED",
+      "decision": "REFERENCE_CURRENTNESS_FROM_SOURCE_ONLY"
+    },
+    {
+      "id": "CF-010",
+      "name": "SOP 建檔與對話蒸餾",
+      "type": "FIXED_PROCESS",
+      "reason": "此條目屬於 forAVAr 現有 SOP／固定流程索引。",
+      "function": "從對話／操作中抽出可重用控制點並形成 SOP 候選；把來源紀錄分離保存。",
+      "logic": "依現有 SOP／流程權威文件操作。尚未被跨任務證據證實的項目，不得宣告為已驗收。",
+      "source_status": "流程目錄已有入口，連至 SOP-DOC-001。",
+      "source": "SOP_CATALOG",
+      "mapping": "SOP_TO_FRAMEWORK_MAPPING_NOT_VALIDATED",
+      "decision": "REFERENCE_CURRENTNESS_FROM_SOURCE_ONLY"
+    }
+  ]
+}
