@@ -1,9 +1,9 @@
 # SOP／固定流程的新版候選路由｜v0.2
 
 - 原始採用狀態仍由[唯一 SOP 清單](../SOP清單與落實狀態分組.md)管理。
-- 本頁只映射候選責任，不改寫 Current、Trial、Candidate 或 Discussion 狀態。
+- 本頁只映射候選責任，不改寫 Current、Trial、Candidate 或 Discussion 狀態。狀態欄是摘要，完整採納狀態以 SOP 權威清單核對。
 
-| 原 ID | 名稱 | 來源狀態 | 候選主責 | 支援平面 | 歸位理由 |
+| 原 ID | 名稱 | 狀態摘要 | 候選主責 | 支援平面 | 歸位理由 |
 |---|---|---|---|---|---|
 | SOP-META-001 | SOP 固定流程與演化管理 | PROVISIONAL_CURRENT，v0.5；已把關 | L4 | SP6 | SOP生命週期／變更規則 |
 | SOP-DOC-001 | SOP 文件標準欄位與蒸餾建置流程 | TRIAL，v0.1；文件已建立，模板和程序已讀回。 | AX6 | SP6 | SOP欄位／蒸餾／驗收 |
