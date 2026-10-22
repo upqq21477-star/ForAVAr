@@ -33,22 +33,86 @@
   "machine_model": "./architecture_model_v0.2.json",
   "machine_comparison": "./comparison_v0.2.json",
   "machine_branches": [
-    {"id":"P1-S01","path":"./p1_S01_crosswalk_v0.2.json","count":10},
-    {"id":"P1-S02","path":"./p1_S02_crosswalk_v0.2.json","count":8},
-    {"id":"P1-S03","path":"./p1_S03_crosswalk_v0.2.json","count":10},
-    {"id":"P1-S04","path":"./p1_S04_crosswalk_v0.2.json","count":10},
-    {"id":"P1-S05","path":"./p1_S05_crosswalk_v0.2.json","count":10},
-    {"id":"P2-F01","path":"./p2_F01_crosswalk_v0.2.json","count":10},
-    {"id":"P2-F11","path":"./p2_F11_crosswalk_v0.2.json","count":10},
-    {"id":"P2-F21","path":"./p2_F21_crosswalk_v0.2.json","count":10},
-    {"id":"SOP-ACTIVE","path":"./sop_active_crosswalk_v0.2.json","count":12},
-    {"id":"SOP-CANDIDATE","path":"./sop_candidate_crosswalk_v0.2.json","count":8},
-    {"id":"SOP-PENDING","path":"./sop_pending_crosswalk_v0.2.json","count":7},
-    {"id":"PR-S","path":"./pr_S_crosswalk_v0.2.json","count":13},
-    {"id":"PR-A","path":"./pr_A_crosswalk_v0.2.json","count":17},
-    {"id":"PR-B","path":"./pr_B_crosswalk_v0.2.json","count":12},
-    {"id":"PR-CD","path":"./pr_CD_crosswalk_v0.2.json","count":9},
-    {"id":"PR-RECENT","path":"./pr_RECENT_crosswalk_v0.2.json","count":3}
+    {
+      "id": "P1-S01",
+      "path": "./p1_S01_crosswalk_v0.2.json",
+      "count": 10
+    },
+    {
+      "id": "P1-S02",
+      "path": "./p1_S02_crosswalk_v0.2.json",
+      "count": 8
+    },
+    {
+      "id": "P1-S03",
+      "path": "./p1_S03_crosswalk_v0.2.json",
+      "count": 10
+    },
+    {
+      "id": "P1-S04",
+      "path": "./p1_S04_crosswalk_v0.2.json",
+      "count": 10
+    },
+    {
+      "id": "P1-S05",
+      "path": "./p1_S05_crosswalk_v0.2.json",
+      "count": 10
+    },
+    {
+      "id": "P2-F01",
+      "path": "./p2_F01_crosswalk_v0.2.json",
+      "count": 10
+    },
+    {
+      "id": "P2-F11",
+      "path": "./p2_F11_crosswalk_v0.2.json",
+      "count": 10
+    },
+    {
+      "id": "P2-F21",
+      "path": "./p2_F21_crosswalk_v0.2.json",
+      "count": 10
+    },
+    {
+      "id": "SOP-ACTIVE",
+      "path": "./sop_active_crosswalk_v0.2.json",
+      "count": 12
+    },
+    {
+      "id": "SOP-CANDIDATE",
+      "path": "./sop_candidate_crosswalk_v0.2.json",
+      "count": 8
+    },
+    {
+      "id": "SOP-PENDING",
+      "path": "./sop_pending_crosswalk_v0.2.json",
+      "count": 7
+    },
+    {
+      "id": "PR-S",
+      "path": "./pr_S_crosswalk_v0.2.json",
+      "count": 13
+    },
+    {
+      "id": "PR-A",
+      "path": "./pr_A_crosswalk_v0.2.json",
+      "count": 17
+    },
+    {
+      "id": "PR-B",
+      "path": "./pr_B_crosswalk_v0.2.json",
+      "count": 12
+    },
+    {
+      "id": "PR-CD",
+      "path": "./pr_CD_crosswalk_v0.2.json",
+      "count": 9
+    },
+    {
+      "id": "PR-RECENT",
+      "path": "./pr_RECENT_crosswalk_v0.2.json",
+      "count": 3
+    }
   ],
   "human_views": {
     "hud": "../重構候選_HUD_v0.2.md",
@@ -58,6 +122,7 @@
     "p1_mapping": "../P1新版候選歸位_v0.2.md",
     "p2_mapping": "../P2新版候選歸位_v0.2.md",
     "sop_mapping": "../SOP新版候選路由_v0.2.md",
-    "pr_mapping": "../PR新版候選路由_v0.2.md"
+    "pr_mapping": "../PR新版候選路由_v0.2.md",
+    "diagrams": "../新框架結構圖與關係圖_v0.2.md"
   }
 }
