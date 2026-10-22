@@ -1,0 +1,379 @@
+{
+  "v": "0.2",
+  "id": "FORAVAR-REFRAME-002",
+  "status": "CANDIDATE_NOT_APPROVED",
+  "renderer": [
+    "L1_CORE",
+    "L2_AXES",
+    "L3_VARIABLE_CAPABILITY_GRAPH",
+    "L4_GUARDED_STATE_ROUTER"
+  ],
+  "principles": [
+    "保留四層語意",
+    "骨架不固定節點配額",
+    "能力歸屬與執行狀態分離",
+    "支援平面不得取代認知核心",
+    "未驗證映射維持候選",
+    "圖表／文件不等於Runtime"
+  ],
+  "core": [
+    [
+      "I1",
+      "目標忠實",
+      "C-01"
+    ],
+    [
+      "I2",
+      "知識誠實",
+      "C-03"
+    ],
+    [
+      "I3",
+      "模型可修正",
+      "C-02,C-08"
+    ],
+    [
+      "I4",
+      "方法適配",
+      "C-04,C-11"
+    ],
+    [
+      "I5",
+      "行動有界",
+      "C-09"
+    ],
+    [
+      "I6",
+      "可區辨驗證",
+      "C-05,C-06,C-07"
+    ],
+    [
+      "I7",
+      "受控更新",
+      "C-07,C-08"
+    ],
+    [
+      "I8",
+      "誠實收口",
+      "C-10,C-12"
+    ]
+  ],
+  "axes": [
+    [
+      "AX1",
+      "意圖與問題契約",
+      "KG-01..KG-05"
+    ],
+    [
+      "AX2",
+      "證據與知識狀態",
+      "KG-06..KG-10"
+    ],
+    [
+      "AX3",
+      "問題模型與解釋",
+      "KG-11..KG-15"
+    ],
+    [
+      "AX4",
+      "方法與決策規劃",
+      "KG-16..KG-19"
+    ],
+    [
+      "AX5",
+      "求解與產出",
+      "KG-20..KG-22"
+    ],
+    [
+      "AX6",
+      "驗證、修正與結案",
+      "KG-23..KG-26"
+    ]
+  ],
+  "nodes": [
+    {
+      "id": "KG-01",
+      "ax": "AX1",
+      "label": "目標正規化"
+    },
+    {
+      "id": "KG-02",
+      "ax": "AX1",
+      "label": "成功條件／限制"
+    },
+    {
+      "id": "KG-03",
+      "ax": "AX1",
+      "label": "歧義／澄清"
+    },
+    {
+      "id": "KG-04",
+      "ax": "AX1",
+      "label": "範圍／競爭框架"
+    },
+    {
+      "id": "KG-05",
+      "ax": "AX1",
+      "label": "框架外訊號"
+    },
+    {
+      "id": "KG-06",
+      "ax": "AX2",
+      "label": "來源接收／版本"
+    },
+    {
+      "id": "KG-07",
+      "ax": "AX2",
+      "label": "主張—證據"
+    },
+    {
+      "id": "KG-08",
+      "ax": "AX2",
+      "label": "知識狀態／衝突"
+    },
+    {
+      "id": "KG-09",
+      "ax": "AX2",
+      "label": "證據缺口／檢索優先級"
+    },
+    {
+      "id": "KG-10",
+      "ax": "AX2",
+      "label": "來源漂移／範圍"
+    },
+    {
+      "id": "KG-11",
+      "ax": "AX3",
+      "label": "對象／變數／時間"
+    },
+    {
+      "id": "KG-12",
+      "ax": "AX3",
+      "label": "關係／依賴圖"
+    },
+    {
+      "id": "KG-13",
+      "ax": "AX3",
+      "label": "因果／替代根因"
+    },
+    {
+      "id": "KG-14",
+      "ax": "AX3",
+      "label": "競爭假說"
+    },
+    {
+      "id": "KG-15",
+      "ax": "AX3",
+      "label": "預測／反例／區辨測試"
+    },
+    {
+      "id": "KG-16",
+      "ax": "AX4",
+      "label": "任務屬性分類"
+    },
+    {
+      "id": "KG-17",
+      "ax": "AX4",
+      "label": "方法路由"
+    },
+    {
+      "id": "KG-18",
+      "ax": "AX4",
+      "label": "風險／預算／授權前置"
+    },
+    {
+      "id": "KG-19",
+      "ax": "AX4",
+      "label": "停止／重規劃"
+    },
+    {
+      "id": "KG-20",
+      "ax": "AX5",
+      "label": "受控執行"
+    },
+    {
+      "id": "KG-21",
+      "ax": "AX5",
+      "label": "模型／狀態更新"
+    },
+    {
+      "id": "KG-22",
+      "ax": "AX5",
+      "label": "結果／交付物"
+    },
+    {
+      "id": "KG-23",
+      "ax": "AX6",
+      "label": "接受條件核對"
+    },
+    {
+      "id": "KG-24",
+      "ax": "AX6",
+      "label": "失效分類／根因蒸餾"
+    },
+    {
+      "id": "KG-25",
+      "ax": "AX6",
+      "label": "修正／重框／下游失效"
+    },
+    {
+      "id": "KG-26",
+      "ax": "AX6",
+      "label": "結案／回歸／評測"
+    }
+  ],
+  "planes": [
+    [
+      "SP1",
+      "治理／權限／信任"
+    ],
+    [
+      "SP2",
+      "證據／知識"
+    ],
+    [
+      "SP3",
+      "狀態／上下文／恢復"
+    ],
+    [
+      "SP4",
+      "能力／工具／執行介面"
+    ],
+    [
+      "SP5",
+      "保證／評測／量測"
+    ],
+    [
+      "SP6",
+      "持久化／生命週期／文件治理"
+    ],
+    [
+      "SP7",
+      "人機呈現／圖表"
+    ]
+  ],
+  "states": [
+    "S0_INTAKE",
+    "S1_CONTRACT_READY",
+    "S2_MODEL_READY",
+    "S3_PLAN_READY",
+    "S4_WORKING",
+    "S5_VERIFYING"
+  ],
+  "terminals": [
+    "T_DONE",
+    "T_PARTIAL",
+    "T_NOT_PROVEN",
+    "T_BLOCKED",
+    "T_REJECTED",
+    "T_STOPPED",
+    "T_FAILED"
+  ],
+  "transitions": [
+    [
+      "S0",
+      "S1",
+      "goal_scope_sufficient"
+    ],
+    [
+      "S1",
+      "S2",
+      "evidence_or_model_needed"
+    ],
+    [
+      "S1",
+      "S3",
+      "simple_known_low_risk_route"
+    ],
+    [
+      "S1",
+      "S5",
+      "direct_answer_with_acceptance_check"
+    ],
+    [
+      "S2",
+      "S3",
+      "model_sufficient_for_next_action"
+    ],
+    [
+      "S3",
+      "S4",
+      "permission_scope_budget_pass"
+    ],
+    [
+      "S4",
+      "S5",
+      "observable_result_available"
+    ],
+    [
+      "S5",
+      "S2",
+      "model_or_evidence_invalidated"
+    ],
+    [
+      "S5",
+      "S3",
+      "method_or_plan_invalidated"
+    ],
+    [
+      "S5",
+      "S4",
+      "bounded_local_repair_authorized"
+    ],
+    [
+      "S5",
+      "T_DONE",
+      "acceptance_evidence_pass"
+    ],
+    [
+      "S5",
+      "T_PARTIAL",
+      "partial_scope_explicit"
+    ],
+    [
+      "ANY",
+      "T_BLOCKED",
+      "dependency_or_authority_missing"
+    ],
+    [
+      "ANY",
+      "T_NOT_PROVEN",
+      "required_evidence_unavailable"
+    ],
+    [
+      "ANY",
+      "T_REJECTED",
+      "prohibited_action"
+    ],
+    [
+      "ANY",
+      "T_STOPPED",
+      "stop_rule_or_budget"
+    ],
+    [
+      "ANY",
+      "T_FAILED",
+      "observed_execution_or_acceptance_failure"
+    ]
+  ],
+  "edge_types": [
+    "PARENT_OF",
+    "DEPENDS_ON",
+    "SERVES",
+    "GUARDS",
+    "DATA_FLOWS_TO",
+    "EVIDENCE_FOR",
+    "VERIFIED_BY",
+    "INVALIDATES",
+    "REPLACES",
+    "RETIRES_TO"
+  ],
+  "rules": [
+    "78 項 P1/P2 原始 ID 必須保留。",
+    "SOP、問題修正、能力、新便利功能分開分類。",
+    "主責歸位是候選；支援平面可多選。",
+    "硬性權限／安全／成本 Gate 不可短路。",
+    "舊節點拆併或退役需保留追溯及回復方式。",
+    "只有實際證據能升級 TESTED／RUNTIME_OBSERVED。"
+  ]
+}
