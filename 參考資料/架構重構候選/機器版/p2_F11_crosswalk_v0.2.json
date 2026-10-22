@@ -1,0 +1,119 @@
+{
+  "v": "0.2",
+  "branch": "P2-F11",
+  "title": "P2-F11–F20",
+  "source": "P2_EVIDENCE_MATRIX",
+  "rule": "Candidate mapping only; preserve source ID/status; not forAVAr runtime evidence.",
+  "items": [
+    {
+      "id": "P2-F11",
+      "nm": "來源／結果生命週期與封存治理",
+      "src_status": "PATCHED_UNVERIFIED / SIMULATION_ONLY",
+      "ax": "AX6",
+      "node": "KG-26",
+      "sp": "SP6",
+      "why": "來源結果生命週期",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F12",
+      "nm": "外部工具雷達與 Provider",
+      "src_status": "候選發現與 Adapter 程式存在不等於 Provider 真正啟用",
+      "ax": "AX4",
+      "node": "KG-17",
+      "sp": "SP4,SP1",
+      "why": "工具雷達不等於啟用",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F13",
+      "nm": "自我評估、變更影響與演進回退",
+      "src_status": "PATCHED_UNVERIFIED / SIMULATION_ONLY",
+      "ax": "AX6",
+      "node": "KG-25",
+      "sp": "SP1,SP5",
+      "why": "影響／回退／回歸",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F14",
+      "nm": "Current／文件投影／交接一致性",
+      "src_status": "PARTIAL / PATCHED_UNVERIFIED / NOT_EXECUTED",
+      "ax": "L4",
+      "node": "S5",
+      "sp": "SP3,SP6,SP7",
+      "why": "Current／文件／交接一致",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F15",
+      "nm": "最低操作驗收與故障歸因",
+      "src_status": "BASELINE_DOCUMENT_LOOP_PASS（限定範圍）",
+      "ax": "AX6",
+      "node": "KG-23",
+      "sp": "SP5",
+      "why": "操作驗收與故障歸因",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F16",
+      "nm": "AI 對話＋GitHub 最低操作模式",
+      "src_status": "BASELINE_DOCUMENT_LOOP_PASS（限定文件操作）；PROGRAM_EXECUTED_PASS／OBSERV",
+      "ax": "L4",
+      "node": "S0–S5",
+      "sp": "SP4,SP6",
+      "why": "最低可用工作路徑",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F17",
+      "nm": "Current-first 狀態與資料生命週期",
+      "src_status": "PARTIAL / CODE_PRESENT_UNVERIFIED / NOT_EXECUTED",
+      "ax": "L4",
+      "node": "S0–S5",
+      "sp": "SP3,SP6",
+      "why": "Current-first／生命週期",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F18",
+      "nm": "必要能力納入與退場治理",
+      "src_status": "CODE_PRESENT_UNVERIFIED / NOT_EXECUTED",
+      "ax": "AX4",
+      "node": "KG-17",
+      "sp": "SP4,SP6",
+      "why": "能力納入與退場",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F19",
+      "nm": "UNKNOWN 觸發的針對性診斷與補救",
+      "src_status": "CODE_PRESENT_UNVERIFIED / NOT_EXECUTED",
+      "ax": "AX4",
+      "node": "KG-09",
+      "sp": "SP2,SP5",
+      "why": "未知觸發針對性診斷",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F20",
+      "nm": "系統建置工廠：按證據選擇 BUILD／REPAIR／EXTEND／REBUILD",
+      "src_status": "CODE_PRESENT_UNVERIFIED / NOT_EXECUTED",
+      "ax": "AX5",
+      "node": "KG-20",
+      "sp": "SP4,SP1,SP5",
+      "why": "BUILD／REPAIR／EXTEND／REBUILD",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    }
+  ]
+}
