@@ -355,6 +355,21 @@
       "ANY",
       "T_FAILED",
       "observed_execution_or_acceptance_failure"
+    ],
+    [
+      "S0",
+      "S0",
+      "material_ambiguity_requires_minimal_clarification; remain waiting for user input"
+    ],
+    [
+      "S2",
+      "S2",
+      "bounded_targeted_evidence_step_has_expected_value_and_budget"
+    ],
+    [
+      "S5",
+      "S1",
+      "goal_scope_or_problem_contract_invalidated"
     ]
   ],
   "edge_types": [
@@ -375,6 +390,9 @@
     "主責歸位是候選；支援平面可多選。",
     "硬性權限／安全／成本 Gate 不可短路。",
     "舊節點拆併或退役需保留追溯及回復方式。",
-    "只有實際證據能升級 TESTED／RUNTIME_OBSERVED。"
+    "只有實際證據能升級 TESTED／RUNTIME_OBSERVED。",
+    "S0 may stay in a clarification-wait state only when ambiguity materially changes outcome, scope, risk or authorization; ask the minimum necessary question.",
+    "S2 may repeat targeted evidence work only when expected information gain is positive and the budget/retry bound remains; otherwise progress to planning or a truthful terminal state.",
+    "From verification, a failed goal/scope contract returns to S1; failed evidence/model returns to S2; failed method returns to S3. Never route every failure through a full restart."
   ]
 }
