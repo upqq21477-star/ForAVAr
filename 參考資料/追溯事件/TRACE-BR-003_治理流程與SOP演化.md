@@ -22,7 +22,7 @@
 | EVT-0038 | 2026-10-21 | `RECORD_GOVERNANCE_CLOSED_LOOP_AND_INFORMATION_ROUTING_STUDY` | 新增 PR-054 與資訊整合研討紀錄；候選修正與 Runtime 驗證仍未完成。 | [EVT-0038](./EVT-0038_治理閉環與資訊自動整合研討紀錄.md) | PARTIAL |
 
 | EVT-0053 | 2026-10-22 | PLAN_EXISTING_CAPABILITY_RECONCILIATION | 對話問題整合的既有職責映射、參考資料重整與驗收計畫；未實作。 | [EVT-0053](./EVT-0053_對話問題整合職責映射與參考資料重整規劃.md) | PARTIAL（規劃／引用矩陣已建；全庫掃描與 Runtime 未做） |
-| EVT-0054 | 2026-10-22 | ADD_PROJECT_ISOLATION_AND_ATTRIBUTE_ATTRIBUTION_PLAN | 新專題隔離、結案屬性候選與納入審查；未採納／未實作。 | [EVT-0054](./EVT-0054_專題隔離與基礎屬性歸因規劃.md) | PARTIAL（文件建立，回讀待驗） |
+| EVT-0054 | 2026-10-22 | ADD_PROJECT_ISOLATION_AND_ATTRIBUTE_ATTRIBUTION_PLAN | 新專題隔離、結案屬性候選與納入審查；未採納／未實作。 | [EVT-0054](./EVT-0054_專題隔離與基礎屬性歸因規劃.md) | PARTIAL（文件／索引已讀回；模板試行與 Runtime 未驗） |
 
 ## 使用規則
 
