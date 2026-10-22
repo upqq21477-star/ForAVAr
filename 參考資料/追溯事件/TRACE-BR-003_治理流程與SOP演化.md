@@ -21,6 +21,8 @@
 | EVT-0036 | 2026-10-21 | SIM_GATE_ACTIVE | SOP v0.5 模擬閘門生效。 | [裁定](../問題清單_近期補入與ID對照.md#key-change-simulation-gate-2026-10-21) | PARTIAL（效益／Runtime 未測） |
 | EVT-0038 | 2026-10-21 | `RECORD_GOVERNANCE_CLOSED_LOOP_AND_INFORMATION_ROUTING_STUDY` | 新增 PR-054 與資訊整合研討紀錄；候選修正與 Runtime 驗證仍未完成。 | [EVT-0038](./EVT-0038_治理閉環與資訊自動整合研討紀錄.md) | PARTIAL |
 
+| EVT-0053 | 2026-10-22 | PLAN_EXISTING_CAPABILITY_RECONCILIATION | 對話問題整合的既有職責映射、參考資料重整與驗收計畫；未實作。 | [EVT-0053](./EVT-0053_對話問題整合職責映射與參考資料重整規劃.md) | PARTIAL（規劃／引用矩陣已建；全庫掃描與 Runtime 未做） |
+
 ## 使用規則
 
 - 本分支只負責以上分類中的歷史事件摘要，不取代來源報告、SOP 或研究主軸。
