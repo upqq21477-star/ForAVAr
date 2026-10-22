@@ -1,0 +1,109 @@
+{
+  "schema_version": "0.1",
+  "branch_id": "SOP-CAND",
+  "title": "SOP-CAND-005–012",
+  "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
+  "rules": [
+    "詳細證據仍以來源權威為準。",
+    "source_status、mapping、decision 是不同狀態維度。",
+    "來源功能列入清單不代表 forAVAr 已實作。"
+  ],
+  "items": [
+    {
+      "id": "SOP-CAND-005",
+      "name": "意圖、既有職責與衝突的前置掃描",
+      "type": "SOP_CANDIDATE",
+      "reason": "本次工作顯示，已有規則與相似流程未必會在新增內容前先被比較。",
+      "function": "定義目標拆解、相關 MASTER／SOP／問題清單檢索、唯一責任比對、衝突分類及變更影響表；決定整合進現有流程或獨立 SOP。",
+      "logic": "代表性案例中，寫入前能辨識重複、衝突和受影響文件；未經必要掃描不能把高影響變更判為 READY。候選修正詳見[整合研討紀錄](./解析文檔/治理閉環與資訊自動整合_整合研討紀錄_2026-10-21.md)。",
+      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "source": "SOP_CATALOG",
+      "mapping": "CANDIDATE_MAPPING_PENDING",
+      "decision": "PENDING_ADOPTION"
+    },
+    {
+      "id": "SOP-CAND-006",
+      "name": "問題到控制再到回歸的閉環",
+      "type": "SOP_CANDIDATE",
+      "reason": "現有問題 ID、候選改善及 SOP 執行紀錄未形成每項問題都可追蹤的改善—復發檢查鏈。",
+      "function": "定義問題、根因證據、改善負責角色、控制點、驗收案例、回歸測試及狀態變更的關聯。",
+      "logic": "每個結案改善有具體驗收證據和復發檢查；失敗再次出現時能回查既有措施。",
+      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "source": "SOP_CATALOG",
+      "mapping": "CANDIDATE_MAPPING_PENDING",
+      "decision": "PENDING_ADOPTION"
+    },
+    {
+      "id": "SOP-CAND-007",
+      "name": "變更影響與完成閘門",
+      "type": "SOP_CANDIDATE",
+      "reason": "多文件更新可能產生部分新、部分舊狀態；完成文件不等於完成整體任務。",
+      "function": "導入輕量 Definition of Ready／Definition of Done 清單與變更影響表，分清文件寫入、內容、引用、行為與 Runtime 證據。",
+      "logic": "變更開始前已有可核對條件；結案逐項回報 PASS／PARTIAL／BLOCKED／NOT_VERIFIED。",
+      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "source": "SOP_CATALOG",
+      "mapping": "CANDIDATE_MAPPING_PENDING",
+      "decision": "PENDING_ADOPTION"
+    },
+    {
+      "id": "SOP-CAND-008",
+      "name": "一致性靜態檢查",
+      "type": "SOP_CANDIDATE",
+      "reason": "連結、索引、ID、必備欄位和字元限制目前依賴人工讀回，容易漏檢。",
+      "function": "盤點可由腳本或工具低成本檢查的項目，先定檢查輸入／輸出和錯誤分類，再評估執行方式。",
+      "logic": "對指定範圍可重複執行；錯誤有定位；不能掃描的範圍明確報 PARTIAL。",
+      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "source": "SOP_CATALOG",
+      "mapping": "CANDIDATE_MAPPING_PENDING",
+      "decision": "PENDING_ADOPTION"
+    },
+    {
+      "id": "SOP-CAND-009",
+      "name": "改善成效基線與回歸量測",
+      "type": "SOP_CANDIDATE",
+      "reason": "沒有基線時，不能證明增加治理程序後更正確、更省時或減少返工。",
+      "function": "為代表性任務建立簡單基線，量測重複建檔、職責漏掃、衝突漏判、返工、錯誤、成本及延遲。",
+      "logic": "使用可比較案例和明確指標；未測量時標 UNKNOWN／UNMEASURED，不宣稱改善。",
+      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "source": "SOP_CATALOG",
+      "mapping": "CANDIDATE_MAPPING_PENDING",
+      "decision": "PENDING_ADOPTION"
+    },
+    {
+      "id": "SOP-CAND-010",
+      "name": "重大決策紀錄",
+      "type": "SOP_CANDIDATE",
+      "reason": "架構／治理決策若只存最終規則，後續不容易理解被拒選項和取捨。",
+      "function": "規劃輕量決策紀錄欄位：背景、問題、候選、選擇、理由、後果、授權、證據與重審條件。",
+      "logic": "明確定義何種重大決策需要記錄；決策連至唯一規範且不重複保存全文。",
+      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "source": "SOP_CATALOG",
+      "mapping": "CANDIDATE_MAPPING_PENDING",
+      "decision": "PENDING_ADOPTION"
+    },
+    {
+      "id": "SOP-CAND-011",
+      "name": "先批判框架再細化",
+      "type": "SOP_CANDIDATE",
+      "reason": "初始框架可能把後續研究鎖定在錯誤方向。",
+      "function": "加入替代框架、未知、反例及依賴外溢檢查。",
+      "logic": "高不確定／高影響任務需留檢查證據；簡單任務不強制重型流程。",
+      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "source": "SOP_CATALOG",
+      "mapping": "CANDIDATE_MAPPING_PENDING",
+      "decision": "PENDING_ADOPTION"
+    },
+    {
+      "id": "SOP-CAND-012",
+      "name": "自我更新控制面與回歸閘門",
+      "type": "SOP_CANDIDATE",
+      "reason": "若更新器可自行修改權限、評估門檻或回退規則，可能移除自身保護。",
+      "function": "將內容面與控制面分離；未經明確授權不得自改核心規則、評估器、權限或回退條件；必要時使用預先保留案例。",
+      "logic": "若批准自我更新功能，需先完成權限、測試、審核、回退和共因失效驗收；目前未實作。",
+      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "source": "SOP_CATALOG",
+      "mapping": "CANDIDATE_MAPPING_PENDING",
+      "decision": "PENDING_ADOPTION"
+    }
+  ]
+}
