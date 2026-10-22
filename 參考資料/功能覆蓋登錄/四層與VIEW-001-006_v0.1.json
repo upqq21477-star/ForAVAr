@@ -1,0 +1,237 @@
+{
+  "schema_version": "0.1",
+  "branch_id": "ARCH-VIEW-A",
+  "title": "四層架構與 VIEW-001–006",
+  "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
+  "rules": [
+    "詳細證據仍以來源權威為準。",
+    "source_status、mapping、decision 是不同狀態維度。",
+    "來源功能列入清單不代表 forAVAr 已實作。"
+  ],
+  "items": [
+    {
+      "id": "CORE-001",
+      "name": "L1 核心：思考不變量",
+      "type": "ARCHITECTURE_REQUIREMENT",
+      "lane": "NEW_FEATURE",
+      "reason": "避免系統核心從思考偏移成純治理、控制或文件管理。",
+      "function": "定義所有任務共用的最小認知原則，而非固定執行所有步驟。",
+      "logic": "目標／限制／成功條件先行；分開事實、來源主張、推論、假說、未知與衝突；可用反證修正問題模型；依任務屬性選方法；流程深度按風險與成本調整。",
+      "sources": [
+        "FOUR_LAYER_BLUEPRINT"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "SPECIFIED_IN_DRAFT_NOT_ACCEPTED",
+      "layer_candidates": [
+        "L1"
+      ],
+      "acceptance": [
+        "每條不變量有定義、違反例、可觀察訊號與測試方法",
+        "不存在將治理清單誤當思考核心的層級替代"
+      ]
+    },
+    {
+      "id": "RENDER-001",
+      "name": "L2 主軸：第一次渲染 A1–A6",
+      "type": "ARCHITECTURE_REQUIREMENT",
+      "lane": "NEW_FEATURE",
+      "reason": "把抽象思考核心拆成可辨識的責任域，讓人類與 AI 能檢查是否漏掉認知責任。",
+      "function": "以六個主軸呈現意圖／問題框定、證據／知識狀態、問題模型／解釋、方法／策略、求解／方案形成、驗證／重框／回饋。",
+      "logic": "每個主軸要有唯一責任、輸入、輸出、依賴與非責任範圍；主軸不是角色數量，也不表示每項任務都依序執行全部主軸。",
+      "sources": [
+        "FOUR_LAYER_BLUEPRINT"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "SPECIFIED_IN_DRAFT_NOT_ACCEPTED",
+      "layer_candidates": [
+        "L2"
+      ],
+      "acceptance": [
+        "六軸責任邊界可區分",
+        "重疊與責任空洞有記錄"
+      ]
+    },
+    {
+      "id": "SKELETON-001",
+      "name": "L3 骨架：十八個節點 N01–N18",
+      "type": "ARCHITECTURE_REQUIREMENT",
+      "lane": "NEW_FEATURE",
+      "reason": "將主軸繼續拆解到可檢查入口、操作、輸出、失敗狀態與下一步。",
+      "function": "用每軸三個節點共十八節點，表示目標／邊界／框架、證據／主張／未知、因果／假說／檢驗、任務屬性／路由／停止、執行／更新／綜合、驗收／修正／結案。",
+      "logic": "每個節點需有入口條件、必要輸入、操作規則、輸出、失敗分支、下一步、測試與證據映射；允許按任務選用或短路。",
+      "sources": [
+        "FOUR_LAYER_BLUEPRINT"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "SPECIFIED_IN_DRAFT_NOT_ACCEPTED",
+      "layer_candidates": [
+        "L3"
+      ],
+      "acceptance": [
+        "18 個節點均有契約",
+        "無孤兒節點、重複責任或無出口節點"
+      ]
+    },
+    {
+      "id": "FRAMEWORK-001",
+      "name": "L4 框架：條件式流程 F0–F7",
+      "type": "ARCHITECTURE_REQUIREMENT",
+      "lane": "NEW_FEATURE",
+      "reason": "讓骨架依風險、複雜度、證據、權限與成本生成適用流程，不把骨架變成所有任務的固定 SOP。",
+      "function": "定義 F0 前置檢查、F1 問題框定、F2 證據／模型、F3 方法路由、F4 受控執行、F5 驗收分流、F6 必要持久化／交接、F7 結案／評測。",
+      "logic": "每一條分支需有觸發條件、可觀察判據、成功／失敗狀態、停止或恢復路徑；低風險簡單任務可縮短路徑。",
+      "sources": [
+        "FOUR_LAYER_BLUEPRINT"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "SPECIFIED_IN_DRAFT_NOT_ACCEPTED",
+      "layer_candidates": [
+        "L4"
+      ],
+      "acceptance": [
+        "所有主要分支都有觸發、出口與停止條件",
+        "無限重試、無限研究及流程強制化反例通過桌上推演"
+      ]
+    },
+    {
+      "id": "VIEW-001",
+      "name": "機器可讀功能登錄（JSON）",
+      "type": "CROSSCUTTING_GOVERNANCE",
+      "lane": "NEW_FEATURE",
+      "reason": "降低功能清單的歧義、重複、漏項與同步成本，讓 AI 能以固定欄位快速過濾、排序及追溯。",
+      "function": "以穩定 ID、分類、建立原因、功能、邏輯、依賴、來源、問題／SOP 關聯、實作狀態、證據狀態及驗收條件保存每個能力項。",
+      "logic": "JSON 是此登錄的機器讀取主資料；不可把沒有來源的項目寫成已確認功能。P1/P2 狀態只表示來源狀態，不自動繼承到 forAVAr Runtime。",
+      "sources": [
+        "P1_FUNCTION_MATRIX",
+        "P2_EVIDENCE_MATRIX",
+        "SOP_CATALOG",
+        "PR_INDEX"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "NEW_CATALOG_PROPOSAL",
+      "layer_candidates": [
+        "橫向支援平面"
+      ],
+      "acceptance": [
+        "JSON 可解析",
+        "ID 唯一"
+      ]
+    },
+    {
+      "id": "VIEW-002",
+      "name": "人類可讀 HUD／功能面板（Markdown）",
+      "type": "USABILITY_ENHANCEMENT",
+      "lane": "NEW_FEATURE",
+      "reason": "讓人快速掃描系統總覽、狀態、依賴、任務阻塞和詳細分支，不必直接讀大型 JSON 或全部文件。",
+      "function": "以摘要儀表板、分層樹狀圖、關係圖、分類表格、狀態文字和來源連結呈現功能清單；借鏡遊戲 UI 的任務面板與分區導航，但不把裝飾取代實質資訊。",
+      "logic": "人類視圖由機器登錄投影而來；文字狀態須可讀，不只靠色彩；可逐層展開細節。視圖與 JSON 不一致時以 JSON／源文件檢查並標記投影漂移。",
+      "sources": [
+        "P2_SYSTEM_BLUEPRINT",
+        "FORAVAR_P1P2_TREE",
+        "FOUR_LAYER_BLUEPRINT"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "NEW_CATALOG_PROPOSAL",
+      "layer_candidates": [
+        "呈現支援平面"
+      ],
+      "acceptance": [
+        "可從總覽找到每個 ID",
+        "人類視圖的重要狀態與機器登錄一致"
+      ]
+    },
+    {
+      "id": "VIEW-003",
+      "name": "雙視圖一致性與差異檢查",
+      "type": "CROSSCUTTING_GOVERNANCE",
+      "lane": "NEW_FEATURE",
+      "reason": "避免機器版與人類版各自修改，形成兩套互相矛盾的事實來源。",
+      "function": "把 JSON 定義為功能登錄的主資料，Markdown 為呈現投影；每次更新以同一變更集更新兩者，讀回並核對項目總數、ID、分類、狀態與圖表節點。",
+      "logic": "一筆資料一個權威來源；人類視圖不得反向改寫機器登錄；沒有自動產生器之前，更新者必須在同一交易中對照兩檔並執行清單式一致性檢查。",
+      "sources": [
+        "P2_SYSTEM_BLUEPRINT",
+        "PR_INDEX"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "NEW_CATALOG_PROPOSAL",
+      "layer_candidates": [
+        "文件治理／驗收"
+      ],
+      "acceptance": [
+        "JSON 與 Markdown 的 ID 集合一致",
+        "功能總數可對帳"
+      ]
+    },
+    {
+      "id": "VIEW-004",
+      "name": "樹狀圖與關係圖雙圖合約",
+      "type": "USABILITY_ENHANCEMENT",
+      "lane": "NEW_FEATURE",
+      "reason": "樹狀圖表達分類／父子歸屬；關係圖表達依賴、交接、證據和跨模組關係，兩種圖不能互相取代。",
+      "function": "提供四層渲染樹、P1/P2 十大功能分支樹、以及流程／依賴／問題—SOP—功能—驗收關係圖。",
+      "logic": "樹節點表示歸屬；關係圖的每條邊要標示依賴、資料流、控制流、治理／授權、來源或驗收語意，未知關係標 UNKNOWN。圖只是源資料的衍生視圖。",
+      "sources": [
+        "FORAVAR_P1P2_TREE",
+        "FOUR_LAYER_BLUEPRINT",
+        "P2_SYSTEM_BLUEPRINT"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "PARTIAL_IN_SOURCE_DOCUMENTS",
+      "layer_candidates": [
+        "L2/L3/L4",
+        "橫向支援平面"
+      ],
+      "acceptance": [
+        "樹狀歸屬與關係邊語意分開",
+        "所有工程決策用的邊可追溯"
+      ]
+    },
+    {
+      "id": "VIEW-005",
+      "name": "來源／實作／測試／Runtime 分層狀態",
+      "type": "CROSSCUTTING_GOVERNANCE",
+      "lane": "NEW_FEATURE",
+      "reason": "避免看到藍圖、功能表或程式檔，就推論功能已接線、測試通過或真實運行。",
+      "function": "每項能力區分設計狀態、來源 repo 狀態、forAVAr 覆蓋／映射狀態、實作接線狀態、測試狀態、Runtime 觀測狀態。",
+      "logic": "設計、檔案存在、靜態審查、模擬、程式測試、端到端驗收和真實 Runtime 觀測是不同證據層；沒有證據不得升級。",
+      "sources": [
+        "P2_EVIDENCE_MATRIX",
+        "P1_FUNCTION_MATRIX",
+        "FOUR_LAYER_BLUEPRINT"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "SPECIFIED_ACROSS_SOURCE_DOCS",
+      "layer_candidates": [
+        "橫向支援平面"
+      ],
+      "acceptance": [
+        "每個狀態都有定義",
+        "不以文件存在代替測試"
+      ]
+    },
+    {
+      "id": "VIEW-006",
+      "name": "P1/P2 功能到 forAVAr 四層的雙向映射",
+      "type": "CROSSCUTTING_GOVERNANCE",
+      "lane": "NEW_FEATURE",
+      "reason": "功能來源樹能證明列入盤點，但不能證明新四層模型已吸收各項責任；要防止命名重構造成能力遺失。",
+      "function": "為每個 P1／P2 原功能指定保留、整合、替代、延期、退役或待裁定決策，並映射到思考主軸／骨架，或標為橫向支援平面。",
+      "logic": "不能強迫所有工程治理能力塞進思考核心；必須同時做正向追蹤（來源功能→新責任）與反向追蹤（新節點→來源價值／需求），不合理映射保留 UNKNOWN。",
+      "sources": [
+        "FORAVAR_P1P2_TREE",
+        "P1_FUNCTION_MATRIX",
+        "P2_EVIDENCE_MATRIX",
+        "FOUR_LAYER_BLUEPRINT"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "MISSING_AS_SINGLE_AUDITED_MATRIX",
+      "layer_candidates": [
+        "四層認知結構＋橫向支援平面"
+      ],
+      "acceptance": [
+        "48+30 項都有明確決策或 OPEN 狀態",
+        "正反雙向映射可回查"
+      ]
+    }
+  ]
+}
