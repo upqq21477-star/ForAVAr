@@ -1,0 +1,117 @@
+{
+  "schema_version": "0.1",
+  "branch_id": "P1-S02",
+  "title": "P1 F11-F18",
+  "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
+  "rules": [
+    "詳細證據仍以來源權威為準。",
+    "source_status、mapping、decision 是不同狀態維度。",
+    "來源功能列入清單不代表 forAVAr 已實作。"
+  ],
+  "items": [
+    {
+      "id": "P1-F11",
+      "name": "共現",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "MODEL_NATIVE",
+      "source_group": "S02 Runtime）",
+      "reason": "需要發現元素同時出現的關係。",
+      "function": "模型或 parser 整理共現。（P1 來源分類：MODEL_NATIVE；原責任域：S02 Runtime）",
+      "logic": "model or parser。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F12",
+      "name": "方向",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S02 Runtime）",
+      "reason": "關係方向錯誤會改變因果／依賴理解。",
+      "function": "模型提出關係，做明確證據檢查。（P1 來源分類：TOOL_GUARD；原責任域：S02 Runtime）",
+      "logic": "model proposal + explicit evidence check。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F13",
+      "name": "條件",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S02 Runtime）",
+      "reason": "條件關係要保留限制。",
+      "function": "模型提出條件並檢查證據。（P1 來源分類：TOOL_GUARD；原責任域：S02 Runtime）",
+      "logic": "model proposal + evidence check。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F14",
+      "name": "依賴",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S02 Runtime）",
+      "reason": "下游行為可能依賴前置條件。",
+      "function": "模型候選加證據檢查。（P1 來源分類：TOOL_GUARD；原責任域：S02 Runtime）",
+      "logic": "model proposal + evidence check。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F15",
+      "name": "衝突／支持",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S02 Runtime）",
+      "reason": "相矛盾主張需同時保留以供判斷。",
+      "function": "保留雙方主張及 provenance。（P1 來源分類：TOOL_GUARD；原責任域：S02 Runtime）",
+      "logic": "preserve both claims + provenance。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F16",
+      "name": "時間",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S02 Runtime）",
+      "reason": "事件時間順序會改變解釋。",
+      "function": "確定性時間排序。（P1 來源分類：TOOL_GUARD；原責任域：S02 Runtime）",
+      "logic": "deterministic temporal ordering。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F17",
+      "name": "關係強度",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S02 Runtime）",
+      "reason": "關係強度需可比較、可重現。",
+      "function": "確定性計數／統計。（P1 來源分類：TOOL_GUARD；原責任域：S02 Runtime）",
+      "logic": "deterministic count/statistics。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F18",
+      "name": "關係鏈",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S02 Runtime）",
+      "reason": "多步關係需要 graph traversal。",
+      "function": "圖結構遍歷。（P1 來源分類：TOOL_GUARD；原責任域：S02 Runtime）",
+      "logic": "graph traversal。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    }
+  ]
+}
