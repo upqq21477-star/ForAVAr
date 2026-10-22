@@ -14,36 +14,36 @@
       "name": "意圖、既有職責與衝突的前置掃描",
       "type": "SOP_CANDIDATE",
       "reason": "本次工作顯示，已有規則與相似流程未必會在新增內容前先被比較。",
-      "function": "定義目標拆解、相關 MASTER／SOP／問題清單檢索、唯一責任比對、衝突分類及變更影響表；決定整合進現有流程或獨立 SOP。",
-      "logic": "代表性案例中，寫入前能辨識重複、衝突和受影響文件；未經必要掃描不能把高影響變更判為 READY。候選修正詳見[整合研討紀錄](./解析文檔/治理閉環與資訊自動整合_整合研討紀錄_2026-10-21.md)。",
-      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "function": "前置掃描由 SOP-META-001 第 2 節維護：重建基線、分類變更、核對功能／文件／批准責任與影響範圍；CF-009 觸發路由。",
+      "logic": "代表性案例中，寫入前能辨識重複、衝突和受影響文件；未經必要掃描不能把高影響變更判為 READY。候選修正詳見[整合研討紀錄](./解析文檔/治理閉環與資訊自動整合_整合研討紀錄_2026-10-21.md)。 試行狀態詳見 SOP-META-001 v0.6 與 2026-10-22 增量更新案例；規範整合不代表跨任務已驗證。",
+      "source_status": "INTEGRATED_IN_SOP_META_001_V0_6_TRIAL",
       "source": "SOP_CATALOG",
-      "mapping": "CANDIDATE_MAPPING_PENDING",
-      "decision": "PENDING_ADOPTION"
+      "mapping": "MAPPED_TO_SOP_META_001_SECTION_2",
+      "decision": "INTEGRATED_TRIAL_NOT_VALIDATED"
     },
     {
       "id": "SOP-CAND-006",
       "name": "問題到控制再到回歸的閉環",
       "type": "SOP_CANDIDATE",
       "reason": "現有問題 ID、候選改善及 SOP 執行紀錄未形成每項問題都可追蹤的改善—復發檢查鏈。",
-      "function": "定義問題、根因證據、改善負責角色、控制點、驗收案例、回歸測試及狀態變更的關聯。",
-      "logic": "每個結案改善有具體驗收證據和復發檢查；失敗再次出現時能回查既有措施。",
-      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "function": "將問題證據、根因可信度、原責任節點、最小修正、回歸測試與後續復發檢查串成可追溯閉環。",
+      "logic": "每個結案改善有具體驗收證據和復發檢查；失敗再次出現時能回查既有措施。 試行狀態詳見 SOP-META-001 v0.6 與 2026-10-22 增量更新案例；規範整合不代表跨任務已驗證。",
+      "source_status": "INTEGRATED_IN_SOP_META_001_V0_6_TRIAL",
       "source": "SOP_CATALOG",
-      "mapping": "CANDIDATE_MAPPING_PENDING",
-      "decision": "PENDING_ADOPTION"
+      "mapping": "MAPPED_TO_SOP_META_001_SECTION_2",
+      "decision": "INTEGRATED_TRIAL_NOT_VALIDATED"
     },
     {
       "id": "SOP-CAND-007",
       "name": "變更影響與完成閘門",
       "type": "SOP_CANDIDATE",
       "reason": "多文件更新可能產生部分新、部分舊狀態；完成文件不等於完成整體任務。",
-      "function": "導入輕量 Definition of Ready／Definition of Done 清單與變更影響表，分清文件寫入、內容、引用、行為與 Runtime 證據。",
-      "logic": "變更開始前已有可核對條件；結案逐項回報 PASS／PARTIAL／BLOCKED／NOT_VERIFIED。",
-      "source_status": "CANDIDATE_NOT_ADOPTED",
+      "function": "依 Δ0–Δ3 影響分級定義變更最小範圍、受影響契約、回歸、回退及分層完成條件。",
+      "logic": "變更開始前已有可核對條件；結案逐項回報 PASS／PARTIAL／BLOCKED／NOT_VERIFIED。 試行狀態詳見 SOP-META-001 v0.6 與 2026-10-22 增量更新案例；規範整合不代表跨任務已驗證。",
+      "source_status": "INTEGRATED_IN_SOP_META_001_V0_6_TRIAL",
       "source": "SOP_CATALOG",
-      "mapping": "CANDIDATE_MAPPING_PENDING",
-      "decision": "PENDING_ADOPTION"
+      "mapping": "MAPPED_TO_SOP_META_001_SECTION_2",
+      "decision": "INTEGRATED_TRIAL_NOT_VALIDATED"
     },
     {
       "id": "SOP-CAND-008",
