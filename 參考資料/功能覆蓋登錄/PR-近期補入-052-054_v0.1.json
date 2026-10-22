@@ -4,9 +4,9 @@
   "title": "PR-052–054",
   "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
   "rules": [
-    "詳細證據仍以來源權威為準。",
-    "source_status、mapping、decision 是不同狀態維度。",
-    "來源功能列入清單不代表 forAVAr 已實作。"
+    "PR 狀態以 authoritative_source 及問題清單主索引為準。",
+    "function/logic 描述追溯責任與已記錄處理方向；不代表問題已解決。",
+    "控制點映射及回歸驗收未完成時維持 pending。"
   ],
   "items": [
     {
@@ -14,36 +14,35 @@
       "name": "無 GitHub 可用上下文包，藍圖／舊交接被迫代替 Current，造成狀態重建偏差",
       "type": "PROBLEM_REMEDIATION",
       "severity": "RECENT",
-      "reason": "無法讀取最新儲存庫時，沒有綁定來源版本、Current、Active Work、核心限制、證據及下一步的自足狀態包；模型以初始藍圖／部分摘要",
-      "control_summary": "建立由既有權威來源派生的可攜式 State Bundle，包含 Core Anchor、Current State、Task Contract、來源指",
-      "status": "OPEN",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_近期補入與ID對照.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "reason": "無法讀取最新儲存庫時，沒有綁定來源版本、Current、Active Work、核心限制、證據及下一",
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "建立由既有權威來源派生的可攜式 State Bundle，包含 Core Anchor、Current State、Task Contract、來源指",
+      "source_status": "OPEN",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-053",
       "name": "已知治理規則未觸發前置檢查",
       "type": "PROBLEM_REMEDIATION",
       "severity": "RECENT",
-      "reason": "職責矩陣、既有 SOP、問題清單與流程索引雖已存在，但任務開始時不一定被檢索與套用；可能先新增文件，之後才發現重疊或漏掉通用抽象。",
-      "control_summary": "SOP-META-001 v0.4 已明文化先查直接相關主軸／SOP／問題分支，再列變更集；但每次任務是否確實觸發、跨會話／Runtime 是否可靠仍",
-      "status": "OPEN",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_近期補入與ID對照.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "reason": "職責矩陣、既有 SOP、問題清單與流程索引雖已存在，但任務開始時不一定被檢索與套用；可能先新增文件，",
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "SOP-META-001 v0.4 已明文化先查直接相關主軸／SOP／問題分支，再列變更集；但每次任務是否確實觸發、跨會話／Runtime 是否可靠仍",
+      "source_status": "OPEN",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-054",
       "name": "資訊分類、唯一歸位與流程回寫未形成可驗收閉環",
       "type": "PROBLEM_REMEDIATION",
       "severity": "RECENT",
-      "reason": "重要新資訊可能留在對話或個別分析文件，未被明確分類、歸入唯一責任位置，或未同步問題／SOP／索引／追溯；文件存在也無法證明流程已自動觸發。",
-      "control_summary": "候選修正： 裁定既有 CF-004／CF-008／CF-009／CF-010 分工；整合 SOP-CAND-005／006／008 的前置掃描、問題—",
-      "status": "OPEN",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_近期補入與ID對照.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "reason": "重要新資訊可能留在對話或個別分析文件，未被明確分類、歸入唯一責任位置，或未同步問題／SOP／索引／追",
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "候選修正： 裁定既有 CF-004／CF-008／CF-009／CF-010 分工；整合 SOP-CAND-005／006／008 的前置掃描、問題—",
+      "source_status": "OPEN",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     }
-  ]
+  ],
+  "authoritative_source": "../問題清單_近期補入與ID對照.md",
+  "source_registry": "PR_INDEX"
 }
