@@ -4,9 +4,9 @@
   "title": "PR-A 14-30",
   "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
   "rules": [
-    "詳細證據仍以來源權威為準。",
-    "source_status、mapping、decision 是不同狀態維度。",
-    "來源功能列入清單不代表 forAVAr 已實作。"
+    "PR 狀態以 authoritative_source 及問題清單主索引為準。",
+    "function/logic 描述追溯責任與已記錄處理方向；不代表問題已解決。",
+    "控制點映射及回歸驗收未完成時維持 pending。"
   ],
   "items": [
     {
@@ -15,11 +15,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "隱性依賴、共用狀態或核心資料變更會影響大量下游元件。",
-      "control_summary": "明確依賴方向與模組責任；先分析直接依賴及共用契約，再依影響範圍做回歸；記錄實際變更半徑。。來源狀態：DESIGN_DEFINED_UNVERIFIED",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "明確依賴方向與模組責任；先分析直接依賴及共用契約，再依影響範圍做回歸；記錄實際變更半徑。",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-015",
@@ -27,11 +26,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "每對功能自行整合會增加相依數；資料格式仍合法，但同名欄位或狀態含義已變。",
-      "control_summary": "少量共用契約、明確版本及依賴方向；測試實際交互；避免把所有內部細節都變成公開接口。。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "少量共用契約、明確版本及依賴方向；測試實際交互；避免把所有內部細節都變成公開接口。",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-016",
@@ -39,11 +37,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "索引名稱不代表能力已實作、已接線、依賴可用或有驗收證據。",
-      "control_summary": "能力卡列觸發／禁止條件、輸入、輸出、依賴、版本與測試；沒有實作或 caller 時不得路由為可用能力。P2 R3d130j 快照另發現 F15／F16",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "能力卡列觸發／禁止條件、輸入、輸出、依賴、版本與測試；沒有實作或 caller 時不得路由為可用能力。P2 R3d130j 快照另發現 F15／F16",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-017",
@@ -51,11 +48,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "新版只更新部分契約、插件、索引或測試；其餘元件提前使用新版本。",
-      "control_summary": "先驗證完整依賴集合，再切換路由；明確相容政策、版本指紋與回退版本；中途失敗時保持舊版有效。。來源狀態：DESIGN_DEFINED_UNVERIFIE",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "先驗證完整依賴集合，再切換路由；明確相容政策、版本指紋與回退版本；中途失敗時保持舊版有效。",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-018",
@@ -63,11 +59,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "AI／工具獲得超出任務需要的讀寫及外部操作權限；不可信套件或資料可能帶入風險。",
-      "control_summary": "最小權限、明確寫入範圍、外部工具及來源審查、不可逆操作授權與工具前後政策檢查。。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "最小權限、明確寫入範圍、外部工具及來源審查、不可逆操作授權與工具前後政策檢查。",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-019",
@@ -75,11 +70,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "不同文件各自維護現況，造成多份互相矛盾的真相。",
-      "control_summary": "每種狀態只指定一個權威來源；README、索引與圖表屬派生視圖；衝突時回查權威並阻擋受影響工作。P2 R3d130j 快照實例：Current／Act",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "每種狀態只指定一個權威來源；README、索引與圖表屬派生視圖；衝突時回查權威並阻擋受影響工作。P2 R3d130j 快照實例：Current／Act",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-020",
@@ -87,11 +81,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "確認後方案或基準又改變，或模糊的「更新」被解讀成授權全面修改。",
-      "control_summary": "寫入前重核基準、批准範圍與版本；任何變更須列差異、原因、影響及授權；超出範圍即停下重確認。。來源狀態：DESIGN_DEFINED_UNVERIFIE",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "寫入前重核基準、批准範圍與版本；任何變更須列差異、原因、影響及授權；超出範圍即停下重確認。",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-021",
@@ -99,11 +92,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "文件存在不會自動改變執行行為；啟動入口、版本核對及失敗阻擋未必接線。",
-      "control_summary": "定義啟動載入及版本記錄，並將高影響更新前的職責／衝突掃描設為觸發式檢查；以新會話及同會話案例測試規則是否被實際採用。P2 離線案例已建立 State ",
-      "status": "OPEN",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "定義啟動載入及版本記錄，並將高影響更新前的職責／衝突掃描設為觸發式檢查；以新會話及同會話案例測試規則是否被實際採用。P2 離線案例已建立 State。",
+      "source_status": "OPEN",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-022",
@@ -111,11 +103,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "不同角色若共用同一模型、同一上下文及同一錯誤前提，可能彼此複誦；角色名稱本身不構成存取控制。",
-      "control_summary": "用實際權限、資料邊界、不同驗證來源與外部可觀測證據建立獨立性；只增加角色數不算控制措施。。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "用實際權限、資料邊界、不同驗證來源與外部可觀測證據建立獨立性；只增加角色數不算控制措施。",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-023",
@@ -123,11 +114,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "測試可能共享錯誤假設；只追求速度或通過率，會誘導跳過查證或關鍵負例。",
-      "control_summary": "先定接受條件；加入負例、邊界及保留案例；審核測試本身；分開呈現品質、安全、成本和回歸率。P2 快照有 90 個局部案例全為 NOT_RUN，57 個未",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "先定接受條件；加入負例、邊界及保留案例；審核測試本身；分開呈現品質、安全、成本和回歸率。P2 快照有 90 個局部案例全為 NOT_RUN，57 個未",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-024",
@@ -135,11 +125,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "缺少停止條件、重試上限、預算或明確阻塞出口；研究也可能永遠不收口。",
-      "control_summary": "依資訊增益、目標、風險及預算決定是否深入；設停止／阻塞條件、重試限制和回退位置；允許維持現況。。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "依資訊增益、目標、風險及預算決定是否深入；設停止／阻塞條件、重試限制和回退位置；允許維持現況。",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-025",
@@ -147,11 +136,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "若新增能力都與全部舊能力逐一比較，關係數可能二次成長；證據不足也可能被錯判為「無衝突」。",
-      "control_summary": "先做相關範圍檢索；關係邊附來源、方向及版本；未知關係保持 UNKNOWN，不可自動判相容。。來源狀態：DESIGN_DEFINED_UNVERIFIE",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "先做相關範圍檢索；關係邊附來源、方向及版本；未知關係保持 UNKNOWN，不可自動判相容。",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-026",
@@ -159,11 +147,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "Git 回退只能還原部分檔案，不一定能撤銷外部 API、資料庫、遠端服務或其他不可逆副作用。",
-      "control_summary": "區分可追溯、可重現、可補償、可復原與可回退；對外部副作用設補償或人工恢復方案。。來源狀態：DESIGN_DEFINED_UNVERIFIED。問題清單",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "區分可追溯、可重現、可補償、可復原與可回退；對外部副作用設補償或人工恢復方案。",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-027",
@@ -171,11 +158,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "文件完整、節點更多或流程更嚴謹，不能證明實際任務品質／成本改善。",
-      "control_summary": "用相同代表性任務比較簡單基線、固定流程及屬性導向方案；測量錯誤、返工、成本、延遲及維護負擔。。來源狀態：OPEN。問題清單狀態與功能實作狀態是兩個維度",
-      "status": "OPEN",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "用相同代表性任務比較簡單基線、固定流程及屬性導向方案；測量錯誤、返工、成本、延遲及維護負擔。",
+      "source_status": "OPEN",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-028",
@@ -183,11 +169,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "README、責任矩陣、規格與能力索引可能依序更新；中途失敗會留下部分新、部分舊的狀態。",
-      "control_summary": "將一批相依更新視為同一變更單位；預先列更新清單；寫後逐檔讀回、核對引用與樹狀檔案；失敗明確標記未完成並修復。。來源狀態：DESIGN_DEFINED_",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "將一批相依更新視為同一變更單位；預先列更新清單；寫後逐檔讀回、核對引用與樹狀檔案；失敗明確標記未完成並修復。",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-029",
@@ -195,23 +180,23 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
       "reason": "內容雜湊不等於語意新鮮度；API、授權、服務行為可能在本地文件未變時改變。",
-      "control_summary": "記錄來源與觀察時間；依資料易變程度設定重核條件；重大外部依賴必要時直接測試。。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "記錄來源與觀察時間；依資料易變程度設定重核條件；重大外部依賴必要時直接測試。",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-030",
       "name": "風險分級、變更優先序缺乏一致判準",
       "type": "PROBLEM_REMEDIATION",
       "severity": "A",
-      "reason": "只依檔案數、行數或主觀的「看起來複雜」分級，可能讓小而高風險的寫入走捷徑，或讓低風險改動承受過重流程。",
-      "control_summary": "依語意影響、權限、不可逆性、依賴範圍與失敗代價判級；安全、授權及資料完整性是硬性 Gate，不能被速度抵銷。。來源狀態：DESIGN_DEFINED_",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_A級系統風險.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "reason": "只依檔案數、行數或主觀的「看起來複雜」分級，可能讓小而高風險的寫入走捷徑，或讓低風險改動承受過重流程",
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "依語意影響、權限、不可逆性、依賴範圍與失敗代價判級；安全、授權及資料完整性是硬性 Gate，不能被速度抵銷。",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     }
-  ]
+  ],
+  "authoritative_source": "../問題清單_A級系統風險.md",
+  "source_registry": "PR_INDEX"
 }
