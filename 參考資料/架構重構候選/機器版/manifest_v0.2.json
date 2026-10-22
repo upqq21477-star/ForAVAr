@@ -123,6 +123,7 @@
     "p2_mapping": "../P2新版候選歸位_v0.2.md",
     "sop_mapping": "../SOP新版候選路由_v0.2.md",
     "pr_mapping": "../PR新版候選路由_v0.2.md",
-    "diagrams": "../新框架結構圖與關係圖_v0.2.md"
+    "diagrams": "../新框架結構圖與關係圖_v0.2.md",
+    "tabletop": "../桌上模擬與失效檢查_v0.2.md"
   }
 }
