@@ -1,365 +1,365 @@
 {
-  "schema_version": "0.3",
-  "doc_id": "FORAVAR-REASONING-CORE-FIRST-ARCH-003",
-  "status": "CANDIDATE_FOR_REVIEW",
-  "runtime_status": "NOT_RUN",
-  "authority": {
-    "modifies_formal_plan": false,
-    "writes_to_P1": false,
-    "writes_to_P2": false,
-    "baseline_refs": [
-      "forAVAr: 架構重構候選 v0.2",
-      "forAVAr: 核心重建施工藍圖 2026-10-22"
-    ]
-  },
-  "mission": "以可驗證的方法提升不同任務中的思考品質；不把架構完整度、文件數量或流程完成率當成目標本身。",
-  "optimization_policy": {
-    "strategy": "hard_gates_then_multi_objective_tradeoff",
-    "hard_gates": [
-      "保持使用者目標、範圍與非目標忠實",
-      "分離事實、觀察、推論、假說、未知與衝突",
-      "不得用效率指標抵銷安全、授權或重大正確性要求",
-      "外部副作用及不可逆操作須通過獨立權限與範圍檢查"
-    ],
-    "compare_dimensions": [
-      "目標符合度",
-      "證據支持與時效",
-      "反例與替代假說表現",
-      "結果可靠度與回歸風險",
-      "路由適切性",
-      "耗時與工具成本",
-      "上下文占用與使用者負擔",
-      "返工與生命週期維護成本"
-    ],
-    "default_rule": "在硬性門檻通過的方案中，選擇最小足夠方法；下一步若預期不會改變決策、減少重要不確定性或提升驗收結果，則停止或如實部分交付。"
-  },
-  "layers": [
-    {
-      "id": "L0",
-      "name": "使命與全系統優化準則",
-      "fixed": true,
-      "purpose": "防止局部優化取代思考品質"
-    },
-    {
-      "id": "L1",
-      "name": "思考不變量",
-      "fixed": true,
-      "items": [
-        [
-          "I1",
-          "目標忠實"
-        ],
-        [
-          "I2",
-          "知識誠實"
-        ],
-        [
-          "I3",
-          "模型可修正"
-        ],
-        [
-          "I4",
-          "方法適配"
-        ],
-        [
-          "I5",
-          "品質與成本分離"
-        ],
-        [
-          "I6",
-          "可區辨驗證"
-        ],
-        [
-          "I7",
-          "受控更新"
-        ],
-        [
-          "I8",
-          "誠實收口"
-        ]
-      ]
-    },
-    {
-      "id": "L2",
-      "name": "認知責任域",
-      "fixed": true,
-      "axes": [
-        {
-          "id": "AX1",
-          "name": "意圖與問題契約",
-          "responsibility": "定義目標、接受條件、範圍、限制、非目標"
-        },
-        {
-          "id": "AX2",
-          "name": "證據與知識狀態",
-          "responsibility": "管理來源、支持範圍、時效、衝突與未知"
-        },
-        {
-          "id": "AX3",
-          "name": "問題模型與解釋",
-          "responsibility": "建立對象、變數、關係、根因候選與競爭假說"
-        },
-        {
-          "id": "AX4",
-          "name": "方法與決策規劃",
-          "responsibility": "選擇下一個高價值步驟、方法、預算和停止條件"
-        },
-        {
-          "id": "AX5",
-          "name": "求解與產出",
-          "responsibility": "執行推理、研究、計算、設計、施工或綜合"
-        },
-        {
-          "id": "AX6",
-          "name": "驗證、修正與結案",
-          "responsibility": "核對接受條件、分類失效、選擇修正、重框或終態"
-        }
-      ]
-    },
-    {
-      "id": "L3",
-      "name": "按需能力庫",
-      "fixed": false,
-      "runtime_policy": "catalogue_not_mandatory_pipeline",
-      "node_count_policy": "variable",
-      "candidate_catalogue": [
-        {
-          "axis": "AX1",
-          "ids": [
-            "KG-01",
-            "KG-02",
-            "KG-03",
-            "KG-04",
-            "KG-05"
-          ]
-        },
-        {
-          "axis": "AX2",
-          "ids": [
-            "KG-06",
-            "KG-07",
-            "KG-08",
-            "KG-09",
-            "KG-10"
-          ]
-        },
-        {
-          "axis": "AX3",
-          "ids": [
-            "KG-11",
-            "KG-12",
-            "KG-13",
-            "KG-14",
-            "KG-15"
-          ]
-        },
-        {
-          "axis": "AX4",
-          "ids": [
-            "KG-16",
-            "KG-17",
-            "KG-18",
-            "KG-19"
-          ]
-        },
-        {
-          "axis": "AX5",
-          "ids": [
-            "KG-20",
-            "KG-21",
-            "KG-22"
-          ]
-        },
-        {
-          "axis": "AX6",
-          "ids": [
-            "KG-23",
-            "KG-24",
-            "KG-25",
-            "KG-26"
-          ]
-        }
-      ],
-      "selection_rule": "只依任務屬性、未知、風險、可觀測性、接受條件與預期資訊價值載入所需能力。"
-    },
-    {
-      "id": "L4",
-      "name": "適應式思考循環",
-      "fixed": "responsibility_only",
-      "phases": [
-        {
-          "id": "P1",
-          "name": "定位目標與接受條件",
-          "required": true
-        },
-        {
-          "id": "P2",
-          "name": "建立最小足夠問題模型",
-          "required": "when_needed"
-        },
-        {
-          "id": "P3",
-          "name": "選擇下一個高價值步驟",
-          "required": "when_needed"
-        },
-        {
-          "id": "P4",
-          "name": "執行所需方法／工具",
-          "required": "when_needed"
-        },
-        {
-          "id": "P5",
-          "name": "核對觀察與接受條件",
-          "required": true
-        },
-        {
-          "id": "P6",
-          "name": "完成、回流、部分交付或停止",
-          "required": true
-        }
-      ],
-      "route_rules": [
-        {
-          "condition": "target_or_scope_invalidated",
-          "route": "P1"
-        },
-        {
-          "condition": "evidence_or_model_invalidated",
-          "route": "P2"
-        },
-        {
-          "condition": "method_invalidated",
-          "route": "P3"
-        },
-        {
-          "condition": "bounded_repair_is_worthwhile",
-          "route": "P4"
-        },
-        {
-          "condition": "acceptance_evidence_passes",
-          "route": "DONE"
-        },
-        {
-          "condition": "evidence_unavailable_or_budget_exhausted_or_no_progress",
-          "route": "PARTIAL_OR_NOT_PROVEN_OR_STOPPED"
-        }
-      ],
-      "anti_loop_guard": "每次重試須記錄預期新增資訊／修復與成本；若沒有新資訊、新路徑或改變條件，不得無限重複。"
-    }
-  ],
-  "modes": [
-    {
-      "id": "QUICK",
-      "use_when": "目標明確、問題已知、低風險且無需外部副作用",
-      "rule": "可直接產出；仍須比例適當的核對"
-    },
-    {
-      "id": "STANDARD",
-      "use_when": "需建立問題模型、比較方法或查核重要主張",
-      "rule": "執行最小充分分析並核對接受條件"
-    },
-    {
-      "id": "DEEP",
-      "use_when": "不確定性高、因果複雜、影響重大或明確要求深度／外部研究",
-      "rule": "加入競爭假說、外部證據、反例、區辨測試與必要回歸"
-    },
-    {
-      "id": "HIGH_RISK_GUARDED",
-      "use_when": "重大後果、外部副作用、不可逆行動或權限敏感情況",
-      "rule": "獨立權限與安全 gate；不得被快速路由跳過"
-    }
-  ],
-  "cross_cutting_services": [
-    {
-      "id": "SP-A",
-      "name": "證據與來源",
-      "relation": "SUPPORTS"
-    },
-    {
-      "id": "SP-B",
-      "name": "安全、權限與信任",
-      "relation": "GUARDS"
-    },
-    {
-      "id": "SP-C",
-      "name": "狀態、上下文與恢復",
-      "relation": "RECORDS_AND_RECOVERS"
-    },
-    {
-      "id": "SP-D",
-      "name": "工具與執行",
-      "relation": "ENABLES"
-    },
-    {
-      "id": "SP-E",
-      "name": "評測與觀測",
-      "relation": "MEASURES_AND_DETECTS_REGRESSION"
-    },
-    {
-      "id": "SP-F",
-      "name": "文件、呈現與版本治理",
-      "relation": "PRESENTS_AND_GOVERNS"
-    }
-  ],
-  "terminal_states": [
-    "DONE",
-    "PARTIAL",
-    "NOT_PROVEN",
-    "BLOCKED",
-    "REJECTED",
-    "STOPPED",
-    "FAILED"
-  ],
-  "evaluation_policy": {
-    "baseline": [
-      "legacy_four_layer",
-      "candidate_v0.2",
-      "candidate_v0.3"
-    ],
-    "dimensions": [
-      "target_fit",
-      "claim_evidence_support",
-      "uncertainty_and_conflict_handling",
-      "routing_errors",
-      "hard_gate_omissions",
-      "rework_and_regression",
-      "latency",
-      "tool_cost",
-      "context_cost",
-      "user_friction",
-      "maintenance_cost"
-    ],
-    "hard_gates_scored_separately": true,
-    "pilot_scenarios": [
-      "simple_known_question",
-      "material_ambiguity",
-      "current_external_information",
-      "conflicting_sources",
-      "causal_diagnosis",
-      "counterexample_reframes_model",
-      "multi_file_write_or_external_side_effect",
-      "evidence_unavailable",
-      "budget_exhaustion",
-      "architecture_feature_proposal"
-    ],
-    "acceptance_rule": "Do not claim a winner from design completeness or a small tabletop sample. Require no regression on hard gates and reproducible improvement on predeclared quality or total-cost dimensions using held-out cases."
-  },
-  "known_unresolved_issues": [
-    "P1-F10 owner AX4 conflicts with KG-09, which belongs to AX2 in the current candidate mapping.",
-    "P1-F33 owner AX6 conflicts with KG-15, which belongs to AX3.",
-    "P1-F42 owner AX4 conflicts with KG-09, which belongs to AX2.",
-    "P1-F43 mixes L4 with KG-19; the source notes this separate iteration system is retired, so route semantics need review.",
-    "P2-F19 owner AX4 conflicts with KG-09, which belongs to AX2.",
-    "P2-F27 adaptive presentation may belong primarily to presentation support SP7 in v0.2, not AX6/KG-23.",
-    "Legacy C-09 to I5 mapping requires exact source-semantic verification; preserve quality, correctness, safety, time, and resource distinctions."
-  ],
-  "external_basis": [
-    "NASA Systems Engineering Fundamentals: whole-system tradeoffs and holistic design",
-    "ISO/IEC/IEEE 15288:2023: iterative and recursive lifecycle processes without prescribing one model",
-    "NIST AI RMF: governance as cross-cutting, not a rigid linear checklist",
-    "OpenAI Evaluation Best Practices: task-specific, representative, repeatable evaluations",
-    "Google Cloud Well-Architected Framework: simplicity, decoupling, ongoing improvement",
-    "Donella Meadows: nonlinear systems effects and unintended consequences",
-    "Artinger, Gigerenzer, Jacobs (2022): conditions for rational satisficing under uncertainty"
+ "schema_version": "0.3",
+ "doc_id": "FORAVAR-REASONING-CORE-FIRST-ARCH-003",
+ "status": "CANDIDATE_FOR_REVIEW",
+ "runtime_status": "NOT_RUN",
+ "authority": {
+  "modifies_formal_plan": false,
+  "writes_to_P1": false,
+  "writes_to_P2": false,
+  "baseline_refs": [
+   "forAVAr: 架構重構候選 v0.2",
+   "forAVAr: 核心重建施工藍圖 2026-10-22"
   ]
+ },
+ "mission": "以可驗證的方法提升不同任務中的思考品質；不把架構完整度、文件數量或流程完成率當成目標本身。",
+ "optimization_policy": {
+  "strategy": "hard_gates_then_multi_objective_tradeoff",
+  "hard_gates": [
+   "保持使用者目標、範圍與非目標忠實",
+   "分離事實、觀察、推論、假說、未知與衝突",
+   "不得用效率指標抵銷安全、授權或重大正確性要求",
+   "外部副作用及不可逆操作須通過獨立權限與範圍檢查"
+  ],
+  "compare_dimensions": [
+   "目標符合度",
+   "證據支持與時效",
+   "反例與替代假說表現",
+   "結果可靠度與回歸風險",
+   "路由適切性",
+   "耗時與工具成本",
+   "上下文占用與使用者負擔",
+   "返工與生命週期維護成本"
+  ],
+  "default_rule": "在硬性門檻通過的方案中，選擇最小足夠方法；下一步若預期不會改變決策、減少重要不確定性或提升驗收結果，則停止或如實部分交付。"
+ },
+ "layers": [
+  {
+   "id": "L0",
+   "name": "使命與全系統優化準則",
+   "fixed": true,
+   "purpose": "防止局部優化取代思考品質"
+  },
+  {
+   "id": "L1",
+   "name": "思考不變量",
+   "fixed": true,
+   "items": [
+    [
+     "I1",
+     "目標忠實"
+    ],
+    [
+     "I2",
+     "知識誠實"
+    ],
+    [
+     "I3",
+     "模型可修正"
+    ],
+    [
+     "I4",
+     "方法適配"
+    ],
+    [
+     "I5",
+     "品質與成本分離"
+    ],
+    [
+     "I6",
+     "可區辨驗證"
+    ],
+    [
+     "I7",
+     "受控更新"
+    ],
+    [
+     "I8",
+     "誠實收口"
+    ]
+   ]
+  },
+  {
+   "id": "L2",
+   "name": "認知責任域",
+   "fixed": true,
+   "axes": [
+    {
+     "id": "AX1",
+     "name": "意圖與問題契約",
+     "responsibility": "定義目標、接受條件、範圍、限制、非目標"
+    },
+    {
+     "id": "AX2",
+     "name": "證據與知識狀態",
+     "responsibility": "管理來源、支持範圍、時效、衝突與未知"
+    },
+    {
+     "id": "AX3",
+     "name": "問題模型與解釋",
+     "responsibility": "建立對象、變數、關係、根因候選與競爭假說"
+    },
+    {
+     "id": "AX4",
+     "name": "方法與決策規劃",
+     "responsibility": "選擇下一個高價值步驟、方法、預算和停止條件"
+    },
+    {
+     "id": "AX5",
+     "name": "求解與產出",
+     "responsibility": "執行推理、研究、計算、設計、施工或綜合"
+    },
+    {
+     "id": "AX6",
+     "name": "驗證、修正與結案",
+     "responsibility": "核對接受條件、分類失效、選擇修正、重框或終態"
+    }
+   ]
+  },
+  {
+   "id": "L3",
+   "name": "按需能力庫",
+   "fixed": false,
+   "runtime_policy": "catalogue_not_mandatory_pipeline",
+   "node_count_policy": "variable",
+   "candidate_catalogue": [
+    {
+     "axis": "AX1",
+     "ids": [
+      "KG-01",
+      "KG-02",
+      "KG-03",
+      "KG-04",
+      "KG-05"
+     ]
+    },
+    {
+     "axis": "AX2",
+     "ids": [
+      "KG-06",
+      "KG-07",
+      "KG-08",
+      "KG-09",
+      "KG-10"
+     ]
+    },
+    {
+     "axis": "AX3",
+     "ids": [
+      "KG-11",
+      "KG-12",
+      "KG-13",
+      "KG-14",
+      "KG-15"
+     ]
+    },
+    {
+     "axis": "AX4",
+     "ids": [
+      "KG-16",
+      "KG-17",
+      "KG-18",
+      "KG-19"
+     ]
+    },
+    {
+     "axis": "AX5",
+     "ids": [
+      "KG-20",
+      "KG-21",
+      "KG-22"
+     ]
+    },
+    {
+     "axis": "AX6",
+     "ids": [
+      "KG-23",
+      "KG-24",
+      "KG-25",
+      "KG-26"
+     ]
+    }
+   ],
+   "selection_rule": "只依任務屬性、未知、風險、可觀測性、接受條件與預期資訊價值載入所需能力。"
+  },
+  {
+   "id": "L4",
+   "name": "適應式思考循環",
+   "fixed": "responsibility_only",
+   "phases": [
+    {
+     "id": "P1",
+     "name": "定位目標與接受條件",
+     "required": true
+    },
+    {
+     "id": "P2",
+     "name": "建立最小足夠問題模型",
+     "required": "when_needed"
+    },
+    {
+     "id": "P3",
+     "name": "選擇下一個高價值步驟",
+     "required": "when_needed"
+    },
+    {
+     "id": "P4",
+     "name": "執行所需方法／工具",
+     "required": "when_needed"
+    },
+    {
+     "id": "P5",
+     "name": "核對觀察與接受條件",
+     "required": true
+    },
+    {
+     "id": "P6",
+     "name": "完成、回流、部分交付或停止",
+     "required": true
+    }
+   ],
+   "route_rules": [
+    {
+     "condition": "target_or_scope_invalidated",
+     "route": "P1"
+    },
+    {
+     "condition": "evidence_or_model_invalidated",
+     "route": "P2"
+    },
+    {
+     "condition": "method_invalidated",
+     "route": "P3"
+    },
+    {
+     "condition": "bounded_repair_is_worthwhile",
+     "route": "P4"
+    },
+    {
+     "condition": "acceptance_evidence_passes",
+     "route": "DONE"
+    },
+    {
+     "condition": "evidence_unavailable_or_budget_exhausted_or_no_progress",
+     "route": "PARTIAL_OR_NOT_PROVEN_OR_STOPPED"
+    }
+   ],
+   "anti_loop_guard": "每次重試須記錄預期新增資訊／修復與成本；若沒有新資訊、新路徑或改變條件，不得無限重複。"
+  }
+ ],
+ "modes": [
+  {
+   "id": "QUICK",
+   "use_when": "目標明確、問題已知、低風險且無需外部副作用",
+   "rule": "可直接產出；仍須比例適當的核對"
+  },
+  {
+   "id": "STANDARD",
+   "use_when": "需建立問題模型、比較方法或查核重要主張",
+   "rule": "執行最小充分分析並核對接受條件"
+  },
+  {
+   "id": "DEEP",
+   "use_when": "不確定性高、因果複雜、影響重大或明確要求深度／外部研究",
+   "rule": "加入競爭假說、外部證據、反例、區辨測試與必要回歸"
+  },
+  {
+   "id": "HIGH_RISK_GUARDED",
+   "use_when": "重大後果、外部副作用、不可逆行動或權限敏感情況",
+   "rule": "獨立權限與安全 gate；不得被快速路由跳過"
+  }
+ ],
+ "cross_cutting_services": [
+  {
+   "id": "SP-A",
+   "name": "證據與來源",
+   "relation": "SUPPORTS"
+  },
+  {
+   "id": "SP-B",
+   "name": "安全、權限與信任",
+   "relation": "GUARDS"
+  },
+  {
+   "id": "SP-C",
+   "name": "狀態、上下文與恢復",
+   "relation": "RECORDS_AND_RECOVERS"
+  },
+  {
+   "id": "SP-D",
+   "name": "工具與執行",
+   "relation": "ENABLES"
+  },
+  {
+   "id": "SP-E",
+   "name": "評測與觀測",
+   "relation": "MEASURES_AND_DETECTS_REGRESSION"
+  },
+  {
+   "id": "SP-F",
+   "name": "文件、呈現與版本治理",
+   "relation": "PRESENTS_AND_GOVERNS"
+  }
+ ],
+ "terminal_states": [
+  "DONE",
+  "PARTIAL",
+  "NOT_PROVEN",
+  "BLOCKED",
+  "REJECTED",
+  "STOPPED",
+  "FAILED"
+ ],
+ "evaluation_policy": {
+  "baseline": [
+   "legacy_four_layer",
+   "candidate_v0.2",
+   "candidate_v0.3"
+  ],
+  "dimensions": [
+   "target_fit",
+   "claim_evidence_support",
+   "uncertainty_and_conflict_handling",
+   "routing_errors",
+   "hard_gate_omissions",
+   "rework_and_regression",
+   "latency",
+   "tool_cost",
+   "context_cost",
+   "user_friction",
+   "maintenance_cost"
+  ],
+  "hard_gates_scored_separately": true,
+  "pilot_scenarios": [
+   "simple_known_question",
+   "material_ambiguity",
+   "current_external_information",
+   "conflicting_sources",
+   "causal_diagnosis",
+   "counterexample_reframes_model",
+   "multi_file_write_or_external_side_effect",
+   "evidence_unavailable",
+   "budget_exhaustion",
+   "architecture_feature_proposal"
+  ],
+  "acceptance_rule": "Do not claim a winner from design completeness or a small tabletop sample. Require no regression on hard gates and reproducible improvement on predeclared quality or total-cost dimensions using held-out cases."
+ },
+ "known_unresolved_issues": [
+  "P1-F10 owner AX4 conflicts with KG-09, which belongs to AX2 in the current candidate mapping.",
+  "P1-F33 owner AX6 conflicts with KG-15, which belongs to AX3.",
+  "P1-F42 owner AX4 conflicts with KG-09, which belongs to AX2.",
+  "P1-F43 mixes L4 with KG-19; the source notes this separate iteration system is retired, so route semantics need review.",
+  "P2-F19 owner AX4 conflicts with KG-09, which belongs to AX2.",
+  "P2-F27 adaptive presentation may belong primarily to presentation support SP7 in v0.2, not AX6/KG-23.",
+  "Legacy C-09 to I5 mapping requires exact source-semantic verification; preserve quality, correctness, safety, time, and resource distinctions."
+ ],
+ "external_basis": [
+  "NASA Systems Engineering Fundamentals: whole-system tradeoffs and holistic design",
+  "ISO/IEC/IEEE 15288:2023: iterative and recursive lifecycle processes without prescribing one model",
+  "NIST AI RMF: governance as cross-cutting, not a rigid linear checklist",
+  "OpenAI Evaluation Best Practices: task-specific, representative, repeatable evaluations",
+  "Google Cloud Well-Architected Framework: simplicity, decoupling, ongoing improvement",
+  "Donella Meadows: nonlinear systems effects and unintended consequences",
+  "Artinger, Gigerenzer, Jacobs (2022): conditions for rational satisficing under uncertainty"
+ ]
 }
