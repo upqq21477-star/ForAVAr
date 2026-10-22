@@ -14,9 +14,9 @@
       "name": "SOP 固定流程與演化管理",
       "type": "SOP_STANDARD",
       "reason": "此條目屬於 forAVAr 現有 SOP／固定流程索引。",
-      "function": "SOP 的選用、任務分級、流程生命週期、驗收、重大變更模擬閘門及改良退役規則。",
-      "logic": "依現有 SOP／流程權威文件操作。尚未被跨任務證據證實的項目，不得宣告為已驗收。",
-      "source_status": "PROVISIONAL_CURRENT，v0.5；已把關鍵語意變更前的現行／候選配對模擬定為文件治理層生效規則。",
+      "function": "SOP 選用、L0–L3 任務分級、生命週期、驗收、重大變更配對模擬，以及更新任務的基線／根因診斷／變更分類／功能與文件責任映射／Δ0–Δ3 影響分級／回歸與復發檢查。",
+      "logic": "依 SOP-META-001 v0.6 和 CF-009 操作。功能執行責任、文件權威與批准權限分開判定；優先修正／擴充既有節點，僅在現有契約不能承載時提新能力類別。未有獨立回歸證據不得宣稱已驗收。",
+      "source_status": "PROVISIONAL_CURRENT，v0.6；增量更新流程已納入，狀態 TRIAL；跨任務行為與 Runtime 未驗證。",
       "source": "SOP_CATALOG",
       "mapping": "SOP_TO_FRAMEWORK_MAPPING_NOT_VALIDATED",
       "decision": "REFERENCE_CURRENTNESS_FROM_SOURCE_ONLY"
