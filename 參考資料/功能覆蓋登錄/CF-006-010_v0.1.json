@@ -50,9 +50,9 @@
       "name": "SOP 固定流程與演化管理",
       "type": "FIXED_PROCESS",
       "reason": "此條目屬於 forAVAr 現有 SOP／固定流程索引。",
-      "function": "由 SOP-META-001 v0.6 管理 SOP 選用與演化；更新任務依基線、根因診斷、變更分類、功能／文件／批准責任映射、Δ0–Δ3 影響分級、回歸與復發檢查執行。",
+      "function": "由 SOP-META-001 v0.7 管理 SOP 選用與演化；所有語意更新先盤點能力登錄、功能骨架及相關 SOP／PR，記錄重疊、衝突與缺口，再決定修正／擴充／新增；依 Δ0–Δ3 做最小變更與回歸。",
       "logic": "依現有 SOP／流程權威文件操作。尚未被跨任務證據證實的項目，不得宣告為已驗收。",
-      "source_status": "流程入口已更新至 SOP-META-001 v0.6；增量更新路徑為 TRIAL，行為與 Runtime 未驗證。",
+      "source_status": "CF-009 已指向 SOP-META-001 v0.7；既有能力前置盤點為文件治理硬性規則，跨任務行為與 Runtime 強制未驗證。",
       "source": "SOP_CATALOG",
       "mapping": "SOP_TO_FRAMEWORK_MAPPING_NOT_VALIDATED",
       "decision": "REFERENCE_CURRENTNESS_FROM_SOURCE_ONLY"
