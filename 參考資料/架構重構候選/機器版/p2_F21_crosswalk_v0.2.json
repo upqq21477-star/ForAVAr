@@ -75,10 +75,10 @@
       "id": "P2-F27",
       "nm": "適應式呈現、圖表即程式碼與設計到可驗收程序的可追溯性",
       "src_status": "CODE_PRESENT_UNVERIFIED / NOT_EXECUTED",
-      "ax": "AX6",
-      "node": "KG-23",
+      "ax": "SP7",
+      "node": "SP7 presentation pipeline",
       "sp": "SP7,SP5",
-      "why": "適應式呈現／圖表衍生",
+      "why": "適應式呈現的主要責任在支援平面 SP7",
       "map": "CANDIDATE",
       "decision": "UNASSESSED"
     },
