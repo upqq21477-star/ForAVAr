@@ -1,0 +1,138 @@
+{
+  "v": "0.2",
+  "branch": "PR-S",
+  "source": "FORAVAR_PR_REGISTER",
+  "rule": "Candidate route only; authoritative issue title/status/root-cause/evidence remain in existing PR branch.",
+  "items": [
+    {
+      "id": "PR-001",
+      "nm": "理解錯誤、目標漂移或把手段當成目的",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX1",
+      "node": "KG-01",
+      "sp": "SP1,SP3",
+      "why": "目標／意圖漂移",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-002",
+      "nm": "幻覺、捏造事實或虛報來源",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP5",
+      "why": "幻覺／主張證據",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-003",
+      "nm": "來源失真、引用錯配與知識過期",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX2",
+      "node": "KG-06",
+      "sp": "SP2,SP6",
+      "why": "來源／時效",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-004",
+      "nm": "失憶、交接遺漏與跨會話狀態失效",
+      "status": "PERSISTENT_RISK",
+      "owner": "L4",
+      "node": "S1",
+      "sp": "SP3,SP6",
+      "why": "跨輪狀態恢復",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-005",
+      "nm": "長上下文中的關鍵資訊遺漏",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX2",
+      "node": "KG-09",
+      "sp": "SP2,SP3",
+      "why": "上下文缺口",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-006",
+      "nm": "因果推理錯誤、根因誤判或因果鏈不閉合",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX3",
+      "node": "KG-13",
+      "sp": "SP2,SP5",
+      "why": "因果／根因",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-007",
+      "nm": "不確定性被掩蓋、衝突被硬合併",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX2",
+      "node": "KG-08",
+      "sp": "SP2",
+      "why": "未知／衝突",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-008",
+      "nm": "循環驗證、自我修正無效或把重述當證明",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX6",
+      "node": "KG-23",
+      "sp": "SP5",
+      "why": "自我驗證失效",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-009",
+      "nm": "提示注入或不可信資料控制思考與行動",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX5",
+      "node": "KG-20",
+      "sp": "SP1,SP4",
+      "why": "不可信輸入／工具安全",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-010",
+      "nm": "模型與工具更新造成行為漂移",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX6",
+      "node": "KG-26",
+      "sp": "SP5",
+      "why": "模型／工具漂移",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-011",
+      "nm": "把失敗蒸餾成錯誤規則，或一直重犯同類錯誤",
+      "status": "PERSISTENT_RISK",
+      "owner": "AX6",
+      "node": "KG-24",
+      "sp": "SP5,SP6",
+      "why": "錯誤蒸餾／復發",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-012",
+      "nm": "選錯研究／求解方法，或把特定流程強套所有問題",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "AX4",
+      "node": "KG-17",
+      "sp": "SP4,SP5",
+      "why": "方法錯配",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-013",
+      "nm": "第一版問題框架錯誤，後續細化將錯誤放大",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "owner": "AX1",
+      "node": "KG-05",
+      "sp": "SP2,SP5",
+      "why": "初始框架失效",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    }
+  ]
+}
