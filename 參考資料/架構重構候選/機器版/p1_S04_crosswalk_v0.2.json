@@ -58,10 +58,10 @@
       "nm": "反例搜尋",
       "src": "TOOL_GUARD",
       "grp": "S04 Runtime）",
-      "ax": "AX6",
+      "ax": "AX3",
       "node": "KG-15",
       "sp": "SP2,SP5",
-      "why": "反例檢索",
+      "why": "反例檢索是問題模型的區辨測試；驗收連結 SP5",
       "map": "CANDIDATE",
       "decision": "UNASSESSED"
     },
