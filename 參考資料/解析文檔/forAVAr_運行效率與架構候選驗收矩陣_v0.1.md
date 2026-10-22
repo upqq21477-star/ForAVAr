@@ -2,7 +2,8 @@
 
 - DOC_ID：FORAVAR-RUNTIME-EFFICIENCY-EVAL-MATRIX-001
 - 類型：EVALUATION_BLUEPRINT／CANDIDATE
-- 狀態：DRAFT；案例待建立，尚未執行完整桌上模擬或 Runtime。
+- 狀態：BACKUP_ONLY／SUPERSEDED_BY v0.2；原規劃快照，案例未執行。
+- 現行版本：[運行效率與架構候選驗收矩陣 v0.2](./forAVAr_運行效率與架構候選驗收矩陣_v0.2.md)。
 - 唯一責任：用可重複案例驗證運行拓撲、局部更新、按需載入、紀錄精簡、恢復與退場的淨效益。
 - 主藍圖：[核心重建施工藍圖](./forAVAr_核心重建施工藍圖_2026-10-22.md)
 
