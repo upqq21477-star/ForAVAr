@@ -1,31 +1,107 @@
 {
   "version": "0.2",
   "type": "OLD_NEW_COMPARISON",
-  "status": "DESIGN_ANALYSIS_NOT_EXPERIMENTALLY_VERIFIED",
+  "status": "TABLETOP_SIMULATED_DESIGN_LEVEL_NOT_RUNTIME_VERIFIED",
   "old": {
     "name": "2026-10-22 four-layer blueprint",
-    "structure": ["Core", "A1-A6", "N01-N18 fixed three nodes per axis", "F0-F7 conditional workflow"],
-    "strengths": ["simple to explain", "stable baseline", "staged validation plan exists"],
-    "risks": ["fixed node quota may bias decomposition", "capability graph can be mistaken for workflow", "source-function coverage needs separate reconciliation"]
+    "structure": [
+      "Core",
+      "A1-A6",
+      "N01-N18 fixed three nodes per axis",
+      "F0-F7 conditional workflow"
+    ],
+    "strengths": [
+      "simple to explain",
+      "stable baseline",
+      "staged validation plan exists"
+    ],
+    "risks": [
+      "fixed node quota may bias decomposition",
+      "capability graph can be mistaken for workflow",
+      "source-function coverage needs separate reconciliation"
+    ]
   },
   "candidate": {
     "name": "four-layer elastic capability graph and state router v0.2",
-    "structure": ["8 grouped invariants", "AX1-AX6", "KG-01-KG-26 initial variable capabilities", "S0-S5 guarded state router", "SP1-SP7 support planes"],
-    "expected_benefits": ["variable node decomposition", "separate capability ownership from task state", "explicit failure terminals", "per-ID candidate crosswalks"],
-    "risks": ["higher schema and maintenance cost", "ambiguous routing guards", "candidate mappings can be wrong", "legacy references need aliases"]
+    "structure": [
+      "8 grouped invariants",
+      "AX1-AX6",
+      "KG-01-KG-26 initial variable capabilities",
+      "S0-S5 guarded state router",
+      "SP1-SP7 support planes"
+    ],
+    "expected_benefits": [
+      "variable node decomposition",
+      "separate capability ownership from task state",
+      "explicit failure terminals",
+      "per-ID candidate crosswalks"
+    ],
+    "risks": [
+      "higher schema and maintenance cost",
+      "ambiguous routing guards",
+      "candidate mappings can be wrong",
+      "legacy references need aliases"
+    ]
   },
   "judgment": [
-    {"dimension":"human onboarding","current":"OLD_ADVANTAGE","basis":"fixed hierarchy is easier to explain initially"},
-    {"dimension":"skeleton elasticity","current":"NEW_DESIGN_ADVANTAGE","basis":"no fixed per-axis node quota"},
-    {"dimension":"failure state expression","current":"NEW_DESIGN_ADVANTAGE_PENDING_TABLETOP","basis":"guarded states are defined but not tested"},
-    {"dimension":"source traceability","current":"NEW_PLAN_ADVANTAGE_NOT_ACCEPTED","basis":"crosswalks are candidates, not accepted mappings"},
-    {"dimension":"maintenance cost","current":"OLD_ADVANTAGE","basis":"new state and contract metadata adds cost"},
-    {"dimension":"runtime reliability","current":"NOT_COMPARABLE","basis":"no controlled runtime comparison"},
-    {"dimension":"cognitive quality","current":"NOT_COMPARABLE","basis":"same-task experiments not run"}
+    {
+      "dimension": "human onboarding",
+      "current": "OLD_ADVANTAGE",
+      "basis": "fixed hierarchy is easier to explain initially"
+    },
+    {
+      "dimension": "skeleton elasticity",
+      "current": "NEW_DESIGN_ADVANTAGE",
+      "basis": "no fixed per-axis node quota"
+    },
+    {
+      "dimension": "failure state expression",
+      "current": "NEW_DESIGN_ADVANTAGE_AFTER_TABLETOP_FIXES",
+      "basis": "10 tabletop cases were routed after fixes; no Runtime test"
+    },
+    {
+      "dimension": "source traceability",
+      "current": "NEW_PLAN_ADVANTAGE_NOT_ACCEPTED",
+      "basis": "crosswalks are candidates, not accepted mappings"
+    },
+    {
+      "dimension": "maintenance cost",
+      "current": "OLD_ADVANTAGE",
+      "basis": "new state and contract metadata adds cost"
+    },
+    {
+      "dimension": "runtime reliability",
+      "current": "NOT_COMPARABLE",
+      "basis": "no controlled runtime comparison"
+    },
+    {
+      "dimension": "cognitive quality",
+      "current": "NOT_COMPARABLE",
+      "basis": "same-task experiments not run"
+    }
   ],
   "experiment_plan": {
-    "task_types": ["simple answer", "ambiguous intent", "conflicting-source research", "root-cause diagnosis", "reframe after new evidence", "multi-file change", "permission or cost block", "partial completion"],
-    "metrics": ["goal acceptance", "source accuracy", "unknown/conflict preservation", "route mistakes", "missed hard gates", "repair regression", "elapsed time", "tool operations", "rework"],
+    "task_types": [
+      "simple answer",
+      "ambiguous intent",
+      "conflicting-source research",
+      "root-cause diagnosis",
+      "reframe after new evidence",
+      "multi-file change",
+      "permission or cost block",
+      "partial completion"
+    ],
+    "metrics": [
+      "goal acceptance",
+      "source accuracy",
+      "unknown/conflict preservation",
+      "route mistakes",
+      "missed hard gates",
+      "repair regression",
+      "elapsed time",
+      "tool operations",
+      "rework"
+    ],
     "rule": "Use identical cases, sources, permissions and resource limits. Safety, permission and evidence correctness cannot be traded for speed."
   },
   "adoption_gate": [
@@ -35,5 +111,23 @@
     "No required safety or correctness regression",
     "At least one predeclared quality or efficiency metric improves reproducibly",
     "Runtime status is based only on actual execution evidence"
-  ]
+  ],
+  "tabletop_simulation": {
+    "ref": "../桌上模擬與失效檢查_v0.2.md",
+    "cases": 10,
+    "outcome": "PASS_AFTER_ROUTE_GUARD_FIXES",
+    "findings": [
+      "clarification wait state required",
+      "direct answer must generate output before verification",
+      "bounded evidence self-loop required",
+      "contract/frame invalidation returns to S1 while model/evidence invalidation returns to S2",
+      "candidate node owner mismatches corrected in 78 feature crosswalk"
+    ],
+    "limitations": [
+      "tabletop reasoning is not executable code testing",
+      "source semantic mapping for P1/P2 requires review",
+      "PR-014 through PR-051 candidate routing is partly keyword-based",
+      "no controlled old-new benchmark or Runtime acceptance has been run"
+    ]
+  }
 }
