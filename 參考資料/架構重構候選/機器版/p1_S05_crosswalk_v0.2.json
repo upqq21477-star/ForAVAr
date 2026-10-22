@@ -47,9 +47,9 @@
       "src": "TOOL_GUARD",
       "grp": "S05 Runtime）",
       "ax": "AX4",
-      "node": "KG-09",
+      "node": "KG-17",
       "sp": "SP5",
-      "why": "缺口優先排序",
+      "why": "缺口優先排序屬方法／下一步決策",
       "map": "CANDIDATE",
       "decision": "UNASSESSED"
     },
@@ -59,9 +59,9 @@
       "src": "RETIRED_AS_SYSTEM",
       "grp": "S05 Runtime）",
       "ax": "L4",
-      "node": "KG-19",
+      "node": "S0–S5",
       "sp": "SP5",
-      "why": "保留 loop guard 不建獨立 Runtime",
+      "why": "保留 loop guard 由狀態路由承擔，不建立獨立 Runtime",
       "map": "CANDIDATE",
       "decision": "UNASSESSED"
     },
