@@ -10,7 +10,10 @@
   "baseline_refs": [
    "forAVAr: 架構重構候選 v0.2",
    "forAVAr: 核心重建施工藍圖 2026-10-22"
-  ]
+  ],
+  "source_document": "../思考核心優先_全系統架構再設計_v0.3.md",
+  "source_of_truth": "human_readable_candidate_spec",
+  "machine_view_status": "secondary_projection_not_auto_synchronized; reconcile manually; on semantic conflict, use the human-readable candidate specification and record the discrepancy"
  },
  "mission": "以可驗證的方法提升不同任務中的思考品質；不把架構完整度、文件數量或流程完成率當成目標本身。",
  "optimization_policy": {
