@@ -22,34 +22,38 @@
   "classification_schema": {
     "record_type": [
       "ARCHITECTURE_REQUIREMENT",
-      "CROSSCUTTING_GOVERNANCE",
-      "USABILITY_ENHANCEMENT",
-      "METHOD_KNOWLEDGE",
       "BASELINE_CAPABILITY",
-      "SOP_STANDARD",
-      "FIXED_PROCESS",
-      "SOP_CANDIDATE",
+      "CROSSCUTTING_GOVERNANCE",
       "DECISION_PENDING",
+      "FIXED_PROCESS",
+      "METHOD_KNOWLEDGE",
+      "PROBLEM_REGISTER_REFERENCE",
       "PROBLEM_REMEDIATION",
-      "PROBLEM_REGISTER_REFERENCE"
+      "PROBLEM_REMEDIATION_REQUIREMENT",
+      "SOP_CANDIDATE",
+      "SOP_STANDARD",
+      "USABILITY_ENHANCEMENT"
     ],
     "lifecycle_lane": [
       "CORE_STRUCTURE",
       "LEGACY_CAPABILITY",
-      "SOP",
-      "PROBLEM_FIX",
       "NEW_FEATURE",
-      "PENDING_DECISION"
+      "PENDING_DECISION",
+      "PROBLEM_FIX",
+      "SOP"
     ],
     "migration_decision": [
-      "UNASSESSED",
-      "KEEP",
-      "MERGE",
-      "REPLACE",
       "DEFER",
-      "RETIRE",
+      "KEEP",
+      "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
+      "MERGE",
+      "OPEN",
+      "PENDING_ADOPTION",
       "PENDING_DECISION",
-      "OPEN"
+      "REFERENCE_CURRENTNESS_FROM_SOURCE_ONLY",
+      "REPLACE",
+      "RETIRE",
+      "UNASSESSED"
     ]
   },
   "required_fields": [
