@@ -5529,12 +5529,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。方法已有規格方向，跨任務的實際守標能力尚未驗收。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-002",
@@ -5574,12 +5575,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。可降低、發現及阻止錯誤擴散，不能靠提示或自我檢查保證永不發生。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-003",
@@ -5619,12 +5621,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。來源標記與唯一權威規則已寫入參考文件，持續核查成效仍需測試。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-004",
@@ -5664,12 +5667,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。文件與索引可供查閱，但自動載入及行為一致性尚未得到完整驗收。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-005",
@@ -5709,12 +5713,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。研究支持風險存在，但各模型、任務的實際幅度需另行測量。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-006",
@@ -5754,12 +5759,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。方法已記錄，根因判斷品質尚需用代表性任務驗證。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-007",
@@ -5799,12 +5805,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。狀態用語已有文件基線，路由與行為尚待驗收。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-008",
@@ -5844,12 +5851,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。設計方向已列入反證研究，獨立驗證強度尚未全面實測。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-009",
@@ -5889,12 +5897,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。OWASP 已列為主要生成式 AI 風險；forAVAr 的完整防護與紅隊測試仍須驗收。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-010",
@@ -5934,12 +5943,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。OpenAI 文件亦建議持續評估模型輸出；本系統的基線與回退流程仍需證明有效。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-011",
@@ -5979,12 +5989,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PERSISTENT_RISK。根因蒸餾原則已記錄，是否真能降低重複錯誤仍需量測。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-012",
@@ -6024,12 +6035,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED。此項仍列 S，因方法選擇是核心思考職責；方法框架已修正為屬性導向，但尚未以對照實驗證明最佳。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-013",
@@ -6069,12 +6081,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED。已有條件化設計與反證紀錄，尚未證明此方法普遍優於替代方法。",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-014",
@@ -6114,12 +6127,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-015",
@@ -6159,12 +6173,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-016",
@@ -6204,12 +6219,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-017",
@@ -6249,12 +6265,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-018",
@@ -6294,12 +6311,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-019",
@@ -6339,12 +6357,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-020",
@@ -6384,12 +6403,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-021",
@@ -6429,12 +6449,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "OPEN",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-022",
@@ -6474,12 +6495,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-023",
@@ -6519,12 +6541,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-024",
@@ -6564,12 +6587,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-025",
@@ -6609,12 +6633,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-026",
@@ -6654,12 +6679,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-027",
@@ -6699,12 +6725,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "OPEN",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-028",
@@ -6744,12 +6771,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-029",
@@ -6789,12 +6817,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-030",
@@ -6834,12 +6863,13 @@
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-031",
@@ -6860,18 +6890,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "DESIGN_DEFINED_UNVERIFIED",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-032",
@@ -6892,18 +6925,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "DESIGN_DEFINED_UNVERIFIED",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-033",
@@ -6924,18 +6960,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "DESIGN_DEFINED_UNVERIFIED",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-034",
@@ -6956,18 +6995,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-035",
@@ -6988,18 +7030,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "DESIGN_DEFINED_UNVERIFIED",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-036",
@@ -7020,18 +7065,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-037",
@@ -7052,18 +7100,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "DESIGN_DEFINED_UNVERIFIED",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-038",
@@ -7084,18 +7135,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-039",
@@ -7116,18 +7170,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-040",
@@ -7148,18 +7205,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "DOC_FIXED",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DOC_FIXED",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-041",
@@ -7180,18 +7240,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-042",
@@ -7212,18 +7275,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-043",
@@ -7244,18 +7310,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-044",
@@ -7276,18 +7345,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-045",
@@ -7308,18 +7380,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "DESIGN_DEFINED_UNVERIFIED",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-046",
@@ -7340,18 +7415,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-047",
@@ -7372,18 +7450,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "PARTIAL",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "PARTIAL",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-048",
@@ -7404,18 +7485,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "MONITOR",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "MONITOR",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-049",
@@ -7436,18 +7520,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "MONITOR",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "MONITOR",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-050",
@@ -7468,18 +7555,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "MONITOR",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "MONITOR",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-051",
@@ -7500,18 +7590,21 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md"
       ],
       "source_status": "MONITOR",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "MONITOR",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-052",
@@ -7544,19 +7637,21 @@
       "mapping_state": "PROBLEM_TO_CONTROL_MATRIX_NOT_FULLY_VALIDATED",
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_A級系統風險.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_A級系統風險.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_近期補入與ID對照.md"
       ],
       "source_status": "OPEN",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "OPEN",
       "acceptance_checks": [
-        "保留原始問題 ID 和來源",
-        "確認原因／處理方向是否已有對應能力和 SOP",
-        "若宣稱解決，必須連到實際驗收證據和必要的回歸檢查"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "KEEP_PROBLEM_ID; SOLUTION_STATE_REMAINS_SOURCE_DEFINED",
-      "notes": "目前處理方式從 forAVAr 的唯一問題清單分支抽取；新登錄不得替代問題清單中的完整證據與狀態。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-053",
@@ -7577,18 +7672,22 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_近期補入與ID對照.md"
       ],
       "source_status": "OPEN",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "OPEN",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-054",
@@ -7609,18 +7708,22 @@
       "candidate_layer_mapping": [],
       "mapping_state": "NOT_MAPPED",
       "source_refs": [
-        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_BCD級維護品質.md",
+        "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/問題清單_近期補入與ID對照.md"
       ],
       "source_status": "OPEN",
       "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
       "implementation_state": "PROBLEM_TRACKING_ONLY",
       "evidence_state": "OPEN",
       "acceptance_checks": [
-        "回查問題清單對應分支",
-        "取得原文後才補入標題、原因與處理方式"
+        "保留穩定 PR ID，並能讀取問題清單中的完整原文與證據",
+        "檢查此問題是否有對應控制點／功能／SOP；未映射時明確保持 OPEN",
+        "不得以方案存在或文件更新宣告問題已解決",
+        "如宣稱修正有效，需連結實際驗收案例與測試／復發檢查證據"
       ],
       "migration_decision": "OPEN",
-      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據、狀態歷史及上下文仍以權威問題文件為準。"
     }
   ]
 }
