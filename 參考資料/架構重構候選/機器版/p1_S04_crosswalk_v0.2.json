@@ -1,0 +1,129 @@
+{
+  "v": "0.2",
+  "branch": "P1-S04",
+  "title": "P1-F29–F38",
+  "source": "P1_FUNCTION_MATRIX",
+  "rule": "Candidate mapping only; preserve source ID; do not infer implementation.",
+  "items": [
+    {
+      "id": "P1-F29",
+      "nm": "歸納",
+      "src": "MODEL_NATIVE",
+      "grp": "S04 Runtime）",
+      "ax": "AX3",
+      "node": "KG-14",
+      "sp": "SP2",
+      "why": "歸納外推限制",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F30",
+      "nm": "模式解釋",
+      "src": "MODEL_NATIVE",
+      "grp": "S04 Runtime）",
+      "ax": "AX3",
+      "node": "KG-13",
+      "sp": "SP2",
+      "why": "模式解釋",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F31",
+      "nm": "假設建立",
+      "src": "MODEL_NATIVE",
+      "grp": "S04 Runtime）",
+      "ax": "AX3",
+      "node": "KG-14",
+      "sp": "SP2",
+      "why": "可反駁假說",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F32",
+      "nm": "支持證據檢查",
+      "src": "TOOL_GUARD",
+      "grp": "S04 Runtime）",
+      "ax": "AX2",
+      "node": "KG-07",
+      "sp": "SP2",
+      "why": "支持證據檢查",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F33",
+      "nm": "反例搜尋",
+      "src": "TOOL_GUARD",
+      "grp": "S04 Runtime）",
+      "ax": "AX6",
+      "node": "KG-15",
+      "sp": "SP2,SP5",
+      "why": "反例檢索",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F34",
+      "nm": "替代解釋",
+      "src": "MODEL_NATIVE",
+      "grp": "S04 Runtime）",
+      "ax": "AX3",
+      "node": "KG-14",
+      "sp": "SP2",
+      "why": "替代解釋",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F35",
+      "nm": "假設範圍限制",
+      "src": "TOOL_GUARD",
+      "grp": "S04 Runtime）",
+      "ax": "AX1",
+      "node": "KG-02",
+      "sp": "SP1",
+      "why": "假說範圍限制",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F36",
+      "nm": "假設修正",
+      "src": "MODEL_NATIVE",
+      "grp": "S04 Runtime）",
+      "ax": "AX6",
+      "node": "KG-25",
+      "sp": "SP2,SP5",
+      "why": "新證據修正",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F37",
+      "nm": "假設比較",
+      "src": "MODEL_NATIVE",
+      "grp": "S04 Runtime）",
+      "ax": "AX4",
+      "node": "KG-17",
+      "sp": "SP5",
+      "why": "假說比較",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F38",
+      "nm": "證據—推論鏈",
+      "src": "TOOL_GUARD",
+      "grp": "S04 Runtime）",
+      "ax": "AX2",
+      "node": "KG-07",
+      "sp": "SP2,SP6",
+      "why": "推論鏈回溯",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    }
+  ]
+}
