@@ -1,0 +1,119 @@
+{
+  "v": "0.2",
+  "branch": "P2-F01",
+  "title": "P2-F01–F10",
+  "source": "P2_EVIDENCE_MATRIX",
+  "rule": "Candidate mapping only; preserve source ID/status; not forAVAr runtime evidence.",
+  "items": [
+    {
+      "id": "P2-F01",
+      "nm": "問題輸入封包與限制",
+      "src_status": "FILE_PRESENT",
+      "ax": "AX1",
+      "node": "KG-02",
+      "sp": "SP1,SP3",
+      "why": "輸入與限制契約",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F02",
+      "nm": "Brain Proposal 驗證／轉成 Command",
+      "src_status": "部分路徑存在",
+      "ax": "L4",
+      "node": "S1→S3",
+      "sp": "SP1,SP5",
+      "why": "提案驗證後轉命令",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F03",
+      "nm": "Planner／Capability Cards",
+      "src_status": "FILE_PRESENT / SIMULATION_ONLY",
+      "ax": "AX4",
+      "node": "KG-17",
+      "sp": "SP4",
+      "why": "能力卡供方法路由",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F04",
+      "nm": "Method／Pattern 到 Task Set",
+      "src_status": "部分機制存在",
+      "ax": "AX4",
+      "node": "KG-17",
+      "sp": "SP4",
+      "why": "方法組裝任務集",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F05",
+      "nm": "Central 路由與狀態轉移",
+      "src_status": "PATCHED_UNVERIFIED",
+      "ax": "L4",
+      "node": "S0–S5",
+      "sp": "SP3,SP5",
+      "why": "中央狀態轉移",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F06",
+      "nm": "Role 隔離與獨立驗收",
+      "src_status": "來源交接記為 SIMULATION_ONLY",
+      "ax": "AX6",
+      "node": "KG-23",
+      "sp": "SP1,SP5",
+      "why": "隔離／獨立驗收",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F07",
+      "nm": "Current State、必要狀態轉移與執行真相",
+      "src_status": "PATCHED_UNVERIFIED / INCOMPLETE_RUNTIME",
+      "ax": "L4",
+      "node": "S0–S5",
+      "sp": "SP3",
+      "why": "Current 與執行真相",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F08",
+      "nm": "知識匯入與來源追溯",
+      "src_status": "PATCHED_UNVERIFIED / SIMULATION_ONLY",
+      "ax": "AX2",
+      "node": "KG-06",
+      "sp": "SP2",
+      "why": "知識匯入與來源",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F09",
+      "nm": "知識檢索、Context、失憶恢復",
+      "src_status": "PATCHED_UNVERIFIED / NOT_WIRED",
+      "ax": "AX2",
+      "node": "KG-09",
+      "sp": "SP2,SP3",
+      "why": "檢索／上下文恢復",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P2-F10",
+      "nm": "程式重建 Blueprint 與乾淨重建",
+      "src_status": "重建機制與輸入清單存在，但 check／clean build 本輪未執行。此項只代表程式組成與重建輸入，不等於完整的 Blue",
+      "ax": "AX5",
+      "node": "KG-20",
+      "sp": "SP4,SP6",
+      "why": "乾淨重建輸入",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    }
+  ]
+}
