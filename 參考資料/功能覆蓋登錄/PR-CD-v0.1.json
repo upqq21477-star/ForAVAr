@@ -4,9 +4,9 @@
   "title": "PR-CD 43-51",
   "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
   "rules": [
-    "詳細證據仍以來源權威為準。",
-    "source_status、mapping、decision 是不同狀態維度。",
-    "來源功能列入清單不代表 forAVAr 已實作。"
+    "PR 狀態以 authoritative_source 及問題清單主索引為準。",
+    "function/logic 描述追溯責任與已記錄處理方向；不代表問題已解決。",
+    "控制點映射及回歸驗收未完成時維持 pending。"
   ],
   "items": [
     {
@@ -15,11 +15,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "新增／搬移文件後，導航可能未同步。",
-      "control_summary": "新文件同步更新 README 與責任矩陣；變更後讀回並抽查引用。P2 快照 REF-01：F15／F16 指向不存在的測試路徑；REF-02：F27 ",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "新文件同步更新 README 與責任矩陣；變更後讀回並抽查引用。P2 快照 REF-01：F15／F16 指向不存在的測試路徑；REF-02：F27。",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-044",
@@ -27,11 +26,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "同一能力使用多個名稱，或不同概念共享名稱。",
-      "control_summary": "穩定 ID、唯一正式定義，別名只作搜尋導航。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "穩定 ID、唯一正式定義，別名只作搜尋導航。PARTIAL",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-045",
@@ -39,11 +37,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "把低風險歧義當成必須阻塞的問題。",
-      "control_summary": "只對會改變結果、風險、範圍或授權的關鍵歧義澄清；其他情境明示假設後前進。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_D",
-      "status": "DESIGN_DEFINED_UNVERIFIED",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "只對會改變結果、風險、範圍或授權的關鍵歧義澄清；其他情境明示假設後前進。DESIGN_DEFINED_UNVERIFIED",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-046",
@@ -51,11 +48,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "簡單任務被過度圖表化，複雜依賴卻無法直觀檢查。",
-      "control_summary": "依任務選文字、表格或圖表；所有視圖回指權威來源。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "依任務選文字、表格或圖表；所有視圖回指權威來源。PARTIAL",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-047",
@@ -63,11 +59,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "同一結論散落在多處，讀者難以找到唯一入口。",
-      "control_summary": "README 作導航、責任矩陣分工、專題文件負責細節；不重複貼完整背景。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度",
-      "status": "PARTIAL",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "README 作導航、責任矩陣分工、專題文件負責細節；不重複貼完整背景。PARTIAL",
+      "source_status": "PARTIAL",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-048",
@@ -75,11 +70,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "技術新不代表能改善當前問題。",
-      "control_summary": "先列候選並用任務基準證明收益，再決定採用。MONITOR。來源狀態：MONITOR。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解",
-      "status": "MONITOR",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "先列候選並用任務基準證明收益，再決定採用。MONITOR",
+      "source_status": "MONITOR",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-049",
@@ -87,11 +81,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "過早通用化會增加不必要的抽象。",
-      "control_summary": "重複出現、影響擴大或造成高成本失敗時再升級。MONITOR。來源狀態：MONITOR。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已",
-      "status": "MONITOR",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "重複出現、影響擴大或造成高成本失敗時再升級。MONITOR",
+      "source_status": "MONITOR",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-050",
@@ -99,11 +92,10 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "自我修改可能強化錯誤或產生不可恢復變更；評估器、權限與更新器若可互改，會形成自我放寬控制的回饋漏洞。",
-      "control_summary": "尚未建立獨立評估、明確授權、控制面隔離、分階段發布和回退前，不作預設機制。參考 [10k 更新模擬](./解析文檔/治理系統自我改善與一萬次更新壓力模",
-      "status": "MONITOR",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "尚未建立獨立評估、明確授權、控制面隔離、分階段發布和回退前，不作預設機制。參考 [10k 更新模擬](./解析文檔/治理系統自我改善與一萬次更新壓力模",
+      "source_status": "MONITOR",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     },
     {
       "id": "PR-051",
@@ -111,11 +103,12 @@
       "type": "PROBLEM_REMEDIATION",
       "severity": "C/D",
       "reason": "無實際用例的插件、角色、服務和 Schema 難以驗證且會累積維護成本。",
-      "control_summary": "只建立目前必要的最小架構與有證據支持的擴充點。MONITOR。來源狀態：MONITOR。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定",
-      "status": "MONITOR",
-      "source": "PR_INDEX",
-      "source_path": "../問題清單_BCD級維護品質.md",
-      "mapping": "CONTROL_MAPPING_PENDING"
+      "function": "追蹤失效模式並連結控制點、SOP、驗收與回歸證據。",
+      "logic": "只建立目前必要的最小架構與有證據支持的擴充點。MONITOR",
+      "source_status": "MONITOR",
+      "mapping_state": "CONTROL_MAPPING_PENDING"
     }
-  ]
+  ],
+  "authoritative_source": "../問題清單_BCD級維護品質.md",
+  "source_registry": "PR_INDEX"
 }
