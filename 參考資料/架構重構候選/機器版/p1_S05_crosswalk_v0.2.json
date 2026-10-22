@@ -1,0 +1,129 @@
+{
+  "v": "0.2",
+  "branch": "P1-S05",
+  "title": "P1-F39–F48",
+  "source": "P1_FUNCTION_MATRIX",
+  "rule": "Candidate mapping only; preserve source ID; do not infer implementation.",
+  "items": [
+    {
+      "id": "P1-F39",
+      "nm": "小結論",
+      "src": "MODEL_NATIVE",
+      "grp": "S05 Runtime）",
+      "ax": "AX5",
+      "node": "KG-22",
+      "sp": "SP7",
+      "why": "局部結論",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F40",
+      "nm": "小結論檢查",
+      "src": "TOOL_GUARD",
+      "grp": "S05 Runtime）",
+      "ax": "AX6",
+      "node": "KG-23",
+      "sp": "SP5",
+      "why": "小結論驗證",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F41",
+      "nm": "新問題生成",
+      "src": "MODEL_NATIVE",
+      "grp": "S05 Runtime）",
+      "ax": "AX6",
+      "node": "KG-26",
+      "sp": "SP3",
+      "why": "新問題控量",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F42",
+      "nm": "缺口優先級",
+      "src": "TOOL_GUARD",
+      "grp": "S05 Runtime）",
+      "ax": "AX4",
+      "node": "KG-09",
+      "sp": "SP5",
+      "why": "缺口優先排序",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F43",
+      "nm": "迭代控制",
+      "src": "RETIRED_AS_SYSTEM",
+      "grp": "S05 Runtime）",
+      "ax": "L4",
+      "node": "KG-19",
+      "sp": "SP5",
+      "why": "保留 loop guard 不建獨立 Runtime",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F44",
+      "nm": "跨輪合併",
+      "src": "MODEL_NATIVE",
+      "grp": "S05 Runtime）",
+      "ax": "AX5",
+      "node": "KG-21",
+      "sp": "SP3",
+      "why": "跨輪狀態合併",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F45",
+      "nm": "結論穩定度",
+      "src": "TOOL_GUARD",
+      "grp": "S05 Runtime）",
+      "ax": "AX6",
+      "node": "KG-23",
+      "sp": "SP5",
+      "why": "結論穩定檢查",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F46",
+      "nm": "未解問題保留",
+      "src": "TOOL_GUARD",
+      "grp": "S05 Runtime）",
+      "ax": "AX6",
+      "node": "KG-26",
+      "sp": "SP3,SP6",
+      "why": "未解問題保存",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F47",
+      "nm": "最終結論整合",
+      "src": "MODEL_NATIVE",
+      "grp": "S05 Runtime）",
+      "ax": "AX5",
+      "node": "KG-22",
+      "sp": "SP7",
+      "why": "最終綜合",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F48",
+      "nm": "完整回溯",
+      "src": "TOOL_GUARD",
+      "grp": "S05 Runtime）",
+      "ax": "AX6",
+      "node": "KG-23",
+      "sp": "SP5,SP6",
+      "why": "完整回溯",
+      "map": "CANDIDATE",
+      "decision": "UNASSESSED"
+    }
+  ]
+}
