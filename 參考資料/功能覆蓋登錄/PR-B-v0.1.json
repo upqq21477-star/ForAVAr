@@ -1,0 +1,157 @@
+{
+  "schema_version": "0.1",
+  "branch_id": "PR-B",
+  "title": "PR-B 31-42",
+  "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
+  "rules": [
+    "詳細證據仍以來源權威為準。",
+    "source_status、mapping、decision 是不同狀態維度。",
+    "來源功能列入清單不代表 forAVAr 已實作。"
+  ],
+  "items": [
+    {
+      "id": "PR-031",
+      "name": "所有任務承受同一套完整流程",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "流程成本可能高於簡單任務本身。",
+      "control_summary": "SOP-META-001 v0.4 明確分 L0–L3：L1 內縮規劃，L2 僅檢查直接相關文件；跨任務耗時與品質效益仍未測。DESIGN_DEFIN",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-032",
+      "name": "過度插件化、過早抽象",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "每個微小動作獨立成插件會增加接口、路由和版本成本。",
+      "control_summary": "只有可重用、可獨立替換、有獨立權限／副作用或驗收價值的能力才升格。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_DEFI",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-033",
+      "name": "規劃、施工、驗收各自建立平行流程",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "每套流程都管理自己的狀態與交接，容易重複且不同步。",
+      "control_summary": "已選定共用問題解決骨架與封包方式；保留各任務特有條件，不重造平行狀態機。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_D",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-034",
+      "name": "多份索引、Schema 或登錄表變成第二套控制系統",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "每增加一份清冊就增加同步責任和矛盾可能。",
+      "control_summary": "每份文件只維護唯一責任，跨視圖用引用；新表格須證明現有權威來源無法承擔。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度",
+      "status": "PARTIAL",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-035",
+      "name": "主題分流導致紀錄碎片化或難以找回",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "每個主題分開保存可避免混題，但過度拆分會失去上下文和發現路徑。",
+      "control_summary": "新主題獨立成檔，索引保留用途與關聯；整合摘要只作入口，不複製各專題全文。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_D",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-036",
+      "name": "只修症狀，根因仍存在",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "局部修補可暫時消除表象，但未確認共同機制。",
+      "control_summary": "依證據區分輸入、契約、能力、依賴及架構根因；修正後重跑原故障與相關回歸。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度",
+      "status": "PARTIAL",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-037",
+      "name": "以人氣或新穎度代替能力適配",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "高人氣不證明符合任務、授權、維護和成本要求。",
+      "control_summary": "工具雷達只負責發現候選；採用前獨立檢查功能匹配、來源、授權、維護、安全與任務基準。DESIGN_DEFINED_UNVERIFIED。來源狀態：DES",
+      "status": "DESIGN_DEFINED_UNVERIFIED",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-038",
+      "name": "過期能力、重複規則與舊相容層無法退場",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "新能力不斷新增，舊能力無人敢移除，維護負擔累積。",
+      "control_summary": "記錄使用情況、替代者和依賴；退役前核對消費者、遷移及回退。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策",
+      "status": "PARTIAL",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-039",
+      "name": "一般更新缺乏前後比較",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "沒有基線就難以分辨改善、退化或偶然波動。",
+      "control_summary": "寫入模擬僅有操作數 5→4、合併讀回 9→8；實際時間、費用、品質、漏失與返工未測。後續用至少兩個代表性任務對照；未測標 UNMEASURED。架構級",
+      "status": "PARTIAL",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-040",
+      "name": "問題 ID 綁定嚴重度",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "降級或升級時改 ID，可能造成引用失效。",
+      "control_summary": "本版改採固定 PR-###，嚴重度獨立記錄。DOC_FIXED。來源狀態：DOC_FIXED。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件",
+      "status": "DOC_FIXED",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-041",
+      "name": "跨專案術語或相近名稱造成歧義",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "例如 P1／P2 可指專案，也可能被誤讀成抽象層或問題屬性。",
+      "control_summary": "首次出現使用完整術語或命名空間；已知歧義列入文件檢查。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文",
+      "status": "PARTIAL",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    },
+    {
+      "id": "PR-042",
+      "name": "把「完成研究／文件完整」當作真正完成",
+      "type": "PROBLEM_REMEDIATION",
+      "severity": "B",
+      "reason": "文字成果容易遮蔽未執行、未接線、未驗收或未測量。",
+      "control_summary": "每份成果標示證據層級；分開設計、實作、測試、整合與 Runtime 狀態。P2 快照的程式／測試 Runtime 狀態分別為 IMPLEMENTED_",
+      "status": "PARTIAL",
+      "source": "PR_INDEX",
+      "source_path": "../問題清單_BCD級維護品質.md",
+      "mapping": "CONTROL_MAPPING_PENDING"
+    }
+  ]
+}
