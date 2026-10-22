@@ -92,8 +92,7 @@
       "SOP_STANDARD": 2,
       "FIXED_PROCESS": 10,
       "DECISION_PENDING": 7,
-      "PROBLEM_REMEDIATION": 31,
-      "PROBLEM_REGISTER_REFERENCE": 23
+      "PROBLEM_REMEDIATION": 54
     },
     "item_counts_by_lifecycle_lane": {
       "NEW_FEATURE": 14,
@@ -6844,12 +6843,12 @@
     },
     {
       "id": "PR-031",
-      "name": "PR-031｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-031｜所有任務承受同一套完整流程",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "流程成本可能高於簡單任務本身。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：SOP-META-001 v0.4 明確分 L0–L3：L1 內縮規劃，L2 僅檢查直接相關文件；跨任務耗時與品質效益仍未測。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_DEFINED_UNVERIFIED。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -6863,25 +6862,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-032",
-      "name": "PR-032｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-032｜過度插件化、過早抽象",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "每個微小動作獨立成插件會增加接口、路由和版本成本。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：只有可重用、可獨立替換、有獨立權限／副作用或驗收價值的能力才升格。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_DEFINED_UNVERIFIED。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -6895,25 +6894,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-033",
-      "name": "PR-033｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-033｜規劃、施工、驗收各自建立平行流程",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "每套流程都管理自己的狀態與交接，容易重複且不同步。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：已選定共用問題解決骨架與封包方式；保留各任務特有條件，不重造平行狀態機。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_DEFINED_UNVERIFIED。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -6927,25 +6926,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-034",
-      "name": "PR-034｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-034｜多份索引、Schema 或登錄表變成第二套控制系統",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "每增加一份清冊就增加同步責任和矛盾可能。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：每份文件只維護唯一責任，跨視圖用引用；新表格須證明現有權威來源無法承擔。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -6959,25 +6958,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-035",
-      "name": "PR-035｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-035｜主題分流導致紀錄碎片化或難以找回",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "每個主題分開保存可避免混題，但過度拆分會失去上下文和發現路徑。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：新主題獨立成檔，索引保留用途與關聯；整合摘要只作入口，不複製各專題全文。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_DEFINED_UNVERIFIED。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -6991,25 +6990,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-036",
-      "name": "PR-036｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-036｜只修症狀，根因仍存在",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "局部修補可暫時消除表象，但未確認共同機制。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：依證據區分輸入、契約、能力、依賴及架構根因；修正後重跑原故障與相關回歸。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7023,25 +7022,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-037",
-      "name": "PR-037｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-037｜以人氣或新穎度代替能力適配",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "高人氣不證明符合任務、授權、維護和成本要求。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：工具雷達只負責發現候選；採用前獨立檢查功能匹配、來源、授權、維護、安全與任務基準。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_DEFINED_UNVERIFIED。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7055,25 +7054,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-038",
-      "name": "PR-038｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-038｜過期能力、重複規則與舊相容層無法退場",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "新能力不斷新增，舊能力無人敢移除，維護負擔累積。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：記錄使用情況、替代者和依賴；退役前核對消費者、遷移及回退。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7087,25 +7086,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-039",
-      "name": "PR-039｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-039｜一般更新缺乏前後比較",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "沒有基線就難以分辨改善、退化或偶然波動。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：寫入模擬僅有操作數 5→4、合併讀回 9→8；實際時間、費用、品質、漏失與返工未測。後續用至少兩個代表性任務對照；未測標 UNMEASURED。架構級基線另列 PR-027。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7119,25 +7118,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-040",
-      "name": "PR-040｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-040｜問題 ID 綁定嚴重度",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "降級或升級時改 ID，可能造成引用失效。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：本版改採固定 PR-###，嚴重度獨立記錄。DOC_FIXED。來源狀態：DOC_FIXED。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7151,25 +7150,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "DOC_FIXED",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "DOC_FIXED",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-041",
-      "name": "PR-041｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-041｜跨專案術語或相近名稱造成歧義",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "例如 P1／P2 可指專案，也可能被誤讀成抽象層或問題屬性。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：首次出現使用完整術語或命名空間；已知歧義列入文件檢查。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7183,25 +7182,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-042",
-      "name": "PR-042｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-042｜把「完成研究／文件完整」當作真正完成",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "文字成果容易遮蔽未執行、未接線、未驗收或未測量。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：每份成果標示證據層級；分開設計、實作、測試、整合與 Runtime 狀態。P2 快照的程式／測試 Runtime 狀態分別為 IMPLEMENTED_UNVERIFIED、NOT_EXECUTED、INCOMPLETE；本輪封包完整性與語法檢查通過不會提升這些狀態。附帶稽核數字亦需對帳：舊計畫稱 scripts 155＋tools 27＝182，本次按路徑盤點的 Python 檔為 scripts 159＋tools 27＝186；README 稱缺陷 001–019（19 項），OPEN-ISSUES 實際列到 020（20 項）。檔案／工作流存在也不能證明執行成功。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7215,25 +7214,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-043",
-      "name": "PR-043｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-043｜索引、路徑或連結失效",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "新增／搬移文件後，導航可能未同步。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：新文件同步更新 README 與責任矩陣；變更後讀回並抽查引用。P2 快照 REF-01：F15／F16 指向不存在的測試路徑；REF-02：F27 程式／測試引用與 archive 實際位置不一致；REF-03：測試策略文件的相對連結失效。是否為漏包、移位或過期引用仍待來源歷史核對，不能直接補造內容。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7247,25 +7246,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-044",
-      "name": "PR-044｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-044｜命名、顯示或分類不一致",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "同一能力使用多個名稱，或不同概念共享名稱。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：穩定 ID、唯一正式定義，別名只作搜尋導航。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7279,25 +7278,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-045",
-      "name": "PR-045｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-045｜重複提問或過度打斷",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "把低風險歧義當成必須阻塞的問題。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：只對會改變結果、風險、範圍或授權的關鍵歧義澄清；其他情境明示假設後前進。DESIGN_DEFINED_UNVERIFIED。來源狀態：DESIGN_DEFINED_UNVERIFIED。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7311,25 +7310,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "DESIGN_DEFINED_UNVERIFIED",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "DESIGN_DEFINED_UNVERIFIED",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-046",
-      "name": "PR-046｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-046｜視圖形式與任務複雜度不匹配",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "簡單任務被過度圖表化，複雜依賴卻無法直觀檢查。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：依任務選文字、表格或圖表；所有視圖回指權威來源。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7343,25 +7342,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-047",
-      "name": "PR-047｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-047｜文件格式、目錄或描述增加閱讀成本",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "同一結論散落在多處，讀者難以找到唯一入口。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：README 作導航、責任矩陣分工、專題文件負責細節；不重複貼完整背景。PARTIAL。來源狀態：PARTIAL。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7375,25 +7374,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "PARTIAL",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "PARTIAL",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-048",
-      "name": "PR-048｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-048｜新模型、多模態或新協定能力的導入時機",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "技術新不代表能改善當前問題。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：先列候選並用任務基準證明收益，再決定採用。MONITOR。來源狀態：MONITOR。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7407,25 +7406,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "MONITOR",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "MONITOR",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-049",
-      "name": "PR-049｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-049｜低頻特殊領域問題",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "過早通用化會增加不必要的抽象。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：重複出現、影響擴大或造成高成本失敗時再升級。MONITOR。來源狀態：MONITOR。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7439,25 +7438,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "MONITOR",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "MONITOR",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-050",
-      "name": "PR-050｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-050｜自動修改核心與完全自主演化",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "自我修改可能強化錯誤或產生不可恢復變更；評估器、權限與更新器若可互改，會形成自我放寬控制的回饋漏洞。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：尚未建立獨立評估、明確授權、控制面隔離、分階段發布和回退前，不作預設機制。參考 [10k 更新模擬](./解析文檔/治理系統自我改善與一萬次更新壓力模擬_2026-10-21.md)。MONITOR。來源狀態：MONITOR。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7471,25 +7470,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "MONITOR",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "MONITOR",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-051",
-      "name": "PR-051｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-051｜為假想需求預建完整抽象",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "無實際用例的插件、角色、服務和 Schema 難以驗證且會累積維護成本。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：只建立目前必要的最小架構與有證據支持的擴充點。MONITOR。來源狀態：MONITOR。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7503,16 +7502,16 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "MONITOR",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "MONITOR",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-052",
@@ -7561,12 +7560,12 @@
     },
     {
       "id": "PR-053",
-      "name": "PR-053｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-053｜已知治理規則未觸發前置檢查",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "職責矩陣、既有 SOP、問題清單與流程索引雖已存在，但任務開始時不一定被檢索與套用；可能先新增文件，之後才發現重疊或漏掉通用抽象。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：SOP-META-001 v0.4 已明文化先查直接相關主軸／SOP／問題分支，再列變更集；但每次任務是否確實觸發、跨會話／Runtime 是否可靠仍未驗證。證據：[根因診斷](./解析文檔/AI主動問題發現不足與治理閉環缺口_根因診斷紀錄_2026-10-21.md)及[本次 SOP 研討](./問題清單_近期補入與ID對照.md#sop-efficiency-review-2026-10-21)。OPEN。來源狀態：OPEN。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7580,25 +7579,25 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "OPEN",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "OPEN",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     },
     {
       "id": "PR-054",
-      "name": "PR-054｜來源待補入",
-      "record_type": "PROBLEM_REGISTER_REFERENCE",
+      "name": "PR-054｜資訊分類、唯一歸位與流程回寫未形成可驗收閉環",
+      "record_type": "PROBLEM_REMEDIATION",
       "lifecycle_lane": "PROBLEM_FIX",
-      "created_reason": "穩定問題 ID 必須完整保留，避免分流文件或摘要遺漏而使追溯斷裂。",
-      "function": "指向問題清單權威索引／分支，保留 OPEN 缺口，不以不存在內容補寫問題定義。",
-      "logic": "本輪未成功從分支抽出完整標題；先標 SOURCE_RECHECK_REQUIRED，不代表 ID 不存在或問題已解決。",
+      "created_reason": "重要新資訊可能留在對話或個別分析文件，未被明確分類、歸入唯一責任位置，或未同步問題／SOP／索引／追溯；文件存在也無法證明流程已自動觸發。",
+      "function": "保留此失效模式的原始問題、證據、處理方向及目前狀態。此項用來檢查能力／SOP 是否有對應控制，不表示問題已解決。",
+      "logic": "目前處理方向：候選修正： 裁定既有 CF-004／CF-008／CF-009／CF-010 分工；整合 SOP-CAND-005／006／008 的前置掃描、問題—控制—回歸與靜態檢查；建立資料分類／路由契約、變更影響與雙向引用驗收。跨任務觸發、Runtime、效益及完整性仍未驗證。詳見[整合研討紀錄](./解析文檔/治理閉環與資訊自動整合_整合研討紀錄_2026-10-21.md)。OPEN／DISCUSSION_PENDING。來源狀態：OPEN。問題清單狀態與功能實作狀態是兩個維度；不得由有對策或文件化推定已解決。",
       "trigger": "依來源文件所定觸發條件；未明確定義時不得自行補成強制流程。",
       "inputs": [],
       "outputs": [],
@@ -7612,16 +7611,16 @@
       "source_refs": [
         "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/(S級)問題清單.md"
       ],
-      "source_status": "SOURCE_RECHECK_REQUIRED",
-      "coverage_state": "ID_RANGE_RESERVED_SOURCE_LABEL_UNRESOLVED",
-      "implementation_state": "NOT_APPLICABLE",
-      "evidence_state": "NOT_VERIFIED",
+      "source_status": "OPEN",
+      "coverage_state": "PRESENT_IN_PROBLEM_REGISTER; FUNCTION_CONTROL_AND_REGRESSION_MAPPING_STILL_REQUIRES_PROOF",
+      "implementation_state": "PROBLEM_TRACKING_ONLY",
+      "evidence_state": "OPEN",
       "acceptance_checks": [
         "回查問題清單對應分支",
         "取得原文後才補入標題、原因與處理方式"
       ],
       "migration_decision": "OPEN",
-      "notes": "保留穩定 ID，待源文件交叉核對。"
+      "notes": "問題標題、原因、處置方向與狀態依 forAVAr 問題清單分支整理；完整證據與原始上下文仍以權威問題文件為準。"
     }
   ]
 }
