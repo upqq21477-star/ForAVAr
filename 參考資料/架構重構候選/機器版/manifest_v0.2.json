@@ -1,0 +1,63 @@
+{
+  "catalog_id": "FORAVAR-RESTRUCTURE-CANDIDATE-V0.2",
+  "version": "0.2",
+  "status": "CANDIDATE_NOT_APPROVED",
+  "purpose": "Machine manifest for the four-layer candidate redesign, source crosswalks, SOP/PR routing and human-readable views.",
+  "counts": {
+    "axes": 6,
+    "core_invariants": 8,
+    "initial_capability_nodes": 26,
+    "support_planes": 7,
+    "p1_features": 48,
+    "p2_features": 30,
+    "sop_routes": 27,
+    "pr_routes": 54,
+    "source_crosswalk_rows": 159
+  },
+  "authority_rules": [
+    "This candidate does not overwrite the formal blueprint.",
+    "P1 and P2 are read-only; their source matrices remain authoritative.",
+    "All source-function mappings and SOP/PR routes are candidates until checked against full source contracts.",
+    "SOP, problem remediation, baseline capability, and convenience feature are distinct types.",
+    "Documents and diagrams do not prove implementation, tests, or Runtime.",
+    "Adoption requires a same-task old/new comparison and explicit acceptance gate."
+  ],
+  "source_registry": {
+    "old_blueprint": "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/解析文檔/forAVAr_核心重建施工藍圖_2026-10-22.md",
+    "old_detail": "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/解析文檔/forAVAr_四層架構細項展開與閉環證據矩陣_2026-10-22.md",
+    "p1": "https://github.com/upqq21477-star/P1/blob/main/docs/research/P1-48功能-模型能力對照.md",
+    "p2": "https://github.com/upqq21477-star/P2/blob/main/docs/architecture/P2-Implementation-Evidence-Matrix-v1.0.md",
+    "sop": "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/SOP清單與落實狀態分組.md",
+    "pr": "https://github.com/upqq21477-star/forAVAr/blob/main/參考資料/%28S級%29問題清單.md"
+  },
+  "machine_model": "./architecture_model_v0.2.json",
+  "machine_comparison": "./comparison_v0.2.json",
+  "machine_branches": [
+    {"id":"P1-S01","path":"./p1_S01_crosswalk_v0.2.json","count":10},
+    {"id":"P1-S02","path":"./p1_S02_crosswalk_v0.2.json","count":8},
+    {"id":"P1-S03","path":"./p1_S03_crosswalk_v0.2.json","count":10},
+    {"id":"P1-S04","path":"./p1_S04_crosswalk_v0.2.json","count":10},
+    {"id":"P1-S05","path":"./p1_S05_crosswalk_v0.2.json","count":10},
+    {"id":"P2-F01","path":"./p2_F01_crosswalk_v0.2.json","count":10},
+    {"id":"P2-F11","path":"./p2_F11_crosswalk_v0.2.json","count":10},
+    {"id":"P2-F21","path":"./p2_F21_crosswalk_v0.2.json","count":10},
+    {"id":"SOP-ACTIVE","path":"./sop_active_crosswalk_v0.2.json","count":12},
+    {"id":"SOP-CANDIDATE","path":"./sop_candidate_crosswalk_v0.2.json","count":8},
+    {"id":"SOP-PENDING","path":"./sop_pending_crosswalk_v0.2.json","count":7},
+    {"id":"PR-S","path":"./pr_S_crosswalk_v0.2.json","count":13},
+    {"id":"PR-A","path":"./pr_A_crosswalk_v0.2.json","count":17},
+    {"id":"PR-B","path":"./pr_B_crosswalk_v0.2.json","count":12},
+    {"id":"PR-CD","path":"./pr_CD_crosswalk_v0.2.json","count":9},
+    {"id":"PR-RECENT","path":"./pr_RECENT_crosswalk_v0.2.json","count":3}
+  ],
+  "human_views": {
+    "hud": "../重構候選_HUD_v0.2.md",
+    "specification": "../新框架規格_v0.2.md",
+    "comparison": "../新舊對比與優缺點_v0.2.md",
+    "mapping_overview": "../功能映射總覽_v0.2.md",
+    "p1_mapping": "../P1新版候選歸位_v0.2.md",
+    "p2_mapping": "../P2新版候選歸位_v0.2.md",
+    "sop_mapping": "../SOP新版候選路由_v0.2.md",
+    "pr_mapping": "../PR新版候選路由_v0.2.md"
+  }
+}
