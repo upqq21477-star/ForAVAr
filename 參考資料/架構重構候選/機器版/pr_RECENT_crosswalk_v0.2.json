@@ -1,0 +1,38 @@
+{
+  "v": "0.2",
+  "branch": "PR-RECENT",
+  "source": "FORAVAR_PR_REGISTER",
+  "rule": "Candidate route only; authoritative issue title/status/root-cause/evidence remain in existing PR branch.",
+  "items": [
+    {
+      "id": "PR-052",
+      "nm": "無 GitHub 可用上下文包，藍圖／舊交接被迫代替 Current，造成狀態重建偏差",
+      "status": "OPEN",
+      "owner": "L4",
+      "node": "S1",
+      "sp": "SP3,SP6",
+      "why": "狀態恢復包缺口",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-053",
+      "nm": "已知治理規則未觸發前置檢查",
+      "status": "OPEN",
+      "owner": "AX1",
+      "node": "KG-04",
+      "sp": "SP1,SP6",
+      "why": "前置掃描漏失",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    },
+    {
+      "id": "PR-054",
+      "nm": "資訊分類、唯一歸位與流程回寫未形成可驗收閉環",
+      "status": "OPEN",
+      "owner": "AX6",
+      "node": "KG-26",
+      "sp": "SP5,SP6",
+      "why": "資訊歸位／回寫",
+      "map": "CANDIDATE_NEEDS_REVIEW"
+    }
+  ]
+}
