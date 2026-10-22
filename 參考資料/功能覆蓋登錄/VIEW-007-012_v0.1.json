@@ -1,0 +1,183 @@
+{
+  "schema_version": "0.1",
+  "branch_id": "VIEW-B",
+  "title": "VIEW-007–012",
+  "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
+  "rules": [
+    "詳細證據仍以來源權威為準。",
+    "source_status、mapping、decision 是不同狀態維度。",
+    "來源功能列入清單不代表 forAVAr 已實作。"
+  ],
+  "items": [
+    {
+      "id": "VIEW-007",
+      "name": "SOP／問題修正／新增功能分流標籤",
+      "type": "CROSSCUTTING_GOVERNANCE",
+      "lane": "NEW_FEATURE",
+      "reason": "使用者反覆需要重申清單類別；混合標準流程、事故修正與新便利功能會造成重複建檔或誤把候選當現行。",
+      "function": "每個登錄項有明確類型與生命週期：已採用 SOP、SOP 候選、問題修正／風險、基礎能力、便利性、方法／知識、待決策。",
+      "logic": "SOP 描述可重複觸發的標準操作；問題修正描述已觀察失效及根因／修正／驗收；便利性／新方法描述後來增加的能力；待裁定項不能被標成 Current。",
+      "sources": [
+        "SOP_CATALOG",
+        "PR_INDEX"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "NEW_CATALOG_PROPOSAL",
+      "layer_candidates": [
+        "文件治理／功能生命週期"
+      ],
+      "acceptance": [
+        "每筆只有一個主要類型",
+        "正式與候選狀態分開"
+      ]
+    },
+    {
+      "id": "VIEW-008",
+      "name": "問題→控制點→回歸／復發檢查追溯",
+      "type": "PROBLEM_REMEDIATION_REQUIREMENT",
+      "lane": "PROBLEM_FIX",
+      "reason": "問題修正若只存在於分析文件，後續無法判定相關功能是否實際防止復發。",
+      "function": "將 PR ID 連結至已確認根因、控制點／SOP、相關功能、驗收案例、證據、狀態變更和復發檢查。",
+      "logic": "根因未證實時維持假說；方案被寫入不代表已生效；結案必須有驗收證據，必要時安排回歸或復發檢查。",
+      "sources": [
+        "SOP_CATALOG",
+        "PR_INDEX"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "NEEDED_BY_EXISTING_GAP_NOT_YET_VERIFIED",
+      "layer_candidates": [
+        "F5/F7",
+        "橫向驗收平面"
+      ],
+      "related_pr": [
+        "PR-008",
+        "PR-011",
+        "PR-023",
+        "PR-027",
+        "PR-036",
+        "PR-039",
+        "PR-042",
+        "PR-054"
+      ],
+      "related_sop": [
+        "SOP-CAND-006",
+        "SOP-CAND-009"
+      ],
+      "acceptance": [
+        "每個宣稱解決的 PR 有控制點與驗收 refs",
+        "對高影響修正有復發／回歸檢查"
+      ]
+    },
+    {
+      "id": "VIEW-009",
+      "name": "前置檢查：權威、唯一責任、衝突和影響範圍",
+      "type": "SOP_CANDIDATE",
+      "lane": "SOP",
+      "reason": "PR-053 顯示已知 SOP／職責／問題清單未必在寫入前被檢索與套用。",
+      "function": "寫入或架構變更前，先找出現行權威、相近功能、職責歸屬、衝突和受影響檔案，再決定整合或獨立新增。",
+      "logic": "先讀相關索引與唯一定義；將變更內容映射到既有項；若高影響衝突未解，停止進入實施；不得自動建立重複平行機制。",
+      "sources": [
+        "SOP_CATALOG",
+        "PR_INDEX"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "DESIGN_CANDIDATE_NOT_APPROVED",
+      "related_pr": [
+        "PR-016",
+        "PR-019",
+        "PR-028",
+        "PR-034",
+        "PR-053",
+        "PR-054"
+      ],
+      "related_sop": [
+        "SOP-CAND-005",
+        "CF-004",
+        "CF-008",
+        "CF-010"
+      ],
+      "acceptance": [
+        "新增前能辨識重複／衝突",
+        "高影響未解衝突阻止寫入"
+      ]
+    },
+    {
+      "id": "VIEW-010",
+      "name": "適應式呈現：依讀者／用途選文字、表格或圖",
+      "type": "METHOD_KNOWLEDGE",
+      "lane": "NEW_FEATURE",
+      "reason": "單一文字形態不利於理解複雜關係，而所有任務都生圖又增加成本；需要按用途和讀者選視圖。",
+      "function": "簡單任務用文字；結構／責任用架構圖；流程／狀態用流程圖或狀態機；規則用表格；只有互動比較確有收益時才使用互動頁面。",
+      "logic": "視圖依權威需求、複雜度、讀者、風險與介面能力選擇；圖表是契約／狀態／程式的投影，圖表與事實衝突時修正圖，不改寫權威。",
+      "sources": [
+        "P2_SYSTEM_BLUEPRINT",
+        "OTHER_SOURCE"
+      ],
+      "source_status": "P2 F27 is CODE_PRESENT_UNVERIFIED / NOT_EXECUTED in current P2 Evidence Matrix",
+      "mapping": "P2_DESIGN_EXISTS_FORAVAR_INTEGRATION_NOT_VERIFIED",
+      "layer_candidates": [
+        "人類展示層"
+      ],
+      "related_pr": [
+        "PR-046"
+      ],
+      "related_p2": [
+        "P2-F27"
+      ],
+      "acceptance": [
+        "簡單題不強制製圖",
+        "複雜圖每個重要節點／連線可溯源"
+      ]
+    },
+    {
+      "id": "VIEW-011",
+      "name": "能力採納／合併／替代／退場決策",
+      "type": "CROSSCUTTING_GOVERNANCE",
+      "lane": "NEW_FEATURE",
+      "reason": "P1/P2 功能存在不代表 forAVAr 必須原樣複製；照搬所有模組可能形成重複 Runtime／職責。",
+      "function": "對 78 項來源能力逐一做必要性、重疊、可替代性、維護成本、上下文成本與驗收方式評估。",
+      "logic": "功能責任先保留於清單；實作載體可選保留、整合、替代、延期、退役。被合併不等於刪掉原功能責任，須留來源映射與驗收證據。",
+      "sources": [
+        "P1_FUNCTION_MATRIX",
+        "P2_EVIDENCE_MATRIX",
+        "FORAVAR_P1P2_TREE"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "TO_BE_PERFORMED",
+      "layer_candidates": [
+        "架構演化支援平面"
+      ],
+      "acceptance": [
+        "78項全數有決策或明確未決狀態",
+        "不因模組退役而消失功能責任"
+      ]
+    },
+    {
+      "id": "VIEW-012",
+      "name": "文件權威與藍圖狀態鎖定",
+      "type": "CROSSCUTTING_GOVERNANCE",
+      "lane": "NEW_FEATURE",
+      "reason": "目前新四層藍圖明確是施工草案，而不是已核准的正式藍圖；新功能清單不能悄悄變成第二套正式企劃。",
+      "function": "明確區分正式企劃、施工藍圖、研究紀錄、機器功能登錄、人類展示視圖、SOP、問題清單與證據矩陣的權限。",
+      "logic": "每份文件只保有其唯一責任；本次功能清單只作研究／覆蓋登錄。正式企劃更新需依既定的使用者明確授權。",
+      "sources": [
+        "FOUR_LAYER_BLUEPRINT",
+        "FORAVAR_P1P2_TREE",
+        "SOP_CATALOG"
+      ],
+      "source_status": "NOT_REVIEWED",
+      "mapping": "PROPOSED_GOVERNANCE_RULE",
+      "related_pr": [
+        "PR-019",
+        "PR-020",
+        "PR-028",
+        "PR-034",
+        "PR-054"
+      ],
+      "acceptance": [
+        "不把研究草案標成正式藍圖",
+        "不把功能清單視為已核准企劃"
+      ]
+    }
+  ]
+}
