@@ -1,0 +1,143 @@
+{
+  "schema_version": "0.1",
+  "branch_id": "P1-S03",
+  "title": "P1 F19-F28",
+  "master": "../功能清單_基礎能力覆蓋登錄_v0.1.json",
+  "rules": [
+    "詳細證據仍以來源權威為準。",
+    "source_status、mapping、decision 是不同狀態維度。",
+    "來源功能列入清單不代表 forAVAr 已實作。"
+  ],
+  "items": [
+    {
+      "id": "P1-F19",
+      "name": "頻率模式",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S03 Runtime）",
+      "reason": "頻次可揭示常見模式。",
+      "function": "統計與模型解讀。（P1 來源分類：TOOL_GUARD；原責任域：S03 Runtime）",
+      "logic": "statistics / model interpretation。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F20",
+      "name": "共同特徵",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "MODEL_NATIVE",
+      "source_group": "S03 Runtime）",
+      "reason": "需要歸納多個項目的共同點。",
+      "function": "模型分析共同特徵。（P1 來源分類：MODEL_NATIVE；原責任域：S03 Runtime）",
+      "logic": "model analysis。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F21",
+      "name": "差異模式",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "MODEL_NATIVE",
+      "source_group": "S03 Runtime）",
+      "reason": "要區分兩組／版本的差異。",
+      "function": "模型加統計比較。（P1 來源分類：MODEL_NATIVE；原責任域：S03 Runtime）",
+      "logic": "model + statistical comparison。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F22",
+      "name": "趨勢",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S03 Runtime）",
+      "reason": "時間序列趨勢需要定量觀察。",
+      "function": "統計時間序列工具。（P1 來源分類：TOOL_GUARD；原責任域：S03 Runtime）",
+      "logic": "statistical time-series tool。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F23",
+      "name": "群組",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S03 Runtime）",
+      "reason": "項目間可能形成群集。",
+      "function": "分群工具／模型。（P1 來源分類：TOOL_GUARD；原責任域：S03 Runtime）",
+      "logic": "clustering / model。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F24",
+      "name": "條件模式",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "MODEL_NATIVE",
+      "source_group": "S03 Runtime）",
+      "reason": "模式可能只在特定條件下成立。",
+      "function": "模型分析並核對證據。（P1 來源分類：MODEL_NATIVE；原責任域：S03 Runtime）",
+      "logic": "model analysis + evidence。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F25",
+      "name": "週期",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S03 Runtime）",
+      "reason": "週期規律要以資料支持。",
+      "function": "週期性演算法。（P1 來源分類：TOOL_GUARD；原責任域：S03 Runtime）",
+      "logic": "periodicity algorithm。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F26",
+      "name": "異常",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "TOOL_GUARD",
+      "source_group": "S03 Runtime）",
+      "reason": "異常需要相對基線定義。",
+      "function": "異常偵測工具。（P1 來源分類：TOOL_GUARD；原責任域：S03 Runtime）",
+      "logic": "anomaly detection tool。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F27",
+      "name": "例外",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "MODEL_NATIVE",
+      "source_group": "S03 Runtime）",
+      "reason": "例外可能否定一般規則。",
+      "function": "模型分類並保留例外。（P1 來源分類：MODEL_NATIVE；原責任域：S03 Runtime）",
+      "logic": "model classification + preservation。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    },
+    {
+      "id": "P1-F28",
+      "name": "反常組合",
+      "type": "BASELINE_CAPABILITY",
+      "source": "P1_FUNCTION_MATRIX",
+      "source_class": "MODEL_NATIVE",
+      "source_group": "S03 Runtime）",
+      "reason": "不常見組合可能指出模型缺口。",
+      "function": "模型分析反常組合。（P1 來源分類：MODEL_NATIVE；原責任域：S03 Runtime）",
+      "logic": "model analysis。原功能責任納入覆蓋盤點，不代表要在 forAVAr 重建一個獨立 Runtime。",
+      "forAVAr_mapping": "NOT_VALIDATED",
+      "decision": "UNASSESSED"
+    }
+  ]
+}
