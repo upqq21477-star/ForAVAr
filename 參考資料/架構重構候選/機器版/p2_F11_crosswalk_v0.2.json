@@ -97,10 +97,10 @@
       "id": "P2-F19",
       "nm": "UNKNOWN 觸發的針對性診斷與補救",
       "src_status": "CODE_PRESENT_UNVERIFIED / NOT_EXECUTED",
-      "ax": "AX4",
+      "ax": "AX2",
       "node": "KG-09",
       "sp": "SP2,SP5",
-      "why": "未知觸發針對性診斷",
+      "why": "未知與證據缺口由 AX2 定位；AX4 選擇診斷方法",
       "map": "CANDIDATE",
       "decision": "UNASSESSED"
     },
