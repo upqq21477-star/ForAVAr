@@ -80,3 +80,4 @@
 4. 只有在符合 [SOP 固定流程與演化管理](./SOP固定流程與演化管理.md) 的驗收條件後，才把候選從 DRAFT 升級至 VALIDATED／CURRENT。
 5. 台帳達 8,000 字元時按年份或 SOP_ID 分支，主文件保留索引；不得以刪除舊紀錄來降低字數。
 6. 這是人工維護的檔案型紀錄，不代表系統具備自動日誌、任務追蹤或流程強制能力。
+| RUN-20261023-007 | 2026-10-23 | SOP-META-001 v1.1 TRIAL；核心垂直切片 v0.1 | L3；思考主線最小實作與局部驗收 | PARTIAL（12/12 單元測試通過；Runtime 未接線） | 新增 adapter seam，保留低風險短路、授權阻擋、證據分層、接受條件與回饋分流；未新增認知層或平行控制引擎。Python 3.13.5，py_compile PASS、12/12 測試 PASS。未接真實模型／工具、未執行 E2E／Runtime；整批不得進 FINAL_TEST。 | [實作](https://github.com/upqq21477-star/ForAVAr/blob/main/runtime/foravar_vertical_slice.py)；[驗收紀錄](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/%E6%A0%B8%E5%BF%83%E6%80%9D%E8%80%83%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87_v0.1/2026-10-23_%E6%9C%80%E5%B0%8F%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87%E5%96%AE%E5%85%83%E9%A9%97%E6%94%B6%E7%B4%80%E9%8C%84.md) |
