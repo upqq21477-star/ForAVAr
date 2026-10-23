@@ -4,7 +4,7 @@
 - 類型：BLUEPRINT_EXECUTION_PROTOCOL／整批施工生命週期
 - 狀態：PROVISIONAL_CURRENT／v1.1；加入條件式來源掃描順序；跨任務行為與 Runtime 強制性未驗
 - 唯一責任：規定每次核心／系統藍圖施工的設計、功能落實、閉環完整性及正式運行驗收順序。
-- 核心入口：[核心藍圖 v0.5](./forAVAr_核心重建施工藍圖_v0.5_2026-10-23.md)；[SOP-META-001](../SOP固定流程與演化管理.md)；[對話流程列表](../對話流程列表.md)；[全域索引](../文件與分支索引.md)。
+- 核心入口：[核心藍圖 v0.6](./forAVAr_核心重建施工藍圖_v0.6_2026-10-23.md)；[SOP-META-001](../SOP固定流程與演化管理.md)；[對話流程列表](../對話流程列表.md)；[全域索引](../文件與分支索引.md)。
 - 唯讀設計參考：[P2 後續施工路線圖](https://github.com/upqq21477-star/P2/blob/main/docs/plans/P2-Post-r48-Roadmap-v1.0.md)；[P2 系統總體藍圖](https://github.com/upqq21477-star/P2/blob/main/docs/architecture/P2-System-Blueprint-v1.0.md)。P2 僅供唯讀參照，本文件不授權修改 P1／P2。
 
 ## 1. 觸發與總原則
