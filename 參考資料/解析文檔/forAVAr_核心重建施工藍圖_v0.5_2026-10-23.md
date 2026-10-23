@@ -43,7 +43,7 @@
 
 平常只讀取直接相關權威文件、能力登錄、功能骨架及 SOP／PR，不要求每次任務全庫掃描。僅在明確跨庫／架構稽核、流程漏收、來源索引與實際路徑不一致、核心／共享契約變更、局部範圍無法解決責任重疊，或來源掃描基線疑似過期時，才觸發全域掃描。
 
-觸發後順序如下：
+觸發後先讀[來源庫掃描計畫示例：P2 全庫逐批掃描 v1.0](https://github.com/upqq21477-star/P2/blob/4be3a6fe6fdea00f54821e76f1cfbf9605e4e4fe/docs/audit/P2-Repository-Complete-Scan-Plan-v1.0.md)，再依下列順序執行：
 
 1. **先找方法，再列路徑**：先查來源 repository 已有的完整掃描計畫、Roadmap 及相關架構／Current／Policy／Schema／Runtime／Work Packet／Run Mode／Test Strategy／Skill 入口；先讀掃描計畫及條件，再遞迴列舉路徑。
 2. **凍結來源基線**：記錄 repository、branch、commit SHA、tree SHA、當前 blob 數、API truncated 狀態及取樣時間。commit SHA 與 tree SHA 分欄。
