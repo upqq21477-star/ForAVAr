@@ -152,14 +152,9 @@ Core → Axes → Skeleton → Conditional Framework
 
 ## 8. 外部依據及推論限制
 
-本版參照的公開設計／研究包括：
-- Anthropic 將 workflows 與動態 agents 分開，建議由最簡單可用模式開始：[Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)。
-- OpenAI 的 Agent 文件分別描述工具、guardrails、可觀測 trace 與 eval：[Agents SDK](https://developers.openai.com/api/docs/guides/agents/sdk)、[Evals](https://developers.openai.com/api/docs/guides/agent-evals)、[Guardrails and approvals](https://developers.openai.com/api/docs/guides/agents/guardrails-approvals)。
-- LangGraph 對任務 checkpoint 與跨任務 store 的持久狀態有不同設計：[Durable execution](https://langchain-ai.github.io/langgraph/concepts/durable_execution/)。
-- Self-Refine 在其特定任務有收益報告，但外部研究指出純自我修正效果受任務及回饋來源限制：[Self-Refine](https://proceedings.neurips.cc/paper_files/paper/2023/hash/91edff07232fb1b55a505a9e9f6c0ff3-Abstract-Conference.html)、[When Can LLMs Actually Correct Their Own Mistakes?](https://aclanthology.org/2024.tacl-1.78/)。
-- 本專案的跨模型架構比較、P01–P12 桌上模擬及四項消融方案詳見本文開頭連結的 forAVArb 研究紀錄。
+本版外部對照依據包括：[Anthropic 工作流／Agent 設計](https://www.anthropic.com/engineering/building-effective-agents)、[OpenAI Agent 評測與工具核准](https://developers.openai.com/api/docs/guides/agent-evals)、[LangGraph 持久狀態](https://langchain-ai.github.io/langgraph/concepts/durable_execution/)，以及 [Self-Refine](https://proceedings.neurips.cc/paper_files/paper/2023/hash/91edff07232fb1b55a505a9e9f6c0ff3-Abstract-Conference.html) 與 [自我修正批判性綜述](https://aclanthology.org/2024.tacl-1.78/)。完整的主張、限制及對照分析見本文件開頭列出的 forAVArb 研究紀錄。
 
-上述外部資料支持設計模式與試驗方向，不代表本專案架構已獲實測證明。forAVArb 文件 12 的分數是桌上估分，禁止作為本版效能數據或改善百分比。
+外部來源支持設計模式與試驗方向，不代表本專案架構已獲實測證明。forAVArb 文件 12 的分數屬桌上估分，不得作為本版效能數據或改善百分比。
 
 ## 9. 四梯次狀態與本版執行範圍
 
