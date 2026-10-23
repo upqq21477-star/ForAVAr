@@ -35,7 +35,7 @@
 
 ### 3.1 跨庫流程漏收與來源基線（C-07）
 
-僅當跨庫／架構稽核、已知流程漏收、核心／共享契約變更、來源索引與路徑不一致、局部無法解決職責衝突或掃描基線可能過期時，才啟動全域掃描。第一梯次先讀來源庫已有掃描計畫／Roadmap，再凍結 commit SHA、tree SHA、當前 blob 數及 truncated 狀態，之後才遞迴列舉樹與按範圍讀內容。舊分母過期須刷新清冊；分開記錄路徑樹、內容審查和測試／Runtime 狀態。C-02 不另設掃描 SOP，沿用 A0–A9 方法；P1／P2 即使 metadata 顯示可寫也維持唯讀。
+僅當跨庫／架構稽核、已知流程漏收、核心／共享契約變更、來源索引與路徑不一致、局部無法解決職責衝突或掃描基線可能過期時，才啟動全域掃描。第一梯次先讀來源庫已有掃描計畫／Roadmap，例如[P2 全庫逐批掃描計畫 v1.0](https://github.com/upqq21477-star/P2/blob/4be3a6fe6fdea00f54821e76f1cfbf9605e4e4fe/docs/audit/P2-Repository-Complete-Scan-Plan-v1.0.md)，再凍結 commit SHA、tree SHA、當前 blob 數及 truncated 狀態，之後才遞迴列舉樹與按範圍讀內容。舊分母過期須刷新清冊；分開記錄路徑樹、內容審查和測試／Runtime 狀態。C-02 不另設掃描 SOP，沿用 A0–A9 方法；P1／P2 即使 metadata 顯示可寫也維持唯讀。
 
 ## 4. 第二梯次的功能落實條件
 
