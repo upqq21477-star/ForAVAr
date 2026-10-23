@@ -2,8 +2,8 @@
 
 - DOC_ID：FORAVAR-CORE-REBUILD-EXECUTION-BLUEPRINT-20261022
 - 類型：BLUEPRINT_MASTER／STAGED_VALIDATION_PLAN
-- 狀態：PROVISIONAL_CURRENT（文件規格）；跨任務效果與 Runtime 未驗證
-- 版本關係：v0.5 取代 v0.4 作為目前藍圖入口；v0.4 保留作歷史基線。
+- 狀態：SUPERSEDED；保留作歷史基線，不作現行入口
+- 版本關係：v0.5 曾取代 v0.4；現由 [核心藍圖 v0.6](./forAVAr_核心重建施工藍圖_v0.6_2026-10-23.md) 取代為現行入口。歷史內容保留。
 - 唯一責任：定義思考核心、架構層級、運行路由、變更範圍、按需載入、文件生命週期與驗收總體原則。
 - 全域入口：[文件與分支索引](../文件與分支索引.md)；[四層架構細項矩陣](./forAVAr_四層架構細項展開與閉環證據矩陣_2026-10-22.md)。
 - 施工入口：[四梯次 v1.1](./forAVAr_藍圖四梯次施工流程_v1.1.md)；[SOP-META-001](../SOP固定流程與演化管理.md)；[文件生命週期 v0.2](./forAVAr_文件生命週期中斷恢復與退場藍圖_v0.2.md)。
