@@ -79,7 +79,7 @@
 ## EVT-0058｜核心藍圖同步與失憶／資料准入逆向檢驗
 
 - 日期：2026-10-23
-- 狀態：`DOCS_READBACK_VERIFIED／TABLETOP_PARTIAL／RUNTIME_NOT_VERIFIED`
+- 狀態：`DOCS_READBACK_VERIFIED／TABLETOP_PARTIAL／PERMISSION_BOUNDARY_GAP／RUNTIME_NOT_VERIFIED`
 - 對抗測試歸檔：[forAVArb 驗證報告](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/%E6%A1%86%E6%9E%B6%E5%AF%A9%E6%9F%A5/2026-10-23_%E6%95%B4%E9%AB%94%E6%9E%B6%E6%A7%8B%E5%90%8C%E6%AD%A5%E8%88%87%E9%80%86%E5%90%91%E6%AA%A2%E9%A9%97.md)
 
 ### 發現與變更
@@ -96,3 +96,4 @@
 - 已做桌上推演：未知准入、對帳有差額、寫回不一致、未授權刪除、候選被誤判已採納時，按既有規則應阻塞而非繼續。
 - 尚未進行獨立新會話的無記憶行為評測、全庫遞迴引用／語意掃描、Runtime Gate 測試或兩個真實暫存資料批次；不宣稱系統實際行為已被驗證。
 - P1／P2 僅唯讀；未修改 C′ 正式企劃、SOP 正文或既有 PR 狀態。
+- 權限核查：GitHub API metadata 對 `upqq21477-star/P1` 與 `upqq21477-star/P2` 均回傳 `admin=true`、`push=true`。因此唯讀規範未由 repository 權限硬性落實；本次未寫入兩庫、未自行更改權限。應先取得授權並修正存取邊界，否則任何寫入操作均 BLOCKED。
