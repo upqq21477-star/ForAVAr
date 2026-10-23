@@ -3,7 +3,7 @@
 - DOC_ID：FORAVAR-CORE-PRESERVATION-CROSSREPO-EVAL-001
 - 狀態：TEST_SPEC_ONLY；測試規格不代表執行完成
 - 唯一責任：補充核心保真、跨庫流程漏收和權限邊界驗收；一般運行模式由[矩陣 v0.3](./forAVAr_運行效率與架構候選驗收矩陣_v0.3.md)負責。
-- 主藍圖：[核心重建施工藍圖 v0.5](./forAVAr_核心重建施工藍圖_v0.5_2026-10-23.md)
+- 主藍圖：[核心重建施工藍圖 v0.6](./forAVAr_核心重建施工藍圖_v0.6_2026-10-23.md)
 - 規劃依據：[forAVArb 更新規劃 v0.2](https://github.com/upqq21477-star/forAVArb/blob/main/%E8%92%B8%E9%A4%BE/%E6%95%B4%E9%AB%94%E6%A1%86%E6%9E%B6%E8%A9%95%E5%AF%A9/2026-10-23_%E6%95%B4%E9%AB%94%E6%A0%B8%E5%BF%83%E4%BF%9D%E7%9C%9F%E8%88%87%E6%AD%A3%E5%BC%8F%E8%97%8D%E5%9C%96%E6%9B%B4%E6%96%B0%E8%A6%8F%E5%8A%83_v0.2.md)。
 
 ## 測試契約
