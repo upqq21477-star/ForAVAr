@@ -15,6 +15,7 @@
 | EVT-0028 | 2026-10-21 | `REMOVE_REDUNDANT_ARCHIVE_FROM_WORKTREE` | 封包 A ZIP 移出 main；P2 唯讀來源保留。 | [EVT-0028](./EVT-0028_封包A工作樹移除與來源引用遷移.md) | VERIFIED（限定修補） |
 | EVT-0029 | 2026-10-21 | `RETIRE_ARCHIVE_AND_AUDIT_CANDIDATE_FILES` | 封包 B ZIP 移出 main，歷史來源保留。 | [EVT-0029](./EVT-0029_封包B壓縮檔退場與文件候選稽核.md) | VERIFIED（SHA／大小一致） |
 | EVT-0056 | 2026-10-23 | `RETIRE_GITHUB_FILES_AND_VERIFY_HISTORY_BOUNDARY` | 53 個資料夾檔及 3 份專用紀錄從 main 移除；路徑／樹驗證通過，舊 Blob 仍可讀，歷史清除未完成。 | [EVT-0056](./EVT-0056_GitHub文件刪除失效分析與退場流程修正.md) | VERIFIED（main 路徑）／PARTIAL（Git 歷史） |
+| EVT-0057 | 2026-10-23 | `REFINE_TEMP_REPOSITORY_INTAKE_CLOSEOUT_DESIGN` | 主／暫存庫分流候選、開案／結案清單及准入邊界；未採納、未實測。 | [EVT-0057](./EVT-0057_主儲存庫與暫存儲存庫分流設計補強.md) | DOCS_READBACK_VERIFIED／CANDIDATE |
 
 ## 使用規則
 
