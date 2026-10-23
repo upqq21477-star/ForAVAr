@@ -42,6 +42,8 @@
 | RUN-20261023-005 | 2026-10-23 | SOP-META-001 v1.0 TRIAL；藍圖四梯次流程 v1.0 | L3；將四梯次藍圖施工流程納入固定入口 | PARTIAL（文件規則已準備；讀回與行為待驗） | 對齊 PLANNING→REALIZATION→CLOSURE→FINAL_TEST；原核心藍圖 Phase 0–7 歸位為第一梯次設計子流程。整批鎖步、前三梯次極簡／隔離檢查、第四梯次集中正式實際運行；失敗按根因退回並使受影響證據失效。 | [四梯次施工流程](./解析文檔/forAVAr_藍圖四梯次施工流程_v1.0.md)、[EVT-0061](./追溯事件/EVT-0061_藍圖施工四梯次流程整合.md) |
 | RUN-20261023-006 | 2026-10-23 | SOP-META-001 v1.1 TRIAL；核心藍圖 v0.5／四梯次 v1.1 | L3；核心保真及跨庫流程漏收修正 | PARTIAL（文件更新；Runtime 未驗） | 保留思考核心與四層架構；全域掃描僅由明確條件觸發，且先讀來源掃描計畫再凍結 commit/tree/blob 基線；C-02 不另設 SOP，C-01 僅作能力退場條件分支。P1／P2 未寫入；metadata 權限不視為授權。 | [核心藍圖 v0.5](./解析文檔/forAVAr_核心重建施工藍圖_v0.5_2026-10-23.md)、[EVT-0062](./追溯事件/EVT-0062_整體核心保真與正式藍圖v0.5更新.md)、[驗收補充](./解析文檔/forAVAr_核心保真與跨庫掃描驗收補充_v0.1.md) |
 | RUN-20261023-004 | 2026-10-23 | SOP-META-001 v0.9；SOP-REV-001 v0.2／CF-011 | L3；還原現況運作鏈並進行教授級運作模型評審 | PARTIAL（局部工具修復完成；整體 Runtime 未驗） | 核心藍圖方向核對無偏移；現行運作模型估分 42/100、優化方案設計估分 76/100（專家估分）。主庫 321 項，只有兩個 Python 程式，未找到 workflows／tests 目錄或路由器接線證據。修復治理壓力模擬器語法與計數器，讀回；修補後等價源碼副本可執行 5×10,000 與 100,000 次合成負載。P1/P2 admin/push 權限仍待管理者處理；A/B/C 和 Runtime 未測。 | [SOP-REV-001 v0.2](./SOP_全系統教授級反方評審與優化方案驗收.md)、[EVT-0060](./追溯事件/EVT-0060_運作模型現況還原與教授級評審.md)、[運作模型現況評估](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/%E6%A1%86%E6%9E%B6%E5%AF%A9%E6%9F%A5/2026-10-23_%E9%81%8B%E4%BD%9C%E6%A8%A1%E5%9E%8B%E7%8F%BE%E6%B3%81%E9%82%84%E5%8E%9F%E8%88%87%E6%95%99%E6%8E%88%E7%B4%9A%E5%85%A8%E9%9D%A2%E8%A9%95%E4%BC%B0.md) |
+| RUN-20261023-007 | 2026-10-23 | SOP-META-001 v1.1 TRIAL；核心垂直切片 v0.1 | L3；局部切片驗收更正 | PARTIAL（測試 NOT_VERIFIED；Runtime 未接線） | 原 py_compile／12/12 PASS 無實際執行收據，主張已撤回；12 是測試方法數，不是功能總數。 | [更正紀錄](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/%E6%A0%B8%E5%BF%83%E6%80%9D%E8%80%83%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87_v0.1/2026-10-23_%E6%9C%80%E5%B0%8F%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87%E5%96%AE%E5%85%83%E9%A9%97%E6%94%B6%E7%B4%80%E9%8C%84.md)；[局部介面](https://github.com/upqq21477-star/ForAVAr/blob/main/runtime/foravar_vertical_slice.py) |
+| RUN-20261023-008 | 2026-10-23 | SOP-META-001 v1.1 TRIAL；整體語意閉環 PLANNING | L3；完整範圍／功能契約凍結 | PASS_STATIC（設計契約層；程式掃描／測試／Runtime 仍未驗） | 凍結 175 個混合項、P1 48／P2 30／流程 27／PR 54／Core-View 16、4 個 Skill 入口、角色權責、依賴與逐功能 I/O／錯誤／驗收契約。未改正式藍圖；P1/P2 唯讀。 | [範圍凍結](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/%E6%95%B4%E9%AB%94%E8%AA%9E%E6%84%8F%E9%96%89%E7%92%B0_PLANNING_2026-10-23/2026-10-23_%E6%95%B4%E9%AB%94%E6%A1%86%E6%9E%B6%E7%AC%AC%E4%B8%80%E6%A2%AF%E6%AC%A1%E8%A8%AD%E8%A8%88%E8%88%87%E7%AF%84%E5%9C%8D%E5%87%8D%E7%B5%90_v0.1.md)；[逐功能契約與 Gate](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/%E6%95%B4%E9%AB%94%E8%AA%9E%E6%84%8F%E9%96%89%E7%92%B0_PLANNING_2026-10-23/2026-10-23_%E7%AC%AC%E4%B8%80%E6%A2%AF%E6%AC%A1%E9%80%90%E5%8A%9F%E8%83%BD%E5%A5%91%E7%B4%84%E8%88%87%E6%94%BE%E8%A1%8C%E8%A3%9C%E5%85%85_v0.1.md) |
 
 
 ## 2.1 歷史紀錄分支
@@ -80,12 +82,3 @@
 4. 只有在符合 [SOP 固定流程與演化管理](./SOP固定流程與演化管理.md) 的驗收條件後，才把候選從 DRAFT 升級至 VALIDATED／CURRENT。
 5. 台帳達 8,000 字元時按年份或 SOP_ID 分支，主文件保留索引；不得以刪除舊紀錄來降低字數。
 6. 這是人工維護的檔案型紀錄，不代表系統具備自動日誌、任務追蹤或流程強制能力。
-| RUN-20261023-007 | 2026-10-23 | SOP-META-001 v1.1 TRIAL；核心垂直切片 v0.1 | L3；思考主線最小實作與局部驗收 | PARTIAL（單元測試執行未核實；Runtime 未接線） | 原紀錄曾宣稱 py_compile PASS、12/12 測試 PASS；更正見本列下方修訂註記：目前可核對記錄中找不到實際執行輸出，兩項 PASS 主張均撤回，狀態為 NOT_VERIFIED。局部介面不能代表整體語意閉環或整批 PLANNING 通過。 | [實作](https://github.com/upqq21477-star/ForAVAr/blob/main/runtime/foravar_vertical_slice.py)；[更正後驗收紀錄](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/%E6%A0%B8%E5%BF%83%E6%80%9D%E8%80%83%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87_v0.1/2026-10-23_%E6%9C%80%E5%B0%8F%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87%E5%96%AE%E5%85%83%E9%A9%97%E6%94%B6%E7%B4%80%E9%8C%84.md) |
-
-
-### 修訂註記 — RUN-20261023-007（2026-10-23，後續核查）
-
-- **更正事項：** 原列中的「py_compile PASS／12/12 測試 PASS」缺少可核查的實際執行收據。
-- **處置：** 撤回上述 PASS 聲明，兩者統一標記為 `NOT_VERIFIED`；不推論測試已失敗，也不把測試檔中的 12 個方法數當成已驗收功能數。
-- **範圍更正：** 既有垂直切片僅屬候選介面／局部產物，先前的切片級範圍不能支撐整體 PLANNING PASS；技能、功能、角色、控制平面、資料／狀態、流程、依賴與驗收名冊須在整體語意閉環盤點中逐項對帳。
-- **證據位置：** [更正後驗收紀錄](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/%E6%A0%B8%E5%BF%83%E6%80%9D%E8%80%83%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87_v0.1/2026-10-23_%E6%9C%80%E5%B0%8F%E5%9E%82%E7%9B%B4%E5%88%87%E7%89%87%E5%96%AE%E5%85%83%E9%A9%97%E6%94%B6%E7%B4%80%E9%8C%84.md)。
