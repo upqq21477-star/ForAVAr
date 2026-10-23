@@ -2,7 +2,7 @@
 
 - DOC_ID：FORAVAR-BLUEPRINT-FOUR-STAGE-001
 - 類型：BLUEPRINT_EXECUTION_PROTOCOL／整批施工生命週期
-- 狀態：PROVISIONAL_CURRENT；文件規則已寫入，跨任務行為與 Runtime 強制性未驗
+- 狀態：SUPERSEDED；由[四梯次流程 v1.1](./forAVAr_藍圖四梯次施工流程_v1.1.md)取代。保留歷史比較，不代表行為或 Runtime 已驗。
 - 唯一責任：規定每次核心／系統藍圖施工的設計、功能落實、閉環完整性及正式運行驗收順序。
 - 相關規範：[SOP 固定流程與演化管理](../SOP固定流程與演化管理.md)；[對話流程列表](../對話流程列表.md)；[全域文件索引](../文件與分支索引.md)。
 - 唯讀設計參考：[P2 後續施工路線圖](https://github.com/upqq21477-star/P2/blob/main/docs/plans/P2-Post-r48-Roadmap-v1.0.md)；[P2 系統總體藍圖](https://github.com/upqq21477-star/P2/blob/main/docs/architecture/P2-System-Blueprint-v1.0.md)。P2 僅供唯讀參照，本文件不授權修改 P1／P2。
