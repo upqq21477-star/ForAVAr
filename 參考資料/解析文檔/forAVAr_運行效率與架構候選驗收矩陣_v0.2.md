@@ -2,8 +2,8 @@
 
 - DOC_ID：FORAVAR-RUNTIME-EFFICIENCY-EVAL-MATRIX-001
 - 類型：EVALUATION_BLUEPRINT／CANDIDATE
-- 狀態：DRAFT；v0.2 擴充適應式驗證、停止條件與效益量測；案例尚未執行，未經跨任務／Runtime 驗收。
-- 版本關係：本文件取代 v0.1 作為現行測試規劃；v0.1 保留作歷史基線。
+- 狀態：SUPERSEDED_BY_V0.3／HISTORICAL_BASELINE；v0.2 的測試規格保留作比較，不作現行測試矩陣。
+- 版本關係：已由 [v0.3 現行測試規劃](./forAVAr_運行效率與架構候選驗收矩陣_v0.3.md) 取代；v0.1、v0.2 保留作歷史比較基線。
 - 唯一責任：用可重複案例驗證運行拓撲、局部更新、按需載入、紀錄精簡、恢復與退場的淨效益。
 - 主藍圖：[核心重建施工藍圖](./forAVAr_核心重建施工藍圖_2026-10-22.md)
 
