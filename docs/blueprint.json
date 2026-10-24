@@ -12,7 +12,9 @@
       "v0.5"
     ],
     "source_commit_before_slimdown": "132e44fb6b8c872e016d782e08b39edc6c58f1d8",
-    "rule": "Only this file defines the current architecture. Archived proposals are non-authoritative."
+    "rule": "Only this file defines the current architecture. Archived proposals are non-authoritative.",
+    "reconciled_at": "2026-10-24",
+    "reconciliation": "AUDIT_REVISION; formal baseline remains v0.8; no new design version asserted"
   },
   "purpose": "Reliable, goal-bound, evidence-calibrated, method-adaptive, self-correcting cognition under explicit risk/resource/stop constraints.",
   "architecture": {
@@ -34,143 +36,448 @@
     "axes": [
       {
         "id": "A1",
-        "name": "INTENT_AND_PROBLEM_FRAMING",
-        "responsibility": "Target, success criteria, scope, constraints, ambiguity, initial/alternative frames."
+        "name": "意圖與問題框定",
+        "responsibility": "把使用者要求轉成可供分析的問題模型，不預先決定採用什麼工具。",
+        "operations": [
+          "解析原始意圖與使用者真正要取得的結果。",
+          "分離交付物、結果目標與長期目的；不可把文件完成誤作知識問題解決。",
+          "明列硬限制、偏好、非目標、權限和資源界限。",
+          "定義接受條件，盡可能在解題前確定。",
+          "標記歧義、缺少的輸入及哪些歧義會改變答案。",
+          "建立第一版問題框架，列出已納入／排除的範圍及原因。",
+          "對高風險或未定義問題，建立少量競爭框架。",
+          "維護框架外訊號，避免把未列出誤認為不重要。",
+          "使用者目標、限制或成功條件改變時，建立可追蹤的目標更新並重查下游影響。"
+        ],
+        "outputs": "ProblemIntent、SuccessCriteria、BoundaryRecord、FrameCandidates、UnknownList。"
       },
       {
         "id": "A2",
-        "name": "EVIDENCE_AND_KNOWLEDGE_STATE",
-        "responsibility": "Source, observation, claim-evidence links, unknowns, conflicts, stale/unverified states."
+        "name": "證據與知識狀態",
+        "responsibility": "讓推理知道哪些內容有證據支持、哪些只是主張、推論或未知。",
+        "operations": [
+          "記錄來源身分、位置、版本、日期及取得方式。",
+          "區分來源原文、來源轉述、觀察、模型推論和假說。",
+          "檢查來源是否真的支持所引用的結論，而不是只檢查有沒有 URL。",
+          "比對來源時間、適用條件、樣本／範圍與外推限制。",
+          "識別重複轉載，避免把同一原始來源計成多份獨立證據。",
+          "保留互相衝突的證據，不強制合併。",
+          "明確表示 UNKNOWN、CONFLICT、STALE、NOT_CHECKED、NOT_RUN 等狀態。",
+          "在關鍵證據更新後，通知受影響的假說、結論和下游節點重驗。",
+          "當來源無法取得或不完整時，限制結論強度或阻塞相應決策。"
+        ],
+        "outputs": "SourceRecord、Observation、ClaimEvidenceLink、KnowledgeStatus、ConflictSet。"
       },
       {
         "id": "A3",
-        "name": "PROBLEM_MODEL_AND_EXPLANATION",
-        "responsibility": "Objects, relations, dependencies, causal candidates, competing hypotheses and discriminating tests."
+        "name": "問題模型與解釋",
+        "responsibility": "描述問題中的元素、關係、條件、因果候選與未知，不將方便的分類樹誤認為完整世界模型。",
+        "operations": [
+          "識別對象、變數、狀態、條件、時間與範圍。",
+          "建立關係圖，區分依賴、相關、因果候選及單純分類。",
+          "分開觀察到的現象與對其原因的解釋。",
+          "建立少量可競爭的假說或替代根因。",
+          "為各假說列出預期觀察、矛盾證據和區分它們的測試。",
+          "標記模型無法解釋的觀察及 UNCLASSIFIED 節點。",
+          "發現前提矛盾、持續失敗或需要無證據假設時，觸發局部模型更新或全面重框。",
+          "模型更新後追查依賴該模型的結論，不只改圖不改舊答案。"
+        ],
+        "outputs": "ProblemGraph、CausalCandidates、HypothesisSet、DiscriminatingTests、ModelGaps。"
       },
       {
         "id": "A4",
-        "name": "METHOD_AND_STRATEGY",
-        "responsibility": "Task profile, method routing, alternatives, risk/resource budget, next-step and stop rules."
+        "name": "方法選擇與策略",
+        "responsibility": "根據問題屬性決定用什麼認知方法、組合哪些方法，以及下一步最值得做什麼。",
+        "operations": [
+          "辨識認知操作：查證、量測、診斷、因果分析、預測、形式化、計算、最佳化、設計、施工或探索。",
+          "辨識問題定義成熟度、未知來源、可觀測性和候選解結構。",
+          "評估風險、可逆性、依賴深度、資源上限及時間要求。",
+          "決定需要直接回答、檢索、計算、建立模型、研究、實驗或多方法組合。",
+          "比較最低成本可行方案與必要替代方案。",
+          "指定需取得的證據、停止條件及何時升級至更深研究。",
+          "區分認知方法路由與外部行動授權：選方法不等於獲准執行。",
+          "根據新證據、失敗及成本回饋重新選法。",
+          "量測錯誤路由、低風險過度升級及高風險漏判，不能只評估成功案例。"
+        ],
+        "outputs": "TaskProfile、MethodCandidates、RouteDecision、Rationale、Budget、StopRule。"
       },
       {
         "id": "A5",
-        "name": "SOLVE_AND_FORM_RESULT",
-        "responsibility": "Execute the selected reasoning/research/design/engineering method; produce checkable outputs."
+        "name": "求解、推導與方案形成",
+        "responsibility": "實際使用所選的方法得到可以檢查的結果，而不是只輸出規劃描述。",
+        "operations": [
+          "按選定方法執行研究、計算、推導、分析、設計或施工。",
+          "記錄影響結果的假設、資料、工具和版本。",
+          "必要時取得新來源、做計算或實際測試，不以反覆語言推理替代可取得的外部證據。",
+          "分開執行紀錄、觀察結果和最終主張。",
+          "將新觀察回填到問題模型及證據狀態。",
+          "比較候選方案時使用同一目標、限制和接受條件。",
+          "表示結論的適用範圍、限制、未知及成本／風險取捨。",
+          "外部動作或文件寫入需使用獨立控制平面的授權和範圍檢查。"
+        ],
+        "outputs": "ExecutionRecord、Results、ModelUpdate、CandidateComparison、Deliverable。"
       },
       {
         "id": "A6",
-        "name": "VALIDATE_REFRAME_FEEDBACK",
-        "responsibility": "Check acceptance criteria, classify failure, correct/reframe, regress and close out."
+        "name": "驗證、重框與回饋",
+        "responsibility": "判定結果是否符合預先定義的目標；失敗時決定修正層級，而不是不斷追加流程。",
+        "operations": [
+          "把結果逐項對照原目標、硬限制與接受條件。",
+          "驗證關鍵來源支持、計算、輸出格式和實際副作用。",
+          "尋找反例、邊界、來源衝突及執行失敗。",
+          "區分局部瑕疵、方法錯配、假說被推翻、框架失效、需求變更和資料／權限問題。",
+          "局部瑕疵只修相關節點；方法錯配重新選法；框架失效才重框。",
+          "修正後以相同基線、原失敗案例及相關回歸案例重驗。",
+          "以 ACCEPTED、PARTIAL、BLOCKED、FAILED、NOT_PROVEN、REJECTED 等準確表達狀態。",
+          "結案時列出達成項、未達成項、未知、剩餘風險和下一個必要動作。",
+          "只有在根因有證據、修正可重用且回歸支持時，才形成 SOP／能力／核心規則候選。",
+          "定期檢查已升格的規則是否造成新失敗或維護成本超出收益。"
+        ],
+        "outputs": "EvaluationReceipt、FailureClassification、ReframeDecision、RegressionResult、CloseoutStatus。"
       }
     ],
     "skeleton_nodes": [
       {
         "id": "N01",
-        "name": "GOAL_SUCCESS_NORMALIZATION"
+        "name": "目標／成功條件正規化",
+        "owner_axis": "A1",
+        "inputs": "使用者要求、上下文、已授權範圍",
+        "operations": "分離目標、交付物、限制、非目標、接受條件",
+        "outputs": "ProblemIntent、SuccessCriteria",
+        "failure_or_stop_gate": "關鍵矛盾未解時要求澄清或 BLOCKED"
       },
       {
         "id": "N02",
-        "name": "BOUNDARY_DEPENDENCIES"
+        "name": "邊界／依賴",
+        "owner_axis": "A1",
+        "inputs": "ProblemIntent、環境、利害關係人、前置依賴",
+        "operations": "標示範圍內外、上下游依賴、排除理由",
+        "outputs": "BoundaryRecord、DependencyList",
+        "failure_or_stop_gate": "高影響依賴未知時不得假定不存在"
       },
       {
         "id": "N03",
-        "name": "INITIAL_COMPETING_FRAMES"
+        "name": "初始／競爭框架",
+        "owner_axis": "A1",
+        "inputs": "N01、N02、已知證據",
+        "operations": "建立初始框架、替代框架、未知區、重框觸發",
+        "outputs": "FrameSet、FrameVersion",
+        "failure_or_stop_gate": "缺乏依據或框架重大缺項時保留候選而非鎖定"
       },
       {
         "id": "N04",
-        "name": "SOURCE_OBSERVATION"
+        "name": "來源／觀察",
+        "owner_axis": "A2",
+        "inputs": "問題、來源需求、可用工具",
+        "operations": "取得並登錄來源／觀察、日期、版本及取得狀態",
+        "outputs": "SourceRecord、Observation",
+        "failure_or_stop_gate": "來源不可得時標明未取得，不冒稱已查證"
       },
       {
         "id": "N05",
-        "name": "CLAIM_EVIDENCE_RELATION"
+        "name": "主張—證據關係",
+        "owner_axis": "A2",
+        "inputs": "SourceRecord、Observation、Claims",
+        "operations": "對每項重要主張記錄支持、反駁、範圍和獨立性",
+        "outputs": "ClaimEvidenceLink",
+        "failure_or_stop_gate": "證據不支持時降級主張或標未知"
       },
       {
         "id": "N06",
-        "name": "UNKNOWN_CONFLICT_STALE"
+        "name": "未知／衝突",
+        "owner_axis": "A2",
+        "inputs": "多來源、觀察差異、缺值",
+        "operations": "分類未知、衝突、過期、未檢驗；指定解決或停止條件",
+        "outputs": "UnknownList、ConflictSet",
+        "failure_or_stop_gate": "證據不足不得被流程自動改寫成確定"
       },
       {
         "id": "N07",
-        "name": "STRUCTURAL_CAUSAL_MODEL"
+        "name": "結構／因果模型",
+        "owner_axis": "A3",
+        "inputs": "ProblemIntent、證據、領域知識",
+        "operations": "建立變數、條件、依賴與因果候選並標註證據級別",
+        "outputs": "ProblemGraph、CausalModel",
+        "failure_or_stop_gate": "將相關當因果或關係無證據時標為候選"
       },
       {
         "id": "N08",
-        "name": "COMPETING_HYPOTHESES"
+        "name": "競爭假說",
+        "owner_axis": "A3",
+        "inputs": "ProblemGraph、未解觀察",
+        "operations": "形成能解釋相同現象的替代假說及其區別",
+        "outputs": "HypothesisSet",
+        "failure_or_stop_gate": "只有一個假說但替代原因仍重大時不得過早定案"
       },
       {
         "id": "N09",
-        "name": "DISCRIMINATING_TEST"
+        "name": "區辨檢驗",
+        "owner_axis": "A3",
+        "inputs": "HypothesisSet、可觀測性、成本",
+        "operations": "選能讓候選預測不同的證據、測試或觀察",
+        "outputs": "TestDesign、ExpectedObservations",
+        "failure_or_stop_gate": "找不到有效檢驗時明列限制，不偽稱因果已證明"
       },
       {
         "id": "N10",
-        "name": "TASK_ATTRIBUTES"
+        "name": "任務屬性",
+        "owner_axis": "A4",
+        "inputs": "問題描述、未知、風險、資源",
+        "operations": "分析認知操作、成熟度、可觀測性、依賴、時間與可逆性",
+        "outputs": "TaskProfile",
+        "failure_or_stop_gate": "關鍵屬性缺失時採保守路由或取得必要資訊"
       },
       {
         "id": "N11",
-        "name": "METHOD_ROUTING"
+        "name": "方法路由",
+        "owner_axis": "A4",
+        "inputs": "TaskProfile、候選方法、能力可用性",
+        "operations": "比較最簡基線和替代方法，選擇必要組合",
+        "outputs": "RouteDecision、Rationale",
+        "failure_or_stop_gate": "能力未實作、未接線或依賴不可用時不得路由執行"
       },
       {
         "id": "N12",
-        "name": "NEXT_STEP_STOP_BUDGET"
+        "name": "下一步／停止",
+        "owner_axis": "A4",
+        "inputs": "RouteDecision、預算、當前資訊缺口",
+        "operations": "評估下一步資訊價值、成本、時限及停止條件",
+        "outputs": "NextAction、Budget、StopRule",
+        "failure_or_stop_gate": "無進展、預算耗盡或重試超限時停止或保存部分狀態"
       },
       {
         "id": "N13",
-        "name": "EXECUTE_SELECTED_METHOD"
+        "name": "執行選定方法",
+        "owner_axis": "A5",
+        "inputs": "方法規格、資料、已核准能力／權限",
+        "operations": "執行檢索、計算、推理、測試、設計或工程任務",
+        "outputs": "ExecutionRecord、Result",
+        "failure_or_stop_gate": "權限／範圍未通過時阻擋；部分成功需如實記錄"
       },
       {
         "id": "N14",
-        "name": "UPDATE_MODEL_STATE"
+        "name": "更新模型／狀態",
+        "owner_axis": "A5",
+        "inputs": "ExecutionRecord、Result、新觀察",
+        "operations": "更新假說、證據、模型及任務狀態，追蹤被影響結論",
+        "outputs": "ModelUpdate、StateDelta",
+        "failure_or_stop_gate": "狀態或來源衝突無法解決時標 CONFLICT／BLOCKED"
       },
       {
         "id": "N15",
-        "name": "SYNTHESIZE_RESULT"
+        "name": "綜合結果",
+        "owner_axis": "A5",
+        "inputs": "結果、證據、候選方案、限制",
+        "operations": "綜合答案或方案，分清結論、推論、未知與取捨",
+        "outputs": "Deliverable、Rationale",
+        "failure_or_stop_gate": "重要主張無支持時降低結論範圍或保留未決"
       },
       {
         "id": "N16",
-        "name": "ACCEPTANCE_COUNTEREVIDENCE"
+        "name": "驗收／反證",
+        "owner_axis": "A6",
+        "inputs": "SuccessCriteria、Deliverable、原始基線",
+        "operations": "核對必要條件、負例、邊界、證據和實際結果",
+        "outputs": "EvaluationReceipt、Pass/Fail/Unknown",
+        "failure_or_stop_gate": "不得事後降低門檻；未執行的測試是 NOT_RUN"
       },
       {
         "id": "N17",
-        "name": "ROOT_CAUSE_CORRECTION_REFRAME"
+        "name": "根因修正／重框",
+        "owner_axis": "A6",
+        "inputs": "FailureClassification、新證據、差異",
+        "operations": "決定局部修正、改方法、改模型、重框、回退或拒絕",
+        "outputs": "ReframeDecision、ImpactSet",
+        "failure_or_stop_gate": "修正方案沒有能驗收的區辨條件時不升格"
       },
       {
         "id": "N18",
-        "name": "CLOSEOUT_FEEDBACK"
+        "name": "結案／回饋",
+        "owner_axis": "A6",
+        "inputs": "驗收結果、未決項、成本、復發證據",
+        "operations": "做結案裁定、持久化必要資訊、提出規則候選並設退場條件",
+        "outputs": "CloseoutStatus、CandidateRule、Handoff",
+        "failure_or_stop_gate": "證據不足只能部分結案／阻塞，不能宣告全部解決"
       }
     ],
     "conditional_framework": [
       {
         "id": "F0",
-        "name": "INTAKE_PREFLIGHT"
+        "name": "INTAKE_PREFLIGHT",
+        "title": "F0｜請求接收與前置檢查",
+        "input": "使用者要求、專案邊界、目前權威狀態、已存在問題與規則。",
+        "output": "ScopeAndAuthority、RelevantSources、PreflightFindings。",
+        "executed_nodes": null,
+        "steps": [
+          "明確本輪目標與交付物。",
+          "核對專案／儲存庫讀寫範圍及是否獲得更新正式企劃的授權。",
+          "按任務影響檢索相關主軸、問題清單、SOP、決策紀錄和唯一責任文件。",
+          "核對現行版本與來源；相互矛盾時回到權威來源。",
+          "列出需要實際執行的任務，而不是先開始新增模組。"
+        ],
+        "rules": [
+          "必要權威來源無法取得：對受影響決策標記 UNKNOWN／BLOCKED。",
+          "寫入未授權：只研究或建議，不修改正式企劃。",
+          "發現已有相同責任流程：比較並重用，不建立平行流程。"
+        ],
+        "source": "four_layer_spec_2026-10-22"
       },
       {
         "id": "F1",
-        "name": "FRAME"
+        "name": "FRAME",
+        "title": "F1｜問題框定與第一次渲染",
+        "input": null,
+        "output": "ProblemIntent、SuccessCriteria、BoundaryRecord、FrameSet。",
+        "executed_nodes": "執行 N01–N03",
+        "steps": [],
+        "rules": [
+          "目標和關鍵限制足以支持選擇下一步。",
+          "已標記會改變結果的未知。",
+          "對非瑣碎、高風險或根因不明的問題，至少保留一個合理替代框架或重框入口。"
+        ],
+        "source": "four_layer_spec_2026-10-22"
       },
       {
         "id": "F2",
-        "name": "EVIDENCE_AND_MODEL"
+        "name": "EVIDENCE_AND_MODEL",
+        "title": "F2｜證據與模型建立",
+        "input": null,
+        "output": "來源／觀察、主張—證據連結、未知／衝突清單、問題圖、競爭假說及區辨檢驗。",
+        "executed_nodes": "執行 N04–N09",
+        "steps": [],
+        "rules": [
+          "有可靠且足以回答問題的證據：進入方法選擇或直接綜合。",
+          "有衝突：保留各來源與其適用範圍，選擇能區分來源的查證。",
+          "關鍵證據不可得：縮小結論範圍、標記未知或阻塞。",
+          "根因不明：建立可測試的候選，不把第一個合理解釋定為事實。"
+        ],
+        "source": "four_layer_spec_2026-10-22"
       },
       {
         "id": "F3",
-        "name": "METHOD_ROUTE_AND_BUDGET"
+        "name": "METHOD_ROUTE_AND_BUDGET",
+        "title": "F3｜方法路由與預算",
+        "input": null,
+        "output": null,
+        "executed_nodes": "執行 N10–N12",
+        "steps": [
+          "先檢查最簡可行方案。",
+          "只有當問題屬性、未知或失敗代價要求時才增加方法。",
+          "指定成功條件、資源／時間預算、重試上限及停止條件。",
+          "方法選擇與操作授權分離；高影響工具的操作還需通過外圍控制 Gate。"
+        ],
+        "rules": [
+          "直接回答／已有知識；",
+          "外部資料檢索與來源核對；",
+          "量測、計算、形式化或規則驗證；",
+          "根因診斷與因果區辨；",
+          "多方案決策／最佳化；",
+          "設計、施工、程式或文件變更；",
+          "開放探索／問題定義；",
+          "必要時組合方法。"
+        ],
+        "source": "four_layer_spec_2026-10-22"
       },
       {
         "id": "F4",
-        "name": "CONTROLLED_EXECUTION"
+        "name": "CONTROLLED_EXECUTION",
+        "title": "F4｜受控執行",
+        "input": null,
+        "output": null,
+        "executed_nodes": "執行 N13–N15",
+        "steps": [],
+        "rules": [
+          "執行前輸入／版本；",
+          "實際調用的能力及其狀態；",
+          "實際結果、錯誤與部分副作用；",
+          "新觀察和證據；",
+          "任務狀態差異及下一步。"
+        ],
+        "source": "four_layer_spec_2026-10-22"
       },
       {
         "id": "F5",
-        "name": "VALIDATE_AND_BRANCH"
+        "name": "VALIDATE_AND_BRANCH",
+        "title": "F5｜驗收與分流",
+        "input": null,
+        "output": null,
+        "executed_nodes": "執行 N16",
+        "steps": [],
+        "rules": [
+          "PASS：所有必要接受條件都有證據支持，無未處理硬限制失敗。",
+          "PARTIAL：部分要求達成，其餘未達成項及剩餘風險被明確列出。",
+          "LOCAL_FAILURE：核心框架成立，但某個局部步驟或產物不合格；只修影響範圍並跑相關回歸。",
+          "METHOD_FAILURE：選用的方法不適配；返回 N11 重新選擇。",
+          "MODEL_FAILURE：關鍵假說或因果模型被反證；返回 N07–N09 修正。",
+          "FRAME_FAILURE：初始框架漏掉重大依賴、持續解釋不了重要觀察，或必須引入無證據假設；執行 N17 受控重框。",
+          "BLOCKED／UNKNOWN：必要資訊、能力或授權不足；列明缺失條件。",
+          "REJECTED／CANCELLED：沒有符合硬限制的可行解，或任務被授權方取消。"
+        ],
+        "source": "four_layer_spec_2026-10-22"
       },
       {
         "id": "F6",
-        "name": "CONDITIONAL_PERSISTENCE_HANDOFF_WRITEBACK"
+        "name": "CONDITIONAL_PERSISTENCE_HANDOFF_WRITEBACK",
+        "title": "F6｜必要持久化、交接和回寫",
+        "input": null,
+        "output": null,
+        "executed_nodes": null,
+        "steps": [
+          "每一項新資訊先分類。",
+          "找到唯一責任目標，不直接在多處複製權威正文。",
+          "產生變更集，列出需要同步的索引、問題、規則和追溯項。",
+          "核對更新前基線、授權和檔案／資料版本。",
+          "執行寫入後實際讀回、檢查差異和相依內容。",
+          "記錄驗收收據、未完成項及可恢復狀態。",
+          "只有經證據支持的規則候選才能提交正式採納審查。"
+        ],
+        "rules": [
+          "長期／跨會話工作；",
+          "多階段、多模組或多人交接；",
+          "外部副作用、正式寫入或需要回退；",
+          "重要決策、風險、證據、未決項需後續追溯；",
+          "已驗證且有實際重用價值的通用規則。"
+        ],
+        "source": "four_layer_spec_2026-10-22"
       },
       {
         "id": "F7",
-        "name": "CLOSEOUT_AND_EVALUATION"
+        "name": "CLOSEOUT_AND_EVALUATION",
+        "title": "F7｜結案與持續評測",
+        "input": null,
+        "output": null,
+        "executed_nodes": "執行 N18",
+        "steps": [],
+        "rules": [
+          "原目標和成功條件；",
+          "實際完成項／未完成項；",
+          "證據與驗收結果；",
+          "未知、衝突與剩餘風險；",
+          "修正、重框、回退或停止的理由；",
+          "若需跨輪繼續，下一步與狀態版本；",
+          "是否建立規則候選，以及仍欠缺哪些採納證據。"
+        ],
+        "source": "four_layer_spec_2026-10-22"
       }
-    ]
+    ],
+    "closed_loop": {
+      "definition": "Goal/constraints → evidence-backed model → method/route → controlled execution → acceptance → failure classification → local repair/reframe → dependency propagation → regression/closeout.",
+      "limits": [
+        "Not a claim of universal completeness",
+        "No full traversal for all tasks",
+        "Repetition without new evidence is not independent verification",
+        "Unknown remains unknown"
+      ],
+      "terminal_states": [
+        "PASS",
+        "PARTIAL",
+        "BLOCKED",
+        "FAILED",
+        "NOT_PROVEN",
+        "NOT_EXECUTED",
+        "INCONCLUSIVE"
+      ]
+    }
   },
   "invariants": [
     {
@@ -344,6 +651,70 @@
       "Unknown external side effects require a distinct state and recovery decision.",
       "An execution receipt is not the same as result-quality acceptance.",
       "A document rule does not imply automated Runtime enforcement."
+    ],
+    "failure_classes": [
+      "GOAL_OR_SEMANTIC_ERROR",
+      "SOURCE_OR_EVIDENCE_ERROR",
+      "INFERENCE_OR_MODEL_ERROR",
+      "METHOD_OR_ROUTING_ERROR",
+      "TOOL_OR_ADAPTER_ERROR",
+      "AUTHORIZATION_OR_POLICY_BLOCK",
+      "PERSISTENCE_OR_STATE_ERROR",
+      "INTEGRATION_OR_DEPENDENCY_UPDATE_ERROR",
+      "ACCEPTANCE_OR_MEASUREMENT_ERROR",
+      "COST_OR_STOP_ERROR"
+    ],
+    "correction_propagation": [
+      "Identify evidence-supported root cause; otherwise UNKNOWN.",
+      "Define impact/dependency set and exact change set before mutation.",
+      "Update only affected claims, outputs, files, references, tests and states.",
+      "Invalidate downstream evidence bound to changed versions/assumptions.",
+      "Run relevant regression/recurrence checks; do not mint duplicate problem IDs for repeated symptoms."
+    ],
+    "retry_policy": {
+      "rule": "Bound retries; retry only with new evidence, a discriminating change, different method or changed target.",
+      "stop": [
+        "Same input/method yields no new evidence",
+        "Attempt/time/cost budget exhausted",
+        "Required authority/permission/source unavailable",
+        "Acceptance conditions satisfied",
+        "Remaining information is not decision-relevant"
+      ],
+      "partial_failure": "Read actual state first; repair only inconsistent scope."
+    },
+    "run_record": {
+      "required_when": "Actual tool execution/side-effect evidence is required",
+      "fields": [
+        "task_id",
+        "run_id",
+        "target_version",
+        "timestamp",
+        "tool_or_command",
+        "exit_status",
+        "environment",
+        "output_fingerprint",
+        "evidence_ids",
+        "result_status"
+      ],
+      "boundary": "Execution receipt != deliverable acceptance."
+    },
+    "state_bundle": {
+      "classes": [
+        "TASK_EXECUTION_STATE",
+        "CLAIM_SOURCE_EVIDENCE_STATE",
+        "LONG_TERM_MEMORY_RULES"
+      ],
+      "P0": "No extra persisted state beyond necessary minimum.",
+      "P1": "Minimal status, key decisions, blockers, verified results and evidence links.",
+      "P2": "Task-bound checkpoint for cross-session/multi-stage/high-impact/interruption recovery.",
+      "authority": "Portable derived view; never replaces current authoritative files or execution receipts."
+    },
+    "security": [
+      "High-impact/irreversible actions require task-bound scope and permission at runtime/tool boundary.",
+      "Missing authorization, critical evidence or scope blocks affected protected action.",
+      "M/P/T and model confidence cannot override G/policy.",
+      "P1/P2 remain read-only regardless of routing.",
+      "Archive/move is not deletion from Git history."
     ]
   },
   "delivery_lifecycle": {
@@ -398,12 +769,19 @@
   },
   "maturity": {
     "runtime/foravar_vertical_slice.py": "POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED",
-    "runtime/policy_gate.py": "CODE_PRESENT; actual permission backend/denial behavior NOT_VERIFIED",
+    "runtime/policy_gate.py": "CODE_PRESENT; authorization backend behavior and protected-action denial NOT_RUNTIME_VERIFIED",
     "python_contract_tests": "NOT_EXECUTED_IN_THIS_CLEANUP",
     "real_adapter_wiring": "NOT_EXECUTED_OR_NOT_VERIFIED",
     "runtime_timeout_unknown_side_effect_recovery": "NOT_EXECUTED_OR_NOT_VERIFIED",
     "handoff": "SOP-HANDOFF-001=PROVISIONAL_CURRENT_MANUAL; cross-task effect and Runtime auto-trigger NOT_VERIFIED",
-    "rule": "Document consolidation does not promote engineering maturity."
+    "rule": "Document consolidation does not promote engineering maturity.",
+    "reconciliation_evidence": {
+      "source_path": "runtime/foravar_vertical_slice.py",
+      "source_blob_sha": "466ac0163ca888bb1e15b7da73a5662d00092df1",
+      "observed_constant": "POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED",
+      "correction": "Historical v0.8 narrative contains older ADAPTER_SEAM_NOT_INTEGRATED status; current code shows policy gate integrated, not runtime validated.",
+      "tests": "NOT_EXECUTED_IN_THIS_AUDIT"
+    }
   },
   "repo_boundaries": {
     "upqq21477-star/forAVAr": "Current blueprint, operating contract, capability register, problem register, README and necessary Runtime/source code only.",
@@ -412,9 +790,76 @@
     "upqq21477-star/P2": "READ_ONLY; reference/call only; no write/create/delete."
   },
   "source_refs": {
-    "current_blueprint_original_path": "參考資料/解析文檔/forAVAr_核心重建施工藍圖_v0.8_2026-10-24.md",
+    "current_blueprint_original_path": "Archived source record; no longer a current Markdown file.",
     "current_blueprint_original_blob_sha": "410a42602650c78004ef3c7bc7d2e168aab367d1",
     "archived_source_commit": "132e44fb6b8c872e016d782e08b39edc6c58f1d8",
-    "archive_manifest": "https://github.com/upqq21477-star/forAVArb/blob/main/歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json"
-  }
+    "archive_manifest": "https://github.com/upqq21477-star/forAVArb/blob/main/歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json",
+    "authoritative_source": {
+      "repository": "upqq21477-star/forAVArb",
+      "pack": "歸檔/forAVAr_main_退場歸檔_2026-10-24/06e_研究與藍圖紀錄.jsonl",
+      "source_path": "參考資料/解析文檔/forAVAr_核心重建施工藍圖_v0.8_2026-10-24.md",
+      "source_blob_sha": "410a42602650c78004ef3c7bc7d2e168aab367d1",
+      "archive_manifest": "歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json",
+      "archive_commit": "132e44fb6b8c872e016d782e08b39edc6c58f1d8"
+    },
+    "detail_contract": {
+      "repository": "upqq21477-star/forAVArb",
+      "pack": "歸檔/forAVAr_main_退場歸檔_2026-10-24/06d_研究與藍圖紀錄.jsonl",
+      "source_path": "參考資料/解析文檔/forAVAr_四層架構細項展開與閉環證據矩陣_2026-10-22.md",
+      "source_blob_sha": "833111e3c06fc89df9d7d8454a0591984e14be93",
+      "use": "A1-A6 / N01-N18 / F0-F7 detailed contracts normalized here."
+    },
+    "branch_specs": [
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_思考核心與運行架構_v0.7.md",
+        "source_blob_sha": "de318da273e67209aee883f58ac12d792b023efa",
+        "pack": "歸檔/forAVAr_main_退場歸檔_2026-10-24/06d_研究與藍圖紀錄.jsonl",
+        "role": "Core meaning, route axes, roles/plugins."
+      },
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_Runtime狀態安全與恢復架構_v0.7.md",
+        "source_blob_sha": "ff10f0c3ff70181b470e9df77601f83d3de5dea4",
+        "pack": "歸檔/forAVAr_main_退場歸檔_2026-10-24/06d_研究與藍圖紀錄.jsonl",
+        "role": "State, receipts, security, failure and recovery."
+      },
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_驗收治理與四梯次施工規劃_v0.8.md",
+        "source_blob_sha": "613098301bf5c9fde1a6a0129611c0ab8c109993",
+        "pack": "歸檔/forAVAr_main_退場歸檔_2026-10-24/06f_研究與藍圖紀錄.jsonl",
+        "role": "Current four-stage gates, evaluation and readiness."
+      }
+    ]
+  },
+  "purpose_definition": "AI 思考品質，是在理解真實任務目的、成功條件與限制後，以可追溯且範圍相符的依據建構可檢驗的理解或方案；依問題特性選擇認知方法，適當校準結論和未知；當證據、前提或測試結果改變時，能定位受影響的責任、修正表徵／推論／方法並重驗，在證據價值、剩餘風險與投入成本相稱時交付、部分交付、阻塞或停止。",
+  "roles_and_plugins": {
+    "roles": {
+      "principle": "Logical roles do not prove model/context/permission independence.",
+      "allowed": [
+        "COORDINATOR",
+        "PROBLEM_ANALYST",
+        "RESEARCH_EVIDENCE",
+        "DOMAIN_SPECIALIST",
+        "IMPLEMENTER",
+        "VALIDATOR",
+        "RISK_REVIEWER",
+        "INTEGRATOR"
+      ],
+      "activation": "Use staged roles by default; multi-agent only when splitability, explicit output contracts and integration value are established."
+    },
+    "plugin_contract": [
+      "input_schema",
+      "output_schema",
+      "error_types",
+      "timeout",
+      "idempotency",
+      "side_effect_level",
+      "permission_requirement",
+      "evidence_fields",
+      "version",
+      "fallback_or_replacement",
+      "tests"
+    ],
+    "replacement": "Map to existing capability IDs first; add IDs only for evidenced novel responsibility. Plugin-declared read-only is not an execution security boundary."
+  },
+  "delivery_lifecycle_ref": "docs/operating_contract.json#/build_stage_flow"
 }

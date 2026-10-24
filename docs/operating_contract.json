@@ -161,40 +161,27 @@
   "build_stage_flow": [
     {
       "stage": "PLANNING",
-      "requirements": [
-        "Read current authority",
-        "Map old/new IDs and responsibility",
-        "Define alternatives, dependencies, scope and acceptance",
-        "Separate current design from candidates"
-      ]
+      "scope": "凍結藍圖差異、175 登錄／PR／SOP 對帳、M/G/P/T、Runtime contract、StateBundle、生命週期、權限、驗收範圍",
+      "required_artifacts": "變更集、責任映射、未決表、測試計畫、風險／回復方案",
+      "release_gate": "所有新增均指向既有責任或有明確新責任證據；關鍵接受條件可判定"
     },
     {
       "stage": "REALIZATION",
-      "requirements": [
-        "Write only the authorized change set",
-        "Do not add unrelated scope",
-        "Keep implementation and design maturity separate"
-      ]
+      "scope": "只實作已通過規劃與授權的增量；先做 contract/unit tests，再接必要 adapter",
+      "required_artifacts": "程式／文件差異、契約測試結果、執行收據、錯誤出口",
+      "release_gate": "測試已實際執行、結果可回讀；授權拒絕與失敗路徑可觀察"
     },
     {
       "stage": "CLOSURE",
-      "requirements": [
-        "Read back each changed file",
-        "Check structure/schema/crossrefs/IDs/dependencies",
-        "Run applicable contract/regression checks",
-        "Archive validation/temp artifacts",
-        "Record unexecuted tests as NOT_EXECUTED"
-      ]
+      "scope": "核對跨檔依賴、來源／引用、狀態、封包、權限、回復、索引、變更記錄與退場風險",
+      "required_artifacts": "差異清冊、影響圖、回歸與恢復紀錄、已解／未解項",
+      "release_gate": "所有改動可追溯；沒有未解的重大死路或越權寫入"
     },
     {
       "stage": "FINAL_TEST",
-      "requirements": [
-        "Freeze tested version",
-        "Run predefined actual tests",
-        "Compare against baseline",
-        "Report quality/security/cost separately",
-        "Adopt/reject without lowering the threshold post hoc"
-      ]
+      "scope": "凍結版本後跑 TC／adapter tests、C0/C1/C2、A1–A4 及獨立確認集",
+      "required_artifacts": "測試總結、品質／成本／安全分報告、採納／否決決議",
+      "release_gate": "依預先固定的 rubric 與門檻決策；失敗與未知保留"
     }
   ],
   "mutation_protocol": [
@@ -306,7 +293,15 @@
     "format": "JSONL: one source file per line, exact UTF-8 content and source blob metadata",
     "source_manifest": "https://github.com/upqq21477-star/forAVArb/blob/main/歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json",
     "candidate_rule": "Archived/history material is not automatically current; use current blueprint/registers for decisions.",
-    "binary_exception": "The two original DOCX blobs are identified in the manifest but were not duplicated as binary by the text connector; original commit preserves them, paired Markdown is archived."
+    "binary_exception": "The two original DOCX blobs are identified in the manifest but were not duplicated as binary by the text connector; original commit preserves them, paired Markdown is archived.",
+    "manifest": "歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json",
+    "index": "docs/index.json"
   },
-  "task_flow_applicability": "INTAKE→AUTHORIZE→SELECT_SOP→PLAN→EXECUTE→VERIFY→PERSIST→REVIEW is a conditional task lifecycle, not a mandatory full path for every task. Apply only the steps required by task level and risk; mandatory safety, authorization, evidence and truthfulness gates are never skipped."
+  "task_flow_applicability": "INTAKE→AUTHORIZE→SELECT_SOP→PLAN→EXECUTE→VERIFY→PERSIST→REVIEW is a conditional task lifecycle, not a mandatory full path for every task. Apply only the steps required by task level and risk; mandatory safety, authorization, evidence and truthfulness gates are never skipped.",
+  "index": "docs/index.json",
+  "authority_resolution": {
+    "conflicts": "Use designated current authority. For implementation maturity, current code/status evidence outranks stale narrative; neither integration nor documentation implies tests passed.",
+    "historical_links": "Relative Markdown links embedded inside archived JSONL content are legacy source paths. Resolve via docs/index.json and the archive manifest.",
+    "no_auto_promotion": "Archived, candidate, research and manual-simulation material never becomes CURRENT solely because of newer file timestamps; require explicit decision and evidence."
+  }
 }

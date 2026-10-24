@@ -1,0 +1,1449 @@
+{
+  "schema": "foravar.index/v1",
+  "status": "CURRENT",
+  "updated_at": "2026-10-24",
+  "purpose": "Single discovery entry. Read authority first; use source indexes for historical material. Avoid duplicate authority.",
+  "start_here": [
+    "README.md",
+    "docs/index.json",
+    "docs/blueprint.json",
+    "docs/operating_contract.json"
+  ],
+  "authority_order": [
+    {
+      "domain": "ARCHITECTURE",
+      "file": "docs/blueprint.json",
+      "purpose": "Formal current architecture v0.8; detailed A/N/F contracts normalized here."
+    },
+    {
+      "domain": "OPERATING_RULES",
+      "file": "docs/operating_contract.json",
+      "purpose": "L0-L3, preflight, repository boundaries, change lifecycle, four build stages."
+    },
+    {
+      "domain": "CAPABILITIES",
+      "file": "docs/capability_registry.json",
+      "purpose": "Single normalized list of capabilities and evidence/maturity fields."
+    },
+    {
+      "domain": "PROBLEMS",
+      "file": "docs/problem_register.json",
+      "purpose": "Problem statements only; remediation and experiment detail stays outside the problem list."
+    },
+    {
+      "domain": "EXECUTABLE_RUNTIME",
+      "files": [
+        "runtime/foravar_vertical_slice.py",
+        "runtime/policy_gate.py"
+      ],
+      "purpose": "Latest executable behavior; code presence/integration does not prove Runtime validation."
+    },
+    {
+      "domain": "HISTORY_RESEARCH_EXPERIMENTS",
+      "repository": "upqq21477-star/forAVArb",
+      "manifest": "歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json",
+      "purpose": "Historical, candidate, experiment, validation and source-preservation data; not CURRENT by default."
+    }
+  ],
+  "quick_routes": [
+    {
+      "query": "Core / purpose / invariant",
+      "file": "docs/blueprint.json",
+      "pointer": [
+        "/purpose",
+        "/purpose_definition",
+        "/invariants"
+      ]
+    },
+    {
+      "query": "A1-A6 responsibilities + steps + outputs",
+      "file": "docs/blueprint.json",
+      "pointer": "/architecture/axes"
+    },
+    {
+      "query": "N01-N18 input / operations / output / stop gate",
+      "file": "docs/blueprint.json",
+      "pointer": "/architecture/skeleton_nodes"
+    },
+    {
+      "query": "F0-F7 procedures / branches / gates",
+      "file": "docs/blueprint.json",
+      "pointer": "/architecture/conditional_framework"
+    },
+    {
+      "query": "M/G/P/T / adaptive profiles / escalations",
+      "file": "docs/blueprint.json",
+      "pointer": "/routing"
+    },
+    {
+      "query": "Role boundary / plugin contract / replacement",
+      "file": "docs/blueprint.json",
+      "pointer": "/roles_and_plugins"
+    },
+    {
+      "query": "Evidence, RunRecord, StateBundle, failure and recovery",
+      "file": "docs/blueprint.json",
+      "pointer": "/runtime_contract"
+    },
+    {
+      "query": "Runtime maturity / stale documentation reconciliation",
+      "file": "docs/blueprint.json",
+      "pointer": "/maturity"
+    },
+    {
+      "query": "Four-stage build gates",
+      "file": "docs/operating_contract.json",
+      "pointer": "/build_stage_flow"
+    },
+    {
+      "query": "SOP path / L0-L3 / write preflight",
+      "file": "docs/operating_contract.json",
+      "pointer": [
+        "/task_flow",
+        "/task_levels",
+        "/preflight",
+        "/mutation_protocol"
+      ]
+    },
+    {
+      "query": "Capabilities by exact ID",
+      "file": "docs/capability_registry.json",
+      "pointer": "/items"
+    },
+    {
+      "query": "Problem by PR ID",
+      "file": "docs/problem_register.json",
+      "pointer": "/items"
+    },
+    {
+      "query": "Historical blueprint/source files / older candidates",
+      "repository": "upqq21477-star/forAVArb",
+      "manifest": "歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json"
+    }
+  ],
+  "id_lookup": {
+    "capability": {
+      "file": "docs/capability_registry.json",
+      "array": "/items",
+      "by_id": {
+        "CF-006": {
+          "index": 0,
+          "source_path": "參考資料/功能覆蓋登錄/CF-006-010_v0.1.json",
+          "branch_id": "SOP-CF-006-010"
+        },
+        "CF-007": {
+          "index": 1,
+          "source_path": "參考資料/功能覆蓋登錄/CF-006-010_v0.1.json",
+          "branch_id": "SOP-CF-006-010"
+        },
+        "CF-008": {
+          "index": 2,
+          "source_path": "參考資料/功能覆蓋登錄/CF-006-010_v0.1.json",
+          "branch_id": "SOP-CF-006-010"
+        },
+        "CF-009": {
+          "index": 3,
+          "source_path": "參考資料/功能覆蓋登錄/CF-006-010_v0.1.json",
+          "branch_id": "SOP-CF-006-010"
+        },
+        "CF-010": {
+          "index": 4,
+          "source_path": "參考資料/功能覆蓋登錄/CF-006-010_v0.1.json",
+          "branch_id": "SOP-CF-006-010"
+        },
+        "DISC-SOP-001": {
+          "index": 5,
+          "source_path": "參考資料/功能覆蓋登錄/DISC-SOP-001-007_v0.1.json",
+          "branch_id": "SOP-DISC"
+        },
+        "DISC-SOP-002": {
+          "index": 6,
+          "source_path": "參考資料/功能覆蓋登錄/DISC-SOP-001-007_v0.1.json",
+          "branch_id": "SOP-DISC"
+        },
+        "DISC-SOP-003": {
+          "index": 7,
+          "source_path": "參考資料/功能覆蓋登錄/DISC-SOP-001-007_v0.1.json",
+          "branch_id": "SOP-DISC"
+        },
+        "DISC-SOP-004": {
+          "index": 8,
+          "source_path": "參考資料/功能覆蓋登錄/DISC-SOP-001-007_v0.1.json",
+          "branch_id": "SOP-DISC"
+        },
+        "DISC-SOP-005": {
+          "index": 9,
+          "source_path": "參考資料/功能覆蓋登錄/DISC-SOP-001-007_v0.1.json",
+          "branch_id": "SOP-DISC"
+        },
+        "DISC-SOP-006": {
+          "index": 10,
+          "source_path": "參考資料/功能覆蓋登錄/DISC-SOP-001-007_v0.1.json",
+          "branch_id": "SOP-DISC"
+        },
+        "DISC-SOP-007": {
+          "index": 11,
+          "source_path": "參考資料/功能覆蓋登錄/DISC-SOP-001-007_v0.1.json",
+          "branch_id": "SOP-DISC"
+        },
+        "P1-F01": {
+          "index": 12,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F02": {
+          "index": 13,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F03": {
+          "index": 14,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F04": {
+          "index": 15,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F05": {
+          "index": 16,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F06": {
+          "index": 17,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F07": {
+          "index": 18,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F08": {
+          "index": 19,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F09": {
+          "index": 20,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F10": {
+          "index": 21,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S01-v0.1.json",
+          "branch_id": "P1-S01"
+        },
+        "P1-F11": {
+          "index": 22,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S02-v0.1.json",
+          "branch_id": "P1-S02"
+        },
+        "P1-F12": {
+          "index": 23,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S02-v0.1.json",
+          "branch_id": "P1-S02"
+        },
+        "P1-F13": {
+          "index": 24,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S02-v0.1.json",
+          "branch_id": "P1-S02"
+        },
+        "P1-F14": {
+          "index": 25,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S02-v0.1.json",
+          "branch_id": "P1-S02"
+        },
+        "P1-F15": {
+          "index": 26,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S02-v0.1.json",
+          "branch_id": "P1-S02"
+        },
+        "P1-F16": {
+          "index": 27,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S02-v0.1.json",
+          "branch_id": "P1-S02"
+        },
+        "P1-F17": {
+          "index": 28,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S02-v0.1.json",
+          "branch_id": "P1-S02"
+        },
+        "P1-F18": {
+          "index": 29,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S02-v0.1.json",
+          "branch_id": "P1-S02"
+        },
+        "P1-F19": {
+          "index": 30,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F20": {
+          "index": 31,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F21": {
+          "index": 32,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F22": {
+          "index": 33,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F23": {
+          "index": 34,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F24": {
+          "index": 35,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F25": {
+          "index": 36,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F26": {
+          "index": 37,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F27": {
+          "index": 38,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F28": {
+          "index": 39,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S03-v0.1.json",
+          "branch_id": "P1-S03"
+        },
+        "P1-F29": {
+          "index": 40,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F30": {
+          "index": 41,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F31": {
+          "index": 42,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F32": {
+          "index": 43,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F33": {
+          "index": 44,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F34": {
+          "index": 45,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F35": {
+          "index": 46,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F36": {
+          "index": 47,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F37": {
+          "index": 48,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F38": {
+          "index": 49,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S04-v0.1.json",
+          "branch_id": "P1-S04"
+        },
+        "P1-F39": {
+          "index": 50,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F40": {
+          "index": 51,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F41": {
+          "index": 52,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F42": {
+          "index": 53,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F43": {
+          "index": 54,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F44": {
+          "index": 55,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F45": {
+          "index": 56,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F46": {
+          "index": 57,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F47": {
+          "index": 58,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P1-F48": {
+          "index": 59,
+          "source_path": "參考資料/功能覆蓋登錄/P1-S05-v0.1.json",
+          "branch_id": "P1-S05"
+        },
+        "P2-F01": {
+          "index": 60,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F02": {
+          "index": 61,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F03": {
+          "index": 62,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F04": {
+          "index": 63,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F05": {
+          "index": 64,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F06": {
+          "index": 65,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F07": {
+          "index": 66,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F08": {
+          "index": 67,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F09": {
+          "index": 68,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F10": {
+          "index": 69,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F01-v0.1.json",
+          "branch_id": "P2-F1"
+        },
+        "P2-F11": {
+          "index": 70,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F12": {
+          "index": 71,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F13": {
+          "index": 72,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F14": {
+          "index": 73,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F15": {
+          "index": 74,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F16": {
+          "index": 75,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F17": {
+          "index": 76,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F18": {
+          "index": 77,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F19": {
+          "index": 78,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F20": {
+          "index": 79,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F11-v0.1.json",
+          "branch_id": "P2-F11"
+        },
+        "P2-F21": {
+          "index": 80,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F22": {
+          "index": 81,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F23": {
+          "index": 82,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F25": {
+          "index": 83,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F24": {
+          "index": 84,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F26": {
+          "index": 85,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F27": {
+          "index": 86,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F28": {
+          "index": 87,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F29": {
+          "index": 88,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "P2-F30": {
+          "index": 89,
+          "source_path": "參考資料/功能覆蓋登錄/P2-F21-v0.1.json",
+          "branch_id": "P2-F21"
+        },
+        "PR-014": {
+          "index": 90,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-015": {
+          "index": 91,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-016": {
+          "index": 92,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-017": {
+          "index": 93,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-018": {
+          "index": 94,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-019": {
+          "index": 95,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-020": {
+          "index": 96,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-021": {
+          "index": 97,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-022": {
+          "index": 98,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-023": {
+          "index": 99,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-024": {
+          "index": 100,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-025": {
+          "index": 101,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-026": {
+          "index": 102,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-027": {
+          "index": 103,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-028": {
+          "index": 104,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-029": {
+          "index": 105,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-030": {
+          "index": 106,
+          "source_path": "參考資料/功能覆蓋登錄/PR-A-v0.1.json",
+          "branch_id": "PR-A"
+        },
+        "PR-031": {
+          "index": 107,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-032": {
+          "index": 108,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-033": {
+          "index": 109,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-034": {
+          "index": 110,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-035": {
+          "index": 111,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-036": {
+          "index": 112,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-037": {
+          "index": 113,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-038": {
+          "index": 114,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-039": {
+          "index": 115,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-040": {
+          "index": 116,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-041": {
+          "index": 117,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-042": {
+          "index": 118,
+          "source_path": "參考資料/功能覆蓋登錄/PR-B-v0.1.json",
+          "branch_id": "PR-B"
+        },
+        "PR-043": {
+          "index": 119,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-044": {
+          "index": 120,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-045": {
+          "index": 121,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-046": {
+          "index": 122,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-047": {
+          "index": 123,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-048": {
+          "index": 124,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-049": {
+          "index": 125,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-050": {
+          "index": 126,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-051": {
+          "index": 127,
+          "source_path": "參考資料/功能覆蓋登錄/PR-CD-v0.1.json",
+          "branch_id": "PR-CD"
+        },
+        "PR-001": {
+          "index": 128,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-002": {
+          "index": 129,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-003": {
+          "index": 130,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-004": {
+          "index": 131,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-005": {
+          "index": 132,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-006": {
+          "index": 133,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-007": {
+          "index": 134,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-008": {
+          "index": 135,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-009": {
+          "index": 136,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-010": {
+          "index": 137,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-011": {
+          "index": 138,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-012": {
+          "index": 139,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-013": {
+          "index": 140,
+          "source_path": "參考資料/功能覆蓋登錄/PR-S-v0.1.json",
+          "branch_id": "PR-S"
+        },
+        "PR-052": {
+          "index": 141,
+          "source_path": "參考資料/功能覆蓋登錄/PR-近期補入-052-054_v0.1.json",
+          "branch_id": "PR-RECENT"
+        },
+        "PR-053": {
+          "index": 142,
+          "source_path": "參考資料/功能覆蓋登錄/PR-近期補入-052-054_v0.1.json",
+          "branch_id": "PR-RECENT"
+        },
+        "PR-054": {
+          "index": 143,
+          "source_path": "參考資料/功能覆蓋登錄/PR-近期補入-052-054_v0.1.json",
+          "branch_id": "PR-RECENT"
+        },
+        "SOP-CAND-005": {
+          "index": 144,
+          "source_path": "參考資料/功能覆蓋登錄/SOP-CAND-005-012_v0.1.json",
+          "branch_id": "SOP-CAND"
+        },
+        "SOP-CAND-006": {
+          "index": 145,
+          "source_path": "參考資料/功能覆蓋登錄/SOP-CAND-005-012_v0.1.json",
+          "branch_id": "SOP-CAND"
+        },
+        "SOP-CAND-007": {
+          "index": 146,
+          "source_path": "參考資料/功能覆蓋登錄/SOP-CAND-005-012_v0.1.json",
+          "branch_id": "SOP-CAND"
+        },
+        "SOP-CAND-008": {
+          "index": 147,
+          "source_path": "參考資料/功能覆蓋登錄/SOP-CAND-005-012_v0.1.json",
+          "branch_id": "SOP-CAND"
+        },
+        "SOP-CAND-009": {
+          "index": 148,
+          "source_path": "參考資料/功能覆蓋登錄/SOP-CAND-005-012_v0.1.json",
+          "branch_id": "SOP-CAND"
+        },
+        "SOP-CAND-010": {
+          "index": 149,
+          "source_path": "參考資料/功能覆蓋登錄/SOP-CAND-005-012_v0.1.json",
+          "branch_id": "SOP-CAND"
+        },
+        "SOP-CAND-011": {
+          "index": 150,
+          "source_path": "參考資料/功能覆蓋登錄/SOP-CAND-005-012_v0.1.json",
+          "branch_id": "SOP-CAND"
+        },
+        "SOP-CAND-012": {
+          "index": 151,
+          "source_path": "參考資料/功能覆蓋登錄/SOP-CAND-005-012_v0.1.json",
+          "branch_id": "SOP-CAND"
+        },
+        "SOP-META-001": {
+          "index": 152,
+          "source_path": "參考資料/功能覆蓋登錄/SOP與CF-001-005_v0.1.json",
+          "branch_id": "SOP-CORE"
+        },
+        "SOP-DOC-001": {
+          "index": 153,
+          "source_path": "參考資料/功能覆蓋登錄/SOP與CF-001-005_v0.1.json",
+          "branch_id": "SOP-CORE"
+        },
+        "CF-001": {
+          "index": 154,
+          "source_path": "參考資料/功能覆蓋登錄/SOP與CF-001-005_v0.1.json",
+          "branch_id": "SOP-CORE"
+        },
+        "CF-002": {
+          "index": 155,
+          "source_path": "參考資料/功能覆蓋登錄/SOP與CF-001-005_v0.1.json",
+          "branch_id": "SOP-CORE"
+        },
+        "CF-003": {
+          "index": 156,
+          "source_path": "參考資料/功能覆蓋登錄/SOP與CF-001-005_v0.1.json",
+          "branch_id": "SOP-CORE"
+        },
+        "CF-004": {
+          "index": 157,
+          "source_path": "參考資料/功能覆蓋登錄/SOP與CF-001-005_v0.1.json",
+          "branch_id": "SOP-CORE"
+        },
+        "CF-005": {
+          "index": 158,
+          "source_path": "參考資料/功能覆蓋登錄/SOP與CF-001-005_v0.1.json",
+          "branch_id": "SOP-CORE"
+        },
+        "VIEW-007": {
+          "index": 159,
+          "source_path": "參考資料/功能覆蓋登錄/VIEW-007-012_v0.1.json",
+          "branch_id": "VIEW-B"
+        },
+        "VIEW-008": {
+          "index": 160,
+          "source_path": "參考資料/功能覆蓋登錄/VIEW-007-012_v0.1.json",
+          "branch_id": "VIEW-B"
+        },
+        "VIEW-009": {
+          "index": 161,
+          "source_path": "參考資料/功能覆蓋登錄/VIEW-007-012_v0.1.json",
+          "branch_id": "VIEW-B"
+        },
+        "VIEW-010": {
+          "index": 162,
+          "source_path": "參考資料/功能覆蓋登錄/VIEW-007-012_v0.1.json",
+          "branch_id": "VIEW-B"
+        },
+        "VIEW-011": {
+          "index": 163,
+          "source_path": "參考資料/功能覆蓋登錄/VIEW-007-012_v0.1.json",
+          "branch_id": "VIEW-B"
+        },
+        "VIEW-012": {
+          "index": 164,
+          "source_path": "參考資料/功能覆蓋登錄/VIEW-007-012_v0.1.json",
+          "branch_id": "VIEW-B"
+        },
+        "CORE-001": {
+          "index": 165,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "RENDER-001": {
+          "index": 166,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "SKELETON-001": {
+          "index": 167,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "FRAMEWORK-001": {
+          "index": 168,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "VIEW-001": {
+          "index": 169,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "VIEW-002": {
+          "index": 170,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "VIEW-003": {
+          "index": 171,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "VIEW-004": {
+          "index": 172,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "VIEW-005": {
+          "index": 173,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        },
+        "VIEW-006": {
+          "index": 174,
+          "source_path": "參考資料/功能覆蓋登錄/四層與VIEW-001-006_v0.1.json",
+          "branch_id": "ARCH-VIEW-A"
+        }
+      }
+    },
+    "problem": {
+      "file": "docs/problem_register.json",
+      "array": "/items",
+      "by_id": {
+        "PR-001": {
+          "index": 0,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-002": {
+          "index": 1,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-003": {
+          "index": 2,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-004": {
+          "index": 3,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-005": {
+          "index": 4,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-006": {
+          "index": 5,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-007": {
+          "index": 6,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-008": {
+          "index": 7,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-009": {
+          "index": 8,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-010": {
+          "index": 9,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-011": {
+          "index": 10,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-012": {
+          "index": 11,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-013": {
+          "index": 12,
+          "severity": "S",
+          "source_path": "參考資料/問題清單_S級核心問題.md"
+        },
+        "PR-014": {
+          "index": 13,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-015": {
+          "index": 14,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-016": {
+          "index": 15,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-017": {
+          "index": 16,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-018": {
+          "index": 17,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-019": {
+          "index": 18,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-020": {
+          "index": 19,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-021": {
+          "index": 20,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-022": {
+          "index": 21,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-023": {
+          "index": 22,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-024": {
+          "index": 23,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-025": {
+          "index": 24,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-026": {
+          "index": 25,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-027": {
+          "index": 26,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-028": {
+          "index": 27,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-029": {
+          "index": 28,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-030": {
+          "index": 29,
+          "severity": "A",
+          "source_path": "參考資料/問題清單_A級系統風險.md"
+        },
+        "PR-031": {
+          "index": 30,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-032": {
+          "index": 31,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-033": {
+          "index": 32,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-034": {
+          "index": 33,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-035": {
+          "index": 34,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-036": {
+          "index": 35,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-037": {
+          "index": 36,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-038": {
+          "index": 37,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-039": {
+          "index": 38,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-040": {
+          "index": 39,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-041": {
+          "index": 40,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-042": {
+          "index": 41,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-043": {
+          "index": 42,
+          "severity": "C",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-044": {
+          "index": 43,
+          "severity": "C",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-045": {
+          "index": 44,
+          "severity": "C",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-046": {
+          "index": 45,
+          "severity": "C",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-047": {
+          "index": 46,
+          "severity": "C",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-048": {
+          "index": 47,
+          "severity": "D",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-049": {
+          "index": 48,
+          "severity": "D",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-050": {
+          "index": 49,
+          "severity": "D",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-051": {
+          "index": 50,
+          "severity": "D",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-052": {
+          "index": 51,
+          "severity": "UNCLASSIFIED",
+          "source_path": "參考資料/問題清單_近期補入與ID對照.md"
+        },
+        "PR-053": {
+          "index": 52,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        },
+        "PR-054": {
+          "index": 53,
+          "severity": "B",
+          "source_path": "參考資料/問題清單_BCD級維護品質.md"
+        }
+      }
+    }
+  },
+  "archive": {
+    "repository": "upqq21477-star/forAVArb",
+    "readme": "歸檔/forAVAr_main_退場歸檔_2026-10-24/README.md",
+    "manifest": "歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json",
+    "source_commit": "132e44fb6b8c872e016d782e08b39edc6c58f1d8",
+    "source_tree_sha": "132e44fb6b8c872e016d782e08b39edc6c58f1d8",
+    "source_file_count": 314,
+    "pack_count": 33,
+    "exact_lookup": "Search manifest.source_files for exact source_path; use its archive_pack. Each JSONL row stores source_path, source_blob_sha, size, content_status and source content when UTF-8-readable.",
+    "high_value_sources": [
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_核心重建施工藍圖_v0.8_2026-10-24.md",
+        "blob_sha": "410a42602650c78004ef3c7bc7d2e168aab367d1",
+        "pack": "06e_研究與藍圖紀錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_四層架構細項展開與閉環證據矩陣_2026-10-22.md",
+        "blob_sha": "833111e3c06fc89df9d7d8454a0591984e14be93",
+        "pack": "06d_研究與藍圖紀錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_思考核心與運行架構_v0.7.md",
+        "blob_sha": "de318da273e67209aee883f58ac12d792b023efa",
+        "pack": "06d_研究與藍圖紀錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_Runtime狀態安全與恢復架構_v0.7.md",
+        "blob_sha": "ff10f0c3ff70181b470e9df77601f83d3de5dea4",
+        "pack": "06d_研究與藍圖紀錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_驗收治理與四梯次施工規劃_v0.8.md",
+        "blob_sha": "613098301bf5c9fde1a6a0129611c0ab8c109993",
+        "pack": "06f_研究與藍圖紀錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/解析文檔/forAVAr_藍圖四梯次施工流程_v1.1.md",
+        "blob_sha": "c48d9581b4f0bf5bf55295f8f22e715c94bb8a1a",
+        "pack": "06e_研究與藍圖紀錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/SOP固定流程與演化管理.md",
+        "blob_sha": "b70a35340d3a8e727877094afce1185ea3009874",
+        "pack": "01b_主庫入口與治理登錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/SOP_GitHub優先交接流程.md",
+        "blob_sha": "0c960e96100186443a364ec76143d0648fd3bf18",
+        "pack": "01a_主庫入口與治理登錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/去重與蒸餾規範.md",
+        "blob_sha": "a716d47ac63061bfcd03bd3af12b8bb0c1f288e7",
+        "pack": "01c_主庫入口與治理登錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/版本治理與分流規範.md",
+        "blob_sha": "60af966c9aa5aec4b04f54f99473d5bc82e501cd",
+        "pack": "01d_主庫入口與治理登錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/文件與分支索引.md",
+        "blob_sha": "28a97d46e7367f13c90f868af3dcb3872aab6667",
+        "pack": "01d_主庫入口與治理登錄.jsonl"
+      },
+      {
+        "source_path": "參考資料/變更追溯總表.md",
+        "blob_sha": "4dcbfb45867adcc9f26d15cec39293e7270f6fc0",
+        "pack": "01d_主庫入口與治理登錄.jsonl"
+      }
+    ],
+    "categories": [
+      {
+        "id": "BLUEPRINT_AND_ARCHITECTURE",
+        "packs": [
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06d_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06e_研究與藍圖紀錄.jsonl"
+        ],
+        "includes": [
+          "Current v0.8 source",
+          "A/N/F detailed contract",
+          "core/runtime branches"
+        ]
+      },
+      {
+        "id": "GOVERNANCE_AND_FOUR_STAGES",
+        "packs": [
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06f_研究與藍圖紀錄.jsonl"
+        ],
+        "includes": [
+          "v0.8 governance/release gates",
+          "four-stage plan"
+        ]
+      },
+      {
+        "id": "SOP_AND_SOURCE_REGISTRY",
+        "packs": [
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/01a_主庫入口與治理登錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/01b_主庫入口與治理登錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/01c_主庫入口與治理登錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/01d_主庫入口與治理登錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/02a_能力登錄與視圖來源.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/02b_能力登錄與視圖來源.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/02c_能力登錄與視圖來源.jsonl"
+        ]
+      },
+      {
+        "id": "CANDIDATES_RAW_TRACE_RESEARCH_REVERSE",
+        "packs": [
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/03a_候選架構與映射.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/03b_候選架構與映射.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/03c_候選架構與映射.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/03d_候選架構與映射.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/04a_原始封包清冊與文字紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/04b_封包B及原始格式索引.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/05a_追溯事件紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/05b_追溯事件紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/05c_追溯事件紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/05d_追溯事件紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/05e_追溯事件紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06a_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06b_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06c_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06d_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06e_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06f_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06g_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06h_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06i_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06j_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06k_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/06l_研究與藍圖紀錄.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/07a_逆向工具參考.jsonl",
+          "歸檔/forAVAr_main_退場歸檔_2026-10-24/07b_逆向工具參考.jsonl"
+        ]
+      }
+    ],
+    "exceptions": [
+      {
+        "item": "Two DOCX binary files",
+        "status": "Metadata/path/blob SHA/size indexed; original blobs remain in source commit history and paired Markdown is archived."
+      },
+      {
+        "item": "Relative links embedded in old Markdown/source fields",
+        "status": "Treat as legacy source paths; resolve via manifest and archive pack, not current-main relative path."
+      }
+    ]
+  },
+  "integrity_snapshot": {
+    "source_file_count": 314,
+    "source_paths_unique": 314,
+    "archive_packs": 33,
+    "manifest_pack_items": 314,
+    "capability_items": 175,
+    "capability_ids": 175,
+    "problem_items": 54,
+    "problem_ids": 54,
+    "runtime_integration": "POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED",
+    "runtime_tested_in_this_audit": false
+  },
+  "reconciliation_notes": [
+    "Formal baseline remains v0.8 dated 2026-10-24; current machine blueprint includes audit reconciliation, not a claimed v0.9.",
+    "Historical master prose has stale ADAPTER_SEAM_NOT_INTEGRATED text; current code constant shows policy gate integrated but not runtime validated.",
+    "Problem severity for PR-052 remains UNCLASSIFIED because source did not explicitly assign a tier.",
+    "P1/P2 are READ_ONLY; no writes or deletions."
+  ]
+}
