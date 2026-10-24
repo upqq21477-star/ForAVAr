@@ -3,7 +3,7 @@
 - EVENT_ID：EVT-0065
 - 日期：2026-10-24
 - 操作類型：ADOPT_GITHUB_FIRST_HANDOFF
-- 狀態：COMMITTED／READBACK_PENDING
+- 狀態：COMMITTED／READBACK_VERIFIED_FOR_DOCUMENTS
 - 授權：使用者明確要求「更新企劃」，並指定將 GitHub 優先交接流程整合進正式 forAVAr。
 - 唯一責任：記錄責任歸位、正式變更範圍、基線指紋、驗收與殘餘風險。
 - 正式核心基線：[forAVAr 核心重建施工藍圖 v0.7](../解析文檔/forAVAr_核心重建施工藍圖_v0.7_2026-10-24.md)
@@ -67,12 +67,15 @@ forAVArb 讀取時 main HEAD：f3802b12e708123e37b4cdd2ec0e9262c117f3e6。
 | forAVArb 候選來源紀錄 | c81ecb7fa4d18cf24ac8c1e7d4d16976d60d416a |
 | forAVArb 交接 README | 73316195ed48a9ae400bf2690625f98d3fcabf27 |
 
-主要提交：正式 SOP 462e431c87463bb5678b34b5e29a61e5bf45eeb8；SOP 治理 812db364d748794c081a0950767993c39f1bcc41；CF-004 6ea2fc1d69943e9f818a22b0d9cc9a917358a7d9；文件索引 2a7be3994ddbe67982407cf8e4fd0a7da4918ab1；追溯索引 c64e85daddf0df80cf5abb902516e28d199ad1b0；執行台帳 9e0f52e670cda7d9524f37b43a5416ac8d50245a；forAVArb 候選 857973c21da7c37f13b3179fa87d0aa51c77da36；forAVArb README d86637140172e0f5ac01209dc26beeb3f6f667e2。
+主要提交：正式 SOP 462e431c87463bb5678b34b5e29a61e5bf45eeb8；SOP 治理 812db364d748794c081a0950767993c39f1bcc41；CF-004 6ea2fc1d69943e9f818a22b0d9cc9a917358a7d9；文件索引 9c9c3ad0a25f549af5d61a676b4813de3827267f；追溯索引 c64e85daddf0df80cf5abb902516e28d199ad1b0；執行台帳 3d62c5a7d2b250ca95e9a9859b0328f132e7e4b9；SOP 清單 dbf5080e9d8d039d1f15b5fc8e57a4ab50b74d8b；forAVArb 候選 857973c21da7c37f13b3179fa87d0aa51c77da36；forAVArb README d86637140172e0f5ac01209dc26beeb3f6f667e2。
 
 ## 4. 驗收結果與成熟度界線
 
-- 本事件狀態重新開回 READBACK_PENDING，因 SOP 清單與執行台帳在首次讀回後又有變更；須再次讀回全部受影響文件後才能結案。
-- 本次讀回 HEAD：forAVAr main 3d62c5a7d2b250ca95e9a9859b0328f132e7e4b9；forAVArb main d86637140172e0f5ac01209dc26beeb3f6f667e2。正式藍圖 v0.7 Blob SHA 維持 cab6178593154e5402ec5ef0e6480c941f4223b2。
+- 已從 GitHub 再次讀回正式交接 SOP、SOP-META-001、CF-004 流程列表、文件索引、追溯表、SOP 執行台帳、SOP 清單、事件檔、v0.7 核心基線、版本治理規範，以及 forAVArb 候選來源與 README；各文件 Blob SHA 與本事件列出的變更後指紋一致。
+- 已核對 SOP 入口／目錄、CF-004 責任映射、GOV-012、REF-049、EVT-0065 追溯入口及 forAVArb README 正式 SOP 連結。交接 SOP 本身存在，必要欄位、接手題詞、權限界線與讀回步驟均可讀回。
+- 本次讀回 HEAD：forAVAr main eb78e805452cddb6100124773142dbf86c4d5ba1；forAVArb main d86637140172e0f5ac01209dc26beeb3f6f667e2。核心藍圖 v0.7 Blob SHA 維持 cab6178593154e5402ec5ef0e6480c941f4223b2。
+- 字元上限驗收：SOP-META-001 7,996；文件索引 7,996；追溯總表 7,994；CF-004 流程列表 7,855；以上均不超過 8,000 字元。
+- 本次讀回 HEAD：forAVAr main eb78e805452cddb6100124773142dbf86c4d5ba1；forAVArb main d86637140172e0f5ac01209dc26beeb3f6f667e2。正式藍圖 v0.7 Blob SHA 維持 cab6178593154e5402ec5ef0e6480c941f4223b2。
 - 受 8,000 字元治理的文件讀回長度：SOP-META-001 7,996；文件索引 7,996；追溯總表 7,994；CF-004 列表 7,855。其餘新增／修改治理文件均在上限內。
 - 已核對 SOP 清單、GOV-012、REF-049、EVT-0065 入口及 forAVArb README 指向正式 SOP；已讀回可確認的文件連結目標存在。
 - 提交成功、文件讀回、連結檢查、跨任務流程成效及 Runtime 自動強制是不同狀態。
