@@ -314,9 +314,10 @@
     },
     {
       "id": "PR-052",
-      "severity": "S",
+      "severity": "UNCLASSIFIED",
       "title": "缺少 GitHub 可用上下文包造成狀態重建偏差",
-      "source_path": "參考資料/問題清單_近期補入與ID對照.md"
+      "source_path": "參考資料/問題清單_近期補入與ID對照.md",
+      "classification_note": "The source lists PR-052 under recent additions without an explicit S/A/B/C/D tier; retain as unclassified."
     },
     {
       "id": "PR-053",

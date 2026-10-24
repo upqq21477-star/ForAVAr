@@ -14,10 +14,78 @@
     "REVIEW"
   ],
   "task_levels": {
-    "L0": "One-off, low-risk, no write/external side effect; minimal understanding and necessary check.",
-    "L1": "Single-file/local low-risk task; compact plan, focused checks.",
-    "L2": "Multi-file/cross-dependency/batch task; freeze change set, update dependent views, read back and regress.",
-    "L3": "Formal plan/high-impact/irreversible task; explicit authority, impact map, recovery plan and independent acceptance."
+    "L0": {
+      "name": "SIMPLE",
+      "condition": [
+        "One-off answer",
+        "No document persistence",
+        "No external side effect"
+      ],
+      "path": [
+        "Necessary intent understanding",
+        "Necessary factual check"
+      ],
+      "skip": [
+        "Separate SOP selection",
+        "Execution log",
+        "Persistence/ledger entry"
+      ]
+    },
+    "L1": {
+      "name": "SINGLE_DELIVERABLE",
+      "condition": [
+        "One document or one clear deliverable",
+        "Low risk",
+        "Existing SOP available"
+      ],
+      "path": [
+        "Use existing SOP",
+        "Compress plan into execution checklist",
+        "Write and read back the deliverable"
+      ],
+      "skip": [
+        "Separate plan document",
+        "Duplicate long event record",
+        "Full-repository scan without trigger"
+      ]
+    },
+    "L2": {
+      "name": "CROSS_FILE_OR_MULTI_SOURCE",
+      "condition": [
+        "Multiple files/sources",
+        "Index/version/citation updates",
+        "Cross-file dependencies"
+      ],
+      "path": [
+        "Inspect only directly relevant authorities and dependents",
+        "Freeze the change set",
+        "Draft planned content before writing",
+        "Write each file once where possible",
+        "Read back all changed files together",
+        "Then update indexes/trace references",
+        "Use one concise ledger row"
+      ],
+      "failure": "If partial write/verification fails, mark PARTIAL, inspect actual state, repair only inconsistent items."
+    },
+    "L3": {
+      "name": "HIGH_IMPACT_OR_IRREVERSIBLE",
+      "condition": [
+        "Authorization/permissions",
+        "Deletion",
+        "Formal blueprint change",
+        "Irreversible action",
+        "Major unresolved conflict",
+        "High-risk external effect"
+      ],
+      "path": [
+        "Use L2 path",
+        "Explicit authorization",
+        "Impact assessment",
+        "Recovery/rollback or compensation plan",
+        "Independent acceptance"
+      ],
+      "failure": "Any missing required authorization, impact or recovery item blocks the affected action."
+    }
   },
   "preflight": [
     "Restate current-task objective, deliverable, constraints, non-goals and acceptance conditions internally.",
@@ -239,5 +307,6 @@
     "source_manifest": "https://github.com/upqq21477-star/forAVArb/blob/main/歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json",
     "candidate_rule": "Archived/history material is not automatically current; use current blueprint/registers for decisions.",
     "binary_exception": "The two original DOCX blobs are identified in the manifest but were not duplicated as binary by the text connector; original commit preserves them, paired Markdown is archived."
-  }
+  },
+  "task_flow_applicability": "INTAKE→AUTHORIZE→SELECT_SOP→PLAN→EXECUTE→VERIFY→PERSIST→REVIEW is a conditional task lifecycle, not a mandatory full path for every task. Apply only the steps required by task level and risk; mandatory safety, authorization, evidence and truthfulness gates are never skipped."
 }
