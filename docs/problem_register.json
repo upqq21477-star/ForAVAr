@@ -1,0 +1,334 @@
+{
+  "schema": "foravar.problem-register/v1",
+  "status": "CURRENT",
+  "date": "2026-10-24",
+  "authority": "docs/problem_register.json",
+  "rule": "Problem statements only; remediation belongs in authorized work records.",
+  "count": 54,
+  "items": [
+    {
+      "id": "PR-001",
+      "severity": "S",
+      "title": "理解錯誤、目標漂移或把手段當成目的",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-002",
+      "severity": "S",
+      "title": "捏造事實、幻覺或虛報來源",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-003",
+      "severity": "S",
+      "title": "來源失真、引用錯配或知識過期",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-004",
+      "severity": "S",
+      "title": "失憶、交接遺漏或跨會話狀態失效",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-005",
+      "severity": "S",
+      "title": "長上下文中的關鍵資訊遺漏",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-006",
+      "severity": "S",
+      "title": "因果推理錯誤、根因誤判或因果鏈不完整",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-007",
+      "severity": "S",
+      "title": "隱藏不確定性或強制合併衝突",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-008",
+      "severity": "S",
+      "title": "循環驗證、自我修正無效或把重述當證明",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-009",
+      "severity": "S",
+      "title": "提示注入或不可信資料控制思考／行動",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-010",
+      "severity": "S",
+      "title": "模型或工具更新造成行為漂移",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-011",
+      "severity": "S",
+      "title": "將失敗蒸餾成錯誤規則或反覆重犯",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-012",
+      "severity": "S",
+      "title": "方法選錯或對所有任務套用同一流程",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-013",
+      "severity": "S",
+      "title": "初始問題框架錯誤並放大後續細化",
+      "source_path": "參考資料/問題清單_S級核心問題.md"
+    },
+    {
+      "id": "PR-014",
+      "severity": "A",
+      "title": "變更波及面過大或依賴爆炸",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-015",
+      "severity": "A",
+      "title": "接口過多、隱性耦合或 Schema／語意漂移",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-016",
+      "severity": "A",
+      "title": "能力描述被誤當成可執行功能",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-017",
+      "severity": "A",
+      "title": "升級不相容、部分發布或回退失敗",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-018",
+      "severity": "A",
+      "title": "權限過大、插件副作用或供應鏈風險",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-019",
+      "severity": "A",
+      "title": "Current、藍圖、索引與派生視圖衝突",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-020",
+      "severity": "A",
+      "title": "已確認差異與實際寫入內容不一致",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-021",
+      "severity": "A",
+      "title": "規則存在但新會話未載入或未遵守",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-022",
+      "severity": "A",
+      "title": "角色名義獨立但權限／認知不獨立",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-023",
+      "severity": "A",
+      "title": "測試集錯誤、基準過擬合或指標美化",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-024",
+      "severity": "A",
+      "title": "無限研究、重試、成本失控或任務卡死",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-025",
+      "severity": "A",
+      "title": "能力關係分析爆炸或將未知當成相容",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-026",
+      "severity": "A",
+      "title": "有版本紀錄但無法真正恢復",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-027",
+      "severity": "A",
+      "title": "缺乏基線以證明新架構優於簡單方案",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-028",
+      "severity": "A",
+      "title": "多檔更新部分成功造成版本不一致",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-029",
+      "severity": "A",
+      "title": "外部資料／工具改變而本地知識未更新",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-030",
+      "severity": "A",
+      "title": "風險分級或變更優先序不一致",
+      "source_path": "參考資料/問題清單_A級系統風險.md"
+    },
+    {
+      "id": "PR-031",
+      "severity": "B",
+      "title": "所有任務承受相同完整流程",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-032",
+      "severity": "B",
+      "title": "過度插件化或過早抽象",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-033",
+      "severity": "B",
+      "title": "規劃、施工、驗收各自建立平行流程",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-034",
+      "severity": "B",
+      "title": "多份索引／Schema／登錄表形成第二套控制系統",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-035",
+      "severity": "B",
+      "title": "主題分流造成紀錄碎片化或難以找回",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-036",
+      "severity": "B",
+      "title": "只修症狀，未處理根因",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-037",
+      "severity": "B",
+      "title": "以人氣或新穎度取代能力適配",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-038",
+      "severity": "B",
+      "title": "過期能力、重複規則或舊相容層無法退場",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-039",
+      "severity": "B",
+      "title": "一般更新缺乏前後基線與成效比較",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-040",
+      "severity": "B",
+      "title": "問題 ID 綁定嚴重度，升降級造成引用失效",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-041",
+      "severity": "B",
+      "title": "跨專案術語或相似名稱造成歧義",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-042",
+      "severity": "B",
+      "title": "把研究／文件完整誤認為實作與驗收完成",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-043",
+      "severity": "C",
+      "title": "索引、路徑或連結失效",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-044",
+      "severity": "C",
+      "title": "命名、顯示或分類不一致",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-045",
+      "severity": "C",
+      "title": "重複提問或過度打斷",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-046",
+      "severity": "C",
+      "title": "呈現形式與任務複雜度不匹配",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-047",
+      "severity": "C",
+      "title": "文件格式／目錄／描述增加閱讀成本",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-048",
+      "severity": "D",
+      "title": "新模型、多模態或新協定的導入時機不明",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-049",
+      "severity": "D",
+      "title": "低頻特殊領域問題",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-050",
+      "severity": "D",
+      "title": "自動修改核心與完全自主演化風險",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-051",
+      "severity": "D",
+      "title": "為假想需求預建完整抽象",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-052",
+      "severity": "S",
+      "title": "缺少 GitHub 可用上下文包造成狀態重建偏差",
+      "source_path": "參考資料/問題清單_近期補入與ID對照.md"
+    },
+    {
+      "id": "PR-053",
+      "severity": "B",
+      "title": "既有治理規則未觸發前置檢查",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    },
+    {
+      "id": "PR-054",
+      "severity": "B",
+      "title": "資訊分類、唯一歸位與流程回寫未形成可驗收閉環",
+      "source_path": "參考資料/問題清單_BCD級維護品質.md"
+    }
+  ]
+}

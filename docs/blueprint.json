@@ -1,0 +1,420 @@
+{
+  "schema": "foravar.blueprint/v1",
+  "meta": {
+    "id": "FORAVAR-MASTER",
+    "version": "0.8",
+    "status": "CURRENT",
+    "date": "2026-10-24",
+    "authority": "docs/blueprint.json",
+    "supersedes": [
+      "v0.7",
+      "v0.6",
+      "v0.5"
+    ],
+    "source_commit_before_slimdown": "132e44fb6b8c872e016d782e08b39edc6c58f1d8",
+    "rule": "Only this file defines the current architecture. Archived proposals are non-authoritative."
+  },
+  "purpose": "Reliable, goal-bound, evidence-calibrated, method-adaptive, self-correcting cognition under explicit risk/resource/stop constraints.",
+  "architecture": {
+    "canonical_chain": [
+      "CORE",
+      "A1-A6",
+      "N01-N18",
+      "F0-F7"
+    ],
+    "core": {
+      "responsibility": "Understand target; construct a testable and revisable problem representation; choose suitable methods; generate a checkable result; validate/correct/reframe; stop or hand off honestly.",
+      "non_goals": [
+        "Tools, roles, plugins, runtime, memory, governance and evaluation are support mechanisms, not parallel cognition cores.",
+        "Five-axis/nine-responsibility summaries are views only; no second skeleton or duplicate IDs.",
+        "No fixed full-path execution for all tasks.",
+        "No architecture component is immune to ablation, simplification, rejection or retirement."
+      ]
+    },
+    "axes": [
+      {
+        "id": "A1",
+        "name": "INTENT_AND_PROBLEM_FRAMING",
+        "responsibility": "Target, success criteria, scope, constraints, ambiguity, initial/alternative frames."
+      },
+      {
+        "id": "A2",
+        "name": "EVIDENCE_AND_KNOWLEDGE_STATE",
+        "responsibility": "Source, observation, claim-evidence links, unknowns, conflicts, stale/unverified states."
+      },
+      {
+        "id": "A3",
+        "name": "PROBLEM_MODEL_AND_EXPLANATION",
+        "responsibility": "Objects, relations, dependencies, causal candidates, competing hypotheses and discriminating tests."
+      },
+      {
+        "id": "A4",
+        "name": "METHOD_AND_STRATEGY",
+        "responsibility": "Task profile, method routing, alternatives, risk/resource budget, next-step and stop rules."
+      },
+      {
+        "id": "A5",
+        "name": "SOLVE_AND_FORM_RESULT",
+        "responsibility": "Execute the selected reasoning/research/design/engineering method; produce checkable outputs."
+      },
+      {
+        "id": "A6",
+        "name": "VALIDATE_REFRAME_FEEDBACK",
+        "responsibility": "Check acceptance criteria, classify failure, correct/reframe, regress and close out."
+      }
+    ],
+    "skeleton_nodes": [
+      {
+        "id": "N01",
+        "name": "GOAL_SUCCESS_NORMALIZATION"
+      },
+      {
+        "id": "N02",
+        "name": "BOUNDARY_DEPENDENCIES"
+      },
+      {
+        "id": "N03",
+        "name": "INITIAL_COMPETING_FRAMES"
+      },
+      {
+        "id": "N04",
+        "name": "SOURCE_OBSERVATION"
+      },
+      {
+        "id": "N05",
+        "name": "CLAIM_EVIDENCE_RELATION"
+      },
+      {
+        "id": "N06",
+        "name": "UNKNOWN_CONFLICT_STALE"
+      },
+      {
+        "id": "N07",
+        "name": "STRUCTURAL_CAUSAL_MODEL"
+      },
+      {
+        "id": "N08",
+        "name": "COMPETING_HYPOTHESES"
+      },
+      {
+        "id": "N09",
+        "name": "DISCRIMINATING_TEST"
+      },
+      {
+        "id": "N10",
+        "name": "TASK_ATTRIBUTES"
+      },
+      {
+        "id": "N11",
+        "name": "METHOD_ROUTING"
+      },
+      {
+        "id": "N12",
+        "name": "NEXT_STEP_STOP_BUDGET"
+      },
+      {
+        "id": "N13",
+        "name": "EXECUTE_SELECTED_METHOD"
+      },
+      {
+        "id": "N14",
+        "name": "UPDATE_MODEL_STATE"
+      },
+      {
+        "id": "N15",
+        "name": "SYNTHESIZE_RESULT"
+      },
+      {
+        "id": "N16",
+        "name": "ACCEPTANCE_COUNTEREVIDENCE"
+      },
+      {
+        "id": "N17",
+        "name": "ROOT_CAUSE_CORRECTION_REFRAME"
+      },
+      {
+        "id": "N18",
+        "name": "CLOSEOUT_FEEDBACK"
+      }
+    ],
+    "conditional_framework": [
+      {
+        "id": "F0",
+        "name": "INTAKE_PREFLIGHT"
+      },
+      {
+        "id": "F1",
+        "name": "FRAME"
+      },
+      {
+        "id": "F2",
+        "name": "EVIDENCE_AND_MODEL"
+      },
+      {
+        "id": "F3",
+        "name": "METHOD_ROUTE_AND_BUDGET"
+      },
+      {
+        "id": "F4",
+        "name": "CONTROLLED_EXECUTION"
+      },
+      {
+        "id": "F5",
+        "name": "VALIDATE_AND_BRANCH"
+      },
+      {
+        "id": "F6",
+        "name": "CONDITIONAL_PERSISTENCE_HANDOFF_WRITEBACK"
+      },
+      {
+        "id": "F7",
+        "name": "CLOSEOUT_AND_EVALUATION"
+      }
+    ]
+  },
+  "invariants": [
+    {
+      "id": "INV-01",
+      "rule": "PURPOSE_FIDELITY",
+      "observable": "Target, acceptance criteria, hard constraints and non-goals are traceable."
+    },
+    {
+      "id": "INV-02",
+      "rule": "REVISABLE_FRAME",
+      "observable": "Counterevidence can change the frame; alternatives/unknowns remain visible."
+    },
+    {
+      "id": "INV-03",
+      "rule": "HONEST_KNOWLEDGE_STATE",
+      "observable": "Source, observation, claim, inference, assumption, unknown, conflict and stale states are separate."
+    },
+    {
+      "id": "INV-04",
+      "rule": "METHOD_FIT",
+      "observable": "Method choice matches problem properties, observability, risk and budget."
+    },
+    {
+      "id": "INV-05",
+      "rule": "DISCRIMINATING_VALIDATION",
+      "observable": "Checks distinguish relevant alternatives; repetition is not independent evidence."
+    },
+    {
+      "id": "INV-06",
+      "rule": "CALIBRATED_CONCLUSION",
+      "observable": "Conclusion strength and scope do not exceed the evidence."
+    },
+    {
+      "id": "INV-07",
+      "rule": "CORRECTION_PROPAGATION",
+      "observable": "Upstream changes identify and revalidate affected downstream outputs."
+    },
+    {
+      "id": "INV-08",
+      "rule": "EXECUTION_NOT_QUALITY",
+      "observable": "Tool success, text generation and task acceptance have separate states."
+    },
+    {
+      "id": "INV-09",
+      "rule": "INDEPENDENT_AUTHORIZATION",
+      "observable": "Authorization is enforced at runtime/tool boundary, not granted by routing."
+    },
+    {
+      "id": "INV-10",
+      "rule": "BOUNDED_COST",
+      "observable": "Continue/stop considers marginal information value, remaining risk and cost."
+    },
+    {
+      "id": "INV-11",
+      "rule": "HONEST_TERMINAL_STATE",
+      "observable": "Not-run, unverified, blocked, partial, failed and passed are not conflated."
+    },
+    {
+      "id": "INV-12",
+      "rule": "ARCHITECTURE_CAN_BE_REJECTED",
+      "observable": "Candidate components can be ablated, simplified, rejected or retired."
+    }
+  ],
+  "routing": {
+    "axes": [
+      {
+        "id": "M",
+        "question": "How much analytical/method depth is needed?",
+        "values": [
+          "M0",
+          "M1",
+          "M2",
+          "M3"
+        ]
+      },
+      {
+        "id": "G",
+        "question": "How strict must governance/security/authorization be?",
+        "values": [
+          "G0",
+          "G1",
+          "G2",
+          "G3"
+        ]
+      },
+      {
+        "id": "P",
+        "question": "How much state must persist for continuation/recovery/handoff?",
+        "values": [
+          "P0",
+          "P1",
+          "P2"
+        ]
+      },
+      {
+        "id": "T",
+        "question": "How is work divided, delegated and integrated?",
+        "values": [
+          "T0",
+          "T1",
+          "T2",
+          "T3"
+        ]
+      }
+    ],
+    "orthogonality": "M/G/P/T are independent dimensions; task type is a profile/tag, not a fifth axis.",
+    "profiles": [
+      {
+        "id": "QUICK",
+        "when": "Low ambiguity/risk, short task, easy acceptance.",
+        "minimum": "Understand target, honor constraints, perform necessary check, deliver."
+      },
+      {
+        "id": "STANDARD",
+        "when": "Ordinary analysis/planning with bounded uncertainty or multiple required steps.",
+        "minimum": "Frame, track key evidence states, choose method, perform necessary validation."
+      },
+      {
+        "id": "HIGH_ASSURANCE",
+        "when": "High impact, critical unknown, conflicting sources, long dependencies or irreversible action.",
+        "minimum": "Traceable dependencies, discriminating/independent validation, policy gate, authorization and recovery plan when applicable."
+      }
+    ],
+    "permissions": "Routing/profile selection never grants action permission. G/policy gate may block any M/P/T path."
+  },
+  "support_domains": [
+    "TASK_COORDINATION_AND_SOP",
+    "EVIDENCE_AND_KNOWLEDGE_STATE",
+    "TOOL_PLUGIN_ADAPTERS",
+    "POLICY_AUTHORIZATION_AND_RISK",
+    "RUNTIME_ORCHESTRATION",
+    "STATE_PERSISTENCE_AND_RECOVERY",
+    "TRACE_AUDIT_AND_RECEIPTS",
+    "EVALUATION_REGRESSION_AND_BASELINES",
+    "DOCUMENT_CAPABILITY_PROBLEM_GOVERNANCE"
+  ],
+  "runtime_contract": {
+    "chain": [
+      "FRAME",
+      "EVIDENCE",
+      "ROUTE",
+      "AUTHORIZATION_IF_REQUIRED",
+      "EXECUTION",
+      "EVALUATION",
+      "FEEDBACK"
+    ],
+    "state_separation": [
+      "TASK_EXECUTION_STATE",
+      "CLAIM_SOURCE_EVIDENCE_STATE",
+      "CROSS_TASK_LONG_TERM_MEMORY_RULES"
+    ],
+    "persistence": {
+      "P0": "No additional persistence beyond the minimum explicitly required.",
+      "P1": "Minimal traceable status, key outcomes, blockers and evidence references.",
+      "P2": "Task-bound state bundle/checkpoint for multi-stage, cross-session, high-impact or interruptible work."
+    },
+    "statuses": [
+      "PASS",
+      "PARTIAL",
+      "BLOCKED",
+      "FAILED",
+      "NOT_PROVEN",
+      "NOT_EXECUTED",
+      "INCONCLUSIVE",
+      "UNKNOWN",
+      "CONFLICT",
+      "STALE"
+    ],
+    "rules": [
+      "Missing required evidence, scope or authorization must not be silently accepted.",
+      "Unknown external side effects require a distinct state and recovery decision.",
+      "An execution receipt is not the same as result-quality acceptance.",
+      "A document rule does not imply automated Runtime enforcement."
+    ]
+  },
+  "delivery_lifecycle": {
+    "stages": [
+      {
+        "id": "PLANNING",
+        "gate": [
+          "Target/scope/authority defined",
+          "Current blueprint and relevant IDs checked",
+          "Dependencies and alternatives mapped",
+          "Acceptance criteria/baseline/stop and rollback criteria fixed",
+          "Candidate/current boundary explicit"
+        ]
+      },
+      {
+        "id": "REALIZATION",
+        "gate": [
+          "Only authorized planned changes implemented",
+          "Contract/unit tests executed where available",
+          "Actual changes and execution receipts retained",
+          "No unrelated expansion"
+        ]
+      },
+      {
+        "id": "CLOSURE",
+        "gate": [
+          "Changed files read back",
+          "Schema/links/IDs/dependencies reconciled",
+          "Relevant regression and failure paths checked",
+          "Unexecuted tests remain NOT_EXECUTED",
+          "Temp/experiment material archived"
+        ]
+      },
+      {
+        "id": "FINAL_TEST",
+        "gate": [
+          "Frozen version evaluated against predefined cases/thresholds",
+          "Independent or held-out checks used where applicable",
+          "Quality/security/cost reported separately",
+          "Failures/unknowns preserved; pass only on actual evidence"
+        ]
+      }
+    ],
+    "invalidation": "A change to target, core architecture, dependencies, acceptance criteria or relevant assumptions returns the affected scope to PLANNING and invalidates affected prior evidence.",
+    "universal_gates": [
+      "AUTHORIZATION",
+      "DATA_INTEGRITY",
+      "SECURITY",
+      "COST_LIMIT",
+      "RECOVERY_OR_STOP"
+    ]
+  },
+  "maturity": {
+    "runtime/foravar_vertical_slice.py": "POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED",
+    "runtime/policy_gate.py": "CODE_PRESENT; actual permission backend/denial behavior NOT_VERIFIED",
+    "python_contract_tests": "NOT_EXECUTED_IN_THIS_CLEANUP",
+    "real_adapter_wiring": "NOT_EXECUTED_OR_NOT_VERIFIED",
+    "runtime_timeout_unknown_side_effect_recovery": "NOT_EXECUTED_OR_NOT_VERIFIED",
+    "handoff": "SOP-HANDOFF-001=PROVISIONAL_CURRENT_MANUAL; cross-task effect and Runtime auto-trigger NOT_VERIFIED",
+    "rule": "Document consolidation does not promote engineering maturity."
+  },
+  "repo_boundaries": {
+    "upqq21477-star/forAVAr": "Current blueprint, operating contract, capability register, problem register, README and necessary Runtime/source code only.",
+    "upqq21477-star/forAVArb": "Research, candidates, experiments, validation, temporary materials, raw outputs and archives.",
+    "upqq21477-star/P1": "READ_ONLY; reference/call only; no write/create/delete.",
+    "upqq21477-star/P2": "READ_ONLY; reference/call only; no write/create/delete."
+  },
+  "source_refs": {
+    "current_blueprint_original_path": "參考資料/解析文檔/forAVAr_核心重建施工藍圖_v0.8_2026-10-24.md",
+    "current_blueprint_original_blob_sha": "410a42602650c78004ef3c7bc7d2e168aab367d1",
+    "archived_source_commit": "132e44fb6b8c872e016d782e08b39edc6c58f1d8",
+    "archive_manifest": "https://github.com/upqq21477-star/forAVArb/blob/main/歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json"
+  }
+}

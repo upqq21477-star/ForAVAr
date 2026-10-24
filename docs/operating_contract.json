@@ -1,0 +1,243 @@
+{
+  "schema": "foravar.operating-contract/v1",
+  "status": "CURRENT",
+  "date": "2026-10-24",
+  "authority": "docs/operating_contract.json",
+  "task_flow": [
+    "INTAKE",
+    "AUTHORIZE",
+    "SELECT_SOP",
+    "PLAN",
+    "EXECUTE",
+    "VERIFY",
+    "PERSIST",
+    "REVIEW"
+  ],
+  "task_levels": {
+    "L0": "One-off, low-risk, no write/external side effect; minimal understanding and necessary check.",
+    "L1": "Single-file/local low-risk task; compact plan, focused checks.",
+    "L2": "Multi-file/cross-dependency/batch task; freeze change set, update dependent views, read back and regress.",
+    "L3": "Formal plan/high-impact/irreversible task; explicit authority, impact map, recovery plan and independent acceptance."
+  },
+  "preflight": [
+    "Restate current-task objective, deliverable, constraints, non-goals and acceptance conditions internally.",
+    "Verify current branch/commit and target repository before changes.",
+    "Check docs/blueprint.json, capability registry, relevant SOP/problem IDs and existing responsibility before adding anything.",
+    "Compare sources by declared authority and freshness; archive history is not CURRENT.",
+    "If scope/authority/critical source is missing or conflicting, block the affected write/action or report UNKNOWN; do not silently assume."
+  ],
+  "unique_authority": {
+    "architecture": "docs/blueprint.json",
+    "operation_and_change_rules": "docs/operating_contract.json",
+    "capabilities_and_coverage": "docs/capability_registry.json",
+    "problems_only_no_solutions": "docs/problem_register.json",
+    "derived_indexes": "README.md",
+    "historical_experiment_archive": "forAVArb archive manifest"
+  },
+  "change_policy": [
+    "Reuse or extend an existing responsibility/ID before proposing a new one.",
+    "Do not create a parallel core, skeleton, enum, register or workflow with equivalent responsibility.",
+    "Capability/problem IDs remain stable; severity, status and title are independent fields.",
+    "Keep problem-register entries as concise problem statements; store remediation/experiments in their own authorized workspace, not in the problem register.",
+    "A candidate remains CANDIDATE until the predefined decision gate accepts it.",
+    "No formal blueprint change without explicit project-update authorization; otherwise create/revise only an authorized discussion/research record.",
+    "A title/path change is not evidence that an implementation or capability changed."
+  ],
+  "repo_policy": {
+    "forAVAr": {
+      "access": "WRITE_ALLOWED_WITH_SCOPE",
+      "allowed": [
+        "Current blueprint",
+        "Current operating contract",
+        "Authoritative registries",
+        "Minimal entrypoint",
+        "Necessary Runtime/source code"
+      ],
+      "excluded": [
+        "Raw experiments",
+        "Temporary tests/output",
+        "Historical proposal branches",
+        "Duplicate SOP/reports"
+      ]
+    },
+    "forAVArb": {
+      "access": "ARCHIVE_AND_WORK_DATA",
+      "allowed": [
+        "Research",
+        "Candidate plans",
+        "Validation",
+        "Experiments",
+        "Temporary records",
+        "Raw outputs",
+        "Retired documents",
+        "Handoff artifacts"
+      ]
+    },
+    "P1": {
+      "access": "READ_ONLY",
+      "restrictions": [
+        "NO_CREATE",
+        "NO_UPDATE",
+        "NO_DELETE"
+      ]
+    },
+    "P2": {
+      "access": "READ_ONLY",
+      "restrictions": [
+        "NO_CREATE",
+        "NO_UPDATE",
+        "NO_DELETE"
+      ]
+    }
+  },
+  "build_stage_flow": [
+    {
+      "stage": "PLANNING",
+      "requirements": [
+        "Read current authority",
+        "Map old/new IDs and responsibility",
+        "Define alternatives, dependencies, scope and acceptance",
+        "Separate current design from candidates"
+      ]
+    },
+    {
+      "stage": "REALIZATION",
+      "requirements": [
+        "Write only the authorized change set",
+        "Do not add unrelated scope",
+        "Keep implementation and design maturity separate"
+      ]
+    },
+    {
+      "stage": "CLOSURE",
+      "requirements": [
+        "Read back each changed file",
+        "Check structure/schema/crossrefs/IDs/dependencies",
+        "Run applicable contract/regression checks",
+        "Archive validation/temp artifacts",
+        "Record unexecuted tests as NOT_EXECUTED"
+      ]
+    },
+    {
+      "stage": "FINAL_TEST",
+      "requirements": [
+        "Freeze tested version",
+        "Run predefined actual tests",
+        "Compare against baseline",
+        "Report quality/security/cost separately",
+        "Adopt/reject without lowering the threshold post hoc"
+      ]
+    }
+  ],
+  "mutation_protocol": [
+    "Record baseline commit, exact target paths and approved action scope.",
+    "Build a change set before mutation; do not mix unrelated changes.",
+    "Prefer one atomic tree/commit for a dependent multi-file change.",
+    "After commit, read back changed file contents and inspect the recursive tree.",
+    "Parse all changed JSON; validate unique IDs, local references and expected path presence.",
+    "Run available tests for code changes. If not run, explicitly state NOT_EXECUTED; never infer PASS from file presence or successful commit.",
+    "On partial failure, inspect actual tree/commit state before retry; do not claim rollback removes external side effects.",
+    "Create trace/handoff records only where they provide a durable continuation or audit benefit."
+  ],
+  "evidence_policy": {
+    "distinguish": [
+      "SOURCE",
+      "OBSERVATION",
+      "CLAIM",
+      "INFERENCE",
+      "ASSUMPTION",
+      "UNKNOWN",
+      "CONFLICT",
+      "STALE",
+      "NOT_CHECKED",
+      "NOT_RUN"
+    ],
+    "maturity_states": [
+      "DESIGN",
+      "CANDIDATE",
+      "CODE_PRESENT",
+      "INTEGRATED",
+      "TESTED",
+      "RUNTIME_VALIDATED"
+    ],
+    "assertions": [
+      "Tool invocation success is not task acceptance.",
+      "A test file or planned case is not a test result.",
+      "Model self-review/rephrasing is not independent evidence.",
+      "Preserve conflicting sources and their scope; do not force a merge.",
+      "Unknown stays unknown until evidence changes its state."
+    ],
+    "terminal_states": [
+      "PASS",
+      "PARTIAL",
+      "BLOCKED",
+      "FAILED",
+      "NOT_PROVEN",
+      "NOT_EXECUTED",
+      "INCONCLUSIVE"
+    ]
+  },
+  "routing_policy": {
+    "dimensions": [
+      "M",
+      "G",
+      "P",
+      "T"
+    ],
+    "rule": "Select minimum path capable of meeting acceptance/safety; add depth only for material ambiguity, risk, conflict, dependency, failure or expected decision value.",
+    "escalate_on": [
+      "Decision-changing ambiguity",
+      "Source conflict",
+      "Critical unknown",
+      "First acceptance failure",
+      "Counterevidence",
+      "Dependency expansion",
+      "Potential high-impact side effect"
+    ],
+    "stop_on": [
+      "Acceptance conditions satisfied",
+      "Budget/attempt limit reached",
+      "No new evidence or discriminating correction",
+      "Remaining information is not decision-relevant",
+      "Required authority/inputs unavailable"
+    ],
+    "fail_closed": "Missing authorization or critical fields blocks the affected protected action; safely independent work may continue."
+  },
+  "state_and_handoff": {
+    "state_classes": [
+      "TASK_EXECUTION_STATE",
+      "CLAIM_EVIDENCE_STATE",
+      "LONG_TERM_RULE_MEMORY"
+    ],
+    "persistence": {
+      "P0": "No extra state",
+      "P1": "Minimal traceable status/evidence references",
+      "P2": "State bundle/checkpoint for multi-stage or cross-session work"
+    },
+    "handoff_status": "SOP-HANDOFF-001=PROVISIONAL_CURRENT_MANUAL; not Runtime-automated or cross-task proven",
+    "handoff_fields": [
+      "task_id",
+      "goal",
+      "acceptance",
+      "scope_and_permissions",
+      "source_commit",
+      "current_status",
+      "completed_with_evidence",
+      "open_or_blocked_items",
+      "key decisions",
+      "modified_paths",
+      "tests actually run/results",
+      "next_action",
+      "recovery/rollback if applicable"
+    ],
+    "rule": "GitHub is the durable handoff location; the handoff links to authorities rather than duplicating their full contents."
+  },
+  "archive_policy": {
+    "target": "upqq21477-star/forAVArb",
+    "folder": "歸檔/forAVAr_main_退場歸檔_2026-10-24/",
+    "format": "JSONL: one source file per line, exact UTF-8 content and source blob metadata",
+    "source_manifest": "https://github.com/upqq21477-star/forAVArb/blob/main/歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json",
+    "candidate_rule": "Archived/history material is not automatically current; use current blueprint/registers for decisions.",
+    "binary_exception": "The two original DOCX blobs are identified in the manifest but were not duplicated as binary by the text connector; original commit preserves them, paired Markdown is archived."
+  }
+}
