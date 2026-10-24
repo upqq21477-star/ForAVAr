@@ -6,6 +6,7 @@
 - 類型：BLUEPRINT_MASTER／STAGED_REALIZATION_AND_VALIDATION_PLAN
 - 狀態：SUPERSEDED／BACKUP_ONLY／ARCHITECTURE_DECISION_ADOPTED；原始 Blob SHA：cab6178593154e5402ec5ef0e6480c941f4223b2。
 - 現行版本：[核心重建施工藍圖 v0.8](./forAVAr_核心重建施工藍圖_v0.8_2026-10-24.md)。
+- 歷史說明：本文保留 v0.7 發布時的規劃內容；下文「現行／本次升版」均指 v0.7 當時語境。當前權威以 v0.8 及索引為準。
 - 版本關係：v0.7 取代 v0.6 作為唯一現行正式藍圖；v0.6 原檔保留為歷史版本，僅供差異、稽核與恢復。
 - 唯一責任：定義 AI 思考品質核心、四層認知架構、自適應運行、橫向支援責任、施工階段、驗收與演化規則。
 - 依據：[思考核心與運行架構分支](./forAVAr_思考核心與運行架構_v0.7.md)、[Runtime／狀態／安全／恢復分支](./forAVAr_Runtime狀態安全與恢復架構_v0.7.md)、[驗收／治理／四梯次施工分支](./forAVAr_驗收治理與四梯次施工規劃_v0.7.md)。
