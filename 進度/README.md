@@ -11,6 +11,11 @@
 5. 對照 docs/blueprint.json、docs/operating_contract.json、docs/capability_registry.json、docs/problem_register.json 及 docs/index.json；不得以封包內較新的文件自行覆蓋現行權威。
 6. 完成審核後新增一份有日期／批次編號的審核紀錄，標明審核範圍、證據、缺陷、結論與未完成項目。
 
+## 審核題詞與標準
+
+- [可直接複製使用的教授級審核題詞](教授級審核題詞.md)：以指導教授／首席 AI 工程師角色評價企劃，提供總評、100 分制評分、優缺點、S/A 級問題、業界成熟解法、全量覆蓋矩陣與分階段修正路線。
+- [詳細審核標準與接手流程](審核標準與接手流程.md)：定義權威順序、全量對帳、核心一致性、反證、測試證據、缺陷分級、停止條件與交接要求。
+
 ## 本次輸入
 
 - [B8 壓縮封包](ForAVAr-main_B8.zip)
