@@ -717,56 +717,6 @@
       "Archive/move is not deletion from Git history."
     ]
   },
-  "delivery_lifecycle": {
-    "stages": [
-      {
-        "id": "PLANNING",
-        "gate": [
-          "Target/scope/authority defined",
-          "Current blueprint and relevant IDs checked",
-          "Dependencies and alternatives mapped",
-          "Acceptance criteria/baseline/stop and rollback criteria fixed",
-          "Candidate/current boundary explicit"
-        ]
-      },
-      {
-        "id": "REALIZATION",
-        "gate": [
-          "Only authorized planned changes implemented",
-          "Contract/unit tests executed where available",
-          "Actual changes and execution receipts retained",
-          "No unrelated expansion"
-        ]
-      },
-      {
-        "id": "CLOSURE",
-        "gate": [
-          "Changed files read back",
-          "Schema/links/IDs/dependencies reconciled",
-          "Relevant regression and failure paths checked",
-          "Unexecuted tests remain NOT_EXECUTED",
-          "Temp/experiment material archived"
-        ]
-      },
-      {
-        "id": "FINAL_TEST",
-        "gate": [
-          "Frozen version evaluated against predefined cases/thresholds",
-          "Independent or held-out checks used where applicable",
-          "Quality/security/cost reported separately",
-          "Failures/unknowns preserved; pass only on actual evidence"
-        ]
-      }
-    ],
-    "invalidation": "A change to target, core architecture, dependencies, acceptance criteria or relevant assumptions returns the affected scope to PLANNING and invalidates affected prior evidence.",
-    "universal_gates": [
-      "AUTHORIZATION",
-      "DATA_INTEGRITY",
-      "SECURITY",
-      "COST_LIMIT",
-      "RECOVERY_OR_STOP"
-    ]
-  },
   "maturity": {
     "runtime/foravar_vertical_slice.py": "POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED",
     "runtime/policy_gate.py": "CODE_PRESENT; authorization backend behavior and protected-action denial NOT_RUNTIME_VERIFIED",
