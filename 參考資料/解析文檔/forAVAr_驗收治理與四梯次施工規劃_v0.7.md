@@ -3,7 +3,8 @@
 - DOC_ID：FORAVAR-VALIDATION-GOVERNANCE-STAGES-BRANCH-007
 - 版本：v0.7
 - 日期：2026-10-24
-- 狀態：CURRENT_BRANCH／設計結論已納入正式藍圖；對應的實作成熟度依本文逐項標示
+- 狀態：SUPERSEDED／BACKUP_ONLY；原始 Blob SHA：b70649c1c723ba0f23c6a78022feb3ae9a121be0。
+- 現行分支：[驗收、治理與四梯次施工規劃 v0.8](./forAVAr_驗收治理與四梯次施工規劃_v0.8.md)。
 - PARENT_MASTER：[forAVAr 核心重建施工藍圖 v0.7](./forAVAr_核心重建施工藍圖_v0.7_2026-10-24.md)
 - 唯一責任：維護外部依據、175 項登錄責任對帳、評測規劃、正式文件治理、殘餘風險及退場條件。
 - 內容狀態：正式架構規劃；實驗支持的設計裁決與尚未通過的工程／Runtime 驗收分開記錄。
