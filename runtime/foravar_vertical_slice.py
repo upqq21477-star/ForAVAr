@@ -9,8 +9,13 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import Any
 
-IMPLEMENTATION_VERSION = "0.1.0"
-IMPLEMENTATION_STATUS = "ADAPTER_SEAM_NOT_INTEGRATED"
+try:
+    from .policy_gate import evaluate_authorization
+except ImportError:  # supports direct imports when runtime/ is on sys.path
+    from policy_gate import evaluate_authorization
+
+IMPLEMENTATION_VERSION = "0.2.0"
+IMPLEMENTATION_STATUS = "POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED"
 
 EVIDENCE_KINDS = {
     "SOURCE_OBSERVATION",
@@ -241,13 +246,30 @@ def run_vertical_slice(task: Mapping[str, Any], adapters: Mapping[str, Callable[
     _text(route.get("stop_rule"), "route.stop_rule")
     if not isinstance(route.get("requires_authorization"), bool):
         raise ContractError("route.requires_authorization must be boolean")
+    required_scope = route.get("required_scope", [])
+    if not isinstance(required_scope, list) or any(
+        not isinstance(scope, str) or not scope.strip() for scope in required_scope
+    ):
+        raise ContractError("route.required_scope must be a list of non-empty scope strings")
+    route["required_scope"] = required_scope
 
-    if profile.get("side_effects") is True or route["requires_authorization"]:
-        authorization = _call(adapters, "authorize", task_obj, route)
+    authorization = evaluate_authorization(task_obj, profile, route, adapters)
+    trace.append("POLICY_GATE")
+    if authorization.get("required"):
         trace.append("AUTHORIZATION")
-        _bind_task(authorization, task_id, "authorization")
         if authorization.get("status") != "AUTHORIZED":
-            return _early("BLOCKED", task_id, trace, str(authorization.get("reason", "authorization was not granted")), frame=frame, evidence=evidence, route=route, authorization=authorization)
+            return _early(
+                "BLOCKED",
+                task_id,
+                trace,
+                str(authorization.get("reason", "authorization was not granted")),
+                frame=frame,
+                evidence=evidence,
+                route=route,
+                authorization=authorization,
+            )
+    else:
+        trace.append("AUTHORIZATION_NOT_REQUIRED")
 
     execution = _call(adapters, "execute", task_obj, frame, evidence, route)
     trace.append("EXECUTION")
@@ -322,6 +344,7 @@ def run_vertical_slice(task: Mapping[str, Any], adapters: Mapping[str, Callable[
         "frame": frame,
         "evidence": evidence,
         "route": route,
+        "authorization": authorization,
         "execution": execution,
         "acceptance": {"criteria_results": normalized, "failure_class": failure_class, "reason": reason},
         "feedback": feedback,
