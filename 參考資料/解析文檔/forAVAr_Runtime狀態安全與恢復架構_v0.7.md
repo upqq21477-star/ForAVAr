@@ -4,7 +4,7 @@
 - 版本：v0.7
 - 日期：2026-10-24
 - 狀態：CURRENT_BRANCH／設計結論已納入正式藍圖；對應的實作成熟度依本文逐項標示
-- PARENT_MASTER：[forAVAr 核心思考品質與運行系統總藍圖 v0.7](./forAVAr_核心思考品質與運行系統總藍圖_v0.7_2026-10-24.md)
+- PARENT_MASTER：[forAVAr 核心重建施工藍圖 v0.7](./forAVAr_核心重建施工藍圖_v0.7_2026-10-24.md)
 - 唯一責任：維護證據、工作封包、持久化、Runtime、權限、失敗分類、修正傳播與恢復契約。
 - 內容狀態：正式架構規劃；實驗支持的設計裁決與尚未通過的工程／Runtime 驗收分開記錄。
 
@@ -45,7 +45,7 @@
 
 ## 8. Runtime 最小責任鏈與明確限制
 
-候選責任鏈為：
+正式規劃的責任鏈為：
 
 `FRAME → EVIDENCE → ROUTE → [AUTHORIZATION] → EXECUTION → EVALUATION → FEEDBACK`
 
