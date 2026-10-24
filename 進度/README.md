@@ -34,10 +34,11 @@
 ## 目前基線與審核狀態
 
 - 正式藍圖基線：v0.8，日期 2026-10-24。
-- 正式 Runtime 狀態：POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED。
-- 本次 B8 初審：PARTIAL；交接內容已審閱，但 ZIP 內部程式碼尚未解包及逐檔比對，不能視為程式碼級審核完成。
-- B8 交接檔自行報告：87 項測試在其沙盒環境執行通過；此數字目前是交接者提供的報告，尚未在本輪獨立重跑。
-- 真實 C0/C1/C2、真實 adapter 與 Runtime 觀察仍標記 NOT_EXECUTED／NOT_VERIFIED；合成測試決策為 INCONCLUSIVE。
+- 全局工作階段：**PLANNING／SIMULATION_ONLY**；整體規劃完成前不切入正式實作，真實整合與正式驗收留到最後的 FINAL_TEST。
+- 正式 Runtime 狀態：POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED；此狀態不代表規劃期需要提前執行真實 Runtime 驗收。
+- B17 再審：規劃階段／模擬材料；原 HANDOFF 誤標 BUILD_COMPLETE_PENDING_FINAL_ACCEPTANCE，缺少整體規劃 Gate 完成證據。
+- B17 ZIP 的 SHA-256 與 HANDOFF 所稱前 16 碼不一致；見[唯一教授級審核紀錄](教授級審核_B17_2026-10-24.md)。
+- B17 交接聲稱 131 項契約測試在沙盒執行通過，但本輪未重新執行，且不能取代最後正式驗收。
 
 ## 審核優先事項：不可遺漏既有責任
 
