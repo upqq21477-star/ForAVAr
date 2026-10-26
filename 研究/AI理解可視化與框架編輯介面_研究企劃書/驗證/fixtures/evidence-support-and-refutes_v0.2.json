@@ -1,0 +1,107 @@
+{
+  "schema_version": "0.2.0",
+  "model_id": "model-evidence-trace-demo",
+  "title": "證據支持與反證的方向性範例",
+  "purpose": "展示外部來源需先記錄為來源，再由證據命題節點透過方向性關係連到被評估主張。",
+  "model_state": "draft",
+  "rule_profile": "default-v1",
+  "nodes": [
+    {
+      "id": "claim-performance",
+      "name": "方案 A 在目標環境下優於方案 B",
+      "function": "保存一項待核實的比較性事實主張。",
+      "structural_role": "detail",
+      "entity_kind": "claim",
+      "claim_kind": "external_fact_claim",
+      "review_status": "pending_review",
+      "evidence_status": "mixed",
+      "provenance_refs": [
+        "src-study-a",
+        "src-study-b"
+      ],
+      "condition_refs": [],
+      "attributes": {}
+    },
+    {
+      "id": "evidence-support-a",
+      "name": "研究 A 的支持性觀察",
+      "function": "記錄一項可定位來源所呈現、可能支持目標主張的證據命題。",
+      "structural_role": "detail",
+      "entity_kind": "claim",
+      "claim_kind": "observation",
+      "review_status": "pending_review",
+      "evidence_status": "supported",
+      "provenance_refs": [
+        "src-study-a"
+      ],
+      "condition_refs": [],
+      "attributes": {}
+    },
+    {
+      "id": "evidence-counter-b",
+      "name": "研究 B 的反向觀察",
+      "function": "記錄一項可定位來源所呈現、可能削弱或反駁目標主張的證據命題。",
+      "structural_role": "detail",
+      "entity_kind": "claim",
+      "claim_kind": "observation",
+      "review_status": "pending_review",
+      "evidence_status": "supported",
+      "provenance_refs": [
+        "src-study-b"
+      ],
+      "condition_refs": [],
+      "attributes": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-evidence-support-a",
+      "source_id": "evidence-support-a",
+      "target_id": "claim-performance",
+      "relation_type": "is_evidence_for",
+      "description": "此觀察被提出作為目標主張的支持性證據，仍待人工評估。",
+      "review_status": "pending_review",
+      "evidence_status": "unverified",
+      "provenance_refs": [
+        "src-study-a"
+      ],
+      "condition_refs": [],
+      "attributes": {}
+    },
+    {
+      "id": "edge-evidence-refutes-b",
+      "source_id": "evidence-counter-b",
+      "target_id": "claim-performance",
+      "relation_type": "refutes",
+      "description": "此觀察被提出作為反向證據；不自動變更目標主張的 evidence_status。",
+      "review_status": "pending_review",
+      "evidence_status": "unverified",
+      "provenance_refs": [
+        "src-study-b"
+      ],
+      "condition_refs": [],
+      "attributes": {}
+    }
+  ],
+  "conditions": [],
+  "sources": [
+    {
+      "id": "src-study-a",
+      "source_type": "external_source",
+      "label": "示例研究來源 A（示例資料，不代表實際研究）",
+      "locator": "fixture-source-A",
+      "excerpt": "示例摘錄：呈現部分支持性觀察。",
+      "actor_type": "external_author",
+      "captured_at": "2026-10-26T09:00:00Z"
+    },
+    {
+      "id": "src-study-b",
+      "source_type": "external_source",
+      "label": "示例研究來源 B（示例資料，不代表實際研究）",
+      "locator": "fixture-source-B",
+      "excerpt": "示例摘錄：呈現不一致或反向觀察。",
+      "actor_type": "external_author",
+      "captured_at": "2026-10-26T09:00:00Z"
+    }
+  ]
+}
