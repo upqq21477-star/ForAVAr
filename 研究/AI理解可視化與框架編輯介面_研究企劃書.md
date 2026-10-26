@@ -1105,9 +1105,9 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 |---|---|---|---|
 | DONE-01 | 理念拆分與外部方法比較 | [理念拆分與技術方案比較](./AI理解框架_理念拆分與技術方案比較.md) | 文件已建立 |
 | DONE-02 | 研究閉環與雙向追溯 | 第 21 章流程、追溯矩陣、發布門檻與停止條件 | 規劃完成；尚無實作證據 |
-| DONE-03 | 正式資料契約初稿 | [正式資料契約與原型推演規格](./AI理解框架_正式資料契約與原型推演規格.md) | 草案已建立 |
-| DONE-04 | JSON Schema 草案 | [ai-understanding-model.schema.json](./規格草案/ai-understanding-model.schema.json) | JSON 語法已解析；meta-validation 尚未執行 |
-| DONE-05 | 關係規則登錄表 | [relation-rules.default-v1.json](./規格草案/relation-rules.default-v1.json) | JSON 語法已解析；規則語意尚待推演 |
+| DONE-03 | 正式資料契約初稿 | [正式資料契約與原型推演規格](./AI理解框架_正式資料契約與原型推演規格.md) | v0.2.1-draft；證據／反證方向已納入 |
+| DONE-04 | JSON Schema 草案 | [ai-understanding-model.schema.json](./規格草案/ai-understanding-model.schema.json) | Schema 0.2.0；jsonschema 4.26.0 Draft 2020-12 meta-validation PASS；產品 Runtime 未驗 |
+| DONE-05 | 關係規則登錄表 | [relation-rules.default-v1.json](./規格草案/relation-rules.default-v1.json) | 契約版本 0.2.0；17 種關係集合靜態一致；完整語意推演未完成 |
 | DONE-06 | 關係類型集合靜態比對 | Schema 的 17 個關係類型與規則登錄表 17 個 key 完全一致；每類均有家族、循環及影響規則，邊上沒有重複保存派生政策 | 本輪已重新執行集合檢查並通過；其他 Schema／Runtime 測試未執行 |
 
 ### 22.2 剩餘步驟總表
