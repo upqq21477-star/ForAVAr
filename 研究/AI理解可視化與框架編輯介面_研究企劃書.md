@@ -2,7 +2,7 @@
 
 > **文件性質：** 原理研究與架構企劃，非實作規格、非已驗收系統  
 > **研究狀態：** 架構提案；部分設計具外部標準或研究依據，整體成效尚待驗證  
-> **版本：** 0.6.0-draft  
+> **版本：** 0.7.0-draft  
 > **日期：** 2026-10-26  
 > **主要讀者：** 企劃決策者、系統架構設計者、AI 互動設計者、後續實作人員
 
@@ -26,7 +26,7 @@
 
 ## 本次深化研究修訂摘要
 
-本次修訂在閉環基礎上，新增正式資料契約草案、JSON Schema、關係規則登錄表、原型測試案例清單及有效／無效測試資料。另列出剩餘工作、依賴順序及完成條件。目前只完成規格草案與關係類型集合的靜態一致性檢查；Schema meta-validation、跨物件驗證程式、桌上推演、Runtime 和使用者測試仍未完成。
+本次修訂在閉環基礎上新增正式資料契約、JSON Schema、關係規則登錄表、跨物件驗證規則、狀態機與原型案例。Schema Draft 2020-12 meta-validation 已使用 jsonschema 4.26.0 通過；18 個跨物件原型斷言通過，17 個 relation_type 與 registry keys 靜態一致。這些結果只代表規格／原型的有限驗證；完整發布流程、UI／Runtime 與使用者任務測試仍未完成。
 
 理念拆分、外部工具與方法比較、演算法和取捨理由另見：[AI理解框架：理念拆分、外部方法比較與最佳適配架構](./AI理解框架_理念拆分與技術方案比較.md)。本企劃的建議方案是依目前需求形成的最佳適配起點，並非未經實測即可宣稱普遍最優。
 
@@ -1114,10 +1114,10 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 
 | 順序 | 工作 ID | 項目與內容 | 依賴 | 交付物 | 完成條件 | 狀態 |
 |---|---|---|---|---|---|---|
-| 1 | REM-01 | Schema meta-validation：以符合 JSON Schema Draft 2020-12 的驗證器檢查 schema 本身 | Schema 草案 | 驗證輸出與版本紀錄 | meta-schema 驗證完成，錯誤已修正或明確記錄 | NOT_RUN |
-| 2 | REM-02 | 跨物件驗證規格：唯一 ID、來源／條件引用、懸空邊、自我連線、循環規則 | Schema＋關係規則 | 規則表及預期錯誤碼 | 每條規則有正例、反例和處置方式 | 草案，未執行 |
+| 1 | REM-01 | Schema meta-validation：以符合 JSON Schema Draft 2020-12 的驗證器檢查 schema 本身 | Schema 草案 | 驗證輸出與版本紀錄 | meta-schema 驗證完成，錯誤已修正或明確記錄 | PASS（Meta-schema only；Runtime 未驗） |
+| 2 | REM-02 | 跨物件驗證規格：唯一 ID、來源／條件引用、懸空邊、自我連線、循環規則 | Schema＋關係規則 | 規則表及預期錯誤碼 | 每條規則有正例、反例和處置方式 | 原型 18 個斷言 PASS；完整規則覆蓋未完成 |
 | 3 | REM-03 | 狀態機定稿：內容審核、模型發布、重新確認及例外授權 | 資料契約 | 狀態轉換表 | 所有允許／禁止轉換及發布阻擋原因均可判定 | 草案，未凍結 |
-| 4 | REM-04 | 桌上推演首輪：有效模型、結構錯誤、循環、語意差異及版本取用 | 測試案例＋固定基線 | 案例結果紀錄 | 每項結果有輸入、預期、實際結果和證據 | NOT_RUN |
+| 4 | REM-04 | 桌上推演首輪：有效模型、結構錯誤、循環、語意差異及版本取用 | 測試案例＋固定基線 | 案例結果紀錄 | 每項結果有輸入、預期、實際結果和證據 | 部分完成：18 個原型斷言 PASS；其餘案例 NOT_RUN |
 | 5 | REM-05 | UI 操作規格：樹狀瀏覽、局部關係圖、節點面板、手機連線、刪除和復原 | 資料契約 | UI 操作流程與狀態圖 | 核心任務不依賴臨時猜測或精準拖曳 | 未開始 |
 | 6 | REM-06 | 語意差異與影響分析規格：穩定 ID 比對、變更分類、BFS／DFS 傳播及三方衝突 | 關係規則、版本策略 | 演算法規格與輸出範例 | 每種變更有可重現的預期結果和影響路徑 | 原理已定；細節未凍結 |
 | 7 | REM-07 | 實作規格：模組責任、輸入／輸出、儲存、驗證、版本及匯出介面 | REM-01 至 REM-06 | 實作規格書 | 模組邊界、錯誤處理、資料契約和依賴明確 | 未開始 |
@@ -1132,17 +1132,19 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 - [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json)
 - [關係規則登錄表](./規格草案/relation-rules.default-v1.json)
 - [原型推演案例清單（forAVArb）](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)
+- [跨物件驗證器原型（實驗）](https://github.com/upqq21477-star/forAVArb/blob/main/%E5%AF%A6%E9%A9%97/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/validator_prototype_v0.1.py)
+- [Schema 與跨物件驗證原型測試記錄](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E7%B5%90%E6%9E%9C/Schema%E8%88%87%E8%B7%A8%E7%89%A9%E4%BB%B6%E9%A9%97%E8%AD%89%E5%8E%9F%E5%9E%8B%E6%B8%AC%E8%A9%A6_2026-10-26.md)
 - [支持證據與反證方向範例 fixture](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/fixtures/evidence-support-and-refutes_v0.2.json)
 - [跨物件驗證規則](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E8%A6%8F%E5%89%87/cross-object-validation.default-v1.json)
 - [狀態機與發布門檻](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E8%A6%8F%E5%89%87/%E7%8B%80%E6%85%8B%E6%A9%9F%E8%88%87%E7%99%BC%E5%B8%83%E9%96%80%E6%AA%BB_v0.1.md)
 
-刻意無效的測試 fixtures 也保存在同一驗證資料夾。測試案例和 fixtures 已建立不代表測試已執行；未執行的結果維持 NOT_RUN／NOT_VERIFIED。
+刻意無效的測試 fixtures 也保存在同一驗證資料夾。本輪已完成 Schema meta-validation、3 個精確 fixture 的結構驗證及 18 個原型斷言；未逐項執行的案例仍維持 NOT_RUN／NOT_VERIFIED，Runtime 和使用者驗收未進行。
 
 ### 22.4 接下來的實際執行順序
 
-1. 完成 Schema meta-validation，固定 schema／rule registry 的基線。
-2. 用有效與無效 fixtures，明確化 L0–L3 的預期錯誤與驗證責任。
-3. 桌上推演關係循環、依賴影響方向、已接受內容修改和三方合併。
+1. 固定已通過 meta-validation 的 Schema、relation registry 與 validator rule baseline，補上可重複的執行方式。
+2. 擴大 L0–L3 的精確 fixture 測試，並讓每個結果有 SHA、輸入、預期與實際輸出。
+3. 完成狀態機／發布紀錄測試，再推演依賴影響方向、已接受內容修改和三方合併。
 4. 根據推演結果修正契約，凍結一版供 UI 與實作規格引用。
 5. 完成 UI 操作規格與模組介面，再開始原型建構。
 
