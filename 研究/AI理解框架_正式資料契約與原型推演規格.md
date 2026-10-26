@@ -176,7 +176,7 @@ URI、原始位置、短摘錄、操作者類型及擴充屬性可依來源類�
 
 目前欄位保存的是最新狀態，狀態歷史可先由 Git 記錄保留。若後續正式產品需要逐項審核者、時間、理由和覆核軌跡，應另設審核事件紀錄，不把完整審核歷史硬塞進單一節點物件。
 
-靜態一致性檢查已實際比較 Schema 的 17 個 relation_type 與 registry 的 17 個 key，確認集合相同、沒有重複值，且所有關係均具家族、意義、循環及影響欄位。檢查紀錄及 SHA 基線收錄於 [原型推演案例清單第 2.1 節](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.1.md)。這不包含 JSON Schema meta-validation 或 Runtime 測試。
+靜態一致性檢查已實際比較 Schema 的 17 個 relation_type 與 registry 的 17 個 key，確認集合相同、沒有重複值，且所有關係均具家族、意義、循環及影響欄位。檢查紀錄及 SHA 基線收錄於 [原型推演案例清單第 2.1 節](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)。這不包含 JSON Schema meta-validation 或 Runtime 測試。
 
 ---
 
@@ -286,7 +286,7 @@ JSON Schema 不負責跨陣列的 ID 唯一性或節點引用是否存在；這�
 
 測試案例清單存放在資料／驗證倉庫，以符合研究企劃、資料規格與測試資料分開管理的原則：
 
-[原型推演案例清單：AI 理解可視化框架](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.1.md)
+[原型推演案例清單：AI 理解可視化框架](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)
 
 其狀態須分開記錄：
 - 文件／規格檢查；
