@@ -50,7 +50,15 @@
     "schema_meta_validation": "PASS recorded for the listed legacy source baseline only",
     "fixtures": "3 fixture outcomes recorded for the listed legacy source baseline only",
     "historical_prototype_assertions": "18 PASS only for validator_prototype_v0.1.py with cross-object rules v0.2.0-draft; do not transfer to v0.2/v0.3",
-    "current_candidate": "validator v0.2 and cross-object rules v0.3.0-draft are NOT_RUN",
+    "current_candidate": "validator v0.2.1 static-patched candidate + cross-object rules v0.3.0-draft are NOT_RUN; v0.2.1 is not a proven fix until execution",
     "product_runtime": "NOT_TESTED"
+  },
+  "validation_candidate": {
+    "repository": "upqq21477-star/forAVArb",
+    "path": "AI理解可視化與框架編輯介面_研究企劃書/實驗/validator_prototype_v0.2.1.py",
+    "blob_sha": "56d2c592f89d30a0c6c9e5179c13a844d206bab0",
+    "version": "v0.2.1",
+    "status": "STATIC_PATCHED / NOT_RUN",
+    "review_path": "AI理解可視化與框架編輯介面_研究企劃書/驗證/靜態審查記錄_候選驗證器v0.2_2026-10-27.md"
   }
 }
