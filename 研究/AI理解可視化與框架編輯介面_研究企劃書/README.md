@@ -21,7 +21,7 @@
 
 1. 主企劃、資料契約與比較研究的集中副本，初始版本分別為 0.8.0-draft、0.2.2-draft、0.5.0。
 2. 歷史驗證記錄只支持其標記的舊基線：Schema meta-validation 與三個 fixture 結果；18 個原型斷言只適用於 validator v0.1 與 cross-object rules v0.2.0-draft。
-3. 新候選 validator v0.2 與 cross-object rules v0.3.0-draft 尚未執行。不得把舊測試結果宣稱為新候選已通過。
+3. 原始 validator v0.2 保留為未修改基線；集中資料夾中的修正版候選 validator v0.2.1 與 cross-object rules v0.3.0-draft 仍為 NOT_RUN。靜態審查和程式修改不等於測試通過。
 4. 產品 UI、端到端互動、儲存/載入、行動裝置可用性和正式 Runtime 均未驗收。
 
 ## 後續更新規則
