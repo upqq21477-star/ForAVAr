@@ -1,0 +1,56 @@
+{
+  "project": "AI理解可視化與框架編輯介面_研究企劃書",
+  "manifest_version": "1.0.0",
+  "policy": "Existing files at legacy paths are not modified, moved, or deleted. This directory is the consolidated working baseline for future updates.",
+  "repository": "upqq21477-star/forAVAr",
+  "branch": "main",
+  "baselines": {
+    "proposal": {
+      "repository": "upqq21477-star/forAVAr",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書.md",
+      "source_blob_sha": "f0ef13950cdf255d79c5866e132bca7b321a039d",
+      "source_url": "https://github.com/upqq21477-star/ForAVAr/blob/main/%E7%A0%94%E7%A9%B6/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E8%88%87%E6%A1%86%E6%9E%B6%E7%B7%A8%E8%BC%AF%E4%BB%8B%E9%9D%A2_%E7%A0%94%E7%A9%B6%E4%BC%81%E5%8A%83%E6%9B%B8.md",
+      "consolidated_path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
+      "version": "0.8.0-draft"
+    },
+    "contract": {
+      "repository": "upqq21477-star/forAVAr",
+      "path": "研究/AI理解框架_正式資料契約與原型推演規格.md",
+      "source_blob_sha": "8472753256d4d30dd8d8d4a15a6ef8ea92fd2d4b",
+      "source_url": "https://github.com/upqq21477-star/ForAVAr/blob/main/%E7%A0%94%E7%A9%B6/AI%E7%90%86%E8%A7%A3%E6%A1%86%E6%9E%B6_%E6%AD%A3%E5%BC%8F%E8%B3%87%E6%96%99%E5%A5%91%E7%B4%84%E8%88%87%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94%E8%A6%8F%E6%A0%BC.md",
+      "consolidated_path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解框架_正式資料契約與原型推演規格.md",
+      "version": "0.2.2-draft"
+    },
+    "comparison": {
+      "repository": "upqq21477-star/forAVAr",
+      "path": "研究/AI理解框架_理念拆分與技術方案比較.md",
+      "source_blob_sha": "645e4a97e9c427c3897b2f19e73ae3766fd9c9aa",
+      "source_url": "https://github.com/upqq21477-star/ForAVAr/blob/main/%E7%A0%94%E7%A9%B6/AI%E7%90%86%E8%A7%A3%E6%A1%86%E6%9E%B6_%E7%90%86%E5%BF%B5%E6%8B%86%E5%88%86%E8%88%87%E6%8A%80%E8%A1%93%E6%96%B9%E6%A1%88%E6%AF%94%E8%BC%83.md",
+      "consolidated_path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解框架_理念拆分與技術方案比較.md",
+      "version": "0.5.0"
+    },
+    "schema": {
+      "repository": "upqq21477-star/forAVAr",
+      "path": "研究/規格草案/ai-understanding-model.schema.json",
+      "source_blob_sha": "02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be",
+      "source_url": "https://github.com/upqq21477-star/ForAVAr/blob/main/%E7%A0%94%E7%A9%B6/%E8%A6%8F%E6%A0%BC%E8%8D%89%E6%A1%88/ai-understanding-model.schema.json",
+      "consolidated_path": "研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/ai-understanding-model.schema.json",
+      "version": "0.2.0"
+    },
+    "relation_rules": {
+      "repository": "upqq21477-star/forAVAr",
+      "path": "研究/規格草案/relation-rules.default-v1.json",
+      "source_blob_sha": "291087a0902f4b0f590fe16c666bf6b3fc1e1ed2",
+      "source_url": "https://github.com/upqq21477-star/ForAVAr/blob/main/%E7%A0%94%E7%A9%B6/%E8%A6%8F%E6%A0%BC%E8%8D%89%E6%A1%88/relation-rules.default-v1.json",
+      "consolidated_path": "研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/relation-rules.default-v1.json",
+      "version": "0.2.0"
+    }
+  },
+  "evidence_boundary": {
+    "schema_meta_validation": "PASS recorded for the listed legacy source baseline only",
+    "fixtures": "3 fixture outcomes recorded for the listed legacy source baseline only",
+    "historical_prototype_assertions": "18 PASS only for validator_prototype_v0.1.py with cross-object rules v0.2.0-draft; do not transfer to v0.2/v0.3",
+    "current_candidate": "validator v0.2 and cross-object rules v0.3.0-draft are NOT_RUN",
+    "product_runtime": "NOT_TESTED"
+  }
+}
