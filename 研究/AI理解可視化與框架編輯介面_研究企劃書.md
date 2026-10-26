@@ -1108,7 +1108,7 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 | DONE-03 | 正式資料契約初稿 | [正式資料契約與原型推演規格](./AI理解框架_正式資料契約與原型推演規格.md) | 草案已建立 |
 | DONE-04 | JSON Schema 草案 | [ai-understanding-model.schema.json](./規格草案/ai-understanding-model.schema.json) | JSON 語法已解析；meta-validation 尚未執行 |
 | DONE-05 | 關係規則登錄表 | [relation-rules.default-v1.json](./規格草案/relation-rules.default-v1.json) | JSON 語法已解析；規則語意尚待推演 |
-| DONE-06 | 關係類型集合靜態比對 | Schema 的 17 個關係類型與規則登錄表 17 個 key 完全一致；每類均有家族、循環及影響規則，邊上沒有重複保存派生政策 | 新基線待重新執行集合檢查；其他 Schema／Runtime 測試未執行 |
+| DONE-06 | 關係類型集合靜態比對 | Schema 的 17 個關係類型與規則登錄表 17 個 key 完全一致；每類均有家族、循環及影響規則，邊上沒有重複保存派生政策 | 本輪已重新執行集合檢查並通過；其他 Schema／Runtime 測試未執行 |
 
 ### 22.2 剩餘步驟總表
 
