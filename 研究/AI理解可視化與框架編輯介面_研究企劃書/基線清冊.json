@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.3",
+  "manifest_version": "3.4",
   "updated": "2026-10-27",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -11,7 +11,8 @@
     "source_paths": "External original source paths are not modified by this consolidation.",
     "test_results": "PASS only applies to the exact test performed; static checks never substitute for execution.",
     "research_modules": "Research modules reuse the current data contract, compare against the read-only P1/P2 sources, and do not bypass the active acceptance gate or imply runtime validation.",
-    "research_review_records": "Static critique records are indexed but do not update the normative schema, acceptance status, or UI gate; runtime claims require execution evidence."
+    "research_review_records": "Static critique records are indexed but do not update the normative schema, acceptance status, or UI gate; runtime claims require execution evidence.",
+    "research_scope_boundary": "本清冊只管理 AI 理解可視化與框架編輯介面課題；複雜系統解構、世界模型建構、因果閉環與模擬驗證是獨立研究，另存於研究根目錄，不列入本企劃基線。"
   },
   "current_status": {
     "overall": "STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED",
@@ -85,21 +86,6 @@
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
       "sha": "90b9d39634d3c0f8bc42b8d8b1ed1b31b7489a4a"
-    },
-    {
-      "role": "bidirectional_reconstruction_research",
-      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/雙向結構還原與缺漏推導/00_雙向結構還原與缺漏推導研究企劃_v1.0.md",
-      "sha": "19814d4b8be907f34357d2029a1661e422daa02a"
-    },
-    {
-      "role": "bidirectional_critique_review",
-      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/雙向結構還原與缺漏推導/01_教授級逆向批評與邏輯因果閉環審查_2026-10-27.md",
-      "sha": "c771f9e375a8d51a757faeef5da56238dc0ef9c1"
-    },
-    {
-      "role": "bidirectional_thinking_core_alignment",
-      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/雙向結構還原與缺漏推導/02_思考核心對照、問題因果鏈與系統性修正方案_2026-10-27.md",
-      "sha": "c4b3e11134bd6a70bc70c8e0ee61ff8e3b8496ed"
     }
   ],
   "test_fixtures": {
