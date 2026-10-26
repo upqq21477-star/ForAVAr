@@ -1,6 +1,6 @@
 {
   "rule_profile": "default-v1",
-  "contract_version": "0.1.0",
+  "contract_version": "0.2.0",
   "status": "draft_not_runtime_validated",
   "description": "Relation family, cycle handling and impact propagation are derived from relation_type here. These values must not be duplicated and manually edited on every edge.",
   "default_policy": {
