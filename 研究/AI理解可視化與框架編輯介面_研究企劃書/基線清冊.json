@@ -22,7 +22,7 @@
     {
       "role": "main_proposal",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
-      "sha": "6f836aa88a675afcf0051718060a2aab5daba25c"
+      "sha": "48a4419315ad3a7726505cd7b52eabd959437263"
     },
     {
       "role": "data_contract",
@@ -57,7 +57,7 @@
     {
       "role": "test_case_catalog",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/驗證/案例清單.md",
-      "sha": "63c47ea7e450ac10908bb4286393f96775ebd42a"
+      "sha": "ac4e8cf64aa667e66b2136a7447470ca9a700301"
     },
     {
       "role": "current_validator_candidate",
