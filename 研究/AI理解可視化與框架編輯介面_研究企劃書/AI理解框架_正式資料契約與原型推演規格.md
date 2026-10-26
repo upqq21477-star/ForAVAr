@@ -2,8 +2,8 @@
 
 > **文件性質：** 規格草案，供桌上推演與後續原型實作  
 > **版本：** 0.2.2-draft  
-> **狀態：** 結構草案已建立；JSON Schema 尚未完成正式 meta-schema 驗證，跨物件規則尚未經程式執行  
-> **對應主企劃：** [AI 理解可視化與框架編輯介面研究企劃書](../AI理解可視化與框架編輯介面_研究企劃書.md)  
+> **狀態：** Schema 0.2.0（blob SHA `02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be`）的 Draft 2020-12 meta-validation 已以 jsonschema 4.26.0 通過；跨物件規則 0.3.0-draft 與驗證器候選 v0.2.1 尚未執行；正式 Runtime／UI 未驗收  
+> **對應主企劃：** [AI 理解可視化與框架編輯介面研究企劃書](./AI理解可視化與框架編輯介面_研究企劃書.md)  
 > **規格檔：** [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json) · [關係規則登錄表 default-v1](./規格草案/relation-rules.default-v1.json)
 
 ---
@@ -51,7 +51,7 @@
 |---|---|---|
 | `規格草案/ai-understanding-model.schema.json` | JSON 欄位、型別、必填欄位及列舉值 | JSON 語法與 Draft 2020-12 meta-schema 驗證已通過（jsonschema 4.26.0）；完整產品整合尚未驗證 |
 | `規格草案/relation-rules.default-v1.json` | 關係類型對應的家族、循環政策與影響規則 | JSON 語法與 relation_type 集合靜態比對已通過；規則語意尚待桌上推演 |
-| `forAVArb/驗證/AI理解可視化框架/案例清單_原型推演_v0.2.md` | 正向、負向和衝突測試案例及 fixtures | 清單有 70 個唯一案例 ID；3 個精確 fixtures 通過預期 Schema 驗證，舊規則基線下 18 個原型斷言通過；新版規則候選 0.3.0 與驗證器 v0.2 尚未執行，其他案例與 Runtime 尚未完成 |
+| `驗證/案例清單_原型推演_v0.2.md` | 正向、負向和衝突測試案例及 fixtures | 清單有 70 個唯一案例 ID；3 個精確 fixtures 通過預期 Schema 驗證，舊規則基線下 18 個原型斷言通過；新版規則候選 0.3.0 與驗證器 v0.2.1 尚未執行，其他案例與 Runtime 尚未完成 |
 
 資料契約 schema 與關係規則登錄表有意分開：schema 定義可接受的資料形狀；規則登錄表定義關係在圖上的行為。後者可變更循環與影響政策，但必須有版本和變更紀錄。
 
@@ -176,7 +176,7 @@ URI、原始位置、短摘錄、操作者類型及擴充屬性可依來源類�
 
 目前欄位保存的是最新狀態，狀態歷史可先由 Git 記錄保留。若後續正式產品需要逐項審核者、時間、理由和覆核軌跡，應另設審核事件紀錄，不把完整審核歷史硬塞進單一節點物件。
 
-靜態一致性檢查已比較 Schema 的 17 個 relation_type 與 registry 的 17 個 key，確認集合完全一致且每類關係都有必要規則欄位。Draft 2020-12 meta-schema 已另行驗證通過。完整記錄與基線 SHA 收錄於 [原型推演案例清單第 2.1–2.2 節](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)。這不代表完整的跨物件規則、發布流程、Runtime 或使用者任務已驗收。
+靜態一致性檢查已比較 Schema 的 17 個 relation_type 與 registry 的 17 個 key，確認集合完全一致且每類關係都有必要規則欄位。Draft 2020-12 meta-schema 已另行驗證通過。完整記錄與基線 SHA 收錄於 [原型推演案例清單第 2.1–2.2 節](./驗證/案例清單_原型推演_v0.2.md)。這不代表完整的跨物件規則、發布流程、Runtime 或使用者任務已驗收。
 
 ---
 
@@ -286,13 +286,13 @@ JSON Schema 不負責跨陣列的 ID 唯一性或節點引用是否存在；這�
 
 ### 7.1 舊版測試與候選版分流
 
-現有 18 個 PASS 只適用於驗證器 v0.1 與 cross-object rules 0.2.0-draft。新的規則候選 0.3.0-draft 與驗證器 v0.2 尚未執行回歸測試，不得繼承舊版 PASS。新版的程式缺口、候選行為及待跑測試列於 [驗證器實作覆蓋率與缺口審查](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E5%AF%A9%E6%9F%A5%E8%A8%98%E9%8C%84_%E9%A9%97%E8%AD%89%E5%99%A8%E5%AF%A6%E4%BD%9C%E8%A6%86%E8%93%8B%E7%8E%87_2026-10-26.md)。
+現有 18 個 PASS 只適用於驗證器 v0.1 與 cross-object rules 0.2.0-draft。新的規則候選 0.3.0-draft 與驗證器 v0.2.1 尚未執行回歸測試，不得繼承舊版 PASS。新版的程式缺口、候選行為及待跑測試列於 [驗證器實作覆蓋率與缺口審查](./驗證/審查記錄_驗證器實作覆蓋率_2026-10-26.md)。
 
 
 
 測試案例清單及結果報告存放在資料／驗證倉庫，以符合研究企劃、資料規格與測試證據分開管理的原則：
 
-[Schema 與跨物件驗證原型測試結果](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E7%B5%90%E6%9E%9C/Schema%E8%88%87%E8%B7%A8%E7%89%A9%E4%BB%B6%E9%A9%97%E8%AD%89%E5%8E%9F%E5%9E%8B%E6%B8%AC%E8%A9%A6_2026-10-26.md)； [原型推演案例清單：AI 理解可視化框架](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)
+[Schema 與跨物件驗證原型測試結果](./驗證/結果/Schema與跨物件驗證原型測試_2026-10-26.md)； [原型推演案例清單：AI 理解可視化框架](./驗證/案例清單_原型推演_v0.2.md)
 
 其狀態須分開記錄：
 - 文件／規格檢查；
