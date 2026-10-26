@@ -2,7 +2,7 @@
 
 > **文件性質：** 原理研究與架構企劃，非實作規格、非已驗收系統  
 > **研究狀態：** 架構提案；部分設計具外部標準或研究依據，整體成效尚待驗證  
-> **版本：** 0.5.0-draft  
+> **版本：** 0.6.0-draft  
 > **日期：** 2026-10-26  
 > **主要讀者：** 企劃決策者、系統架構設計者、AI 互動設計者、後續實作人員
 
@@ -363,7 +363,7 @@ flowchart TD
 
 ```json
 {
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "model_id": "model-example",
   "title": "AI 理解模型範例",
   "purpose": "示意節點、關係與來源的關聯。",
@@ -451,11 +451,15 @@ flowchart TD
 | `transfers_data_to` | A 把資料交給 B | 資料流向 | 視資料流規則而定 |
 | `conflicts_with` | A 與 B 衝突 | 衝突關係 | 通常需描述衝突原因 |
 | `supersedes` | A 取代 B | 版本或責任取代 | 應保存變更依據 |
-| `explains` | A 用來說明 B | 解釋或證據關係 | 依情境而定 |
+| `explains` | A 用來說明 B | 解釋或補充說明 | 依情境而定 |
+| `is_evidence_for` | 證據命題支持／作為目標主張的證據 | 有向證據追溯 | 需有來源引用；不自動設定目標 evidence_status |
+| `refutes` | 證據命題反駁或削弱目標主張 | 有向反證追溯 | 需有來源引用；不自動改寫目標 evidence_status |
 
 「介紹」不宜預設為所有圖中的通用關係類型，因為它可能只是節點說明文字，未必代表正式的語意連結。只有在確實需要表示「某內容用於解釋另一內容」時，才使用 `explains` 類型。
 
-關係類型應進一步分成「關係家族」與「具體關係類型」，並為不同家族設定不同的循環、條件驗證及影響傳播規則。層級／依賴子圖可能要求無環；因果／影響圖則可能合理包含回饋環，不得把全圖一律當成 DAG。
+關係家族、循環政策與影響傳播規則由規則登錄表按 `relation_type` 推導，不在每條邊重複保存。層級／依賴子圖可能要求無環；因果／影響圖則可能合理包含回饋環，不得把全圖一律當成 DAG。
+
+來源引用和證據關係也必須區分：`provenance_refs` 表示可追溯來源，不單獨表示來源支持該命題。當支持／反證方向需要被查詢時，將證據命題建成節點，以 `is_evidence_for` 連接支持證據，以有向 `refutes` 連接反證；這些關係都不自動更改目標主張的 `evidence_status`。完整資料契約見 [正式資料契約草案第 3.5.1 節](./AI理解框架_正式資料契約與原型推演規格.md)。
 
 ### 7.2 因果關係需保留證據狀態
 
@@ -1104,7 +1108,7 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 | DONE-03 | 正式資料契約初稿 | [正式資料契約與原型推演規格](./AI理解框架_正式資料契約與原型推演規格.md) | 草案已建立 |
 | DONE-04 | JSON Schema 草案 | [ai-understanding-model.schema.json](./規格草案/ai-understanding-model.schema.json) | JSON 語法已解析；meta-validation 尚未執行 |
 | DONE-05 | 關係規則登錄表 | [relation-rules.default-v1.json](./規格草案/relation-rules.default-v1.json) | JSON 語法已解析；規則語意尚待推演 |
-| DONE-06 | 關係類型集合靜態比對 | Schema 的 16 個關係類型與規則登錄表 16 個 key 完全一致；每類均有家族、循環及影響規則，邊上沒有重複保存派生政策 | 本輪靜態一致性檢查通過；不等於 Schema／Runtime 測試通過 |
+| DONE-06 | 關係類型集合靜態比對 | Schema 的 17 個關係類型與規則登錄表 17 個 key 完全一致；每類均有家族、循環及影響規則，邊上沒有重複保存派生政策 | 新基線待重新執行集合檢查；其他 Schema／Runtime 測試未執行 |
 
 ### 22.2 剩餘步驟總表
 
@@ -1128,6 +1132,9 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 - [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json)
 - [關係規則登錄表](./規格草案/relation-rules.default-v1.json)
 - [原型推演案例清單（forAVArb）](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.1.md)
+- [支持證據與反證方向範例 fixture](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/fixtures/evidence-support-and-refutes_v0.2.json)
+- [跨物件驗證規則](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E8%A6%8F%E5%89%87/cross-object-validation.default-v1.json)
+- [狀態機與發布門檻](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E8%A6%8F%E5%89%87/%E7%8B%80%E6%85%8B%E6%A9%9F%E8%88%87%E7%99%BC%E5%B8%83%E9%96%80%E6%AA%BB_v0.1.md)
 
 刻意無效的測試 fixtures 也保存在同一驗證資料夾。測試案例和 fixtures 已建立不代表測試已執行；未執行的結果維持 NOT_RUN／NOT_VERIFIED。
 
