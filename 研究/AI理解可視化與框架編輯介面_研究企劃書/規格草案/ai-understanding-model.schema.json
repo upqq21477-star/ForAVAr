@@ -1,0 +1,481 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/upqq21477-star/ForAVAr/main/%E7%A0%94%E7%A9%B6/%E8%A6%8F%E6%A0%BC%E8%8D%89%E6%A1%88/ai-understanding-model.schema.json",
+  "title": "ForAVAr AI Understanding Model",
+  "description": "Draft schema for the semantic content model. Cross-object identity, reference, graph-cycle, provenance and release rules require an additional deterministic validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_id",
+    "title",
+    "model_state",
+    "rule_profile",
+    "nodes",
+    "edges",
+    "conditions",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.2.0",
+      "description": "Version of this data contract; distinct from a Git commit or content revision."
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "purpose": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "model_state": {
+      "enum": [
+        "draft",
+        "proposed",
+        "published",
+        "superseded",
+        "archived"
+      ]
+    },
+    "rule_profile": {
+      "const": "default-v1",
+      "description": "Selects the external rule registry. The registry, not each edge, defines relation family, cycle policy and impact propagation."
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/condition"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "attributes": {
+      "type": "object",
+      "description": "Optional model-level domain data; must not duplicate canonical fields.",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z][A-Za-z0-9._:-]*$"
+    },
+    "reviewStatus": {
+      "enum": [
+        "pending_review",
+        "accepted",
+        "rejected",
+        "disputed",
+        "needs_reconfirmation"
+      ]
+    },
+    "evidenceStatus": {
+      "enum": [
+        "not_applicable",
+        "unverified",
+        "supported",
+        "insufficient",
+        "contradicted",
+        "mixed"
+      ]
+    },
+    "provenanceRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
+      "uniqueItems": true
+    },
+    "conditionRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
+      "uniqueItems": true
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "function",
+        "structural_role",
+        "entity_kind",
+        "review_status",
+        "provenance_refs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "function": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "structural_role": {
+          "enum": [
+            "core",
+            "main_axis",
+            "skeleton",
+            "module",
+            "detail",
+            "unassigned"
+          ]
+        },
+        "entity_kind": {
+          "enum": [
+            "goal",
+            "requirement",
+            "capability",
+            "function",
+            "concept",
+            "condition",
+            "decision",
+            "claim",
+            "process",
+            "data_object",
+            "custom"
+          ]
+        },
+        "custom_kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "claim_kind": {
+          "enum": [
+            "user_statement",
+            "user_requirement",
+            "design_decision",
+            "external_fact_claim",
+            "model_inference",
+            "hypothesis",
+            "open_question",
+            "observation",
+            "other"
+          ]
+        },
+        "review_status": {
+          "$ref": "#/$defs/reviewStatus"
+        },
+        "evidence_status": {
+          "$ref": "#/$defs/evidenceStatus"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/provenanceRefs"
+        },
+        "condition_refs": {
+          "$ref": "#/$defs/conditionRefs"
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 8000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "entity_kind": {
+                "const": "custom"
+              }
+            },
+            "required": [
+              "entity_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "custom_kind"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "custom_kind"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "claim_kind": {
+                "const": "external_fact_claim"
+              }
+            },
+            "required": [
+              "claim_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "evidence_status"
+            ],
+            "properties": {
+              "evidence_status": {
+                "enum": [
+                  "unverified",
+                  "supported",
+                  "insufficient",
+                  "contradicted",
+                  "mixed"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_id",
+        "target_id",
+        "relation_type",
+        "review_status",
+        "provenance_refs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "source_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "target_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "relation_type": {
+          "enum": [
+            "contains",
+            "depends_on",
+            "precedes",
+            "causes",
+            "influences",
+            "triggers",
+            "transfers_data_to",
+            "conflicts_with",
+            "supersedes",
+            "explains",
+            "supports",
+            "implements",
+            "derived_from",
+            "satisfies",
+            "verified_by",
+            "is_evidence_for",
+            "refutes"
+          ],
+          "description": "Typed relation between node objects; refutes means the source evidence proposition contradicts or weakens the target claim."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "review_status": {
+          "$ref": "#/$defs/reviewStatus"
+        },
+        "evidence_status": {
+          "$ref": "#/$defs/evidenceStatus"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/provenanceRefs"
+        },
+        "condition_refs": {
+          "$ref": "#/$defs/conditionRefs"
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "condition_kind",
+        "description",
+        "evaluation_mode",
+        "review_status",
+        "provenance_refs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "condition_kind": {
+          "enum": [
+            "start_condition",
+            "completion_condition",
+            "failure_condition",
+            "cancel_condition",
+            "guard_condition"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "evaluation_mode": {
+          "enum": [
+            "descriptive",
+            "machine_evaluable"
+          ]
+        },
+        "expression_language": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "expression": {
+          "type": [
+            "object",
+            "array",
+            "string",
+            "number",
+            "boolean",
+            "integer",
+            "null"
+          ]
+        },
+        "review_status": {
+          "$ref": "#/$defs/reviewStatus"
+        },
+        "evidence_status": {
+          "$ref": "#/$defs/evidenceStatus"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/provenanceRefs"
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "evaluation_mode": {
+                "const": "machine_evaluable"
+              }
+            },
+            "required": [
+              "evaluation_mode"
+            ]
+          },
+          "then": {
+            "required": [
+              "expression",
+              "expression_language"
+            ]
+          }
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_type",
+        "label",
+        "captured_at"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "source_type": {
+          "enum": [
+            "user_input",
+            "external_source",
+            "project_file",
+            "tool_output",
+            "model_inference",
+            "rule_derived",
+            "calculation",
+            "other"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "locator": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "excerpt": {
+          "type": "string",
+          "maxLength": 8000
+        },
+        "actor_type": {
+          "enum": [
+            "user",
+            "assistant",
+            "tool",
+            "system",
+            "external_author",
+            "other"
+          ]
+        },
+        "captured_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}
