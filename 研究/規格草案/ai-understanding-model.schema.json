@@ -18,7 +18,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "0.1.0",
+      "const": "0.2.0",
       "description": "Version of this data contract; distinct from a Git commit or content revision."
     },
     "model_id": {
@@ -302,8 +302,10 @@
             "derived_from",
             "satisfies",
             "verified_by",
-            "is_evidence_for"
-          ]
+            "is_evidence_for",
+            "refutes"
+          ],
+          "description": "Typed relation between node objects; refutes means the source evidence proposition contradicts or weakens the target claim."
         },
         "description": {
           "type": "string",
