@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.1",
+  "manifest_version": "3.2",
   "updated": "2026-10-27",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -10,7 +10,8 @@
     "historical_iterations": "Earlier prototype files, review reports, and change/handoff notes were distilled into 驗證/演進與驗收總結.md and removed from the active working tree. Git history remains available but is not required for ordinary handoff.",
     "source_paths": "External original source paths are not modified by this consolidation.",
     "test_results": "PASS only applies to the exact test performed; static checks never substitute for execution.",
-    "research_modules": "Research modules reuse the current data contract; they do not bypass the active acceptance gate or imply runtime validation."
+    "research_modules": "Research modules reuse the current data contract; they do not bypass the active acceptance gate or imply runtime validation.",
+    "research_review_records": "Static critique records are indexed but do not update the normative schema, acceptance status, or UI gate; runtime claims require execution evidence."
   },
   "current_status": {
     "overall": "STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED",
@@ -78,17 +79,22 @@
     {
       "role": "external_reference_index",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/參考資料/外部研究來源與技術標準索引.md",
-      "sha": "9b3c6afc22c1b0ab0f7dd8e3863976a06e783455"
+      "sha": "48f182b3002a3e4d7c67614503672747c0c4adfe"
     },
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "37f73215dfb8c82ca7d0c73464580b9fb84a058c"
+      "sha": "5bb5014f460753d952a5499dbb13feec89a87c68"
     },
     {
       "role": "bidirectional_reconstruction_research",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/雙向結構還原與缺漏推導/00_雙向結構還原與缺漏推導研究企劃_v1.0.md",
       "sha": "19814d4b8be907f34357d2029a1661e422daa02a"
+    },
+    {
+      "role": "bidirectional_critique_review",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/雙向結構還原與缺漏推導/01_教授級逆向批評與邏輯因果閉環審查_2026-10-27.md",
+      "sha": "c771f9e375a8d51a757faeef5da56238dc0ef9c1"
     }
   ],
   "test_fixtures": {
