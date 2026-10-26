@@ -1,7 +1,7 @@
 # AI 理解框架：正式資料契約與規則草案
 
 > **文件性質：** 規格草案，供桌上推演與後續原型實作  
-> **版本：** 0.2.0-draft  
+> **版本：** 0.2.1-draft  
 > **狀態：** 結構草案已建立；JSON Schema 尚未完成正式 meta-schema 驗證，跨物件規則尚未經程式執行  
 > **對應主企劃：** [AI 理解可視化與框架編輯介面研究企劃書](../AI理解可視化與框架編輯介面_研究企劃書.md)  
 > **規格檔：** [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json) · [關係規則登錄表 default-v1](./規格草案/relation-rules.default-v1.json)
@@ -49,9 +49,9 @@
 
 | 檔案 | 職責 | 目前狀態 |
 |---|---|---|
-| `規格草案/ai-understanding-model.schema.json` | JSON 欄位、型別、必填欄位及列舉值 | JSON 語法已解析；**Schema meta-validation 尚未執行** |
+| `規格草案/ai-understanding-model.schema.json` | JSON 欄位、型別、必填欄位及列舉值 | JSON 語法與 Draft 2020-12 meta-schema 驗證已通過（jsonschema 4.26.0）；完整產品整合尚未驗證 |
 | `規格草案/relation-rules.default-v1.json` | 關係類型對應的家族、循環政策與影響規則 | JSON 語法與 relation_type 集合靜態比對已通過；規則語意尚待桌上推演 |
-| `forAVArb/驗證/AI理解可視化框架/案例清單_原型推演_v0.2.md` | 正向、負向和衝突測試案例及 fixtures | 清單和 9 個 fixtures 已建立（2 個有效／證據範例及 7 個負向案例）；僅關係類型集合靜態比對為 PASS，其餘測試仍未執行 |
+| `forAVArb/驗證/AI理解可視化框架/案例清單_原型推演_v0.2.md` | 正向、負向和衝突測試案例及 fixtures | 清單有 70 個唯一案例 ID；3 個精確 fixtures 通過預期 Schema 驗證，18 個跨物件原型斷言通過；其他案例與 Runtime 尚未完成 |
 
 資料契約 schema 與關係規則登錄表有意分開：schema 定義可接受的資料形狀；規則登錄表定義關係在圖上的行為。後者可變更循環與影響政策，但必須有版本和變更紀錄。
 
@@ -176,7 +176,7 @@ URI、原始位置、短摘錄、操作者類型及擴充屬性可依來源類�
 
 目前欄位保存的是最新狀態，狀態歷史可先由 Git 記錄保留。若後續正式產品需要逐項審核者、時間、理由和覆核軌跡，應另設審核事件紀錄，不把完整審核歷史硬塞進單一節點物件。
 
-靜態一致性檢查已實際比較 Schema 的 17 個 relation_type 與 registry 的 17 個 key，確認集合相同、沒有重複值，且所有關係均具家族、意義、循環及影響欄位。檢查紀錄及 SHA 基線收錄於 [原型推演案例清單第 2.1 節](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)。這不包含 JSON Schema meta-validation 或 Runtime 測試。
+靜態一致性檢查已比較 Schema 的 17 個 relation_type 與 registry 的 17 個 key，確認集合完全一致且每類關係都有必要規則欄位。Draft 2020-12 meta-schema 已另行驗證通過。完整記錄與基線 SHA 收錄於 [原型推演案例清單第 2.1–2.2 節](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)。這不代表完整的跨物件規則、發布流程、Runtime 或使用者任務已驗收。
 
 ---
 
@@ -284,9 +284,9 @@ JSON Schema 不負責跨陣列的 ID 唯一性或節點引用是否存在；這�
 
 ## 7. 原型推演與現階段狀態
 
-測試案例清單存放在資料／驗證倉庫，以符合研究企劃、資料規格與測試資料分開管理的原則：
+測試案例清單及結果報告存放在資料／驗證倉庫，以符合研究企劃、資料規格與測試證據分開管理的原則：
 
-[原型推演案例清單：AI 理解可視化框架](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)
+[Schema 與跨物件驗證原型測試結果](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E7%B5%90%E6%9E%9C/Schema%E8%88%87%E8%B7%A8%E7%89%A9%E4%BB%B6%E9%A9%97%E8%AD%89%E5%8E%9F%E5%9E%8B%E6%B8%AC%E8%A9%A6_2026-10-26.md)； [原型推演案例清單：AI 理解可視化框架](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)
 
 其狀態須分開記錄：
 - 文件／規格檢查；
@@ -304,13 +304,13 @@ JSON Schema 不負責跨陣列的 ID 唯一性或節點引用是否存在；這�
 
 | ID | 後續項目 | 依賴 | 完成條件 | 目前狀態 |
 |---|---|---|---|---|
-| REM-01 | JSON Schema meta-validation | Schema 草案 | 經符合 Draft 2020-12 的驗證器驗證 | NOT_RUN |
-| REM-02 | 規則登錄表一致性檢查 | Schema＋關係規則 | Schema 的 relation enum 與 registry 一致，無遺漏規則 | 尚待交叉檢查 |
+| REM-01 | JSON Schema meta-validation | Schema 草案 | 經符合 Draft 2020-12 的驗證器驗證 | PASS（Meta-schema only） |
+| REM-02 | 跨物件驗證原型 | Schema＋關係規則 | 唯一 ID、引用、循環、重複邊與證據端點規則有正負例 | 18 個原型斷言 PASS；完整規則整合待完成 |
 | REM-03 | 跨物件驗證規則細化 | 資料契約 | 唯一 ID、引用、循環、自我連線均有明確結果 | 草案 |
-| REM-04 | 狀態轉換與發布門檻凍結 | 審核模型 | 所有允許和禁止轉換都有定義及反例 | 草案 |
+| REM-04 | 狀態轉換與發布門檻凍結 | 審核模型 | 所有允許和禁止轉換都有定義及反例 | 草案；發布閘門尚未執行 |
 | REM-05 | UI 互動規格 | 資料契約 | 樹狀／關係／清單、手機操作、刪除與復原有明確流程 | 未開始 |
 | REM-06 | 語意差異與影響演算法規格 | ID 和關係規則 | 每種變更及傳播政策有輸入、預期輸出 | 草案 |
-| REM-07 | 原型案例桌上推演 | 測試案例清單 | 每個核心案例有逐步結果紀錄 | NOT_RUN |
+| REM-07 | 原型案例桌上推演 | 測試案例清單 | 每個核心案例有逐步結果紀錄 | 部分完成；其餘案例 NOT_RUN |
 | REM-08 | 實作規格與模組邊界 | REM-01–07 | 模組輸入／輸出、錯誤處理和資料契約完整 | 未開始 |
 | REM-09 | 最小原型 | 實作規格 | 能新增／修改節點、建立關係、出差異並匯出 | 未開始 |
 | REM-10 | 自動化／Runtime 驗收 | 最小原型 | 測試結果、失敗紀錄和修正提交可追溯 | NOT_RUN |
