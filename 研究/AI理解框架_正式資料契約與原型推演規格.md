@@ -50,7 +50,7 @@
 | 檔案 | 職責 | 目前狀態 |
 |---|---|---|
 | `規格草案/ai-understanding-model.schema.json` | JSON 欄位、型別、必填欄位及列舉值 | JSON 語法已解析；**Schema meta-validation 尚未執行** |
-| `規格草案/relation-rules.default-v1.json` | 關係類型對應的家族、循環政策與影響規則 | JSON 語法已解析；規則尚待桌上推演 |
+| `規格草案/relation-rules.default-v1.json` | 關係類型對應的家族、循環政策與影響規則 | JSON 語法與 relation_type 集合靜態比對已通過；規則語意尚待桌上推演 |
 | `forAVArb/驗證/AI理解可視化框架/案例清單_原型推演_v0.1.md` | 正向、負向和衝突測試案例 | 待建立／待執行；尚非測試結果 |
 
 資料契約 schema 與關係規則登錄表有意分開：schema 定義可接受的資料形狀；規則登錄表定義關係在圖上的行為。後者可變更循環與影響政策，但必須有版本和變更紀錄。
@@ -162,6 +162,8 @@ URI、原始位置、短摘錄、操作者類型及擴充屬性可依來源類�
 「未修改」不會自動變成 `accepted`；來源存在不代表內容已被證實；使用者接受設計決策不代表外部事實已被科學證實。
 
 目前欄位保存的是最新狀態，狀態歷史可先由 Git 記錄保留。若後續正式產品需要逐項審核者、時間、理由和覆核軌跡，應另設審核事件紀錄，不把完整審核歷史硬塞進單一節點物件。
+
+靜態一致性檢查已實際比較 Schema 的 16 個 relation_type 與 registry 的 16 個 key，確認集合相同、沒有重複值，且所有關係均具家族、意義、循環及影響欄位。檢查紀錄及 SHA 基線收錄於 [原型推演案例清單第 2.1 節](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.1.md)。這不包含 JSON Schema meta-validation 或 Runtime 測試。
 
 ---
 
