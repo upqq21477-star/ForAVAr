@@ -2,7 +2,7 @@
 
 > **文件性質：** 原理研究與架構企劃，非實作規格、非已驗收系統  
 > **研究狀態：** 架構提案；部分設計具外部標準或研究依據，整體成效尚待驗證  
-> **版本：** 0.1.0-draft  
+> **版本：** 0.2.0-draft  
 > **日期：** 2026-10-26  
 > **主要讀者：** 企劃決策者、系統架構設計者、AI 互動設計者、後續實作人員
 
@@ -24,6 +24,12 @@
 
 ---
 
+## 本次深化研究修訂摘要
+
+本次修訂保留原企劃的核心方向，但把容易混淆的資料責任拆開：結構角色與物件類型分離；來源、命題性質、證據狀態與人類審核分離；內容修訂、資料格式版本與正式發布狀態分離；圖形視圖、語意差異和下游 AI 取用分工。版本亦新增關係類型導向的影響分析原則，避免所有修改都造成整份框架重審。
+
+理念拆分、外部工具與方法比較、演算法和取捨理由另見：[AI理解框架：理念拆分、外部方法比較與最佳適配架構](./AI理解框架_理念拆分與技術方案比較.md)。本企劃的建議方案是依目前需求形成的最佳適配起點，並非未經實測即可宣稱普遍最優。
+
 ## 目錄
 
 - [1. 研究定位與範圍](#1-研究定位與範圍)
@@ -44,7 +50,9 @@
 - [16. 主要風險與待決策事項](#16-主要風險與待決策事項)
 - [17. 建議研究與建構梯次](#17-建議研究與建構梯次)
 - [18. 結論](#18-結論)
-- [參考資料](#參考資料)
+- [19. 本次深化研究後的架構優化決議](#19-本次深化研究後的架構優化決議)
+- [參考資料]
+- [理念拆分與技術方案比較](./AI理解框架_理念拆分與技術方案比較.md)(#參考資料)
 - [名詞表](#名詞表)
 - [關鍵詞索引](#關鍵詞索引)
 
@@ -279,10 +287,13 @@ flowchart TD
 | `id` | 必要 | 穩定識別碼，不能因改名而改變 |
 | `name` | 必要 | 簡短名稱 |
 | `function` | 必要 | 一句話說明它的作用；功能型節點建議以動詞開頭 |
-| `type` | 必要 | 核心、主軸、骨架、模組、概念、條件等受控類型 |
+| `structural_role` | 必要／預設一般 | 核心、主軸、骨架、模組、細節等框架層級角色 |
+| `entity_kind` | 必要 | 目標、需求、功能、概念、條件、決策等物件本身類型 |
+| `claim_kind` | 視內容而定 | 使用者需求、設計決策、事實主張、推論、假說等命題性質 |
 | `parent_ids` 或所屬關係 | 依模型選擇 | 用於層級與群組；若允許多重隸屬，不能假設單一父節點 |
 | `provenance_refs` | 必要 | 連至來源紀錄或原始證據 |
-| `review_status` | 必要 | 待檢視、已確認、已否決、資料不足等 |
+| `review_status` | 必要 | 待檢視、已接受、已否決、爭議未解決等人工審核狀態 |
+| `evidence_status` | 有事實主張時適用 | 未核實、有支持、證據不足、有反證等證據評估 |
 | `attributes` | 選填 | 數據、限制、標籤或領域欄位 |
 | `condition_refs` | 視類型而定 | 指向啟動、完成、失敗或取消條件 |
 
@@ -342,18 +353,24 @@ flowchart TD
       "id": "node-core",
       "name": "核心目標",
       "function": "界定整體要達成的結果",
-      "type": "core",
+      "structural_role": "core",
+      "entity_kind": "goal",
+      "claim_kind": "design_decision",
       "provenance_refs": ["prov-001"],
-      "review_status": "needs_review",
+      "review_status": "pending_review",
+      "evidence_status": "not_applicable",
       "attributes": {}
     },
     {
       "id": "node-axis-a",
       "name": "需求整理",
       "function": "把原始要求整理成可檢查的項目",
-      "type": "main_axis",
+      "structural_role": "main_axis",
+      "entity_kind": "capability",
+      "claim_kind": "design_decision",
       "provenance_refs": ["prov-002"],
-      "review_status": "needs_review",
+      "review_status": "pending_review",
+      "evidence_status": "not_applicable",
       "attributes": {}
     }
   ],
@@ -362,10 +379,13 @@ flowchart TD
       "id": "edge-001",
       "source_id": "node-core",
       "target_id": "node-axis-a",
-      "type": "contains",
+      "relation_family": "structure",
+      "relation_type": "contains",
+      "impact_policy": "direct_review",
       "description": "需求整理是實現核心目標的一部分",
       "provenance_refs": ["prov-003"],
-      "review_status": "needs_review"
+      "review_status": "pending_review",
+      "evidence_status": "not_applicable"
     }
   ],
   "view_states": {
@@ -433,16 +453,17 @@ flowchart TD
 
 ### 8.3 確認狀態
 
-建議的內容確認狀態：
+人類審核狀態建議限定在一個清楚的集合：
 
-- `needs_review`：待檢視。
-- `confirmed`：使用者明確確認目前內容。
-- `revised`：內容已被修改，需依規則判斷是否重新確認。
-- `rejected`：使用者明確否決。
-- `insufficient_evidence`：資料不足，不能下結論。
-- `disputed`：存在未解決的矛盾或不同來源主張。
+- `pending_review`：尚待人類檢視。
+- `accepted`：人類接受該項內容，作為目前工作模型的一部分。
+- `rejected`：人類明確否決該項內容。
+- `disputed`：存在未解決的意見或來源衝突。
+- `needs_reconfirmation`：相關語意內容發生改變，既有接受決定可能不再適用。
 
-確認狀態必須與來源類型分離。使用者未操作某一節點，不等於已閱讀、同意或確認；系統也不能把未修改的項目自動鎖定成共識。
+「資料不足」不應同時作為審核狀態和證據狀態。對外部事實主張，另用 `evidence_status` 表達 `unverified`、`supported`、`insufficient` 或 `contradicted`；對使用者需求或設計決策，重點則是內容是否準確表達意圖，以及人類是否接受。
+
+來源／產生方式、命題性質、證據狀態和人工審核狀態需要分開。AI 推論可以有可信的來源紀錄，但仍未獲人類接受；使用者可接受某一設計決策，但這不代表相關外部事實已被證實。
 
 ### 8.4 確認後「上鎖」的正確含義
 
@@ -526,7 +547,7 @@ flowchart TD
 
 **語意驗證**包括：關係類型是否允許、必要條件是否缺漏、是否有互相矛盾的條件、某流程是否存在無法抵達的結束狀態，以及循環是否違反特定關係規則。
 
-不能把兩層檢查合併成一個「AI 認為正確」的狀態。結構檢查可以由規則確定地完成；語意檢查需明確指出依據、限制及需要人類判斷的部分。
+不能把兩層檢查合併成一個「AI 認為正確」的狀態。建議實際拆成四類：JSON Schema 結構驗證、跨物件參照與不變式檢查、按關係家族執行的圖規則，以及需要來源和人工判斷的證據／語意檢視。前三類應盡量採可重現規則；第四類可以用 AI 提示風險，但不得把 AI 的合理性評語直接視為事實證明。草稿允許不完整，發布規則再判斷哪些問題必須阻擋。
 
 ### 10.3 刪除防護
 
@@ -546,7 +567,7 @@ flowchart TD
 
 ### 11.1 版本基準
 
-初始理解草稿可以標為 `V0`，人類首次確認後形成 `V1`。此後每次正式接受的變更形成新版本。每一份差異報告必須明確記錄比較的來源版本與目標版本；不能只依靠 AI 回憶曾經改過什麼。
+初始理解草稿與首次正式發布可以使用 `V0`、`V1` 作為人類閱讀標籤，但正式識別應使用 Git commit SHA 或其他無歧義的修訂 ID。需分開管理模型內容修訂、`schema_version`、單項內容的審核狀態和整份模型的發布狀態。只有對外 API／格式相容性需要承諾時，才使用 Semantic Versioning 描述契約相容性。每一份差異報告必須記錄明確的來源版本與目標版本；不能依靠 AI 對歷史的模糊回憶。
 
 ### 11.2 差異分類
 
@@ -811,6 +832,48 @@ GraphRAG 適合把大型文字語料轉成實體、關係、摘要及檢索結�
 
 ---
 
+## 19. 本次深化研究後的架構優化決議
+
+### 19.1 優化後的總體判斷
+
+原企劃的「同一份正式資料、多種視圖、人類可直接修正、完整框架加版本差異」核心保留。此次修訂的重點不是增加子系統，而是拆開原本容易混淆的責任，使資料模型、驗證、審核、版本和展示互相配合。
+
+### 19.2 最適合目前需求的起始方案
+
+1. **正式模型：** 以 JSON 表達節點、關係、條件和必要 metadata；使用穩定 ID；允許同一對節點有多種關係。
+2. **概念分類：** 將 `structural_role`（核心／主軸／骨架等）與 `entity_kind`（目標／需求／功能／條件等）分開，避免類型維度混合。
+3. **知識治理：** 分開來源／產生方式、命題性質、證據狀態和人工審核狀態；不以單一確認欄位代表全部。
+4. **版本：** 用 Git 保存正式快照與歷史；應用層依 ID 生成語意差異。JSON Patch 可作為變更傳輸格式，但不代替語意比較。
+5. **驗證：** JSON Schema 檢查資料形狀，自訂確定性規則檢查參照完整性和關係不變式，來源與人工審核處理事實和意圖問題。
+6. **影響分析：** 只沿已定義的關係政策傳播；每個受影響項目都需提供理由和關係路徑，不進行無差別的全圖重審。
+7. **介面：** 樹狀／清單作為總覽與手機入口，節點連線圖用於局部稀疏關係，矩陣或密集關係表列為後續可選視圖。
+8. **後續 AI：** 以明確版本 ID 和任務相關子圖作為輸入契約；無法讀取指定版本時應明確回報，不得默默使用舊摘要。
+9. **技術選型：** 第一階段不強制導入圖資料庫、GraphRAG、完整 OWL/RDF、event sourcing 或 CRDT；只有實際需求和評估支持時再導入。
+
+### 19.3 哪些理念保留、修改或延後
+
+| 決策 | 原理 | 本次判斷 |
+|---|---|---|
+| 單一正式模型、多視圖 | 避免各視圖語意分裂 | 保留為核心原則 |
+| 節點名稱＋功能預設顯示 | 降低主畫面認知負擔 | 保留；底層不能只存兩欄 |
+| 核心／主軸／骨架 | 人類閱讀框架的層次 | 保留；改成結構角色維度 |
+| 節點只有單一類型欄位 | 便於初始建模 | 修改；與物件類型分離 |
+| 來源與確認分離 | 避免混淆內容來源與人類接受 | 保留並擴充為多個獨立狀態軸 |
+| 所有關係用同一套規則 | 簡化初始實作 | 不採用；依關係家族設定規則 |
+| 每次修改都全圖重檢 | 避免遺漏 | 修改成按關係政策做影響分析 |
+| 文字差異／JSON Patch | 追蹤修改 | 保留作補充；語意差異依穩定 ID 計算 |
+| 圖資料庫或 GraphRAG | 支援密集圖查詢或大型語料 | 延後，直到需求證明必要 |
+| 事件溯源／CRDT | 全事件重播或即時多方同步 | 初期不採用 |
+| 圖片視覺完整度 | 方便展示 | 不作成功標準；以錯誤發現、變更辨識和版本遵循衡量 |
+
+### 19.4 需要實測的核心假說
+
+本方案仍未通過原型驗證。至少需測試：使用者是否能更快發現 AI 的錯誤理解；推論是否常被誤認成已確認內容；差異報告是否降低變更漏看率；影響分析是否同時降低無效重審和漏檢；後續 AI 是否確實讀取指定版本。不能只以畫面完成或功能數量宣稱成功。
+
+### 19.5 延伸研究文件
+
+理念拆分、工具與演算法的詳細比較、取捨理由、測試案例及完整外部參考，整理於 [AI理解框架：理念拆分、外部方法比較與最佳適配架構](./AI理解框架_理念拆分與技術方案比較.md)。該文件是本企劃的研究依據與決策紀錄，不取代本主企劃。
+
 ## 參考資料
 
 > 下列來源用於支持本文件中所對應的技術概念、工具能力或研究結果。來源存在不代表整套設計已被證實有效。存取日期：2026-10-26。
@@ -847,6 +910,42 @@ GraphRAG 適合把大型文字語料轉成實體、關係、摘要及檢索結�
 
 ---
 
+11. **W3C.** *PROV-DM: The PROV Data Model.* https://www.w3.org/TR/prov-dm/  
+    用途：區分資料實體、產生活動、責任主體和衍生來源。
+
+12. **W3C.** *PROV-O: The PROV Ontology.* https://www.w3.org/TR/prov-o/  
+    用途：PROV 資料模型的 OWL 表達與跨系統來源互通。
+
+13. **W3C.** *Shapes Constraint Language (SHACL).* https://www.w3.org/TR/shacl/  
+    用途：RDF 圖的結構與條件驗證；只有採用 RDF 時才適用。
+
+14. **IETF.** *RFC 8785: JSON Canonicalization Scheme.* https://www.rfc-editor.org/rfc/rfc8785.html  
+    用途：需要可重現 JSON 表示和內容雜湊時的參考；屬 Informational RFC。
+
+15. **Semantic Versioning.** *Version 2.0.0.* https://semver.org/  
+    用途：公開介面相容性版本；不應取代內容修訂 ID。
+
+16. **Git.** *User Manual: Merging Multiple Trees.* https://git-scm.com/docs/user-manual  
+    用途：共同基準的三方合併。
+
+17. **Fowler, M.** *Event Sourcing.* https://martinfowler.com/eaaDev/EventSourcing.html  
+    用途：評估是否需要事件序列重播；非本企劃第一階段必要依賴。
+
+18. **OpenAI.** *Structured Outputs.* https://developers.openai.com/api/docs/guides/structured-outputs  
+    用途：以 schema 約束模型輸出格式；不代表內容正確性已得到保證。
+
+19. **Noy, N. F., & McGuinness, D. L.** *Ontology Development 101: A Guide to Creating Your First Ontology.* Stanford University. https://protege.stanford.edu/publications/ontology_development/ontology101-noy-mcguinness.html  
+    用途：能力問題、範圍界定及迭代式概念模型設計。
+
+20. **Abdelaal, M. et al.** *Comparative Evaluation of Bipartite, Node-Link, and Matrix-Based Network Representations.* IEEE TVCG, 29(1), 896–906, 2023. https://pubmed.ncbi.nlm.nih.gov/36191101/  
+    用途：不同網路圖形表示在不同任務中的比較。
+
+21. **Yoghourdjian, V. et al.** *Scalability of Network Visualisation from a Cognitive Load Perspective.* https://arxiv.org/abs/2008.07944  
+    用途：網路圖規模、密度及特定任務認知負荷的研究。
+
+22. **NetworkX.** *strongly_connected_components.* https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.components.strongly_connected_components.html  
+    用途：有向圖強連通分量與 Tarjan 演算法的實作參考。
+
 ## 名詞表
 
 | 名詞 | 本企劃中的意思 |
@@ -876,7 +975,11 @@ GraphRAG 適合把大型文字語料轉成實體、關係、摘要及檢索結�
 - **啟動／結束條件：** [6.4 條件欄位](#64-條件欄位)、[7. 關係語意](#7-關係語意與條件規則)
 - **來源追蹤：** [4.1 W3C PROV](#41-資料來源追蹤w3c-prov)、[6.5 來源與確認紀錄](#65-來源紀錄與確認紀錄)
 - **確認狀態：** [8.3 確認狀態](#83-確認狀態)、[11.6 未修改內容](#116-未修改內容與確認狀態)
-- **版本管理：** [11. 版本與差異](#11-版本差異與衝突管理)
+- **版本管理：** [11. 版本與差異](#11-版本差異與衝突管理)、[19. 架構優化決議](#19-本次深化研究後的架構優化決議)
+- **結構角色與物件類型：** [6.2 節點欄位](#62-節點欄位)、[理念拆分研究](./AI理解框架_理念拆分與技術方案比較.md)
+- **命題性質與證據狀態：** [8.3 確認狀態](#83-確認狀態)、[理念拆分研究](./AI理解框架_理念拆分與技術方案比較.md)
+- **語意差異與影響分析：** [11.2 差異分類](#112-差異分類)、[理念拆分研究](./AI理解框架_理念拆分與技術方案比較.md)
+- **最佳適配方案：** [19. 本次深化研究後的架構優化決議](#19-本次深化研究後的架構優化決議)
 - **差異比對：** [4.6 差異圖研究](#46-差異圖研究)、[11.2 差異分類](#112-差異分類)
 - **衝突處理：** [11.5 三方比較](#115-三方比較與衝突)
 - **JSON／Schema：** [4.2 JSON Schema](#42-結構驗證json-schema)、[12.2 機器讀取格式](#122-機器讀取格式json)
