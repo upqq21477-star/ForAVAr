@@ -2,7 +2,7 @@
 
 > **文件性質：** 深度研究紀錄與架構決策分析  
 > **對應主企劃：** [AI 理解可視化與框架編輯介面研究企劃書](./AI理解可視化與框架編輯介面_研究企劃書.md)  
-> **版本：** 0.2.0  
+> **版本：** 0.3.0  
 > **研究日期：** 2026-10-26  
 > **狀態：** 方案比較完成；最佳適配方案為研究建議，尚未經原型實測  
 > **範圍聲明：** 本文件比較概念、標準、方法與演算法；不代表相關軟體已實作或整體效果已被證明。
@@ -394,17 +394,16 @@ flowchart TD
 
 模型應允許同一對節點具有不同的關係。例如 A 可能「依賴 B」，同時又「受到 B 影響」。因此，不能簡化成每對節點只有一條無類型的連線。
 
-推薦欄位：
+推薦儲存欄位：
 - `id`、`source_id`、`target_id`；
-- `relation_family`，如 structure、dependency、sequence、causal、trigger、dataflow；
-- `relation_type`，如 contains、depends_on、precedes、influences、triggers、transfers_data_to；
-- `description`；
-- `provenance_refs`；
-- `review_status`；
-- `impact_policy`，例如 none、direct_review、propagate_review；
-- 若必要則有 `condition_ref`。
+- `relation_type`（唯一的正式關係類型）；
+- `description`、`provenance_refs`、`review_status`；
+- 視情況使用 `evidence_status`、`condition_refs` 和 `attributes`。
+
+**不在每條邊重複保存 `relation_family` 或 `impact_policy`。** 這些屬性由 `rule_profile + relation_type` 從關係規則登錄表推導，減少同一關係被指定成不同家族或衝突影響政策的風險。正式契約和登錄表分別見 [正式資料契約](./AI理解框架_正式資料契約與原型推演規格.md)、[JSON Schema](./規格草案/ai-understanding-model.schema.json) 與 [relation-rules.default-v1.json](./規格草案/relation-rules.default-v1.json)。
 
 「支持證據」或「由某來源產生」可由來源引用和來源紀錄表達；若需要在使用者視圖中把它們當作可獨立查詢的節點關係，才建立專用的治理視圖，不把治理邊與所有業務語意邊混為一談。
+
 
 ### 6.3 關係家族和循環規則
 
@@ -690,7 +689,7 @@ L0–L3 應優先使用可重現的確定性規則。L4 可以使用規則、外
 
 研究階段的完成標準是：責任和狀態清楚、候選方案有比較依據、目標可追溯到驗收方法、未決事項有處置方式。原型與實際程式驗證在後續階段執行；沒有實測證據，不宣稱系統成效已獲證明。
 
-詳細端到端流程、追溯矩陣、狀態機、發布門檻和各階段完成條件，收錄於主企劃第 21 章：[AI 理解可視化與框架編輯介面研究企劃書](./AI理解可視化與框架編輯介面_研究企劃書.md)。
+詳細端到端流程、追溯矩陣、狀態機與發布門檻收錄於主企劃第 21 章；剩餘步驟、依賴順序和完成條件收錄於第 22 章：[AI 理解可視化與框架編輯介面研究企劃書](./AI理解可視化與框架編輯介面_研究企劃書.md)。資料契約規格在 [正式資料契約草案](./AI理解框架_正式資料契約與原型推演規格.md)；驗證案例與 fixtures 位於 [原型推演案例清單](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.1.md)，測試狀態以該處紀錄為準。
 
 ## 參考資料
 
