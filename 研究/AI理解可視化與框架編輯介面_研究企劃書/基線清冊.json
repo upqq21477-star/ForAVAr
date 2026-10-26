@@ -1,234 +1,95 @@
 {
-  "project": "AI理解可視化與框架編輯介面_研究企劃書",
-  "version": "2.1.0",
+  "project": "AI理解可視化與框架編輯介面",
+  "manifest_version": "3.0",
   "updated": "2026-10-27",
   "repository": "upqq21477-star/forAVAr",
-  "branch": "main",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
   "policy": {
     "single_source_of_truth": true,
-    "all_future_artifacts_must_be_inside_this_folder": true,
-    "original_files_outside_folder": "preserve unchanged",
-    "central_sha": "Git blob SHA of working copy",
-    "source_sha": "Git blob SHA of original source, when applicable",
-    "test_results": "Never transfer PASS across different code/rule baselines",
-    "external_duplicate_working_folder": "已清除助手先前建立於 forAVArb 的 12 個重複工作副本；原始歷史來源路徑保留，只作追溯，不作為更新位置。"
+    "active_versions": "One current validator, one current cross-object ruleset, one case list, one finite acceptance plan, one consolidated result summary.",
+    "historical_iterations": "Earlier prototype files, review reports, and change/handoff notes were distilled into 驗證/演進與驗收總結.md and removed from the active working tree. Git history remains available but is not required for ordinary handoff.",
+    "source_paths": "External original source paths are not modified by this consolidation.",
+    "test_results": "PASS only applies to the exact test performed; static checks never substitute for execution."
   },
-  "status": {
-    "schema_meta_validation": "PASS recorded for exact schema SHA 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be using jsonschema 4.26.0; not Runtime",
-    "historical_assertions": "18 PASS apply only to validator v0.1 + rules v0.2.0-draft",
-    "candidate": "validator v0.2.1 + rules v0.3.0-draft = STATIC_PATCHED / NOT_RUN",
-    "fixture_gap": "8 fixture files centralized: 2 valid/evidence + 6 negative. Older checklist says 7 negative; one file is unlocated and remains unresolved.",
-    "runtime_ui_e2e": "NOT_TESTED",
-    "current_candidate_test": {
-      "report_path": "驗證/結果/候選驗證器v0.2.1_有限驗收_2026-10-27.md",
-      "report_sha": "73f2a5f32e7a0ad00ad700600eccab1ee82065e8",
-      "result": "7 static checks PASS; Python syntax/CLI/regression/directed tests BLOCKED or NOT_RUN",
-      "stop_condition": "NOT_MET; UI planning and implementation remain gated"
+  "current_status": {
+    "overall": "STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED",
+    "static_checks": "7/7 PASS",
+    "candidate_execution": "BLOCKED / NOT_RUN",
+    "ui_planning_gate": "NOT_MET; do not start UI requirements or implementation",
+    "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated."
+  },
+  "current_baseline": [
+    {
+      "role": "main_proposal",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
+      "sha": "6f836aa88a675afcf0051718060a2aab5daba25c"
     },
-    "documentation_consolidation": "2026-10-27: main proposal distilled from ~1300 to 186 lines; technical comparison from ~804 to ~70 lines; references centralized; handoff and retention decisions added."
-  },
-  "files": [
-    [
-      "README.md",
-      "4b46f36703802ac96991346a02e8af490f1f536c"
-    ],
-    [
-      "AI理解可視化與框架編輯介面_研究企劃書.md",
-      "8a5fcba90a45e75400695f308308eead07250066",
-      "研究/AI理解可視化與框架編輯介面_研究企劃書.md",
-      "f0ef13950cdf255d79c5866e132bca7b321a039d"
-    ],
-    [
-      "AI理解框架_正式資料契約與原型推演規格.md",
-      "0c1156580d6664588fffbf1e5d6c8b52f7cf156a",
-      "研究/AI理解框架_正式資料契約與原型推演規格.md",
-      "8472753256d4d30dd8d8d4a15a6ef8ea92fd2d4b"
-    ],
-    [
-      "AI理解框架_理念拆分與技術方案比較.md",
-      "19b837e01319e4efdde248dc0d44ce0f7bc950bf",
-      "研究/AI理解框架_理念拆分與技術方案比較.md",
-      "645e4a97e9c427c3897b2f19e73ae3766fd9c9aa"
-    ],
-    [
-      "規格草案/ai-understanding-model.schema.json",
-      "02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be",
-      "研究/規格草案/ai-understanding-model.schema.json",
-      "02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be"
-    ],
-    [
-      "規格草案/relation-rules.default-v1.json",
-      "291087a0902f4b0f590fe16c666bf6b3fc1e1ed2",
-      "研究/規格草案/relation-rules.default-v1.json",
-      "291087a0902f4b0f590fe16c666bf6b3fc1e1ed2"
-    ],
-    [
-      "下一階段工作計畫.md",
-      "30d0e82bfc49545ca858f023ca108b1d7868bead"
-    ],
-    [
-      "下一輪有限驗收計畫.md",
-      "6226f84d441424e74285e7b62de8d3e3a69661c4",
-      "由本企劃集中資料夾維護；先前重複工作副本已清除"
-    ],
-    [
-      "變更紀錄.md",
-      "0fbbca4d31f8b286fd1c7604b62c844d674f66fa"
-    ],
-    [
-      "驗證/案例清單_原型推演_v0.2.md",
-      "55f32f964eb24446c2e0edfa09da584044e8a390",
-      "驗證/AI理解可視化框架/案例清單_原型推演_v0.2.md",
-      "02549a0e2b4ab86360f9a8efb1d9d249a08b6092"
-    ],
-    [
-      "驗證/規則/cross-object-validation.default-v1.json",
-      "ca393b5761a4bf3c72c807770a56cc3aea6a8e39",
-      "驗證/AI理解可視化框架/規則/cross-object-validation.default-v1.json",
-      "ca393b5761a4bf3c72c807770a56cc3aea6a8e39"
-    ],
-    [
-      "驗證/規則/狀態機與發布門檻_v0.1.md",
-      "7e254804bd5e4f0dc51dbceddb0f7e555957fba7",
-      "驗證/AI理解可視化框架/規則/狀態機與發布門檻_v0.1.md",
-      "d39f108f7908591d5f2752030977169eae95796a"
-    ],
-    [
-      "驗證/歷史基線/cross-object-validation.default-v1_v0.2.0-draft.json",
-      "036cf96eacae6855518bf72c19522597b83ed7c3",
-      "驗證/AI理解可視化框架/規則/cross-object-validation.default-v1.json@0bd97b6255ca08b8500f087857a19916a8201bd2",
-      "036cf96eacae6855518bf72c19522597b83ed7c3"
-    ],
-    [
-      "驗證/結果/Schema與跨物件驗證原型測試_2026-10-26.md",
-      "ebcba80faa53d938b0e50cde4cd62013214e1c51",
-      "驗證/AI理解可視化框架/結果/Schema與跨物件驗證原型測試_2026-10-26.md",
-      "44b251f4044d8bfc114624eebdb5e74dbed212c1"
-    ],
-    [
-      "驗證/審查記錄_資料契約反方審查_2026-10-26.md",
-      "7c49f097b1e378afe53b5731237a29c8ca35c05f",
-      "驗證/AI理解可視化框架/審查記錄_資料契約反方審查_2026-10-26.md",
-      "7c49f097b1e378afe53b5731237a29c8ca35c05f"
-    ],
-    [
-      "驗證/審查記錄_驗證器實作覆蓋率_2026-10-26.md",
-      "5ef34b2ce67197ef0ce395d8335d7e3558b4dae5",
-      "驗證/AI理解可視化框架/審查記錄_驗證器實作覆蓋率_2026-10-26.md",
-      "92f2b80c9fd1ab51a92cca30fdb961f8f5ea7984"
-    ],
-    [
-      "驗證/靜態審查記錄_候選驗證器v0.2_2026-10-27.md",
-      "60a99b23bb254253b61cec17f3bab6b2be06c246",
-      "直接維護於本企劃集中資料夾；不是外部來源檔"
-    ],
-    [
-      "實驗/validator_prototype_v0.1.py",
-      "e53ef2fb5d19296049adabbd24efd930226ad05b",
-      "實驗/AI理解可視化框架/validator_prototype_v0.1.py",
-      "e53ef2fb5d19296049adabbd24efd930226ad05b"
-    ],
-    [
-      "實驗/validator_prototype_v0.2.py",
-      "e615209ac5ffb325fc50c6f8d0ac8fa73ac18cbc",
-      "實驗/AI理解可視化框架/validator_prototype_v0.2.py",
-      "e615209ac5ffb325fc50c6f8d0ac8fa73ac18cbc"
-    ],
-    [
-      "實驗/validator_prototype_v0.2.1.py",
-      "56d2c592f89d30a0c6c9e5179c13a844d206bab0",
-      "derived_from:實驗/validator_prototype_v0.2.py@e615209ac5ffb325fc50c6f8d0ac8fa73ac18cbc"
-    ],
-    [
-      "驗證/fixtures/minimal-valid-model_v0.1.json",
-      "db3875c480e0044be6c436bc2c3fec4039f86879",
-      "驗證/AI理解可視化框架/fixtures/minimal-valid-model_v0.1.json",
-      "db3875c480e0044be6c436bc2c3fec4039f86879"
-    ],
-    [
-      "驗證/fixtures/evidence-support-and-refutes_v0.2.json",
-      "1dd527f545ff3b1bfce50d6c1fdca5127305d4e9",
-      "驗證/AI理解可視化框架/fixtures/evidence-support-and-refutes_v0.2.json",
-      "1dd527f545ff3b1bfce50d6c1fdca5127305d4e9"
-    ],
-    [
-      "驗證/fixtures/invalid-custom-kind-missing-detail_v0.1.json",
-      "b34cf0600bf0de12df60d42d794bb97f1df904b5",
-      "驗證/AI理解可視化框架/fixtures/invalid-custom-kind-missing-detail_v0.1.json",
-      "b34cf0600bf0de12df60d42d794bb97f1df904b5"
-    ],
-    [
-      "驗證/fixtures/invalid-duplicate-node-id_v0.1.json",
-      "078ec55bbf11e2fee7bc5cd56ab2483301612719",
-      "驗證/AI理解可視化框架/fixtures/invalid-duplicate-node-id_v0.1.json",
-      "078ec55bbf11e2fee7bc5cd56ab2483301612719"
-    ],
-    [
-      "驗證/fixtures/invalid-missing-edge-target_v0.1.json",
-      "8c0669ec5a30028ee612ae18de8c5aa868d6896b",
-      "驗證/AI理解可視化框架/fixtures/invalid-missing-edge-target_v0.1.json",
-      "8c0669ec5a30028ee612ae18de8c5aa868d6896b"
-    ],
-    [
-      "驗證/fixtures/invalid-machine-condition-missing-expression_v0.1.json",
-      "1ed9593f89847e6cdc59f26c75b92383d0bcc6d8",
-      "驗證/AI理解可視化框架/fixtures/invalid-machine-condition-missing-expression_v0.1.json",
-      "1ed9593f89847e6cdc59f26c75b92383d0bcc6d8"
-    ],
-    [
-      "驗證/fixtures/invalid-edge-derived-policy-duplicate_v0.1.json",
-      "4abe11925d5fe2292c4e4fc3332b0b04f8b0796e",
-      "驗證/AI理解可視化框架/fixtures/invalid-edge-derived-policy-duplicate_v0.1.json",
-      "4abe11925d5fe2292c4e4fc3332b0b04f8b0796e"
-    ],
-    [
-      "驗證/fixtures/invalid-unknown-relation-type_v0.1.json",
-      "38e5dd724fd170a484bcbda1deda9e8695d75076",
-      "驗證/AI理解可視化框架/fixtures/invalid-unknown-relation-type_v0.1.json",
-      "38e5dd724fd170a484bcbda1deda9e8695d75076"
-    ],
-    [
-      "驗證/結果/候選驗證器v0.2.1_有限驗收_2026-10-27.md",
-      "73f2a5f32e7a0ad00ad700600eccab1ee82065e8",
-      "new result report created 2026-10-27",
-      "STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED"
-    ],
-    [
-      "參考資料/外部研究來源與技術標準索引.md",
-      "9b3c6afc22c1b0ab0f7dd8e3863976a06e783455",
-      "created in authoritative project folder",
-      null
-    ],
-    [
-      "交接/交接總覽_2026-10-27.md",
-      "b2a76f7d9f7d25cb25cecafa7e83107ee33ffc13",
-      "created in authoritative project folder",
-      null
-    ],
-    [
-      "資料去留與歸檔判定.md",
-      "bfb90e31f69b8c331322a7853f9aea81123fcfe5",
-      "created in authoritative project folder",
-      null
-    ]
+    {
+      "role": "data_contract",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解框架_正式資料契約與原型推演規格.md",
+      "sha": "8b47a5a10805ce65cb873379a1b0c9389181e153"
+    },
+    {
+      "role": "architecture_decision_summary",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解框架_理念拆分與技術方案比較.md",
+      "sha": "19b837e01319e4efdde248dc0d44ce0f7bc950bf"
+    },
+    {
+      "role": "json_schema",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/ai-understanding-model.schema.json",
+      "sha": "02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be"
+    },
+    {
+      "role": "relation_registry",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/relation-rules.default-v1.json",
+      "sha": "291087a0902f4b0f590fe16c666bf6b3fc1e1ed2"
+    },
+    {
+      "role": "cross_object_rules",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/驗證/規則/cross-object-validation.default-v1.json",
+      "sha": "a908b0cce16047ac499c7632534455f372d66a62"
+    },
+    {
+      "role": "state_machine",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/驗證/規則/狀態機與發布門檻.md",
+      "sha": "4839cecd91131a3b3b406af38dd0ea1a7d664d53"
+    },
+    {
+      "role": "test_case_catalog",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/驗證/案例清單.md",
+      "sha": "63c47ea7e450ac10908bb4286393f96775ebd42a"
+    },
+    {
+      "role": "current_validator_candidate",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/實驗/validator_prototype.py",
+      "sha": "56d2c592f89d30a0c6c9e5179c13a844d206bab0"
+    },
+    {
+      "role": "finite_acceptance_plan",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
+      "sha": "27c68c79e7b135ddc8d8e9a5793dd6c5365d869f"
+    },
+    {
+      "role": "consolidated_evolution_and_test_summary",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/驗證/演進與驗收總結.md",
+      "sha": "5c70b4669f55404c566285351d1595b4933c7cb4"
+    },
+    {
+      "role": "external_reference_index",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/參考資料/外部研究來源與技術標準索引.md",
+      "sha": "9b3c6afc22c1b0ab0f7dd8e3863976a06e783455"
+    },
+    {
+      "role": "readme",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
+      "sha": "de8ad9351a0ee8d2379f56f4f81aceec35418ffe"
+    }
   ],
-  "notes": [
-    "Each files[] record is [central_relative_path, central_blob_sha, optional_source_path_or_derived_from, optional_source_blob_sha].",
-    "The manifest itself is excluded from files[] to avoid self-referential hashing; retrieve its current Git blob SHA from GitHub."
-  ],
-  "last_cleanup": {
-    "date": "2026-10-27",
-    "repository": "upqq21477-star/forAVArb",
-    "deleted_duplicate_files": 12,
-    "duplicate_folder": "AI理解可視化與框架編輯介面_研究企劃書/",
-    "verification": "All 12 duplicate paths returned NOT_FOUND after deletion.",
-    "preserved_legacy_sources": [
-      "驗證/AI理解可視化框架/案例清單_原型推演_v0.2.md",
-      "驗證/AI理解可視化框架/規則/cross-object-validation.default-v1.json",
-      "驗證/AI理解可視化框架/結果/Schema與跨物件驗證原型測試_2026-10-26.md",
-      "實驗/AI理解可視化框架/validator_prototype_v0.1.py",
-      "實驗/AI理解可視化框架/validator_prototype_v0.2.py"
-    ]
+  "test_fixtures": {
+    "folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/驗證/fixtures/",
+    "located_count": 8,
+    "valid_or_evidence_count": 2,
+    "negative_count": 6,
+    "individual_hashes_intentionally_omitted": true
   }
 }

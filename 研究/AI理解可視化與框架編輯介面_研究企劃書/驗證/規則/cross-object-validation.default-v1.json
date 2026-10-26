@@ -1,8 +1,8 @@
 {
   "validation_profile": "cross-object-v1",
   "version": "0.3.0-draft",
-  "status": "specification_candidate_prototype_v0.2_not_executed",
-  "scope": "Mostly deterministic validation rules that cannot be guaranteed by JSON Schema alone, with explicitly marked manual-review-only policy items. This registry is a specification artifact; prototype v0.2 has not been executed.",
+  "status": "current_candidate_not_executed",
+  "scope": "Mostly deterministic validation rules that cannot be guaranteed by JSON Schema alone, with explicitly marked manual-review-only policy items. This registry is the current specification candidate; the current validator candidate has not been executed.",
   "inputs": {
     "model_contract": "ai-understanding-model.schema.json",
     "relation_profile": "default-v1",
