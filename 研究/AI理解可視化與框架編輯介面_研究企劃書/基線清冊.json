@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.0",
+  "manifest_version": "3.1",
   "updated": "2026-10-27",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -9,7 +9,8 @@
     "active_versions": "One current validator, one current cross-object ruleset, one case list, one finite acceptance plan, one consolidated result summary.",
     "historical_iterations": "Earlier prototype files, review reports, and change/handoff notes were distilled into 驗證/演進與驗收總結.md and removed from the active working tree. Git history remains available but is not required for ordinary handoff.",
     "source_paths": "External original source paths are not modified by this consolidation.",
-    "test_results": "PASS only applies to the exact test performed; static checks never substitute for execution."
+    "test_results": "PASS only applies to the exact test performed; static checks never substitute for execution.",
+    "research_modules": "Research modules reuse the current data contract; they do not bypass the active acceptance gate or imply runtime validation."
   },
   "current_status": {
     "overall": "STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED",
@@ -22,7 +23,7 @@
     {
       "role": "main_proposal",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
-      "sha": "48a4419315ad3a7726505cd7b52eabd959437263"
+      "sha": "7a9f55c803538dc7f7ddc45dc32bad1fcab2a573"
     },
     {
       "role": "data_contract",
@@ -82,7 +83,12 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "de8ad9351a0ee8d2379f56f4f81aceec35418ffe"
+      "sha": "37f73215dfb8c82ca7d0c73464580b9fb84a058c"
+    },
+    {
+      "role": "bidirectional_reconstruction_research",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/雙向結構還原與缺漏推導/00_雙向結構還原與缺漏推導研究企劃_v1.0.md",
+      "sha": "19814d4b8be907f34357d2029a1661e422daa02a"
     }
   ],
   "test_fixtures": {
