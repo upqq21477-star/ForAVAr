@@ -1,0 +1,68 @@
+{
+  "schema_version": "0.2.0",
+  "model_id": "model-ai-understanding-demo",
+  "title": "負向案例：自訂物件類型缺欄位",
+  "purpose": "用於桌上推演正式資料模型的節點、關係與來源引用。",
+  "model_state": "draft",
+  "rule_profile": "default-v1",
+  "nodes": [
+    {
+      "id": "node-core",
+      "name": "理解模型可檢查",
+      "function": "讓人類能閱讀並修正 AI 形成的框架理解。",
+      "structural_role": "core",
+      "entity_kind": "goal",
+      "claim_kind": "design_decision",
+      "review_status": "pending_review",
+      "evidence_status": "not_applicable",
+      "provenance_refs": [
+        "src-user-001"
+      ],
+      "condition_refs": [],
+      "attributes": {}
+    },
+    {
+      "id": "node-axis-a",
+      "name": "結構化呈現",
+      "function": "將核心目標拆成可閱讀、可編輯的主軸與節點。",
+      "structural_role": "main_axis",
+      "entity_kind": "custom",
+      "claim_kind": "design_decision",
+      "review_status": "pending_review",
+      "evidence_status": "not_applicable",
+      "provenance_refs": [
+        "src-user-001"
+      ],
+      "condition_refs": [],
+      "attributes": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-core-axis-a",
+      "source_id": "node-core",
+      "target_id": "node-axis-a",
+      "relation_type": "contains",
+      "description": "結構化呈現是可檢查理解模型的一部分。",
+      "review_status": "pending_review",
+      "evidence_status": "not_applicable",
+      "provenance_refs": [
+        "src-user-001"
+      ],
+      "condition_refs": [],
+      "attributes": {}
+    }
+  ],
+  "conditions": [],
+  "sources": [
+    {
+      "id": "src-user-001",
+      "source_type": "user_input",
+      "label": "示例需求：希望看見框架核心與主軸，並能修改內容。",
+      "locator": "fixture-source",
+      "excerpt": "需要可閱讀、可編輯的框架結構。",
+      "actor_type": "user",
+      "captured_at": "2026-10-26T09:00:00Z"
+    }
+  ]
+}
