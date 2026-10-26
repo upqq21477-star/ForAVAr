@@ -1131,7 +1131,7 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 - [正式資料契約與原型推演規格](./AI理解框架_正式資料契約與原型推演規格.md)
 - [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json)
 - [關係規則登錄表](./規格草案/relation-rules.default-v1.json)
-- [原型推演案例清單（forAVArb）](./驗證/案例清單_原型推演_v0.2.md)
+- [本企劃集中資料夾：原型推演案例清單](./驗證/案例清單_原型推演_v0.2.md)
 - [上一版驗證器原型 v0.1（已測基線）](./實驗/validator_prototype_v0.1.py)
 - [原始驗證器候選 v0.2（未修改基線）](./實驗/validator_prototype_v0.2.py)
 - [修正版驗證器候選 v0.2.1（尚未執行）](./實驗/validator_prototype_v0.2.1.py)
