@@ -25,7 +25,7 @@
     {
       "role": "main_proposal",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
-      "sha": "40f82add28d047911294beaa17843f525bc1bdf7"
+      "sha": "fe90aca45a72848b43e8c64b329c6a4ffbc62dd6"
     },
     {
       "role": "data_contract",
@@ -85,7 +85,7 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "90b9d39634d3c0f8bc42b8d8b1ed1b31b7489a4a"
+      "sha": "027471e79ac496e169412d0fc8b57485dbc88f88"
     }
   ],
   "test_fixtures": {
