@@ -20,7 +20,7 @@
 4. 人工審核狀態和證據狀態分開；不適用的欄位可標為 `not_applicable`，不強迫所有物件填滿所有狀態。
 5. 模型修訂以 Git commit 或等效的不可混淆修訂 ID 定位；`schema_version` 只代表資料契約版本，不代表內容版本。
 
-本文件不是已驗證的生產規格。正式實作前仍要完成 schema 的 meta-validation、跨陣列參照檢查、狀態轉換規則和測試案例推演。
+本文件不是已驗證的生產規格。Schema 0.2.0 的 Draft 2020-12 meta-validation 已在固定 SHA 上有歷史 PASS；跨陣列參照、目前跨物件規則 0.3.0-draft、驗證器 v0.2.1、狀態轉換、發布閘門與完整案例回歸尚未全部實際執行。現況與逐項證據以 2026-10-27 的有限驗收紀錄為準。
 
 ---
 
@@ -345,4 +345,4 @@ JSON Schema 不負責跨陣列的 ID 唯一性或節點引用是否存在；這�
 
 ## 文件狀態聲明
 
-這是資料契約與驗證設計草案，不是已執行的軟體測試報告。JSON Schema 檔與關係規則檔目前只完成 JSON 語法解析及基本欄位一致性規劃；正式 Draft 2020-12 meta-validation、跨物件規則自動化、桌上推演、Runtime 和使用者測試仍需依第 8 節逐步執行。
+這是資料契約與驗證設計草案，不是已驗收的生產規格。Draft 2020-12 meta-validation 的歷史 PASS 僅適用 Schema blob SHA 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be；舊版 18 項原型斷言只適用 validator v0.1 + cross-object rules 0.2.0-draft。候選 validator v0.2.1 與 rules 0.3.0-draft 尚未執行，2026-10-27 靜態前置檢查 7 項 PASS 但 Python 執行、回歸及定向測試 BLOCKED。Runtime、UI 與使用者任務驗收尚未開始。詳見 [目前候選有限驗收紀錄](./驗證/結果/候選驗證器v0.2.1_有限驗收_2026-10-27.md)。
