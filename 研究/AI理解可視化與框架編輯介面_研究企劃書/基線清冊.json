@@ -11,7 +11,8 @@
     "original_files_outside_folder": "preserve unchanged",
     "central_sha": "Git blob SHA of working copy",
     "source_sha": "Git blob SHA of original source, when applicable",
-    "test_results": "Never transfer PASS across different code/rule baselines"
+    "test_results": "Never transfer PASS across different code/rule baselines",
+    "external_duplicate_working_folder": "已清除助手先前建立於 forAVArb 的 12 個重複工作副本；原始歷史來源路徑保留，只作追溯，不作為更新位置。"
   },
   "status": {
     "schema_meta_validation": "PASS recorded for exact schema SHA 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be using jsonschema 4.26.0; not Runtime",
@@ -62,8 +63,7 @@
     [
       "下一輪有限驗收計畫.md",
       "4ef82c424b829b7b962f18ff8f6d95522c6aa06b",
-      "AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "78b4778fb1718ceceb4d9896f1a7060d468a1ecf"
+      "由本企劃集中資料夾維護；先前重複工作副本已清除"
     ],
     [
       "變更紀錄.md",
@@ -113,7 +113,8 @@
     ],
     [
       "驗證/靜態審查記錄_候選驗證器v0.2_2026-10-27.md",
-      "60a99b23bb254253b61cec17f3bab6b2be06c246"
+      "60a99b23bb254253b61cec17f3bab6b2be06c246",
+      "直接維護於本企劃集中資料夾；不是外部來源檔"
     ],
     [
       "實驗/validator_prototype_v0.1.py",
