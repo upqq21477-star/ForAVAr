@@ -296,7 +296,7 @@ JSON Schema 不負責跨陣列的 ID 唯一性或節點引用是否存在；這�
 - 實際 Runtime 行為；
 - 使用者任務評估。
 
-本文件建立時未執行正式 Schema validator、圖演算法程式測試或 Runtime 測試，故不能將這些項目標記為 PASS。
+在本文件最初建立時，尚未執行正式 Schema validator、圖演算法程式測試或 Runtime 測試。後續已有 Schema meta-validation 與有限範圍的跨物件原型結果，見上表與本文件 REM-01／REM-02；這些結果不代表完整產品整合或 Runtime 通過。
 
 ---
 
