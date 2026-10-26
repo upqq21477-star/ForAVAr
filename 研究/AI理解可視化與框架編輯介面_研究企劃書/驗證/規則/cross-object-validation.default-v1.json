@@ -1,0 +1,427 @@
+{
+  "validation_profile": "cross-object-v1",
+  "version": "0.3.0-draft",
+  "status": "specification_candidate_prototype_v0.2_not_executed",
+  "scope": "Mostly deterministic validation rules that cannot be guaranteed by JSON Schema alone, with explicitly marked manual-review-only policy items. This registry is a specification artifact; prototype v0.2 has not been executed.",
+  "inputs": {
+    "model_contract": "ai-understanding-model.schema.json",
+    "relation_profile": "default-v1",
+    "allowed_collections": [
+      "nodes",
+      "edges",
+      "conditions",
+      "sources"
+    ]
+  },
+  "phases": [
+    {
+      "id": "L0",
+      "name": "JSON parsing",
+      "failure_action": "reject_input",
+      "rules": [
+        "VLD-001"
+      ]
+    },
+    {
+      "id": "L1",
+      "name": "JSON Schema validation",
+      "failure_action": "reject_input",
+      "rules": [
+        "VLD-002",
+        "VLD-003"
+      ]
+    },
+    {
+      "id": "L2",
+      "name": "Cross-object integrity",
+      "failure_action": "block_publish_and_report",
+      "rules": [
+        "VLD-101",
+        "VLD-102",
+        "VLD-103",
+        "VLD-104",
+        "VLD-105",
+        "VLD-106"
+      ]
+    },
+    {
+      "id": "L3",
+      "name": "Typed graph semantics",
+      "failure_action": "block_or_warn_by_rule",
+      "rules": [
+        "VLD-201",
+        "VLD-202",
+        "VLD-203",
+        "VLD-204",
+        "VLD-206"
+      ]
+    },
+    {
+      "id": "L4",
+      "name": "Evidence and review governance",
+      "failure_action": "mark_claim_state_or_block_release",
+      "rules": [
+        "VLD-301",
+        "VLD-302",
+        "VLD-303"
+      ]
+    },
+    {
+      "id": "L5",
+      "name": "Release gate",
+      "failure_action": "block_publication",
+      "rules": [
+        "VLD-401",
+        "VLD-402",
+        "VLD-403",
+        "VLD-404",
+        "VLD-405",
+        "VLD-406",
+        "VLD-407"
+      ]
+    }
+  ],
+  "defaults": {
+    "global_id_namespace": true,
+    "self_loop_policy": "forbidden_for_all_relation_types_in_v1",
+    "duplicate_edge_policy": {
+      "semantic_key": "relation_type plus canonical endpoints plus canonical condition_refs",
+      "symmetric_endpoint_normalization": "sort endpoint IDs when relation registry marks relation symmetric",
+      "condition_refs_semantics": "all listed conditions apply conjunctively (AND) in v1; OR alternatives must use distinct edges with distinct condition sets",
+      "provenance_handling": "different provenance alone does not make a distinct edge; merge source refs only after human confirmation",
+      "attribute_conflicts": "do not auto-merge different attributes; report conflict for human resolution"
+    },
+    "reference_policy": "referenced_id_must_exist_in_the_expected_collection",
+    "unknown_relation_policy": "block_validation_dependent_actions",
+    "unknown_rule_profile_policy": "block_publish_and_impact_analysis",
+    "cycle_detection_scope": "per_relation_type",
+    "mixed_relation_cycle_policy": "warn_in_v1; publication requires the exact cycle path and explicit human acknowledgement in release record; do not infer a forbidden cycle unless a combined constraint is registered",
+    "impact_walk": {
+      "visited_key": "node_id_plus_triggering_change_id",
+      "deduplicate_results_by": "node_id",
+      "preserve": [
+        "triggering_change_id",
+        "relation_path",
+        "rule_profile",
+        "reason"
+      ],
+      "on_unknown_edge_rule": "stop_affected_path_and_report_unknown",
+      "on_no_path": "report_no_path_found_not_no_impact"
+    },
+    "cycle_warning_policy": "cycles with cycle_policy warn may remain in drafts; published releases must include the exact warning paths and an explicit human acknowledgement in the release record"
+  },
+  "rules": [
+    {
+      "id": "VLD-001",
+      "phase": "L0",
+      "severity": "error",
+      "condition": "Input is not valid JSON",
+      "action": "reject_input"
+    },
+    {
+      "id": "VLD-002",
+      "phase": "L1",
+      "severity": "error",
+      "condition": "Input does not validate against the pinned JSON Schema Draft 2020-12 contract",
+      "action": "reject_input"
+    },
+    {
+      "id": "VLD-003",
+      "phase": "L1",
+      "severity": "error",
+      "condition": "The schema's relation_type enum differs from the selected relation registry keys, or the selected rule profile is unavailable",
+      "action": "block_publish_and_impact_analysis"
+    },
+    {
+      "id": "VLD-101",
+      "phase": "L2",
+      "severity": "error",
+      "condition": "An id is duplicated across nodes, edges, conditions, or sources",
+      "action": "block_publish_and_report_all_collisions"
+    },
+    {
+      "id": "VLD-102",
+      "phase": "L2",
+      "severity": "error",
+      "condition": "An edge source_id or target_id does not resolve to an id in nodes",
+      "action": "block_publish_and_report_edge"
+    },
+    {
+      "id": "VLD-103",
+      "phase": "L2",
+      "severity": "error",
+      "condition": "A provenance_refs entry does not resolve to an id in sources",
+      "action": "block_publish_and_report_owner_and_missing_source"
+    },
+    {
+      "id": "VLD-104",
+      "phase": "L2",
+      "severity": "error",
+      "condition": "A condition_refs entry does not resolve to an id in conditions",
+      "action": "block_publish_and_report_owner_and_missing_condition"
+    },
+    {
+      "id": "VLD-105",
+      "phase": "L2",
+      "severity": "error",
+      "condition": "An edge creates a self-loop where source_id equals target_id",
+      "action": "block_publish_and_report_edge"
+    },
+    {
+      "id": "VLD-106",
+      "phase": "L2",
+      "severity": "error",
+      "condition": "Two edges have the same semantic key: relation_type plus canonical endpoints plus canonicalized condition_refs; endpoints are normalized for symmetric relations. condition_refs is interpreted conjunctively in v1. Different provenance alone does not distinguish an edge.",
+      "action": "block_publish_and_report_duplicate_edges; recommend human-reviewed merge of provenance; never auto-merge attributes"
+    },
+    {
+      "id": "VLD-201",
+      "phase": "L3",
+      "severity": "error",
+      "condition": "A cycle exists in a relation_type whose cycle_policy is forbidden, considering only edges of that relation_type",
+      "action": "block_publish_and_report_cycle_path"
+    },
+    {
+      "id": "VLD-202",
+      "phase": "L3",
+      "severity": "warning",
+      "condition": "A cycle exists in a relation_type whose cycle_policy is warn",
+      "action": "allow_draft_and_warn; published release requires warning path plus explicit reviewer acknowledgement in release record"
+    },
+    {
+      "id": "VLD-203",
+      "phase": "L3",
+      "severity": "warning",
+      "condition": "A mixed-relation cycle contains more than one relation_type but no single relation_type has a forbidden cycle",
+      "action": "warn_only_in_v1; published release requires exact mixed-cycle path plus explicit reviewer acknowledgement; do_not_block_without_registered_combined_constraint"
+    },
+    {
+      "id": "VLD-204",
+      "phase": "L3",
+      "severity": "error",
+      "condition": "A relation_type used by the model has no rule definition in the selected relation registry",
+      "action": "block_impact_analysis_and_publish"
+    },
+    {
+      "id": "VLD-301",
+      "phase": "L4",
+      "severity": "error",
+      "condition": "An external_fact_claim lacks a non-not_applicable evidence_status",
+      "action": "reject_schema_input"
+    },
+    {
+      "id": "VLD-302",
+      "phase": "L4",
+      "severity": "warning",
+      "condition": "A model inference, hypothesis, or external fact claim is presented without enough source provenance to reproduce its basis",
+      "action": "mark_unverified_or_insufficient; do_not_upgrade_to_supported"
+    },
+    {
+      "id": "VLD-303",
+      "phase": "L4",
+      "severity": "error",
+      "condition": "A human reviewer or author flags that evidence_status and review_status have been conflated; this semantic concern cannot be inferred reliably from the two enum values alone.",
+      "action": "manual_review_required; do not pretend this rule is deterministically testable from field values alone"
+    },
+    {
+      "id": "VLD-401",
+      "phase": "L5",
+      "severity": "error",
+      "condition": "Any node, edge, or condition has pending_review, rejected, disputed, or needs_reconfirmation at publication time",
+      "action": "block_publish_and_report_object_ids"
+    },
+    {
+      "id": "VLD-402",
+      "phase": "L5",
+      "severity": "error",
+      "condition": "Any active node, edge, or condition has an unresolved reference, forbidden cycle, unknown relation rule, or unapproved exception",
+      "action": "block_publish"
+    },
+    {
+      "id": "VLD-403",
+      "phase": "L5",
+      "severity": "error",
+      "condition": "Any node with structural_role core, main_axis, or skeleton lacks provenance, or has a critical external claim without a supported evidence state",
+      "action": "block_publish_and_report_node"
+    },
+    {
+      "id": "VLD-404",
+      "phase": "L5",
+      "severity": "error",
+      "condition": "The exported Markdown and JSON do not identify the same immutable content revision",
+      "action": "block_publish"
+    },
+    {
+      "id": "VLD-405",
+      "phase": "L5",
+      "severity": "error",
+      "condition": "The release record does not pin schema version, relation rule profile/version, model revision, and change summary",
+      "action": "block_publish"
+    },
+    {
+      "id": "VLD-406",
+      "phase": "L5",
+      "severity": "error",
+      "condition": "A published model has any cycle warning under cycle_policy warn or any mixed-relation cycle warning, but the immutable release record lacks the exact cycle path and an explicit reviewer acknowledgement",
+      "action": "block_publish"
+    },
+    {
+      "id": "VLD-206",
+      "phase": "L3",
+      "severity": "error",
+      "condition": "An edge with relation_type is_evidence_for or refutes resolves to a source node with empty provenance_refs, or a target node that is not claim-bearing (entity_kind=claim or claim_kind is present)",
+      "action": "block_publish_and_report_edge_and_endpoint_ids; do not automatically change the target node evidence_status"
+    },
+    {
+      "id": "VLD-407",
+      "phase": "L5",
+      "severity": "error",
+      "condition": "Cycle exploration exceeds the configured work cap before the graph has been fully examined",
+      "action": "block_publish_and_require_graph_review; never interpret an incomplete cycle search as absence of cycles"
+    }
+  ],
+  "status_transitions": {
+    "review_status": {
+      "pending_review": [
+        "accepted",
+        "rejected",
+        "disputed"
+      ],
+      "accepted": [
+        "needs_reconfirmation"
+      ],
+      "rejected": [
+        "pending_review"
+      ],
+      "disputed": [
+        "accepted",
+        "rejected",
+        "pending_review"
+      ],
+      "needs_reconfirmation": [
+        "accepted",
+        "rejected",
+        "disputed",
+        "pending_review"
+      ]
+    },
+    "model_state": {
+      "draft": [
+        "proposed",
+        "archived"
+      ],
+      "proposed": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "published": [
+        "superseded",
+        "archived"
+      ],
+      "superseded": [
+        "archived"
+      ],
+      "archived": []
+    },
+    "notes": [
+      "Published content revisions are immutable. A change creates a new draft revision; lifecycle metadata may mark the previous revision superseded in a new repository commit without rewriting the historical commit.",
+      "A semantic edit to an accepted node, edge, or condition moves that object's review_status to needs_reconfirmation.",
+      "A rejected object returns to pending_review only after a content change or newly recorded evidence; resubmitting identical content is not a valid transition.",
+      "A transition to published requires all active nodes, edges and conditions to be accepted. Evidence status remains a separate axis.",
+      "An explicit, recorded exception may override a gate only when the rule profile defines who can grant it, its scope, rationale, expiry/review condition, and audit location. No generic silent bypass is allowed."
+    ]
+  },
+  "required_error_record": {
+    "fields": [
+      "rule_id",
+      "severity",
+      "object_id",
+      "json_pointer",
+      "message",
+      "related_object_ids",
+      "rule_profile_version",
+      "action",
+      "evidence_reference"
+    ],
+    "notes": [
+      "Errors must be deterministic and point to the exact object/path.",
+      "Ordering should be stable: phase, severity, JSON pointer, then rule_id.",
+      "A validator must not modify the input as a side effect.",
+      "A missing impact path must not be reported as proof of no impact."
+    ]
+  },
+  "release_record": {
+    "required_fields": [
+      "schema_version",
+      "rule_profile",
+      "rule_profile_version",
+      "model_revision",
+      "change_summary",
+      "published_at",
+      "warnings",
+      "acknowledged_warning_ids",
+      "review_decision_reference"
+    ],
+    "warning_rules": [
+      "warnings must preserve warning_id, rule_id, severity, message, related_object_ids and exact cycle path",
+      "any cycle warning with an acknowledgement policy must be listed and acknowledged by a human decision reference",
+      "the prototype binds model_revision to sha256:<hex> of the exact UTF-8 JSON input bytes; the Markdown export must contain the marker <!-- foravar-model-revision: sha256:<hex> --> with the same value",
+      "warnings must not be silently removed when exporting Markdown or downstream AI context",
+      "the release record identifies an immutable model revision; status changes create new commits and never rewrite historic content"
+    ]
+  },
+  "implementation_notes": [
+    "This registry is a normative draft and a specification artifact, not an executable validator.",
+    "Global ID uniqueness applies across nodes, edges, conditions, and sources, not only within each array.",
+    "VLD-106 treats conditions as conjunctive in v1. Alternative cases should use separate edges, provided their condition sets differ.",
+    "Symmetric edge reversal is covered by semantic-key normalization in VLD-106; do not implement a second, conflicting duplicate rule.",
+    "A no-path result is not evidence that the change has no effect.",
+    "A cycle marked warn may appear in a draft; publishing requires the exact warning path and an explicit reviewer acknowledgement recorded in the release record.",
+    "is_evidence_for and refutes links are between model nodes, not raw source-record IDs. Represent the sourced evidence proposition as a node with provenance_refs to one or more source records; then link that evidence node directionally to the target claim.",
+    "The evidence_status on a target claim is an aggregate human-assessed status. Adding is_evidence_for or refutes edges must not automatically upgrade or downgrade that status.",
+    "The prototype v0.2 file is a candidate implementation and has not been executed; all new v0.2 behaviors remain NOT_RUN until regression output is recorded.",
+    "VLD-107 is superseded by VLD-102/103/104 for snapshot validation; delete preview requires the before/after state and belongs to the editing transaction.",
+    "VLD-303 is explicitly manual-review-only; current fields do not contain an observable signal proving that an author semantically substituted one status axis for another.",
+    "VLD-301 is already constrained by Schema 0.2.0 and appears as VLD-002 during Schema validation, avoiding duplicate errors.",
+    "VLD-407 must be an error that blocks publishing whenever cycle search is incomplete.",
+    "Rule registry phase lists are normative: every active rule ID must appear exactly once across phases. VLD-406 handles preserved cycle-warning evidence; VLD-407 handles incomplete cycle search."
+  ],
+  "superseded_rules": {
+    "VLD-107": {
+      "status": "merged_into_existing_reference_checks",
+      "superseded_by": [
+        "VLD-102",
+        "VLD-103",
+        "VLD-104"
+      ],
+      "reason": "A final snapshot cannot reliably distinguish a deleted target from any other unresolved reference; the same dangling reference is already reported at the correct endpoint/source/condition validator. Delete-preview behavior requires a before/after change event and belongs in the edit transaction/UI layer."
+    }
+  },
+  "implementation_coverage": {
+    "VLD-001": "prototype_v0.1_cli_json_parser",
+    "VLD-002": "jsonschema_validation; schema-level rejection is emitted as VLD-002",
+    "VLD-003": "prototype_static_relation_enum_vs_registry_check",
+    "VLD-101": "prototype_v0.1_global_id_check",
+    "VLD-102": "prototype_v0.1_edge_endpoint_resolution",
+    "VLD-103": "prototype_v0.1_provenance_reference_resolution",
+    "VLD-104": "prototype_v0.1_condition_reference_resolution",
+    "VLD-105": "prototype_v0.1_self_loop_check",
+    "VLD-106": "prototype_v0.1_semantic_edge_duplicate_check_including_condition_refs",
+    "VLD-201": "prototype_v0.1_forbidden_cycle_check",
+    "VLD-202": "prototype_v0.1_cycle_warning; v0.2 improves stable warning IDs and release record verification",
+    "VLD-203": "prototype_v0.1_mixed_cycle_warning; v0.2 improves stable warning IDs and bounded search",
+    "VLD-204": "prototype_v0.1_relation_policy_lookup",
+    "VLD-206": "prototype_v0.1_evidence_edge_endpoint_and_provenance_check",
+    "VLD-301": "enforced_by_schema_allOf; schema violations surface as VLD-002 rather than a duplicate standalone message",
+    "VLD-302": "prototype_v0.2_adds_missing_provenance_warning; execution NOT_RUN",
+    "VLD-303": "manual_review_only_until a concrete machine-observable signal is added to the model contract",
+    "VLD-401": "prototype_v0.1_release_review_status_gate; v0.2 tightens model_state to proposed only",
+    "VLD-402": "prototype_v0.2_fail_closed_when_base_validation_has_blocking_errors; execution NOT_RUN",
+    "VLD-403": "prototype_v0.1_core_provenance_and_critical_claim_gate",
+    "VLD-404": "prototype_v0.2_requires matching SHA-256 revision marker in Markdown export; execution NOT_RUN",
+    "VLD-405": "prototype_v0.1_release_record_required_fields_and_version_match; v0.2 binds model_revision to exact JSON bytes",
+    "VLD-406": "prototype_v0.1_warning acknowledgement; v0.2 requires stable warning ID and exact related object/path preservation; execution NOT_RUN",
+    "VLD-407": "prototype_v0.2_fail_closed_if_cycle_search_is_truncated; execution NOT_RUN"
+  }
+}
