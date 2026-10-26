@@ -26,7 +26,7 @@
 
 ## 本次深化研究修訂摘要
 
-本次修訂在閉環基礎上新增正式資料契約、JSON Schema、關係規則登錄表、跨物件驗證規則、狀態機與原型案例。Schema Draft 2020-12 meta-validation 已使用 jsonschema 4.26.0 通過；舊規則基線（cross-object rules 0.2.0）下的 18 個原型斷言通過，17 個 relation_type 與 registry keys 靜態一致。新版規則候選 0.3.0 與驗證器原型 v0.2 尚未重跑；完整發布流程、UI／Runtime 與使用者任務測試仍未完成。
+本次修訂在閉環基礎上新增正式資料契約、JSON Schema、關係規則登錄表、跨物件驗證規則、狀態機與原型案例。Schema Draft 2020-12 meta-validation 已使用 jsonschema 4.26.0 通過；舊規則基線（cross-object rules 0.2.0）下的 18 個原型斷言通過，17 個 relation_type 與 registry keys 靜態一致。新版規則候選 0.3.0 與修正版驗證器候選 v0.2.1 尚未重跑；完整發布流程、UI／Runtime 與使用者任務測試仍未完成。
 
 理念拆分、外部工具與方法比較、演算法和取捨理由另見：[AI理解框架：理念拆分、外部方法比較與最佳適配架構](./AI理解框架_理念拆分與技術方案比較.md)。本企劃的建議方案是依目前需求形成的最佳適配起點，並非未經實測即可宣稱普遍最優。
 
@@ -1115,7 +1115,7 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 | 順序 | 工作 ID | 項目與內容 | 依賴 | 交付物 | 完成條件 | 狀態 |
 |---|---|---|---|---|---|---|
 | 1 | REM-01 | Schema meta-validation：以符合 JSON Schema Draft 2020-12 的驗證器檢查 schema 本身 | Schema 草案 | 驗證輸出與版本紀錄 | meta-schema 驗證完成，錯誤已修正或明確記錄 | PASS（Meta-schema only；Runtime 未驗） |
-| 2 | REM-02 | 跨物件驗證規格：唯一 ID、來源／條件引用、懸空邊、自我連線、循環規則 | Schema＋關係規則 | 規則表及預期錯誤碼 | 每條規則有正例、反例和處置方式 | 舊規則基線下 18 個斷言 PASS；規則 0.3.0／驗證器 v0.2 NOT_RUN |
+| 2 | REM-02 | 跨物件驗證規格：唯一 ID、來源／條件引用、懸空邊、自我連線、循環規則 | Schema＋關係規則 | 規則表及預期錯誤碼 | 每條規則有正例、反例和處置方式 | 舊規則基線下 18 個斷言 PASS；規則 0.3.0／驗證器 v0.2.1 NOT_RUN |
 | 3 | REM-03 | 狀態機定稿：內容審核、模型發布、重新確認及例外授權 | 資料契約 | 狀態轉換表 | 所有允許／禁止轉換及發布阻擋原因均可判定 | 草案，未凍結 |
 | 4 | REM-04 | 桌上推演首輪：有效模型、結構錯誤、循環、語意差異及版本取用 | 測試案例＋固定基線 | 案例結果紀錄 | 每項結果有輸入、預期、實際結果和證據 | 舊版 18 個斷言有紀錄；新候選回歸測試及其餘案例 NOT_RUN |
 | 5 | REM-05 | UI 操作規格：樹狀瀏覽、局部關係圖、節點面板、手機連線、刪除和復原 | 資料契約 | UI 操作流程與狀態圖 | 核心任務不依賴臨時猜測或精準拖曳 | 未開始 |
@@ -1131,14 +1131,16 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 - [正式資料契約與原型推演規格](./AI理解框架_正式資料契約與原型推演規格.md)
 - [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json)
 - [關係規則登錄表](./規格草案/relation-rules.default-v1.json)
-- [原型推演案例清單（forAVArb）](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)
-- [上一版驗證器原型 v0.1（已測基線）](https://github.com/upqq21477-star/forAVArb/blob/main/%E5%AF%A6%E9%A9%97/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/validator_prototype_v0.1.py)
-- [驗證器候選 v0.2（尚未執行）](https://github.com/upqq21477-star/forAVArb/blob/main/%E5%AF%A6%E9%A9%97/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/validator_prototype_v0.2.py)
-- [驗證器實作覆蓋率與缺口審查](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E5%AF%A9%E6%9F%A5%E8%A8%98%E9%8C%84_%E9%A9%97%E8%AD%89%E5%99%A8%E5%AF%A6%E4%BD%9C%E8%A6%86%E8%93%8B%E7%8E%87_2026-10-26.md)
-- [Schema 與跨物件驗證原型測試記錄](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E7%B5%90%E6%9E%9C/Schema%E8%88%87%E8%B7%A8%E7%89%A9%E4%BB%B6%E9%A9%97%E8%AD%89%E5%8E%9F%E5%9E%8B%E6%B8%AC%E8%A9%A6_2026-10-26.md)
-- [支持證據與反證方向範例 fixture](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/fixtures/evidence-support-and-refutes_v0.2.json)
-- [跨物件驗證規則](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E8%A6%8F%E5%89%87/cross-object-validation.default-v1.json)
-- [狀態機與發布門檻](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E8%A6%8F%E5%89%87/%E7%8B%80%E6%85%8B%E6%A9%9F%E8%88%87%E7%99%BC%E5%B8%83%E9%96%80%E6%AA%BB_v0.1.md)
+- [原型推演案例清單（forAVArb）](./驗證/案例清單_原型推演_v0.2.md)
+- [上一版驗證器原型 v0.1（已測基線）](./實驗/validator_prototype_v0.1.py)
+- [原始驗證器候選 v0.2（未修改基線）](./實驗/validator_prototype_v0.2.py)
+- [修正版驗證器候選 v0.2.1（尚未執行）](./實驗/validator_prototype_v0.2.1.py)
+- [候選 v0.2 靜態審查與 v0.2.1 修正記錄](./驗證/靜態審查記錄_候選驗證器v0.2_2026-10-27.md)
+- [驗證器實作覆蓋率與缺口審查](./驗證/審查記錄_驗證器實作覆蓋率_2026-10-26.md)
+- [Schema 與跨物件驗證原型測試記錄](./驗證/結果/Schema與跨物件驗證原型測試_2026-10-26.md)
+- [支持證據與反證方向範例 fixture](./驗證/fixtures/evidence-support-and-refutes_v0.2.json)
+- [跨物件驗證規則](./驗證/規則/cross-object-validation.default-v1.json)
+- [狀態機與發布門檻](./驗證/規則/狀態機與發布門檻_v0.1.md)
 
 刻意無效的測試 fixtures 也保存在同一驗證資料夾。本輪已完成 Schema meta-validation、3 個精確 fixture 的結構驗證及 18 個原型斷言；未逐項執行的案例仍維持 NOT_RUN／NOT_VERIFIED，Runtime 和使用者驗收未進行。
 
