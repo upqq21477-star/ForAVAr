@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面_研究企劃書",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "updated": "2026-10-27",
   "repository": "upqq21477-star/forAVAr",
   "branch": "main",
@@ -23,30 +23,31 @@
     "current_candidate_test": {
       "report_path": "驗證/結果/候選驗證器v0.2.1_有限驗收_2026-10-27.md",
       "report_sha": "73f2a5f32e7a0ad00ad700600eccab1ee82065e8",
-      "result": "7 static checks PASS; Python execution and regression tests BLOCKED",
-      "stop_condition": "NOT_MET; do not start UI requirement or implementation planning"
-    }
+      "result": "7 static checks PASS; Python syntax/CLI/regression/directed tests BLOCKED or NOT_RUN",
+      "stop_condition": "NOT_MET; UI planning and implementation remain gated"
+    },
+    "documentation_consolidation": "2026-10-27: main proposal distilled from ~1300 to 186 lines; technical comparison from ~804 to ~70 lines; references centralized; handoff and retention decisions added."
   },
   "files": [
     [
       "README.md",
-      "81853ef0e675ac1bbf2cc66c3e5181e759f5eefd"
+      "4b46f36703802ac96991346a02e8af490f1f536c"
     ],
     [
       "AI理解可視化與框架編輯介面_研究企劃書.md",
-      "7c3e4ae8c76033b962ce49e74d6fdcbafb288a9e",
+      "8a5fcba90a45e75400695f308308eead07250066",
       "研究/AI理解可視化與框架編輯介面_研究企劃書.md",
       "f0ef13950cdf255d79c5866e132bca7b321a039d"
     ],
     [
       "AI理解框架_正式資料契約與原型推演規格.md",
-      "a18c39175692481b2a3374596a7602b16083aa51",
+      "0c1156580d6664588fffbf1e5d6c8b52f7cf156a",
       "研究/AI理解框架_正式資料契約與原型推演規格.md",
       "8472753256d4d30dd8d8d4a15a6ef8ea92fd2d4b"
     ],
     [
       "AI理解框架_理念拆分與技術方案比較.md",
-      "6e283857daef71ea5b160367a298f84d30c9b779",
+      "19b837e01319e4efdde248dc0d44ce0f7bc950bf",
       "研究/AI理解框架_理念拆分與技術方案比較.md",
       "645e4a97e9c427c3897b2f19e73ae3766fd9c9aa"
     ],
@@ -64,7 +65,7 @@
     ],
     [
       "下一階段工作計畫.md",
-      "4f183ce88da55735d2a127f67fb93e0b61728036"
+      "30d0e82bfc49545ca858f023ca108b1d7868bead"
     ],
     [
       "下一輪有限驗收計畫.md",
@@ -73,7 +74,7 @@
     ],
     [
       "變更紀錄.md",
-      "e2073b5c3af920dff6324646b249d43ca1639a26"
+      "0fbbca4d31f8b286fd1c7604b62c844d674f66fa"
     ],
     [
       "驗證/案例清單_原型推演_v0.2.md",
@@ -192,6 +193,24 @@
       "73f2a5f32e7a0ad00ad700600eccab1ee82065e8",
       "new result report created 2026-10-27",
       "STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED"
+    ],
+    [
+      "參考資料/外部研究來源與技術標準索引.md",
+      "9b3c6afc22c1b0ab0f7dd8e3863976a06e783455",
+      "created in authoritative project folder",
+      null
+    ],
+    [
+      "交接/交接總覽_2026-10-27.md",
+      "b2a76f7d9f7d25cb25cecafa7e83107ee33ffc13",
+      "created in authoritative project folder",
+      null
+    ],
+    [
+      "資料去留與歸檔判定.md",
+      "bfb90e31f69b8c331322a7853f9aea81123fcfe5",
+      "created in authoritative project folder",
+      null
     ]
   ],
   "notes": [
