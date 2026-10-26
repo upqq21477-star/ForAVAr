@@ -1,7 +1,7 @@
 # AI 理解框架：正式資料契約與規則草案
 
 > **文件性質：** 規格草案，供桌上推演與後續原型實作  
-> **版本：** 0.1.0-draft  
+> **版本：** 0.1.1-draft  
 > **狀態：** 結構草案已建立；JSON Schema 尚未完成正式 meta-schema 驗證，跨物件規則尚未經程式執行  
 > **對應主企劃：** [AI 理解可視化與框架編輯介面研究企劃書](../AI理解可視化與框架編輯介面_研究企劃書.md)  
 > **規格檔：** [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json) · [關係規則登錄表 default-v1](./規格草案/relation-rules.default-v1.json)
@@ -51,7 +51,7 @@
 |---|---|---|
 | `規格草案/ai-understanding-model.schema.json` | JSON 欄位、型別、必填欄位及列舉值 | JSON 語法已解析；**Schema meta-validation 尚未執行** |
 | `規格草案/relation-rules.default-v1.json` | 關係類型對應的家族、循環政策與影響規則 | JSON 語法與 relation_type 集合靜態比對已通過；規則語意尚待桌上推演 |
-| `forAVArb/驗證/AI理解可視化框架/案例清單_原型推演_v0.1.md` | 正向、負向和衝突測試案例 | 待建立／待執行；尚非測試結果 |
+| `forAVArb/驗證/AI理解可視化框架/案例清單_原型推演_v0.1.md` | 正向、負向和衝突測試案例及 fixtures | 清單和 7 個 fixtures 已建立；僅關係類型集合靜態比對為 PASS，其餘測試仍未執行 |
 
 資料契約 schema 與關係規則登錄表有意分開：schema 定義可接受的資料形狀；規則登錄表定義關係在圖上的行為。後者可變更循環與影響政策，但必須有版本和變更紀錄。
 
