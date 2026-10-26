@@ -200,7 +200,19 @@
         "source_changed": "forward_direct",
         "target_changed": "reverse_direct"
       },
-      "condition_requirement": "source_record_required"
+      "condition_requirement": "source_node_with_nonempty_provenance_required; target_node_must_be_claim_bearing; edge expresses an evidence-for/support relationship but does not auto-set target evidence_status"
+    },
+    "refutes": {
+      "family": "evidence_trace",
+      "meaning": "source evidence proposition contradicts or materially weakens the target claim; direction is from evidence proposition to target claim",
+      "directed": true,
+      "symmetric": false,
+      "cycle_policy": "allowed",
+      "impact": {
+        "source_changed": "forward_direct",
+        "target_changed": "reverse_direct"
+      },
+      "condition_requirement": "source_node_with_nonempty_provenance_required; target_node_must_be_claim_bearing; must not auto-set target evidence_status"
     }
   },
   "implementation_notes": [
