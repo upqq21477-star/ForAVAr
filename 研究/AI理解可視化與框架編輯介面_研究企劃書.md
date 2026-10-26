@@ -1131,7 +1131,7 @@ NASA 需求管理指引支持從需求追到設計和驗證、並可反向追溯
 - [正式資料契約與原型推演規格](./AI理解框架_正式資料契約與原型推演規格.md)
 - [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json)
 - [關係規則登錄表](./規格草案/relation-rules.default-v1.json)
-- [原型推演案例清單（forAVArb）](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.1.md)
+- [原型推演案例清單（forAVArb）](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E6%A1%88%E4%BE%8B%E6%B8%85%E5%96%AE_%E5%8E%9F%E5%9E%8B%E6%8E%A8%E6%BC%94_v0.2.md)
 - [支持證據與反證方向範例 fixture](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/fixtures/evidence-support-and-refutes_v0.2.json)
 - [跨物件驗證規則](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E8%A6%8F%E5%89%87/cross-object-validation.default-v1.json)
 - [狀態機與發布門檻](https://github.com/upqq21477-star/forAVArb/blob/main/%E9%A9%97%E8%AD%89/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E6%A1%86%E6%9E%B6/%E8%A6%8F%E5%89%87/%E7%8B%80%E6%85%8B%E6%A9%9F%E8%88%87%E7%99%BC%E5%B8%83%E9%96%80%E6%AA%BB_v0.1.md)
