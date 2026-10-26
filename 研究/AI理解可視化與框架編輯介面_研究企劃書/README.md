@@ -15,6 +15,7 @@
 - [關係規則預設集](./規格草案/relation-rules.default-v1.json)
 - [基線與來源清冊](./基線清冊.json)
 - [下一階段有限工作計畫](./下一階段工作計畫.md)
+- [候選驗證器 v0.2 靜態審查與 v0.2.1 修正記錄](https://github.com/upqq21477-star/forAVArb/blob/main/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E8%88%87%E6%A1%86%E6%9E%B6%E7%B7%A8%E8%BC%AF%E4%BB%8B%E9%9D%A2_%E7%A0%94%E7%A9%B6%E4%BC%81%E5%8A%83%E6%9B%B8/%E9%A9%97%E8%AD%89/%E9%9D%9C%E6%85%8B%E5%AF%A9%E6%9F%A5%E8%A8%98%E9%8C%84_%E5%80%99%E9%81%B8%E9%A9%97%E8%AD%89%E5%99%A8v0.2_2026-10-27.md)
 
 ## 當前基線與證據界線
 
