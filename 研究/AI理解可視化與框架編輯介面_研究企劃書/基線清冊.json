@@ -19,12 +19,18 @@
     "historical_assertions": "18 PASS apply only to validator v0.1 + rules v0.2.0-draft",
     "candidate": "validator v0.2.1 + rules v0.3.0-draft = STATIC_PATCHED / NOT_RUN",
     "fixture_gap": "8 fixture files centralized: 2 valid/evidence + 6 negative. Older checklist says 7 negative; one file is unlocated and remains unresolved.",
-    "runtime_ui_e2e": "NOT_TESTED"
+    "runtime_ui_e2e": "NOT_TESTED",
+    "current_candidate_test": {
+      "report_path": "驗證/結果/候選驗證器v0.2.1_有限驗收_2026-10-27.md",
+      "report_sha": "73f2a5f32e7a0ad00ad700600eccab1ee82065e8",
+      "result": "7 static checks PASS; Python execution and regression tests BLOCKED",
+      "stop_condition": "NOT_MET; do not start UI requirement or implementation planning"
+    }
   },
   "files": [
     [
       "README.md",
-      "8028df47e91783321a9cb2c00bf2fe6b14b0b348"
+      "81853ef0e675ac1bbf2cc66c3e5181e759f5eefd"
     ],
     [
       "AI理解可視化與框架編輯介面_研究企劃書.md",
@@ -62,12 +68,12 @@
     ],
     [
       "下一輪有限驗收計畫.md",
-      "4ef82c424b829b7b962f18ff8f6d95522c6aa06b",
+      "6226f84d441424e74285e7b62de8d3e3a69661c4",
       "由本企劃集中資料夾維護；先前重複工作副本已清除"
     ],
     [
       "變更紀錄.md",
-      "0bfaf5d885bd0f43d4ab51f000921075184b4c46"
+      "e2073b5c3af920dff6324646b249d43ca1639a26"
     ],
     [
       "驗證/案例清單_原型推演_v0.2.md",
@@ -180,6 +186,12 @@
       "38e5dd724fd170a484bcbda1deda9e8695d75076",
       "驗證/AI理解可視化框架/fixtures/invalid-unknown-relation-type_v0.1.json",
       "38e5dd724fd170a484bcbda1deda9e8695d75076"
+    ],
+    [
+      "驗證/結果/候選驗證器v0.2.1_有限驗收_2026-10-27.md",
+      "73f2a5f32e7a0ad00ad700600eccab1ee82065e8",
+      "new result report created 2026-10-27",
+      "STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED"
     ]
   ],
   "notes": [
