@@ -1,28 +1,35 @@
-# forAVAr｜主系統入口
+# forAVAr｜單一開工入口
 
-forAVAr 是以「受目標與證據約束的可靠認知與自我修正」為核心的主系統。正式架構與狀態以本庫的權威文件為準；封包、交接說明、研究紀錄與測試報告都不能自行取代正式基線。
+本頁是 forAVAr 系列工作的起始入口。**接手時先讀本 README，再只讀「目前交接文件」；不要整庫掃描、重讀歷史版本或尋找壓縮檔。** 交接文件會指出當前工作、證據、下一步、阻塞條件與必要檔案。
 
-## 權威入口
+## 目前工作狀態
 
-- 主系統索引：docs/index.json
-- 核心藍圖：docs/blueprint.json
-- 運作契約與變更規則：docs/operating_contract.json
-- 能力登錄表：docs/capability_registry.json
-- 問題登錄表：docs/problem_register.json
-- Runtime：runtime/foravar_vertical_slice.py、runtime/policy_gate.py
+- **目前工作單元：** B27.11／T3-0「基線＋同名測試類別」。
+- **狀態：** PARTIAL／NOT_RUN；已完成遠端檔案的靜態核對，實際 Python 執行與標準驗證尚未完成。
+- **唯一目前交接：** [HANDOFF_B27_11.md](https://github.com/upqq21477-star/forAVArb1/blob/main/HANDOFF_B27_11.md)。
+- **下一步：** 依交接文件完成 T3-0 的實際自比、unittest 載入數核對及要求的驗證，將原始輸出與結果直接寫回 GitHub。**T3-0 未完成前不得進入 T3-1。**
+- **若執行環境不具備兩個專案的可讀工作目錄及 Python 執行能力：** 明確回報 BLOCKED／NOT_RUN；不得用靜態推論代替執行結果，不得將工作單元標為完成。
 
-目前正式藍圖基線為 v0.8（2026-10-24）。目前 Runtime 狀態為 POLICY_GATE_INTEGRATED_RUNTIME_NOT_VALIDATED；不得將政策閘門已整合描述成整體 Runtime 已驗收。
+## 接手流程（最低讀取路徑）
 
-## 進度、壓縮檔與交接檔審核
+1. 讀本頁，了解專案邊界與當前阻塞。
+2. 讀唯一目前交接：[HANDOFF_B27_11.md](https://github.com/upqq21477-star/forAVArb1/blob/main/HANDOFF_B27_11.md)。只讀它指定的當前工作單元；不要整讀其他文件。
+3. 按交接列出的路徑執行。只在需要確認架構或規則時，查閱 [正式藍圖](https://github.com/upqq21477-star/forAVAr1/blob/main/docs/blueprint.json)、[運作契約](https://github.com/upqq21477-star/forAVAr1/blob/main/docs/operating_contract.json) 或 [進度帳本](https://github.com/upqq21477-star/forAVAr1/blob/main/docs/progress_ledger.json) 中相關段落。
+4. 將研究、驗證、實驗輸出與交接紀錄直接提交至資料倉庫；讀回核對路徑、blob SHA 與 commit。交接只保留下一步需要的索引，不重複抄寫整份規格。
 
-從 [進度資料夾入口](進度/README.md) 開始；可直接複製使用的 [教授級審核題詞](進度/教授級審核題詞.md) 與 [詳細審核標準](進度/審核標準與接手流程.md) 已放在進度資料夾。後續新增的 ZIP 壓縮檔與 HANDOFF 交接檔，均先視為「待審核輸入」，不是已採納的程式版本，也不會因為檔案較新就自動成為正式基線。
+## 專案職責與權威順序
 
-審核最高優先順序是：判斷更新是否有缺陷、方向錯誤、偏離核心／主軸或遺漏既有責任；並逐項核對問題清單、功能清單、流程／SOP 清單，確認每項既有需求仍有可追溯的處理路徑。不得只檢查新增程式是否能跑。審核者必須依照 [審核標準與接手流程](進度/審核標準與接手流程.md) 執行，將審核結論、全量覆蓋差異、缺陷、核心／主軸偏移檢查、證據與未完成項目記錄在進度資料夾。若 ZIP 無法實際解包、比較或測試，必須明確標示審核範圍與 NOT_EXECUTED／NOT_VERIFIED，不得宣稱完成程式碼級審核。
+- **[forAVAr](https://github.com/upqq21477-star/forAVAr)：** 研究、框架整理及相關專案文件。
+- **[forAVAr1](https://github.com/upqq21477-star/forAVAr1)：** 目前主體 Runtime／正式藍圖、運作契約、登錄表、進度及驗收文件的工作來源。
+- **[forAVArb](https://github.com/upqq21477-star/forAVArb)：** 可管理的研究／驗證／暫存／實驗資料倉庫；既有退場歸檔路徑只作歷史追溯。
+- **[forAVArb1](https://github.com/upqq21477-star/forAVArb1)：** 目前資料、實驗、驗證、工作計畫及交接的主要入口。
+- **[P1](https://github.com/upqq21477-star/P1) 與 [P2](https://github.com/upqq21477-star/P2)：** 唯讀；不得新增、修改或刪除。
 
-每次交接至少核對：基線 commit、封包完整 SHA-256、變更檔案清單、實際執行的測試與結果、未執行項目、待裁決決策、回復方式與下一步。新版本請使用可區分的檔名或版本號，避免覆寫封包後無法重現先前審核。
+正式規則以 forAVAr1 的現行運作契約為準；架構以正式藍圖為準；進度／驗收以進度帳本為準。交接負責描述當前工作與下一步，不得覆蓋正式基線。
 
-進度資料夾是目前指定的交接輸入與審核入口；其中 ZIP 和交接檔不具有正式架構權威。研究、原始實驗、暫存輸出及需長期保存的驗證材料，依專案資料治理規則歸檔至 upqq21477-star/forAVArb。P1 與 P2 僅供讀取，不得新增、修改或刪除。
+## 檔案更新規則
 
-## 歷史與歸檔
-
-研究、歷史版本、候選方案及舊來源文件位於 forAVArb。請先由 [歸檔 manifest](https://github.com/upqq21477-star/forAVArb/blob/main/歸檔/forAVAr_main_退場歸檔_2026-10-24/manifest.json) 查找原始路徑；歸檔內容不是現行權威，正式決策仍以本庫的權威文件為準。
+- 直接修改授權的 GitHub 專案檔案；每次寫入後讀回核對實際內容。
+- **ZIP 不作為工作來源、例行交付物、驗收條件或交接前置條件。** 只有使用者明確要求可攜快照，或有具體備份／復原需求時才建立。
+- 不因 README 或交接寫了測試命令，就宣稱已執行或通過；只記錄實際輸出。
+- 不得跳過當前工作單元、不得將 NOT_RUN 改寫為 PASS，也不得未經授權提前進入 E4／F2／F3。
