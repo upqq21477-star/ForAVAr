@@ -18,7 +18,7 @@
   "current_status": {
     "overall": "RESEARCH_PLAN_CONSOLIDATED / CANDIDATE_EXECUTION_BLOCKED",
     "plan_closure": "Human-facing interaction-layer position and end-to-end roadmap consolidated on 2026-10-28.",
-    "static_checks": "7/7 PASS is historical evidence for the pre-correction baseline only; current Schema $id path was corrected on 2026-10-28 and must be revalidated.",
+    "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "NOT_MET until current candidate validation stopping conditions pass",
     "ui_implementation": "NOT_STARTED",
@@ -26,13 +26,13 @@
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
     "final_closure": "REQUIRES candidate execution, user workflow definition, graph interaction prototype, core adapter integration, end-to-end simulation, human-task evaluation, and evidence/baseline synchronization.",
-    "schema_path_correction": "Current schema blob c79d7f7535ac38f6046e1f6a67a94c3e6a24f848 has canonical $id path; Draft 2020-12 meta-validation must be rerun. Historic PASS only applies to old blob 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be."
+    "schema_path_correction": "Schema blob c79d7f7535ac38f6046e1f6a67a94c3e6a24f848 now uses the canonical path. Re-run Draft 2020-12 meta-validation; do not transfer historical PASS from 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be."
   },
   "current_baseline": [
     {
       "role": "main_proposal",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
-      "sha": "cf6c681e05ec957ba1dcab46bc730ddec40dd888"
+      "sha": "93417995b76ed544d92a1d400841640d2dab8d5f"
     },
     {
       "role": "data_contract",
@@ -92,7 +92,7 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "a11d44e528f6533d4749d906e707878e952f4d04"
+      "sha": "af63923c7881d42116c7565b3d2fac7fe1d02af4"
     }
   ],
   "test_fixtures": {
