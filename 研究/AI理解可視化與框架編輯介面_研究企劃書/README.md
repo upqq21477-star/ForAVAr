@@ -10,8 +10,8 @@
 
 **規劃及閉環路線已收斂；候選程式驗收仍 BLOCKED／NOT_RUN；UI 正式需求與實作尚未放行。**
 
-- 靜態前置檢查：7/7 PASS（2026-10-27 記錄）。
-- 現行 Python 驗證器、CLI、回歸及定向測試：BLOCKED／NOT_RUN。
+- 修正前基線的靜態前置檢查：7/7 PASS（2026-10-27 歷史紀錄）。2026-10-28 對現行 Schema `$id` 的唯一權威路徑作了修正，現行 SHA 需重新驗證，不承接舊 PASS。
+- 現行 Schema meta-validation、Python 驗證器、CLI、回歸及定向測試：BLOCKED／NOT_RUN。
 - 目前 fixtures：8 個可定位，2 個有效／證據、6 個負向；歷史提及的第 7 個負向 fixture 未定位。
 - 研究關閉條件：資料契約 → 使用者任務 → 圖形互動 → 核心接口 → 閉環模擬 → 人類使用者驗收 → 證據／版本同步。未達最終條件時只能標為 PARTIAL，不得標 ACCEPTED。
 
