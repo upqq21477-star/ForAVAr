@@ -49,7 +49,7 @@
 
 | 檔案 | 職責 | 目前狀態 |
 |---|---|---|
-| `規格草案/ai-understanding-model.schema.json` | JSON 欄位、型別、必填欄位及列舉值 | JSON 語法與 Draft 2020-12 meta-schema 驗證已通過（jsonschema 4.26.0）；完整產品整合尚未驗證 |
+| `規格草案/ai-understanding-model.schema.json` | JSON 欄位、型別、必填欄位及列舉值 | 舊 SHA `02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be` 的 Draft 2020-12 meta-schema 驗證曾通過（jsonschema 4.26.0）；現行 SHA `c79d7f7535ac38f6046e1f6a67a94c3e6a24f848` 的 meta-validation NOT_RUN；完整產品整合尚未驗證 |
 | `規格草案/relation-rules.default-v1.json` | 關係類型對應的家族、循環政策與影響規則 | JSON 語法與 relation_type 集合靜態比對已通過；規則語意尚待桌上推演 |
 | `驗證/案例清單.md` | 正向、負向和衝突測試案例及 fixtures | 清單有 70 個唯一案例 ID；3 個精確 fixtures 通過預期 Schema 驗證，舊規則基線下 18 個原型斷言通過；新版規則候選 0.3.0 與驗證器 v0.2.1 尚未執行，其他案例與 Runtime 尚未完成 |
 
