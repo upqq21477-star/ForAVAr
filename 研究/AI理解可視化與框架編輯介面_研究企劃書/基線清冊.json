@@ -1,7 +1,7 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.4",
-  "updated": "2026-10-27",
+  "manifest_version": "3.5",
+  "updated": "2026-10-28",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
   "policy": {
@@ -12,20 +12,26 @@
     "test_results": "PASS only applies to the exact test performed; static checks never substitute for execution.",
     "research_modules": "Research modules reuse the current data contract, compare against the read-only P1/P2 sources, and do not bypass the active acceptance gate or imply runtime validation.",
     "research_review_records": "Static critique records are indexed but do not update the normative schema, acceptance status, or UI gate; runtime claims require execution evidence.",
-    "research_scope_boundary": "本清冊只管理 AI 理解可視化與框架編輯介面課題；複雜系統解構、世界模型建構、因果閉環與模擬驗證是獨立研究，另存於研究根目錄，不列入本企劃基線。"
+    "research_scope_boundary": "本清冊只管理 AI 理解可視化與框架編輯介面課題；複雜系統解構、世界模型建構、因果閉環與模擬驗證屬獨立專門研究，可按任務需要提供方法支援，不構成平行認知核心，也不自動代表已整合進主體。",
+    "human_interaction_layer": "圖形認知與固定引導流程是既有 AI 認知架構的人類使用者側延伸；允許獨立的視覺語法、互動狀態機與圖形表示模型，但語意變更須經版本化映射契約回饋核心。此層不替代機器認知核心，也不強制 AI 對所有任務採單一推理流程。"
   },
   "current_status": {
-    "overall": "STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED",
-    "static_checks": "7/7 PASS",
+    "overall": "RESEARCH_PLAN_CONSOLIDATED / CANDIDATE_EXECUTION_BLOCKED",
+    "plan_closure": "Human-facing interaction-layer position and end-to-end roadmap consolidated on 2026-10-28.",
+    "static_checks": "7/7 PASS (2026-10-27; static only)",
     "candidate_execution": "BLOCKED / NOT_RUN",
-    "ui_planning_gate": "NOT_MET; do not start UI requirements or implementation",
-    "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated."
+    "ui_requirements_gate": "NOT_MET until candidate validation stopping conditions pass",
+    "ui_implementation": "NOT_STARTED",
+    "integration_to_core": "NOT_STARTED; requires a versioned mapping/edit-event/feedback contract after gate A",
+    "user_acceptance": "NOT_STARTED",
+    "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
+    "final_closure": "REQUIRES candidate execution, user workflow definition, graph interaction prototype, core adapter integration, end-to-end simulation, human-task evaluation, and evidence/baseline synchronization."
   },
   "current_baseline": [
     {
       "role": "main_proposal",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
-      "sha": "fe90aca45a72848b43e8c64b329c6a4ffbc62dd6"
+      "sha": "dfe0906820010675cad0322fd62775837a778ac2"
     },
     {
       "role": "data_contract",
@@ -70,7 +76,7 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "27c68c79e7b135ddc8d8e9a5793dd6c5365d869f"
+      "sha": "4af8069352df599e03200d12eda630a63e4b5c0a"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
@@ -85,7 +91,7 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "027471e79ac496e169412d0fc8b57485dbc88f88"
+      "sha": "c453469a0cae87adf4cd740efaefeb3407312030"
     }
   ],
   "test_fixtures": {
