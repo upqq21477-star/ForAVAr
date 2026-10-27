@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/upqq21477-star/ForAVAr/main/%E7%A0%94%E7%A9%B6/%E8%A6%8F%E6%A0%BC%E8%8D%89%E6%A1%88/ai-understanding-model.schema.json",
+  "$id": "https://raw.githubusercontent.com/upqq21477-star/ForAVAr/main/%E7%A0%94%E7%A9%B6/AI%E7%90%86%E8%A7%A3%E5%8F%AF%E8%A6%96%E5%8C%96%E8%88%87%E6%A1%86%E6%9E%B6%E7%B7%A8%E8%BC%AF%E4%BB%8B%E9%9D%A2_%E7%A0%94%E7%A9%B6%E4%BC%81%E5%8A%83%E6%9B%B8/%E8%A6%8F%E6%A0%BC%E8%8D%89%E6%A1%88/ai-understanding-model.schema.json",
   "title": "ForAVAr AI Understanding Model",
   "description": "Draft schema for the semantic content model. Cross-object identity, reference, graph-cycle, provenance and release rules require an additional deterministic validator.",
   "type": "object",
