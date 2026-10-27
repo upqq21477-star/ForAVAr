@@ -110,18 +110,18 @@ UI 尚未進入正式需求規格階段。通過驗收閘門後，才將以下�
 
 ## 5. 目前基線與實驗證據
 
-**截至 2026-10-27 的實際狀態：STATIC_PREFLIGHT_PASS / PYTHON_EXECUTION_BLOCKED。停止條件未達成。**
+**截至 2026-10-28 的實際狀態：RESEARCH_PLAN_CONSOLIDATED / PYTHON_EXECUTION_BLOCKED。** 2026-10-27 的 7/7 靜態檢查僅適用於修正前基線；現行 Schema SHA `c79d7f7535ac38f6046e1f6a67a94c3e6a24f848` 的 meta-validation 尚未重跑，停止條件未達成。
 
 | 項目 | 固定基線 | 已知狀態 |
 |---|---|---|
-| JSON Schema | 0.2.0；SHA `02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be` | Draft 2020-12 meta-validation 有歷史 PASS；不代表產品 Runtime |
+| JSON Schema | 0.2.0；現行 SHA `c79d7f7535ac38f6046e1f6a67a94c3e6a24f848` | `$id` 已對齊唯一權威路徑；meta-validation NOT_RUN。舊 SHA `02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be` 的 PASS 僅為歷史證據 |
 | 關係登錄表 | 0.2.0；SHA `291087a0902f4b0f590fe16c666bf6b3fc1e1ed2` | 17 種關係與 Schema 列舉靜態一致 |
 | 跨物件規則候選 | 0.3.0-draft；SHA `ca393b5761a4bf3c72c807770a56cc3aea6a8e39` | NOT_RUN |
 | 驗證器候選 | v0.2.1；SHA `56d2c592f89d30a0c6c9e5179c13a844d206bab0` | 靜態修正；Python 未執行 |
 | 測試案例 | v0.2.2；70 個唯一 TC ID | 案例定義存在；不是 70 項已通過測試 |
 | fixtures | 8 個可定位檔案 | 2 個有效／證據樣例、6 個負向；舊清單提到第 7 個負向 fixture，但該檔仍未定位 |
 | 舊原型測試 | validator v0.1 + rules v0.2.0-draft | 18 個歷史斷言 PASS 僅適用該基線 |
-| 2026-10-27 候選前置檢查 | 7 項靜態檢查 | 全部 PASS；Python 語法、CLI、回歸與新定向測試 BLOCKED |
+| 2026-10-27 修正前基線檢查 | 7 項靜態檢查 | 修正前基線全部 PASS；現行 `$id` 路徑修正後需重跑，Python／CLI／回歸／定向測試仍 BLOCKED／NOT_RUN |
 | UI／Runtime／使用者任務 | 尚未形成可驗收基線 | NOT_RUN／NOT_VERIFIED |
 
 完整逐項結果見[候選驗證器 v0.2.1 有限驗收紀錄](./驗證/演進與驗收總結.md)與[歷史 Schema／跨物件原型測試紀錄](./驗證/演進與驗收總結.md)。不得把舊版 PASS 轉移到新候選。
