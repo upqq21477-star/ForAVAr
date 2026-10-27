@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.5",
+  "manifest_version": "3.6",
   "updated": "2026-10-28",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -18,25 +18,26 @@
   "current_status": {
     "overall": "RESEARCH_PLAN_CONSOLIDATED / CANDIDATE_EXECUTION_BLOCKED",
     "plan_closure": "Human-facing interaction-layer position and end-to-end roadmap consolidated on 2026-10-28.",
-    "static_checks": "7/7 PASS (2026-10-27; static only)",
+    "static_checks": "7/7 PASS is historical evidence for the pre-correction baseline only; current Schema $id path was corrected on 2026-10-28 and must be revalidated.",
     "candidate_execution": "BLOCKED / NOT_RUN",
-    "ui_requirements_gate": "NOT_MET until candidate validation stopping conditions pass",
+    "ui_requirements_gate": "NOT_MET until current candidate validation stopping conditions pass",
     "ui_implementation": "NOT_STARTED",
     "integration_to_core": "NOT_STARTED; requires a versioned mapping/edit-event/feedback contract after gate A",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
-    "final_closure": "REQUIRES candidate execution, user workflow definition, graph interaction prototype, core adapter integration, end-to-end simulation, human-task evaluation, and evidence/baseline synchronization."
+    "final_closure": "REQUIRES candidate execution, user workflow definition, graph interaction prototype, core adapter integration, end-to-end simulation, human-task evaluation, and evidence/baseline synchronization.",
+    "schema_path_correction": "Current schema blob c79d7f7535ac38f6046e1f6a67a94c3e6a24f848 has canonical $id path; Draft 2020-12 meta-validation must be rerun. Historic PASS only applies to old blob 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be."
   },
   "current_baseline": [
     {
       "role": "main_proposal",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
-      "sha": "3e564d32e1697b6e02fa5219800263d280774f36"
+      "sha": "cf6c681e05ec957ba1dcab46bc730ddec40dd888"
     },
     {
       "role": "data_contract",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解框架_正式資料契約與原型推演規格.md",
-      "sha": "8b47a5a10805ce65cb873379a1b0c9389181e153"
+      "sha": "82202d0a7d623970ffc52cbe4f8dcb0234ab7ffd"
     },
     {
       "role": "architecture_decision_summary",
@@ -46,7 +47,7 @@
     {
       "role": "json_schema",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/ai-understanding-model.schema.json",
-      "sha": "02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be"
+      "sha": "c79d7f7535ac38f6046e1f6a67a94c3e6a24f848"
     },
     {
       "role": "relation_registry",
@@ -81,7 +82,7 @@
     {
       "role": "consolidated_evolution_and_test_summary",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/驗證/演進與驗收總結.md",
-      "sha": "c694d0fc4dc430b2014f705647f33b4179f8c781"
+      "sha": "8793b9f77295de1cf3e7a07192c42e79cc276a90"
     },
     {
       "role": "external_reference_index",
@@ -91,7 +92,7 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "c453469a0cae87adf4cd740efaefeb3407312030"
+      "sha": "a11d44e528f6533d4749d906e707878e952f4d04"
     }
   ],
   "test_fixtures": {
