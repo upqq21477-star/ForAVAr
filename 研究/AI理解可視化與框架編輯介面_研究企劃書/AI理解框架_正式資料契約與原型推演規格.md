@@ -2,7 +2,7 @@
 
 > **文件性質：** 規格草案，供桌上推演與後續原型實作  
 > **版本：** 0.2.2-draft  
-> **狀態：** Schema 0.2.0（blob SHA `02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be`）的 Draft 2020-12 meta-validation 已以 jsonschema 4.26.0 通過；跨物件規則 0.3.0-draft 與驗證器候選 v0.2.1 尚未執行；正式 Runtime／UI 未驗收  
+> **狀態（2026-10-28）：** Schema `$id` 已對齊唯一權威路徑；現行 Schema SHA `c79d7f7535ac38f6046e1f6a67a94c3e6a24f848` 的 meta-validation 尚未重跑。歷史 PASS 僅適用舊 SHA `02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be`，不可轉移。跨物件規則 0.3.0-draft 與驗證器候選 v0.2.1 尚未執行；正式 Runtime／UI 未驗收  
 > **對應主企劃：** [AI 理解可視化與框架編輯介面研究企劃書](./AI理解可視化與框架編輯介面_研究企劃書.md)  
 > **規格檔：** [JSON Schema 草案](./規格草案/ai-understanding-model.schema.json) · [關係規則登錄表 default-v1](./規格草案/relation-rules.default-v1.json)
 
@@ -345,4 +345,4 @@ JSON Schema 不負責跨陣列的 ID 唯一性或節點引用是否存在；這�
 
 ## 文件狀態聲明
 
-這是資料契約與驗證設計草案，不是已驗收的生產規格。Draft 2020-12 meta-validation 的歷史 PASS 僅適用 Schema blob SHA 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be；舊版 18 項原型斷言只適用 validator v0.1 + cross-object rules 0.2.0-draft。候選 validator v0.2.1 與 rules 0.3.0-draft 尚未執行，2026-10-27 靜態前置檢查 7 項 PASS 但 Python 執行、回歸及定向測試 BLOCKED。Runtime、UI 與使用者任務驗收尚未開始。詳見 [目前候選有限驗收紀錄](./驗證/演進與驗收總結.md)。
+這是資料契約與驗證設計草案，不是已驗收的生產規格。舊 Schema SHA 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be 的 Draft 2020-12 meta-validation 歷史 PASS 不適用於現行 SHA `c79d7f7535ac38f6046e1f6a67a94c3e6a24f848`，因現行 `$id` 已對齊唯一權威檔案路徑，需在階段 A 重跑。舊版 18 項原型斷言只適用 validator v0.1 + cross-object rules 0.2.0-draft。候選 validator v0.2.1 與 rules 0.3.0-draft 尚未執行；Python 執行、回歸及定向測試維持 BLOCKED／NOT_RUN。Runtime、UI 與使用者任務驗收尚未開始。詳見 [目前候選有限驗收紀錄](./驗證/演進與驗收總結.md)。
