@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "4.0",
+  "manifest_version": "4.1",
   "updated": "2026-10-28",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "WU-C0-13 field-mapping transparency and WU-C0-14 positional identity / ambiguity navigation implemented; JavaScript COMPILE_OK; local simulations passed; browser interaction NOT_RUN",
+    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, and WU-C0-15 position-first identity across tree/card/graph implemented; root index.html is the sole HTML entry; JavaScript COMPILE_OK; 7 local simulations match expectations; browser interaction and GitHub Pages serving NOT_RUN / NOT_VERIFIED",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -77,8 +77,20 @@
         "e3_simulation": "5 local positional / ambiguity classification cases passed",
         "e4_browser_interaction": "NOT_RUN",
         "data_mutation": false
+      },
+      "cross_view_identity": {
+        "status": "IMPLEMENTED",
+        "tree": "nodes[i]; ambiguous contains edges not used as hierarchy",
+        "cards": "nodes[i] identity",
+        "graph": "unique internal key per node; edges[i] identity; ambiguous or unresolved endpoints are separate placeholders",
+        "readonly": true,
+        "e3_syntax_check": "COMPILE_OK",
+        "e3_simulation": "7 local identity / ambiguity cases passed",
+        "e4_browser_interaction": "NOT_RUN"
       }
-    }
+    },
+    "website_entry": "index.html",
+    "github_pages_deployment": "NOT_VERIFIED; root index.html committed, but live Pages response must be checked"
   },
   "current_baseline": [
     {
@@ -129,7 +141,7 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "b13b6559cf507bea2dbd18784caedbd3f2cc8e5f"
+      "sha": "07d0aa172074a938174e537c7b4a6af25ec370fb"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
@@ -144,12 +156,17 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "cacb582c3b8b08abdc160f634120763273afbb9c"
+      "sha": "6bede24fd3482e0f86fcdbd08740046aeb76e959"
     },
     {
       "role": "read_only_visualization_prototype",
-      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/實驗/唯讀框架可視化原型.html",
-      "sha": "aa87d899ae33e7563e126cbbaa6fb0fd8a6a2998"
+      "path": "index.html",
+      "sha": "6e0ac6328d03bade69f1cc9478fa310eb63e1ab8"
+    },
+    {
+      "role": "repository_entry_readme",
+      "path": "README.md",
+      "sha": "f3e20cdba737dcb928f26d570918e3333f52854a"
     }
   ],
   "test_fixtures": {

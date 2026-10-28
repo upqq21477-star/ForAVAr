@@ -384,6 +384,10 @@ function appendEdgeEndpointAudit(parent,edge){
 }
 
 function nodeById(id){return model.nodes.find(n=>n.id===id)}
+function nodeIndexesForId(id){
+ if(typeof id!=="string"||!id.trim())return [];
+ const out=[];model.nodes.forEach((node,index)=>{if(node&&node.id===id)out.push(index)});return out;
+}
 function edgeById(id){return model.edges.find(e=>e.id===id)}
 function sourceById(id){return model.sources.find(s=>s.id===id)}
 function condById(id){return model.conditions.find(c=>c.id===id)}
@@ -496,15 +500,16 @@ function selectedObjectMatchesFilter(){
 function selectionIsVisible(){
  const obj=currentSelectedObject();if(!obj)return true;
  if(selected.type==="source"||selected.type==="condition")return true;
- if(selected.type==="edge"){
-  if(activeView!=="graph"||!selectedObjectMatchesFilter())return false;
-  if($("graphScope").value==="upstream"&&obj.source_id!==obj.target_id)return false;
-  return true;
- }
+ if(selected.type==="edge")return activeView==="graph"&&selectedObjectMatchesFilter();
  if(activeView==="tree"||activeView==="cards")return selectedObjectMatchesFilter();
  if(selectedObjectMatchesFilter())return true;
  const q=$("search").value.trim().toLowerCase();
- return Boolean(q&&matchingEdges().some(e=>e.source_id===obj.id||e.target_id===obj.id));
+ const selectedIndex=Number.isInteger(selected.index)?selected.index:(nodeIndexesForId(obj.id).length===1?nodeIndexesForId(obj.id)[0]:-1);
+ if(selectedIndex<0||!q)return false;
+ return matchingEdges().some(edge=>{
+  const from=nodeIndexesForId(edge.source_id),to=nodeIndexesForId(edge.target_id);
+  return (from.length===1&&from[0]===selectedIndex)||(to.length===1&&to[0]===selectedIndex);
+ });
 }
 function renderSelectionNotice(){
  const current=currentSelectedObject();
@@ -525,176 +530,209 @@ function badges(n){const box=el("div","badges");box.append(badge(roleLabel[n.str
 function showModelStats(){ $("modelTitle").textContent=model.title||"未命名模型";$("modelPurpose").textContent=model.purpose||"未提供目的說明";$("nodeCount").textContent=model.nodes.length;$("edgeCount").textContent=model.edges.length;$("conditionCount").textContent=model.conditions.length;$("sourceCount").textContent=model.sources.length;$("viewCount").lastElementChild.textContent=model.model_id+" · "+model.model_state}
 function renderTree(){
  const root=$("treeView");root.replaceChildren();
- const filtered=matchingNodes();
- const allowed=new Set(filtered.map(n=>n.id));
- const parent=new Map(),children=new Map(model.nodes.map(n=>[n.id,[]])),allParents=new Map(model.nodes.map(n=>[n.id,[]]));
- const containsEdges=model.edges.filter(e=>e.relation_type==="contains"&&nodeById(e.source_id)&&nodeById(e.target_id));
- containsEdges.forEach(e=>{
-  allParents.get(e.target_id).push(e.source_id);
-  if(!parent.has(e.target_id)){parent.set(e.target_id,e.source_id);children.get(e.source_id).push(e.target_id)}
+ const indexes=model.nodes.map((_,index)=>index);
+ const matched=new Set(matchingNodes().map(node=>model.nodes.indexOf(node)).filter(index=>index>=0));
+ const parent=new Map(),children=new Map(),allParents=new Map();
+ indexes.forEach(index=>{children.set(index,[]);allParents.set(index,[])});
+ const ambiguous=[];
+ model.edges.forEach((edge,edgeIndex)=>{
+  if(!edge||edge.relation_type!=="contains")return;
+  const from=nodeIndexesForId(edge.source_id),to=nodeIndexesForId(edge.target_id);
+  if(from.length!==1||to.length!==1){
+   const p=[];
+   if(from.length!==1)p.push("source_id "+String(edge.source_id===undefined?"(缺失)":edge.source_id)+(from.length>1?" 對應 "+from.length+" 個節點":" 無唯一節點"));
+   if(to.length!==1)p.push("target_id "+String(edge.target_id===undefined?"(缺失)":edge.target_id)+(to.length>1?" 對應 "+to.length+" 個節點":" 無唯一節點"));
+   ambiguous.push({index:edgeIndex,problems:p});return;
+  }
+  const a=from[0],b=to[0];if(!allParents.get(b).includes(a))allParents.get(b).push(a);
+  if(!parent.has(b)){parent.set(b,a);children.get(a).push(b)}
  });
- root.append(el("p","graph-hint","樹狀圖只沿「包含 contains」關係建立層級；依賴、衝突、證據等其他關係請切換到關係圖檢視。"));
- let roots=model.nodes.filter(n=>!parent.has(n.id));
- if(!roots.length&&model.nodes.length)roots=[model.nodes[0]];
+ root.append(el("p","graph-hint","樹狀只使用端點 ID 均能唯一解析的 contains 關係。節點以 nodes[i] 識別；ID 重複或缺失的關係不會任意連到第一筆，請查看下方歧義提示或切換關係圖。"));
+ const selectedIndex=selected.type==="node"?(Number.isInteger(selected.index)&&model.nodes[selected.index]?selected.index:(nodeIndexesForId(selected.id).length===1?nodeIndexesForId(selected.id)[0]:-1)):-1;
+ let roots=indexes.filter(index=>!parent.has(index));if(!roots.length&&indexes.length)roots=indexes.slice();
  const visited=new Set();
- function branchHasMatch(id,trail){
-  if(allowed.has(id))return true;
-  if(trail.has(id))return false;
-  const next=new Set(trail);next.add(id);
-  return (children.get(id)||[]).some(child=>branchHasMatch(child,next));
+ function hasMatch(index,trail){
+  if(matched.has(index))return true;
+  if(trail.has(index))return false;
+  const next=new Set(trail);next.add(index);return (children.get(index)||[]).some(child=>hasMatch(child,next));
  }
- function draw(n,depth,anc){
-  if(anc.has(n.id)){root.append(el("div","message","偵測到 contains 循環，已在此停止展開："+n.id));return}
-  if(visited.has(n.id))return;
-  if(!branchHasMatch(n.id,new Set()))return;
-  visited.add(n.id);
-  const row=el("button","tree-node"+(selected.type==="node"&&(Number.isInteger(selected.index)?model.nodes[selected.index]===n:selected.id===n.id)?" selected":""));
-  row.type="button";row.style.setProperty("--indent",Math.min(depth,7)*15+"px");row.setAttribute("aria-label","選取節點 "+n.name);
-  row.append(el("span","indent"));
-  const info=el("span","tree-label");
-  info.append(el("span","tree-name",n.name||n.id),el("span","tree-meta",(roleLabel[n.structural_role]||"未分類")+" · "+n.id));
-  row.append(info,badge(n.review_status||"未知"));
-  const parentCount=(allParents.get(n.id)||[]).length;
-  if(parentCount>1)row.append(badge("多父節點 "+parentCount));
-  row.addEventListener("click",()=>selectItem("node",n.id,model.nodes.indexOf(n)));
-  root.append(row);
-  const next=new Set(anc);next.add(n.id);
-  (children.get(n.id)||[]).forEach(id=>{const child=nodeById(id);if(child)draw(child,depth+1,next)});
+ function draw(index,depth,ancestors){
+  const node=model.nodes[index];if(!node)return;
+  if(ancestors.has(index)){root.append(el("div","message error","偵測到 contains 循環，停止展開："+objectPath("node",index)));return}
+  if(visited.has(index)||!hasMatch(index,new Set()))return;
+  visited.add(index);
+  const row=el("button","tree-node"+(selectedIndex===index?" selected":""));row.type="button";
+  row.dataset.objectPath=objectPath("node",index);row.style.setProperty("--indent",Math.min(depth,7)*15+"px");
+  row.setAttribute("aria-label","選取 "+(node.name||"未命名節點")+"，位置 "+objectPath("node",index));row.append(el("span","indent"));
+  const idText=typeof node.id==="string"&&node.id.trim()?node.id:"(缺少有效 ID)";
+  const info=el("span","tree-label");info.append(el("span","tree-name",node.name||idText),el("span","tree-meta",objectPath("node",index)+" · ID "+idText));
+  row.append(info,badge(node.review_status||"未知"));
+  if((allParents.get(index)||[]).length>1)row.append(badge("多父節點 "+allParents.get(index).length));
+  const idMatches=nodeIndexesForId(node.id);
+  if(typeof node.id!=="string"||!node.id.trim())row.append(badge("ID 缺失"));else if(idMatches.length>1)row.append(badge("ID 重複 "+idMatches.length));
+  row.addEventListener("click",()=>selectItem("node",node.id,index));root.append(row);
+  const next=new Set(ancestors);next.add(index);(children.get(index)||[]).forEach(child=>draw(child,depth+1,next));
  }
- roots.forEach(n=>draw(n,0,new Set()));
- model.nodes.filter(n=>!visited.has(n.id)&&branchHasMatch(n.id,new Set())).forEach(n=>{
-  root.append(el("div","message","非樹狀根節點或循環組成部分："+n.name));
-  draw(n,0,new Set());
+ roots.forEach(index=>draw(index,0,new Set()));
+ indexes.filter(index=>!visited.has(index)&&hasMatch(index,new Set())).forEach(index=>{
+  root.append(el("div","message","非樹狀根節點或循環組成部分："+objectPath("node",index)));draw(index,0,new Set());
  });
- const renderedNodes=root.querySelectorAll(".tree-node").length;
- const hiddenNodes=Math.max(0,model.nodes.length-renderedNodes);
- const shownContainsEdges=Math.max(0,renderedNodes-roots.filter(n=>visited.has(n.id)).length);
- const hiddenRelations=Math.max(0,model.edges.length-shownContainsEdges);
- root.append(el("div","message","樹狀可見節點 "+renderedNodes+"／"+model.nodes.length+"；因篩選或非樹狀結構未呈現 "+hiddenNodes+" 個節點。樹狀僅呈現 contains 層級；其餘關係數量 "+hiddenRelations+" 條，請在關係圖查看。"));
- if(!renderedNodes)root.append(el("div","empty","沒有符合目前搜尋與狀態篩選的節點。"));
+ ambiguous.forEach(item=>root.append(el("div","message error","無法唯一建立樹狀關係：edges["+item.index+"] · "+item.problems.join("；")+"。未自動選擇端點。")));
+ const rendered=root.querySelectorAll("button.tree-node").length,hidden=Math.max(0,model.nodes.length-rendered);
+ const hiddenRelations=Math.max(0,model.edges.length-Math.max(0,rendered-roots.filter(index=>visited.has(index)).length));
+ root.append(el("div","message","樹狀可見節點 "+rendered+"／"+model.nodes.length+"；因篩選或非樹狀結構未呈現 "+hidden+" 個節點。樹狀只呈現唯一可解析的 contains 層級；其他關係 "+hiddenRelations+" 條，請在關係圖查看。"));
+ if(!rendered)root.append(el("div","empty","沒有符合目前搜尋與狀態篩選的節點。"));
 }
 function renderCards(){
  const root=$("cardsView");root.replaceChildren();const grid=el("div","cards");
- matchingNodes().forEach(n=>{const c=el("button","nodecard"+(selected.type==="node"&&(Number.isInteger(selected.index)?model.nodes[selected.index]===n:selected.id===n.id)?" selected":""));c.type="button";c.append(badges(n),el("h3","",n.name||n.id),el("p","",n.function||"尚無功能說明"),el("div","detail-id",n.id));c.addEventListener("click",()=>selectItem("node",n.id,model.nodes.indexOf(n)));grid.append(c)});
+ const selectedIndex=selected.type==="node"?(Number.isInteger(selected.index)&&model.nodes[selected.index]?selected.index:(nodeIndexesForId(selected.id).length===1?nodeIndexesForId(selected.id)[0]:-1)):-1;
+ matchingNodes().forEach(node=>{
+  const index=model.nodes.indexOf(node);if(index<0)return;
+  const card=el("button","nodecard"+(selectedIndex===index?" selected":""));card.type="button";card.dataset.objectPath=objectPath("node",index);
+  const idText=typeof node.id==="string"&&node.id.trim()?node.id:"(缺少有效 ID)";
+  card.append(badges(node),el("h3","",node.name||idText),el("p","",node.function||"尚無功能說明"),el("div","detail-id",objectPath("node",index)+" · ID "+idText));
+  const matches=nodeIndexesForId(node.id);
+  if(typeof node.id!=="string"||!node.id.trim())card.append(el("div","message error","此物件缺少可用 ID；以集合位置定位。"));
+  else if(matches.length>1)card.append(el("div","message error","此 ID 重複 "+matches.length+" 次；本卡片仍指向 "+objectPath("node",index)+"。"));
+  card.addEventListener("click",()=>selectItem("node",node.id,index));grid.append(card);
+ });
  if(!grid.childElementCount)root.append(el("div","empty","沒有符合搜尋條件的節點。"));else root.append(grid);
 }
 function renderGraph(){
  const root=$("graphView");root.replaceChildren();
- root.append(el("p","graph-hint","選取節點後，可切換只看上游、只看下游或雙向關係，並控制展開層數。搜尋關係時，相關端點會保留作為脈絡。"));
+ root.append(el("p","graph-hint","節點以 nodes[i] 識別，關係以 edges[i] 識別。只有唯一 ID 才能連到實體節點；缺失／重複端點會顯示獨立佔位並可回到對應關係詳情，不會自動選第一筆。"));
  const q=$("search").value.trim().toLowerCase();
- const directNodes=matchingNodes(), edgeMatches=matchingEdges();
- const candidateMap=new Map(directNodes.map(n=>[n.id,n]));
- if(q&&edgeMatches.length) edgeMatches.forEach(e=>[e.source_id,e.target_id].forEach(id=>{const n=nodeById(id);if(n&&!candidateMap.has(id))candidateMap.set(id,n)}));
+ const directIndexes=matchingNodes().map(node=>model.nodes.indexOf(node)).filter(index=>index>=0);
+ const directIds=new Set(directIndexes.map(index=>model.nodes[index]&&model.nodes[index].id).filter(id=>typeof id==="string"&&id.trim()));
+ const matchedEdgeIndexes=matchingEdges().map(edge=>model.edges.indexOf(edge)).filter(index=>index>=0);
+ const hasStatusFilter=Boolean($("reviewFilter").value||$("evidenceFilter").value);
+ let baseEdgeIndexes;
+ if(q&&matchedEdgeIndexes.length)baseEdgeIndexes=matchedEdgeIndexes.slice();
+ else if(q)baseEdgeIndexes=model.edges.map((_,index)=>index).filter(index=>{const edge=model.edges[index];return directIds.has(edge.source_id)||directIds.has(edge.target_id)});
+ else baseEdgeIndexes=model.edges.map((_,index)=>index).filter(index=>{
+  const edge=model.edges[index];if(!edge)return false;
+  const from=nodeIndexesForId(edge.source_id),to=nodeIndexesForId(edge.target_id);
+  if(from.length===1&&to.length===1)return nodePassesFilters(model.nodes[from[0]])&&nodePassesFilters(model.nodes[to[0]]);
+  return !hasStatusFilter||directIds.has(edge.source_id)||directIds.has(edge.target_id);
+ });
+ const graphNodesByKey=new Map(),edgeViewsByIndex=new Map();
+ function nodeView(index){
+  const key="node@"+index;if(graphNodesByKey.has(key))return graphNodesByKey.get(key);
+  const original=model.nodes[index],view={...original,id:key,__graphKey:key,__nodeIndex:index,__originalNode:original,__originalId:original&&original.id,__diagnosticPlaceholder:null,__objectPath:objectPath("node",index)};
+  graphNodesByKey.set(key,view);return view;
+ }
+ function endpointView(edgeIndex,field){
+  const edge=model.edges[edgeIndex],id=edge&&edge[field],matches=nodeIndexesForId(id);
+  if(matches.length===1)return nodeView(matches[0]);
+  const key="endpoint@"+edgeIndex+":"+field;if(graphNodesByKey.has(key))return graphNodesByKey.get(key);
+  const shown=id===undefined||id===null||id===""?"(缺失)":String(id),kind=matches.length>1?"ambiguous":"unresolved";
+  const view={id:key,__graphKey:key,__nodeIndex:null,__originalId:id,__objectPath:"edges["+edgeIndex+"]."+field,
+   name:matches.length>1?"歧義端點："+shown:"未解析端點："+shown,
+   function:matches.length>1?"此端點 ID 對應 "+matches.length+" 個節點；原型不推測真正端點。":"此端點未唯一對應至 nodes 陣列中的節點。",
+   structural_role:"unassigned",entity_kind:"endpoint",review_status:"needs_reconfirmation",evidence_status:"insufficient",provenance_refs:[],condition_refs:[],
+   __diagnosticPlaceholder:{edgeIndex:edgeIndex,field:field,kind:kind,candidateIndexes:matches.slice(),originalId:id}};
+  graphNodesByKey.set(key,view);return view;
+ }
+ function edgeView(index){
+  if(edgeViewsByIndex.has(index))return edgeViewsByIndex.get(index);
+  const original=model.edges[index],from=endpointView(index,"source_id"),to=endpointView(index,"target_id");
+  const view={...original,id:"edge@"+index,source_id:from.id,target_id:to.id,__originalEdge:original,__edgeIndex:index,__originalId:original&&original.id,
+   __originalSourceId:original&&original.source_id,__originalTargetId:original&&original.target_id,
+   __sourceNodeIndex:from.__nodeIndex,__targetNodeIndex:to.__nodeIndex,__objectPath:objectPath("edge",index)};
+  edgeViewsByIndex.set(index,view);return view;
+ }
+ function graphNodeByKey(key){return graphNodesByKey.get(key)||null}
+ const candidateMap=new Map();directIndexes.forEach(index=>{const view=nodeView(index);candidateMap.set(view.id,view)});
+ let baseEdges=baseEdgeIndexes.map(edgeView);
+ const selectedEdgeIndex=selected.type==="edge"?(Number.isInteger(selected.index)&&model.edges[selected.index]?selected.index:(model.edges.filter(edge=>edge&&edge.id===selected.id).length===1?model.edges.findIndex(edge=>edge&&edge.id===selected.id):-1)):-1;
+ const selectedEdgeView=selectedEdgeIndex>=0?edgeView(selectedEdgeIndex):null;
+ if(selectedEdgeView&&!baseEdges.some(edge=>edge.__edgeIndex===selectedEdgeIndex))baseEdges=[selectedEdgeView,...baseEdges];
+ baseEdges.forEach(edge=>{const from=graphNodeByKey(edge.source_id),to=graphNodeByKey(edge.target_id);if(from)candidateMap.set(from.id,from);if(to)candidateMap.set(to.id,to)});
+ const selectedNodeIndex=selected.type==="node"?(Number.isInteger(selected.index)&&model.nodes[selected.index]?selected.index:(nodeIndexesForId(selected.id).length===1?nodeIndexesForId(selected.id)[0]:-1)):-1;
+ if(selectedNodeIndex>=0){const view=nodeView(selectedNodeIndex);candidateMap.set(view.id,view)}
  const candidateNodes=Array.from(candidateMap.values());
- let baseEdges;
- if(q&&edgeMatches.length) baseEdges=edgeMatches;
- else if(q) {const ids=new Set(candidateNodes.map(n=>n.id));baseEdges=model.edges.filter(e=>ids.has(e.source_id)||ids.has(e.target_id))}
- else baseEdges=model.edges.filter(e=>{const a=nodeById(e.source_id),b=nodeById(e.target_id);return a&&b&&nodePassesFilters(a)&&nodePassesFilters(b)});
- const selectedEdge=selected.type==="edge"?(Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id)):null;
- if(selectedEdge&&!baseEdges.includes(selectedEdge))baseEdges=[selectedEdge,...baseEdges];
- const missingEndpointNodes=new Map();
- baseEdges.forEach(e=>["source_id","target_id"].forEach(field=>{
-  const id=e[field],resolved=typeof id==="string"&&id.trim()&&model.nodes.some(n=>n&&n.id===id);
-  if(!resolved&&!missingEndpointNodes.has(id)){
-   const index=model.edges.indexOf(e),shown=String(id===undefined||id===null||id===""?"(missing)":id);
-   missingEndpointNodes.set(id,{id:id,name:"未解析端點："+shown,function:"此端點未對應到 nodes 陣列中的節點；僅作唯讀視覺佔位。",structural_role:"unassigned",entity_kind:"concept",review_status:"needs_reconfirmation",evidence_status:"insufficient",provenance_refs:[],condition_refs:[],__diagnosticPlaceholder:{edgeIndex:index,field:field}});
-  }
- }));
- const graphNode=id=>(typeof id==="string"&&id.trim()?model.nodes.find(n=>n&&n.id===id):undefined)||missingEndpointNodes.get(id);
- let focusId=selected.type==="edge"?(selectedEdge||{}).source_id:selected.id;
- if(q&&edgeMatches.length&&!edgeMatches.some(e=>e.source_id===focusId||e.target_id===focusId))focusId=edgeMatches[0].source_id;
- if(!candidateMap.has(focusId)&&!baseEdges.some(e=>e.source_id===focusId||e.target_id===focusId))focusId=baseEdges.length?baseEdges[0].source_id:(candidateNodes[0]||{}).id;
- const scope=$("graphScope").value, rawDepth=$("graphDepth").value;
+ let focusKey=selected.type==="edge"&&selectedEdgeView?selectedEdgeView.source_id:selectedNodeIndex>=0?nodeView(selectedNodeIndex).id:(candidateNodes[0]||{}).id;
+ if(q&&matchedEdgeIndexes.length&&!baseEdges.some(edge=>matchedEdgeIndexes.includes(edge.__edgeIndex)&&(edge.source_id===focusKey||edge.target_id===focusKey))){
+  const firstMatch=baseEdges.find(edge=>matchedEdgeIndexes.includes(edge.__edgeIndex));if(firstMatch)focusKey=firstMatch.source_id;
+ }
+ if(!candidateMap.has(focusKey)&&!baseEdges.some(edge=>edge.source_id===focusKey||edge.target_id===focusKey))focusKey=baseEdges.length?baseEdges[0].source_id:(candidateNodes[0]||{}).id;
+ const scope=$("graphScope").value,rawDepth=$("graphDepth").value;
  const depthLimit=rawDepth==="all"?Number.POSITIVE_INFINITY:Math.max(1,Number(rawDepth)||1);
- let visibleEdges=baseEdges.slice(), visibleNodes=candidateNodes.slice();
- if(scope!=="all"&&focusId){
-  const distance=new Map([[focusId,0]]), queue=[focusId], edgeSet=new Set();
+ let visibleEdges=baseEdges.slice(),visibleNodes=candidateNodes.slice();
+ if(scope!=="all"&&focusKey){
+  const distance=new Map([[focusKey,0]]),queue=[focusKey],edgeSet=new Set();
   while(queue.length){
-   const current=queue.shift(), d=distance.get(current);
-   if(d>=depthLimit)continue;
-   baseEdges.forEach(e=>{
+   const current=queue.shift(),level=distance.get(current);if(level>=depthLimit)continue;
+   baseEdges.forEach(edge=>{
     let next=null;
-    if(scope==="upstream"&&e.target_id===current)next=e.source_id;
-    else if(scope==="downstream"&&e.source_id===current)next=e.target_id;
-    else if(scope==="both"){
-     if(e.source_id===current)next=e.target_id;
-     else if(e.target_id===current)next=e.source_id;
-    }
-    if(next===null)return;
-    edgeSet.add(e);
-    if(!distance.has(next)){distance.set(next,d+1);queue.push(next)}
+    if(scope==="upstream"&&edge.target_id===current)next=edge.source_id;
+    else if(scope==="downstream"&&edge.source_id===current)next=edge.target_id;
+    else if(scope==="both"){if(edge.source_id===current)next=edge.target_id;else if(edge.target_id===current)next=edge.source_id}
+    if(next===null)return;edgeSet.add(edge);if(!distance.has(next)){distance.set(next,level+1);queue.push(next)}
    });
   }
-  visibleEdges=baseEdges.filter(e=>edgeSet.has(e));
-  const ids=new Set(distance.keys());
-  visibleNodes=Array.from(ids).map(id=>graphNode(id)).filter(Boolean);
-  if(!visibleNodes.length&&graphNode(focusId))visibleNodes=[graphNode(focusId)];
- }else if(scope==="all"){
-  const ids=new Set(candidateNodes.map(n=>n.id));
-  visibleEdges=baseEdges.filter(e=>graphNode(e.source_id)&&graphNode(e.target_id));
-  visibleEdges.forEach(e=>{const a=graphNode(e.source_id),b=graphNode(e.target_id);if(a&&!ids.has(a.id)){ids.add(a.id);visibleNodes.push(a)}if(b&&!ids.has(b.id)){ids.add(b.id);visibleNodes.push(b)}});
- }
- const nodeIds=new Set(visibleNodes.map(n=>n.id));
- visibleEdges=visibleEdges.filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id));
- if(!visibleNodes.length){
-  root.append(el("div","empty","沒有符合目前搜尋、狀態與關係範圍的節點。"));
-  $("graphScopeSummary").textContent="此條件組合沒有可顯示的節點。";
-  $("graphScaleNotice").textContent="調整搜尋、狀態篩選、關係方向或深度後可重新顯示；原始模型不會被修改。";
-  return;
- }
+  visibleEdges=baseEdges.filter(edge=>edgeSet.has(edge));visibleNodes=Array.from(distance.keys()).map(graphNodeByKey).filter(Boolean);
+  if(!visibleNodes.length&&graphNodeByKey(focusKey))visibleNodes=[graphNodeByKey(focusKey)];
+ }else if(scope==="all"){visibleNodes=candidateNodes.slice();visibleEdges=baseEdges.filter(edge=>graphNodeByKey(edge.source_id)&&graphNodeByKey(edge.target_id))}
+ const nodeKeys=new Set(visibleNodes.map(node=>node.id));visibleEdges=visibleEdges.filter(edge=>nodeKeys.has(edge.source_id)&&nodeKeys.has(edge.target_id));
+ if(!visibleNodes.length){root.append(el("div","empty","沒有符合目前搜尋、狀態與關係範圍的節點。"));$("graphScopeSummary").textContent="此條件組合沒有可顯示的節點。";$("graphScaleNotice").textContent="調整搜尋、狀態篩選、關係方向或深度後可重新顯示；原始模型不會被修改。";return}
  const scopeLabel={all:"全部關係",upstream:"上游",downstream:"下游",both:"上游＋下游"}[scope]||scope;
- const placeholderCount=visibleNodes.filter(n=>n&&n.__diagnosticPlaceholder).length;
- const actualVisibleNodes=visibleNodes.length-placeholderCount;
- const totalNodes=model.nodes.length,totalEdges=model.edges.length;
- const queryActive=Boolean(q),statusActive=Boolean($("reviewFilter").value||$("evidenceFilter").value);
+ const placeholderCount=visibleNodes.filter(node=>node.__diagnosticPlaceholder).length,actualVisibleNodes=visibleNodes.length-placeholderCount;
+ const totalNodes=model.nodes.length,totalEdges=model.edges.length,queryActive=Boolean(q),statusActive=hasStatusFilter;
  const isSubset=scope!=="all"||rawDepth!=="all"||queryActive||statusActive||actualVisibleNodes<totalNodes||visibleEdges.length<totalEdges;
- $("graphScopeSummary").textContent="範圍："+scopeLabel+"；深度："+(rawDepth==="all"?"不限":rawDepth+" 層")+"；畫面節點 "+actualVisibleNodes+"／"+totalNodes+(placeholderCount?"（另含 "+placeholderCount+" 個未解析端點佔位）":"")+"；畫面關係 "+visibleEdges.length+"／"+totalEdges+"。"+(focusId?" 聚焦："+((nodeById(focusId)||{}).name||focusId):"");
+ const focusNode=graphNodeByKey(focusKey);
+ $("graphScopeSummary").textContent="範圍："+scopeLabel+"；深度："+(rawDepth==="all"?"不限":rawDepth+" 層")+"；畫面節點 "+actualVisibleNodes+"／"+totalNodes+(placeholderCount?"（另含 "+placeholderCount+" 個缺失／歧義端點佔位）":"")+"；畫面關係 "+visibleEdges.length+"／"+totalEdges+"。"+(focusKey?" 聚焦："+((focusNode&&focusNode.name)||focusKey)+(focusNode&&focusNode.__objectPath?" · "+focusNode.__objectPath:""):"");
  const hiddenNodeCount=Math.max(0,totalNodes-actualVisibleNodes),hiddenEdgeCount=Math.max(0,totalEdges-visibleEdges.length);
- $("graphScaleNotice").textContent=(isSubset?"目前為局部／篩選後視圖，不能視為完整模型。":"目前顯示所有可定位的節點與關係；這不代表資料契約或證據已通過驗證。")+
-  " 未呈現："+hiddenNodeCount+" 個節點、"+hiddenEdgeCount+" 條關係。"+
-  ((visibleNodes.length>80||visibleEdges.length>120||scope==="all"||rawDepth==="all")?" 提示：目前圖面範圍較大或未設深度上限，手機閱讀可能較擁擠；可改用上下游範圍或降低深度。此提示不阻擋瀏覽。":"");
- const legend=el("div","graph-legend");
- legend.append(el("span","graph-legend-title","關係圖例"),el("span","graph-legend-direction","箭頭：來源 → 目標"));
- const relationCounts=new Map();
- visibleEdges.forEach(e=>relationCounts.set(e.relation_type,(relationCounts.get(e.relation_type)||0)+1));
- Array.from(relationCounts.entries()).sort((a,b)=>String(a[0]).localeCompare(String(b[0]))).forEach(([type,count])=>{
-  const item=el("span","graph-legend-item");
-  item.append(el("span","",relationLabel[type]||type),badge(count+" 條"));
-  legend.append(item);
- });
- if(!relationCounts.size)legend.append(el("span","message","目前範圍沒有可顯示的關係類型。"));
- root.append(legend);
+ $("graphScaleNotice").textContent=(isSubset?"目前為局部／篩選後視圖，不能視為完整模型。":"目前顯示所有節點及可定位關係；這不代表資料契約或證據已通過驗證。")+" 未呈現："+hiddenNodeCount+" 個節點、"+hiddenEdgeCount+" 條關係。"+((visibleNodes.length>80||visibleEdges.length>120||scope==="all"||rawDepth==="all")?" 提示：目前圖面範圍較大或未設深度上限，手機閱讀可能較擁擠；可改用上下游範圍或降低深度。此提示不阻擋瀏覽。":"");
+ const legend=el("div","graph-legend");legend.append(el("span","graph-legend-title","關係圖例"),el("span","graph-legend-direction","箭頭：來源 → 目標"));
+ const relationCounts=new Map();visibleEdges.forEach(edge=>relationCounts.set(edge.relation_type,(relationCounts.get(edge.relation_type)||0)+1));
+ Array.from(relationCounts.entries()).sort((a,b)=>String(a[0]).localeCompare(String(b[0]))).forEach(([type,count])=>{const item=el("span","graph-legend-item");item.append(el("span","",relationLabel[type]||type),badge(count+" 條"));legend.append(item)});
+ if(!relationCounts.size)legend.append(el("span","message","目前範圍沒有可顯示的關係類型。"));root.append(legend);
  const depth=new Map(),parents=new Map();
- visibleEdges.filter(e=>e.relation_type==="contains").forEach(e=>{if(!parents.has(e.target_id))parents.set(e.target_id,e.source_id)});
- let roots=visibleNodes.filter(n=>!parents.has(n.id)||!nodeIds.has(parents.get(n.id)));if(!roots.length)roots=[visibleNodes[0]];
- roots.forEach(n=>depth.set(n.id,0));let changed=true;
- for(let k=0;k<visibleNodes.length&&changed;k++){changed=false;visibleEdges.filter(e=>e.relation_type==="contains").forEach(e=>{if(depth.has(e.source_id)&&nodeIds.has(e.target_id)&&!depth.has(e.target_id)){depth.set(e.target_id,Math.min(4,depth.get(e.source_id)+1));changed=true}})}
- visibleNodes.forEach(n=>{if(!depth.has(n.id))depth.set(n.id,0)});
- const groups={};visibleNodes.forEach(n=>{const d=depth.get(n.id);(groups[d]||(groups[d]=[])).push(n)});
- const maxDepth=Math.max.apply(null,visibleNodes.map(n=>depth.get(n.id))),colGap=250,rowGap=110,width=200+maxDepth*colGap+220,maxRows=Math.max.apply(null,Object.values(groups).map(g=>g.length)),height=Math.max(330,maxRows*rowGap+100);
- const pos={};Object.keys(groups).forEach(d=>groups[d].forEach((n,i)=>{pos[n.id]={x:55+Number(d)*colGap,y:45+i*rowGap}}));
+ visibleEdges.filter(edge=>edge.relation_type==="contains"&&edge.__sourceNodeIndex!==null&&edge.__targetNodeIndex!==null).forEach(edge=>{if(!parents.has(edge.target_id))parents.set(edge.target_id,edge.source_id)});
+ let roots=visibleNodes.filter(node=>!parents.has(node.id)||!nodeKeys.has(parents.get(node.id)));if(!roots.length)roots=[visibleNodes[0]];
+ roots.forEach(node=>depth.set(node.id,0));let changed=true;
+ for(let k=0;k<visibleNodes.length&&changed;k++){changed=false;visibleEdges.filter(edge=>edge.relation_type==="contains"&&edge.__sourceNodeIndex!==null&&edge.__targetNodeIndex!==null).forEach(edge=>{if(depth.has(edge.source_id)&&nodeKeys.has(edge.target_id)&&!depth.has(edge.target_id)){depth.set(edge.target_id,Math.min(4,depth.get(edge.source_id)+1));changed=true}})}
+ visibleNodes.forEach(node=>{if(!depth.has(node.id))depth.set(node.id,0)});
+ const groups={};visibleNodes.forEach(node=>{const level=depth.get(node.id);(groups[level]||(groups[level]=[])).push(node)});
+ const maxDepth=Math.max.apply(null,visibleNodes.map(node=>depth.get(node.id))),colGap=250,rowGap=110,width=200+maxDepth*colGap+220,maxRows=Math.max.apply(null,Object.values(groups).map(group=>group.length)),height=Math.max(330,maxRows*rowGap+100),positions={};
+ Object.keys(groups).forEach(level=>groups[level].forEach((node,index)=>{positions[node.id]={x:55+Number(level)*colGap,y:45+index*rowGap}}));
  const ns="http://www.w3.org/2000/svg",svg=document.createElementNS(ns,"svg");svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("class","graph");svg.setAttribute("role","group");svg.setAttribute("aria-label","可互動節點與關係圖");
- const defs=document.createElementNS(ns,"defs"),marker=document.createElementNS(ns,"marker");marker.setAttribute("id","arrow");marker.setAttribute("markerWidth","8");marker.setAttribute("markerHeight","8");marker.setAttribute("refX","6");marker.setAttribute("refY","3");marker.setAttribute("orient","auto");const arrow=document.createElementNS(ns,"path");arrow.setAttribute("d","M0,0 L6,3 L0,6 Z");arrow.setAttribute("fill","#71879f");marker.append(arrow);defs.append(marker);svg.append(defs);
- visibleEdges.forEach(e=>{
-  const a=pos[e.source_id],b=pos[e.target_id];if(!a||!b)return;
-  const d="M"+(a.x+178)+" "+(a.y+38)+" C"+(a.x+213)+" "+(a.y+38)+" "+(b.x-35)+" "+(b.y+38)+" "+b.x+" "+(b.y+38);
-  const visible=document.createElementNS(ns,"path");visible.setAttribute("d",d);visible.setAttribute("class","graph-edge"+(selected.type==="edge"&&(Number.isInteger(selected.index)?model.edges[selected.index]===e:selected.id===e.id)?" selected":""));visible.setAttribute("marker-end","url(#arrow)");visible.setAttribute("pointer-events","none");svg.append(visible);
-  const hit=document.createElementNS(ns,"path");hit.setAttribute("d",d);hit.setAttribute("fill","none");hit.setAttribute("stroke","transparent");hit.setAttribute("stroke-width","16");hit.setAttribute("tabindex","0");hit.setAttribute("role","button");hit.setAttribute("aria-label","選取關係："+(relationLabel[e.relation_type]||e.relation_type));hit.style.cursor="pointer";hit.addEventListener("click",()=>selectItem("edge",e.id,model.edges.indexOf(e)));hit.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("edge",e.id,model.edges.indexOf(e))}});svg.append(hit);
-  const label=document.createElementNS(ns,"text");label.setAttribute("x",(a.x+178+b.x)/2);label.setAttribute("y",(a.y+38+b.y+38)/2-7);label.setAttribute("class","edge-label");label.textContent=relationLabel[e.relation_type]||e.relation_type;svg.append(label);
+ const defs=document.createElementNS(ns,"defs"),marker=document.createElementNS(ns,"marker");marker.setAttribute("id","arrow");marker.setAttribute("markerWidth","8");marker.setAttribute("markerHeight","8");marker.setAttribute("refX","6");marker.setAttribute("refY","3");marker.setAttribute("orient","auto");
+ const arrow=document.createElementNS(ns,"path");arrow.setAttribute("d","M0,0 L6,3 L0,6 Z");arrow.setAttribute("fill","#71879f");marker.append(arrow);defs.append(marker);svg.append(defs);
+ visibleEdges.forEach(edge=>{
+  const a=positions[edge.source_id],b=positions[edge.target_id];if(!a||!b)return;
+  const d="M"+(a.x+178)+" "+(a.y+38)+" C"+(a.x+213)+" "+(a.y+38)+" "+(b.x-35)+" "+(b.y+38)+" "+b.x+" "+(b.y+38),edgeIsSelected=selected.type==="edge"&&selectedEdgeIndex===edge.__edgeIndex;
+  const visible=document.createElementNS(ns,"path");visible.setAttribute("d",d);visible.setAttribute("class","graph-edge"+(edgeIsSelected?" selected":""));visible.setAttribute("marker-end","url(#arrow)");visible.setAttribute("pointer-events","none");svg.append(visible);
+  const hit=document.createElementNS(ns,"path");hit.setAttribute("d",d);hit.setAttribute("fill","none");hit.setAttribute("stroke","transparent");hit.setAttribute("stroke-width","16");hit.setAttribute("tabindex","0");hit.setAttribute("role","button");hit.setAttribute("aria-label","選取關係 "+edge.__objectPath+"："+(relationLabel[edge.relation_type]||edge.relation_type));hit.style.cursor="pointer";
+  hit.addEventListener("click",()=>selectItem("edge",edge.__originalId,edge.__edgeIndex));hit.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectItem("edge",edge.__originalId,edge.__edgeIndex)}});svg.append(hit);
+  const label=document.createElementNS(ns,"text");label.setAttribute("x",(a.x+178+b.x)/2);label.setAttribute("y",(a.y+38+b.y+38)/2-7);label.setAttribute("class","edge-label");label.textContent=relationLabel[edge.relation_type]||edge.relation_type;svg.append(label);
  });
- visibleNodes.forEach(n=>{
-  const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&(Number.isInteger(selected.index)?model.nodes[selected.index]===n:selected.id===n.id)?" selected":"")+(n.__diagnosticPlaceholder?" missing":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);
-  const rect=document.createElementNS(ns,"rect");rect.setAttribute("width","180");rect.setAttribute("height","76");rect.setAttribute("rx","9");g.append(rect);
-  const title=document.createElementNS(ns,"text");title.setAttribute("x","10");title.setAttribute("y","24");title.textContent=(n.name||n.id).slice(0,19);g.append(title);
-  const meta=document.createElementNS(ns,"text");meta.setAttribute("x","10");meta.setAttribute("y","46");meta.setAttribute("style","fill:#9db0c4;font-size:11px");meta.textContent=(roleLabel[n.structural_role]||"未指定")+" · "+(n.entity_kind||"未知");g.append(meta);
-  const chooseGraphNode=()=>{if(n.__diagnosticPlaceholder){const p=n.__diagnosticPlaceholder,e=model.edges[p.edgeIndex];selected={type:"edge",id:e&&e.id,index:p.edgeIndex,path:"edges["+p.edgeIndex+"]."+p.field,diagnosticCode:"MISSING_EDGE_ENDPOINT"};render()}else selectItem("node",n.id,model.nodes.indexOf(n))};
-  g.addEventListener("click",chooseGraphNode);g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();chooseGraphNode()}});svg.append(g);
+ visibleNodes.forEach(node=>{
+  const p=positions[node.id];if(!p)return;
+  const nodeIndex=node.__nodeIndex,nodeIsSelected=selected.type==="node"&&Number.isInteger(selectedNodeIndex)&&selectedNodeIndex>=0&&nodeIndex===selectedNodeIndex&&nodeIndex!==null;
+  const group=document.createElementNS(ns,"g");group.setAttribute("class","graph-node"+(nodeIsSelected?" selected":"")+(node.__diagnosticPlaceholder?" missing":""));group.setAttribute("transform","translate("+p.x+" "+p.y+")");group.setAttribute("tabindex","0");group.setAttribute("role","button");
+  group.setAttribute("aria-label","選取 "+(node.name||node.id)+(node.__objectPath?"，位置 "+node.__objectPath:""));if(node.__objectPath)group.dataset.objectPath=node.__objectPath;
+  const rect=document.createElementNS(ns,"rect");rect.setAttribute("width","180");rect.setAttribute("height","76");rect.setAttribute("rx","9");group.append(rect);
+  const title=document.createElementNS(ns,"text");title.setAttribute("x","10");title.setAttribute("y","24");title.textContent=String(node.name||node.__originalId||"未命名").slice(0,19);group.append(title);
+  const meta=document.createElementNS(ns,"text");meta.setAttribute("x","10");meta.setAttribute("y","46");meta.setAttribute("style","fill:#9db0c4;font-size:11px");meta.textContent=node.__objectPath||("端點佔位 · "+String(node.__originalId===undefined?"(缺失)":node.__originalId)).slice(0,22);group.append(meta);
+  const chooseGraphNode=()=>{
+   if(node.__diagnosticPlaceholder){
+    const problem=node.__diagnosticPlaceholder,original=model.edges[problem.edgeIndex];
+    selected={type:"edge",id:original&&original.id,index:problem.edgeIndex,path:"edges["+problem.edgeIndex+"]."+problem.field,diagnosticCode:problem.kind==="ambiguous"?"AMBIGUOUS_EDGE_ENDPOINT":"MISSING_EDGE_ENDPOINT"};render();
+   }else selectItem("node",node.__originalId,nodeIndex);
+  };
+  group.addEventListener("click",chooseGraphNode);group.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();chooseGraphNode()}});svg.append(group);
  });
  const wrap=el("div","graphwrap");wrap.append(svg);root.append(wrap);
  const edgeList=el("div","edge-list");
- visibleEdges.forEach(e=>{const row=el("button","edge-row"+(selected.type==="edge"&&(Number.isInteger(selected.index)?model.edges[selected.index]===e:selected.id===e.id)?" selected":""));row.type="button";const a=nodeById(e.source_id),b=nodeById(e.target_id);row.append(el("div","edge-path",(a?a.name:e.source_id)+"  →  "+(relationLabel[e.relation_type]||e.relation_type)+"  →  "+(b?b.name:e.target_id)),el("div","edge-description",e.description||"未提供關係描述"));row.addEventListener("click",()=>selectItem("edge",e.id,model.edges.indexOf(e)));edgeList.append(row)});
- if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前深度／方向範圍內沒有可顯示的關係。"));
- root.append(edgeList);
+ visibleEdges.forEach(edge=>{
+  const edgeIsSelected=selected.type==="edge"&&selectedEdgeIndex===edge.__edgeIndex,row=el("button","edge-row"+(edgeIsSelected?" selected":""));row.type="button";row.dataset.objectPath=edge.__objectPath;
+  const from=graphNodeByKey(edge.source_id),to=graphNodeByKey(edge.target_id);
+  row.append(el("div","edge-path",(from?from.name:edge.__originalSourceId)+" → "+(relationLabel[edge.relation_type]||edge.relation_type)+" → "+(to?to.name:edge.__originalTargetId)),el("div","edge-description",edge.__objectPath+" · "+(edge.description||"未提供關係描述")));
+  row.addEventListener("click",()=>selectItem("edge",edge.__originalId,edge.__edgeIndex));edgeList.append(row);
+ });
+ if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前深度／方向範圍內沒有可顯示的關係。"));root.append(edgeList);
 }
 function appendDiagnosticContext(parent){
  if(!selected.path)return;
@@ -868,8 +906,8 @@ $("refocusSelection").addEventListener("click",()=>{
  render();
 });
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
-$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入本機檔案："+file.name+"。四個集合的基本結構已讀取；局部診斷不等同正式 Schema／完整跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
-$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
+$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id,index:0}:{type:"edge",id:model.edges.length?model.edges[0].id:"",index:0};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入本機檔案："+file.name+"。四個集合的基本結構已讀取；局部診斷不等同正式 Schema／完整跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
+$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id,index:0};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
 render();
 })();
 </script>
