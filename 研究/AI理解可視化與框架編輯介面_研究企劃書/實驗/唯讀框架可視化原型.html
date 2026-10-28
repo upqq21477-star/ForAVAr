@@ -217,7 +217,7 @@ function renderTree(){
   (children.get(n.id)||[]).forEach(id=>{const child=nodeById(id);if(child)draw(child,depth+1,next)});
  }
  roots.forEach(n=>draw(n,0,new Set()));
- model.nodes.filter(n=>!visited.has(n.id)&&branchHasMatch(n.id,new Set())).forEach(n=>{if(!root.childElementCount||!visited.has(n.id))root.append(el("div","message","非樹狀根節點或循環組成部分："+n.name);draw(n,0,new Set())});
+ model.nodes.filter(n=>!visited.has(n.id)&&branchHasMatch(n.id,new Set())).forEach(n=>{if(!root.childElementCount||!visited.has(n.id))root.append(el("div","message","非樹狀根節點或循環組成部分："+n.name));draw(n,0,new Set())});
  if(!root.childElementCount)root.append(el("div","empty","沒有符合目前搜尋與狀態篩選的節點。"));
 }
 function renderCards(){
