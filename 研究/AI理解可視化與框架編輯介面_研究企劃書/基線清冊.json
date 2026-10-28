@@ -89,8 +89,22 @@
         "e4_browser_interaction": "NOT_RUN"
       }
     },
-    "website_entry": "index.html",
-    "github_pages_deployment": "NOT_VERIFIED; root index.html committed, but live Pages response must be checked"
+    "website_entry": "index.html (committed at repository root; not yet published)",
+    "github_pages_deployment": "BLOCKED_NOT_ENABLED; GitHub API repository metadata has_pages=false; live checks of the canonical project URL, casing variants, and /index.html returned HTTP 404 on 2026-10-28. Repository visibility is private. Do not change visibility automatically; owner must choose an eligible Pages plan/source or explicitly authorize an alternative.",
+    "website_publish_blocker": {
+      "status": "OWNER_ACTION_REQUIRED",
+      "observed": [
+        "GitHub repository API has_pages=false",
+        "https://upqq21477-star.github.io/forAVAr/ returned HTTP 404",
+        "https://upqq21477-star.github.io/ForAVAr/ returned HTTP 404",
+        "https://upqq21477-star.github.io/foravar/ returned HTTP 404",
+        "https://upqq21477-star.github.io/forAVAr/index.html returned HTTP 404"
+      ],
+      "visibility": "private",
+      "plan_constraint_reference": "https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site",
+      "guardrail": "Do not make the repository public or create a paid/external deployment without explicit owner authorization.",
+      "next_action": "Owner checks Settings > Pages and account eligibility; if allowed, publish from main / (root). Only then perform one limited browser smoke check."
+    }
   },
   "current_baseline": [
     {
