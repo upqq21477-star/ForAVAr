@@ -14,7 +14,8 @@ header{padding:18px 22px 14px;border-bottom:1px solid var(--line);background:#10
 .actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:8px 12px}.btn.primary{background:#153b43;border-color:#287a78}.btn:hover{filter:brightness(1.15)}
 main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;padding:12px;max-width:1800px;margin:auto;min-height:calc(100vh - 110px)}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;min-width:0;overflow:hidden}.panel-head{padding:13px 14px;border-bottom:1px solid var(--line);font-weight:700}.panel-body{padding:13px}
-.fieldlabel{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}input[type=search]{width:100%;background:#0d1724;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:10px;margin-bottom:12px}
+.fieldlabel{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}input[type=search],select{width:100%;background:#0d1724;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:10px;margin-bottom:10px}
+.filter-grid{display:grid;grid-template-columns:1fr;gap:4px;margin-bottom:10px}.filter-actions{display:flex;gap:7px}.filter-actions .btn{flex:1;padding:7px 8px;font-size:12px}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.stat{background:#101a28;border:1px solid var(--line);border-radius:9px;padding:10px}.stat b{display:block;font-size:22px}.stat span{font-size:11px;color:var(--muted)}
 .keylist{display:flex;flex-direction:column;gap:6px;margin-top:10px}.keyrow{display:flex;align-items:center;gap:8px;padding:8px;border-radius:7px;background:#101a28;font-size:12px;color:var(--muted)}.dot{width:8px;height:8px;background:var(--accent);border-radius:50%;flex:none}
 .mainhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{padding:8px 11px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--muted)}.tab[aria-selected=true]{background:#153b43;color:var(--text);border-color:#287a78}.view{padding:14px;min-height:450px;overflow:auto}.view[hidden]{display:none}
@@ -45,8 +46,31 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
   <section class="panel sidebar">
     <div class="panel-head">模型與導覽</div>
     <div class="panel-body">
-      <label class="fieldlabel" for="search">搜尋節點名稱、ID 或功能</label>
-      <input id="search" type="search" placeholder="輸入關鍵字…" autocomplete="off">
+      <label class="fieldlabel" for="search">搜尋節點、關係、來源或條件</label>
+      <input id="search" type="search" placeholder="名稱、ID、關係類型或描述…" autocomplete="off">
+      <div class="filter-grid">
+        <label class="fieldlabel" for="reviewFilter">節點審核狀態</label>
+        <select id="reviewFilter">
+          <option value="">全部審核狀態</option>
+          <option value="pending_review">待審核</option>
+          <option value="accepted">已接受</option>
+          <option value="rejected">已拒絕</option>
+          <option value="disputed">有爭議</option>
+          <option value="needs_reconfirmation">需要重新確認</option>
+        </select>
+        <label class="fieldlabel" for="evidenceFilter">節點證據狀態</label>
+        <select id="evidenceFilter">
+          <option value="">全部證據狀態</option>
+          <option value="not_applicable">不適用</option>
+          <option value="unverified">未驗證</option>
+          <option value="supported">有支持證據</option>
+          <option value="insufficient">證據不足</option>
+          <option value="contradicted">受到反駁</option>
+          <option value="mixed">證據混合</option>
+        </select>
+        <div class="filter-actions"><button id="clearFilters" class="btn" type="button">清除篩選</button></div>
+      </div>
+      <div id="filterSummary" class="message" aria-live="polite">顯示全部節點與關係。</div>
       <div id="modelTitle" class="detail-title">示例模型</div>
       <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
       <div class="stats">
@@ -127,8 +151,35 @@ function nodeById(id){return model.nodes.find(n=>n.id===id)}
 function edgeById(id){return model.edges.find(e=>e.id===id)}
 function sourceById(id){return model.sources.find(s=>s.id===id)}
 function condById(id){return model.conditions.find(c=>c.id===id)}
-function nodeText(n){return [n.id,n.name,n.function,n.structural_role,n.entity_kind].join(" ").toLowerCase()}
-function matchingNodes(){const q=$("search").value.trim().toLowerCase();return model.nodes.filter(n=>!q||nodeText(n).includes(q))}
+function nodeText(n){
+ const sources=(n.provenance_refs||[]).map(sourceById).filter(Boolean).flatMap(s=>[s.label,s.excerpt,s.locator,s.id]);
+ const conditions=(n.condition_refs||[]).map(condById).filter(Boolean).flatMap(c=>[c.name,c.description,c.id]);
+ return [n.id,n.name,n.function,n.description,n.structural_role,n.entity_kind,n.review_status,n.evidence_status,...sources,...conditions].join(" ").toLowerCase();
+}
+function edgeText(e){
+ const a=nodeById(e.source_id), b=nodeById(e.target_id);
+ const sources=(e.provenance_refs||[]).map(sourceById).filter(Boolean).flatMap(s=>[s.label,s.excerpt,s.locator,s.id]);
+ const conditions=(e.condition_refs||[]).map(condById).filter(Boolean).flatMap(c=>[c.name,c.description,c.id]);
+ return [e.id,e.relation_type,relationLabel[e.relation_type],e.description,e.review_status,e.evidence_status,e.source_id,e.target_id,a&&a.name,a&&a.function,b&&b.name,b&&b.function,...sources,...conditions].join(" ").toLowerCase();
+}
+function nodePassesFilters(n){
+ const review=$("reviewFilter").value, evidence=$("evidenceFilter").value;
+ return (!review||n.review_status===review)&&(!evidence||n.evidence_status===evidence);
+}
+function matchingNodes(){
+ const q=$("search").value.trim().toLowerCase();
+ return model.nodes.filter(n=>nodePassesFilters(n)&&(!q||nodeText(n).includes(q)));
+}
+function matchingEdges(){
+ const q=$("search").value.trim().toLowerCase();
+ return model.edges.filter(e=>!q||edgeText(e).includes(q));
+}
+function updateFilterSummary(){
+ const n=matchingNodes().length, e=matchingEdges().length, q=$("search").value.trim();
+ const active=Boolean(q||$("reviewFilter").value||$("evidenceFilter").value);
+ $("filterSummary").textContent=active?("符合節點篩選："+n+"／"+model.nodes.length+"；搜尋符合關係："+e+"／"+model.edges.length+"。狀態篩選只套用於節點；關係搜尋會保留端點作為脈絡。"):"顯示全部節點與關係："+model.nodes.length+" 個節點、"+model.edges.length+" 條關係。";
+ $("viewCount").lastElementChild.textContent=n+" 節點符合 · "+e+" 關係匹配";
+}
 function selectItem(type,id){selected={type:type,id:id};render()}
 function badge(text, cls){return el("span","badge "+(cls||""),text)}
 function badges(n){const box=el("div","badges");box.append(badge(roleLabel[n.structural_role]||n.structural_role),badge(n.entity_kind||"未分類"),badge(n.review_status||"審核未知",n.review_status==="accepted"?"accepted":"pending"),badge(n.evidence_status||"證據未知"));return box}
@@ -136,24 +187,38 @@ function showModelStats(){ $("modelTitle").textContent=model.title||"未命名�
 function renderTree(){
  const root=$("treeView");root.replaceChildren();
  const allowed=new Set(matchingNodes().map(n=>n.id));
- const parent=new Map(), children=new Map(model.nodes.map(n=>[n.id,[]]));
- model.edges.filter(e=>e.relation_type==="contains"&&nodeById(e.source_id)&&nodeById(e.target_id)).forEach(e=>{if(!parent.has(e.target_id)){parent.set(e.target_id,e.source_id);children.get(e.source_id).push(e.target_id)}});
+ const parent=new Map(), children=new Map(model.nodes.map(n=>[n.id,[]])), allParents=new Map(model.nodes.map(n=>[n.id,[]]));
+ model.edges.filter(e=>e.relation_type==="contains"&&nodeById(e.source_id)&&nodeById(e.target_id)).forEach(e=>{
+  allParents.get(e.target_id).push(e.source_id);
+  if(!parent.has(e.target_id)){parent.set(e.target_id,e.source_id);children.get(e.source_id).push(e.target_id)}
+ });
  let roots=model.nodes.filter(n=>!parent.has(n.id));
  if(!roots.length&&model.nodes.length) roots=[model.nodes[0]];
  const visited=new Set();
+ function branchHasMatch(id, trail){
+  if(allowed.has(id)) return true;
+  if(trail.has(id)) return false;
+  const next=new Set(trail);next.add(id);
+  return (children.get(id)||[]).some(child=>branchHasMatch(child,next));
+ }
  function draw(n,depth,anc){
-  if(!allowed.has(n.id)&&!children.get(n.id).some(id=>allowed.has(id))) return;
-  const row=el("button","tree-node"+(selected.type==="node"&&selected.id===n.id?" selected":""),"");
+  if(anc.has(n.id)){root.append(el("div","message","偵測到 contains 循環，已在此停止展開："+n.id));return}
+  if(visited.has(n.id)){return}
+  if(!branchHasMatch(n.id,new Set())) return;
+  visited.add(n.id);
+  const row=el("button","tree-node"+(selected.type==="node"&&selected.id===n.id?" selected":""));
   row.type="button";row.style.setProperty("--indent",Math.min(depth,7)*15+"px");row.setAttribute("aria-label","選取節點 "+n.name);
   row.append(el("span","indent"));
-  const info=el("span","tree-label");info.append(el("span","tree-name",n.name||n.id),el("span","tree-meta",(roleLabel[n.structural_role]||"未分類")+" · "+n.id));row.append(info,badge(n.review_status||"未知"));row.addEventListener("click",()=>selectItem("node",n.id));root.append(row);
-  if(anc.has(n.id)){root.append(el("div","message","偵測到循環：已停止展開 "+n.id));return}
-  visited.add(n.id);const next=new Set(anc);next.add(n.id);
+  const info=el("span","tree-label");info.append(el("span","tree-name",n.name||n.id),el("span","tree-meta",(roleLabel[n.structural_role]||"未分類")+" · "+n.id));row.append(info,badge(n.review_status||"未知"));
+  const parentCount=(allParents.get(n.id)||[]).length;
+  if(parentCount>1) row.append(badge("多父節點 "+parentCount));
+  row.addEventListener("click",()=>selectItem("node",n.id));root.append(row);
+  const next=new Set(anc);next.add(n.id);
   (children.get(n.id)||[]).forEach(id=>{const child=nodeById(id);if(child)draw(child,depth+1,next)});
  }
  roots.forEach(n=>draw(n,0,new Set()));
- model.nodes.filter(n=>!visited.has(n.id)&&allowed.has(n.id)).forEach(n=>{root.append(el("div","message","未掛在 contains 階層下的節點"));draw(n,0,new Set())});
- if(!root.childElementCount)root.append(el("div","empty","沒有符合搜尋條件的節點。"));
+ model.nodes.filter(n=>!visited.has(n.id)&&branchHasMatch(n.id,new Set())).forEach(n=>{if(!root.childElementCount||!visited.has(n.id))root.append(el("div","message","非樹狀根節點或循環組成部分："+n.name);draw(n,0,new Set())});
+ if(!root.childElementCount)root.append(el("div","empty","沒有符合目前搜尋與狀態篩選的節點。"));
 }
 function renderCards(){
  const root=$("cardsView");root.replaceChildren();const grid=el("div","cards");
@@ -161,22 +226,47 @@ function renderCards(){
  if(!grid.childElementCount)root.append(el("div","empty","沒有符合搜尋條件的節點。"));else root.append(grid);
 }
 function renderGraph(){
- const root=$("graphView");root.replaceChildren();root.append(el("p","graph-hint","點節點看內容；點關係線或下方關係列看關係語意。包含關係用於估算層級，其他邊保留原始方向。"));
- const nodes=matchingNodes();const nodeIds=new Set(nodes.map(n=>n.id));if(!nodes.length){root.append(el("div","empty","沒有符合搜尋條件的節點。"));return}
- const parents=new Map(),depth=new Map();model.edges.filter(e=>e.relation_type==="contains"&&nodeIds.has(e.source_id)&&nodeIds.has(e.target_id)).forEach(e=>{if(!parents.has(e.target_id))parents.set(e.target_id,e.source_id)});
- const roots=nodes.filter(n=>!parents.has(n.id));if(!roots.length)roots.push(nodes[0]);
+ const root=$("graphView");root.replaceChildren();
+ root.append(el("p","graph-hint","可搜尋節點或關係。選取節點查看屬性；選取關係線或關係列查看端點、條件與來源。關係結果可保留端點作為閱讀脈絡。"));
+ const q=$("search").value.trim().toLowerCase();
+ const directNodes=matchingNodes(), edgeMatches=matchingEdges();
+ const nodeMap=new Map(directNodes.map(n=>[n.id,n]));
+ if(q&&edgeMatches.length){
+  edgeMatches.forEach(e=>[e.source_id,e.target_id].forEach(id=>{const n=nodeById(id);if(n&&!nodeMap.has(id))nodeMap.set(id,n)}));
+ }
+ const nodes=Array.from(nodeMap.values()),nodeIds=new Set(nodes.map(n=>n.id));
+ if(!nodes.length){root.append(el("div","empty","沒有符合目前搜尋與狀態篩選的節點或可定位關係。"));return}
+ const visibleEdges=(q&&edgeMatches.length?edgeMatches:model.edges.filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id))).filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id));
+ const depth=new Map(), containsChildren=new Map(nodes.map(n=>[n.id,[]])), parents=new Map();
+ model.edges.filter(e=>e.relation_type==="contains"&&nodeById(e.source_id)&&nodeById(e.target_id)).forEach(e=>{if(!parents.has(e.target_id))parents.set(e.target_id,e.source_id);if(containsChildren.has(e.source_id))containsChildren.get(e.source_id).push(e.target_id)});
+ let roots=nodes.filter(n=>!parents.has(n.id)||!nodeIds.has(parents.get(n.id)));if(!roots.length)roots=[nodes[0]];
  roots.forEach(n=>depth.set(n.id,0));let changed=true;
  for(let k=0;k<nodes.length&&changed;k++){changed=false;model.edges.filter(e=>e.relation_type==="contains").forEach(e=>{if(depth.has(e.source_id)&&nodeIds.has(e.target_id)&&!depth.has(e.target_id)){depth.set(e.target_id,Math.min(4,depth.get(e.source_id)+1));changed=true}})}
  nodes.forEach(n=>{if(!depth.has(n.id))depth.set(n.id,0)});
  const groups={};nodes.forEach(n=>{const d=depth.get(n.id);(groups[d]||(groups[d]=[])).push(n)});
- const maxDepth=Math.max.apply(null,nodes.map(n=>depth.get(n.id))), colGap=250, rowGap=110, width=200+maxDepth*colGap+220, maxRows=Math.max.apply(null,Object.values(groups).map(g=>g.length)), height=Math.max(330,maxRows*rowGap+100);
+ const maxDepth=Math.max.apply(null,nodes.map(n=>depth.get(n.id))),colGap=250,rowGap=110,width=200+maxDepth*colGap+220,maxRows=Math.max.apply(null,Object.values(groups).map(g=>g.length)),height=Math.max(330,maxRows*rowGap+100);
  const pos={};Object.keys(groups).forEach(d=>groups[d].forEach((n,i)=>{pos[n.id]={x:55+Number(d)*colGap,y:45+i*rowGap}}));
- const ns="http://www.w3.org/2000/svg",svg=document.createElementNS(ns,"svg");svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("class","graph");svg.setAttribute("role","img");svg.setAttribute("aria-label","節點與關係圖");
+ const ns="http://www.w3.org/2000/svg",svg=document.createElementNS(ns,"svg");svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("class","graph");svg.setAttribute("role","group");svg.setAttribute("aria-label","可互動節點與關係圖");
  const defs=document.createElementNS(ns,"defs"),marker=document.createElementNS(ns,"marker");marker.setAttribute("id","arrow");marker.setAttribute("markerWidth","8");marker.setAttribute("markerHeight","8");marker.setAttribute("refX","6");marker.setAttribute("refY","3");marker.setAttribute("orient","auto");const arrow=document.createElementNS(ns,"path");arrow.setAttribute("d","M0,0 L6,3 L0,6 Z");arrow.setAttribute("fill","#71879f");marker.append(arrow);defs.append(marker);svg.append(defs);
- model.edges.filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id)).forEach(e=>{const a=pos[e.source_id],b=pos[e.target_id];if(!a||!b)return;const line=document.createElementNS(ns,"path");const sx=a.x+178,sy=a.y+38,tx=b.x,ty=b.y+38;line.setAttribute("d","M"+sx+" "+sy+" C"+(sx+35)+" "+sy+" "+(tx-35)+" "+ty+" "+tx+" "+ty);line.setAttribute("class","graph-edge"+(selected.type==="edge"&&selected.id===e.id?" selected":""));line.setAttribute("marker-end","url(#arrow)");line.setAttribute("stroke-width","12");line.setAttribute("stroke-linecap","round");line.setAttribute("stroke-opacity",selected.type==="edge"&&selected.id===e.id?"0.85":"0.001");line.addEventListener("click",()=>selectItem("edge",e.id));svg.append(line);const visible=document.createElementNS(ns,"path");visible.setAttribute("d",line.getAttribute("d"));visible.setAttribute("class","graph-edge"+(selected.type==="edge"&&selected.id===e.id?" selected":""));visible.setAttribute("marker-end","url(#arrow)");visible.addEventListener("click",()=>selectItem("edge",e.id));svg.append(visible);const label=document.createElementNS(ns,"text");label.setAttribute("x",(sx+tx)/2);label.setAttribute("y",(sy+ty)/2-7);label.setAttribute("class","edge-label");label.textContent=relationLabel[e.relation_type]||e.relation_type;svg.append(label)});
- nodes.forEach(n=>{const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&selected.id===n.id?" selected":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);const rect=document.createElementNS(ns,"rect");rect.setAttribute("width","180");rect.setAttribute("height","76");rect.setAttribute("rx","9");g.append(rect);const title=document.createElementNS(ns,"text");title.setAttribute("x","10");title.setAttribute("y","24");title.textContent=(n.name||n.id).slice(0,19);g.append(title);const meta=document.createElementNS(ns,"text");meta.setAttribute("x","10");meta.setAttribute("y","46");meta.setAttribute("style","fill:#9db0c4;font-size:11px");meta.textContent=(roleLabel[n.structural_role]||"未指定")+" · "+(n.entity_kind||"未知");g.append(meta);g.addEventListener("click",()=>selectItem("node",n.id));g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("node",n.id)}});svg.append(g)});
+ visibleEdges.forEach(e=>{
+  const a=pos[e.source_id],b=pos[e.target_id];if(!a||!b)return;
+  const d="M"+(a.x+178)+" "+(a.y+38)+" C"+(a.x+213)+" "+(a.y+38)+" "+(b.x-35)+" "+(b.y+38)+" "+b.x+" "+(b.y+38);
+  const visible=document.createElementNS(ns,"path");visible.setAttribute("d",d);visible.setAttribute("class","graph-edge"+(selected.type==="edge"&&selected.id===e.id?" selected":""));visible.setAttribute("marker-end","url(#arrow)");visible.setAttribute("pointer-events","none");svg.append(visible);
+  const hit=document.createElementNS(ns,"path");hit.setAttribute("d",d);hit.setAttribute("fill","none");hit.setAttribute("stroke","transparent");hit.setAttribute("stroke-width","16");hit.setAttribute("tabindex","0");hit.setAttribute("role","button");hit.setAttribute("aria-label","選取關係："+(relationLabel[e.relation_type]||e.relation_type));hit.style.cursor="pointer";hit.addEventListener("click",()=>selectItem("edge",e.id));hit.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("edge",e.id)}});svg.append(hit);
+  const label=document.createElementNS(ns,"text");label.setAttribute("x",(a.x+178+b.x)/2);label.setAttribute("y",(a.y+38+b.y+38)/2-7);label.setAttribute("class","edge-label");label.textContent=relationLabel[e.relation_type]||e.relation_type;svg.append(label);
+ });
+ nodes.forEach(n=>{
+  const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&selected.id===n.id?" selected":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);
+  const rect=document.createElementNS(ns,"rect");rect.setAttribute("width","180");rect.setAttribute("height","76");rect.setAttribute("rx","9");g.append(rect);
+  const title=document.createElementNS(ns,"text");title.setAttribute("x","10");title.setAttribute("y","24");title.textContent=(n.name||n.id).slice(0,19);g.append(title);
+  const meta=document.createElementNS(ns,"text");meta.setAttribute("x","10");meta.setAttribute("y","46");meta.setAttribute("style","fill:#9db0c4;font-size:11px");meta.textContent=(roleLabel[n.structural_role]||"未指定")+" · "+(n.entity_kind||"未知");g.append(meta);
+  g.addEventListener("click",()=>selectItem("node",n.id));g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("node",n.id)}});svg.append(g);
+ });
  const wrap=el("div","graphwrap");wrap.append(svg);root.append(wrap);
- const edgeList=el("div","edge-list");model.edges.filter(e=>nodeIds.has(e.source_id)||nodeIds.has(e.target_id)).forEach(e=>{const row=el("button","edge-row"+(selected.type==="edge"&&selected.id===e.id?" selected":""));row.type="button";const a=nodeById(e.source_id),b=nodeById(e.target_id);row.append(el("div","edge-path",(a?a.name:e.source_id)+"  →  "+(relationLabel[e.relation_type]||e.relation_type)+"  →  "+(b?b.name:e.target_id)),el("div","edge-description",e.description||"未提供關係描述"));row.addEventListener("click",()=>selectItem("edge",e.id));edgeList.append(row)});if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前沒有關係資料。"));root.append(edgeList);
+ const edgeList=el("div","edge-list");
+ visibleEdges.forEach(e=>{const row=el("button","edge-row"+(selected.type==="edge"&&selected.id===e.id?" selected":""));row.type="button";const a=nodeById(e.source_id),b=nodeById(e.target_id);row.append(el("div","edge-path",(a?a.name:e.source_id)+"  →  "+(relationLabel[e.relation_type]||e.relation_type)+"  →  "+(b?b.name:e.target_id)),el("div","edge-description",e.description||"未提供關係描述"));row.addEventListener("click",()=>selectItem("edge",e.id));edgeList.append(row)});
+ if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前範圍內沒有可顯示的關係。"));
+ root.append(edgeList);
 }
 function detailNode(n){
  const root=$("detailPanel");root.replaceChildren();if(!n){root.append(el("div","empty","找不到所選節點。"));return}
@@ -193,12 +283,15 @@ function detailEdge(e){
  const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源／條件"));const sources=(e.provenance_refs||[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(s=>refs.append(el("div","tree-node",s.label||s.id),el("div","message",s.excerpt||s.locator||s.id)));(e.condition_refs||[]).map(condById).filter(Boolean).forEach(c=>refs.append(el("div","fieldlabel",c.name||c.id),el("div","message",c.description||"")));root.append(refs);
 }
 function renderDetail(){if(selected.type==="edge")detailEdge(edgeById(selected.id));else detailNode(nodeById(selected.id))}
-function render(){showModelStats();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail()}
+function render(){showModelStats();updateFilterSummary();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail()}
 function minimalShape(x){if(!x||typeof x!=="object"||!Array.isArray(x.nodes)||!Array.isArray(x.edges)||!Array.isArray(x.conditions)||!Array.isArray(x.sources))throw new Error("檔案需包含 nodes、edges、conditions、sources 四個陣列。");const ids=new Set();x.nodes.forEach(n=>{if(!n||typeof n.id!=="string"||!n.id||typeof n.name!=="string")throw new Error("每個節點至少要有字串 id 與 name。");if(ids.has(n.id))throw new Error("節點 ID 重複："+n.id);ids.add(n.id)});return true}
 $("search").addEventListener("input",()=>render());
+$("reviewFilter").addEventListener("change",()=>render());
+$("evidenceFilter").addEventListener("change",()=>render());
+$("clearFilters").addEventListener("click",()=>{$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";render()});
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
-$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("loadMessage").className="message";$("loadMessage").textContent="已載入："+file.name+"。只做基本讀取檢查，未執行完整 Schema／跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
-$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
+$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("loadMessage").className="message";$("loadMessage").textContent="已載入："+file.name+"。只做基本讀取檢查，未執行完整 Schema／跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
+$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
 render();
 })();
 </script>
