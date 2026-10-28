@@ -51,7 +51,18 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .graph-control{min-width:0}.graph-control label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.graph-control select{width:100%;background:#0d1724;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px}
 @media(max-width:520px){.graph-controls{grid-template-columns:1fr}}
 .edge-list{display:flex;flex-direction:column;gap:8px;margin-top:13px}.edge-row{width:100%;text-align:left;border:1px solid var(--line);background:#101a28;border-radius:8px;padding:10px}.edge-row.selected{border-color:var(--accent)}.edge-path{font-weight:650;font-size:13px}.edge-description{color:var(--muted);font-size:12px;margin-top:4px}
-.detail-section{margin-bottom:16px}.detail-title{font-size:17px;line-height:1.35;font-weight:750;overflow-wrap:anywhere}.detail-id{font:11px ui-monospace,monospace;color:var(--muted);overflow-wrap:anywhere;margin-top:5px}.detail-function{margin:12px 0;padding:10px;border-left:3px solid var(--accent);background:#101a28;border-radius:0 7px 7px 0}.kv{border-top:1px solid var(--line);padding:8px 0;display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}.empty{padding:36px 15px;text-align:center;color:var(--muted)}.foot{padding:10px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
+.detail-section{margin-bottom:16px}.detail-title{font-size:17px;line-height:1.35;font-weight:750;overflow-wrap:anywhere}.detail-id{font:11px ui-monospace,monospace;color:var(--muted);overflow-wrap:anywhere;margin-top:5px}.detail-function{margin:12px 0;padding:10px;border-left:3px solid var(--accent);background:#101a28;border-radius:0 7px 7px 0}.kv{border-top:1px solid var(--line);padding:8px 0;display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}
+.field-audit{margin:0 0 16px;border:1px solid var(--line);border-radius:9px;background:#101a28;overflow:hidden}
+.field-audit>summary{cursor:pointer;padding:10px;font-size:12px;font-weight:700;line-height:1.5;color:var(--text);overflow-wrap:anywhere}
+.field-audit[open]>summary{border-bottom:1px solid var(--line)}
+.field-audit-body{padding:0 10px 10px}
+.field-audit-group{margin-top:10px}
+.field-audit-heading{font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px}
+.field-audit-key-list{display:flex;flex-wrap:wrap;gap:5px}
+.field-audit-key{font:10px ui-monospace,monospace;color:var(--accent);background:#182a3a;border:1px solid var(--line);border-radius:5px;padding:3px 5px;overflow-wrap:anywhere}
+.field-audit-raw{margin-top:5px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.field-audit-raw>summary{cursor:pointer;padding:7px;font:11px ui-monospace,monospace;color:var(--text);background:#141f2e;overflow-wrap:anywhere}
+.field-audit-value{margin:0;padding:8px;font:11px/1.45 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;max-height:280px;overflow:auto;color:var(--muted);background:#0b121c}.empty{padding:36px 15px;text-align:center;color:var(--muted)}.foot{padding:10px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
 .status{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}.status .dot{background:var(--warn)}.message{font-size:12px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}.message.error{color:var(--bad)}.fileinput{display:none}
 .diag-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#101a28;text-align:left;font-weight:650}
 .diag-count{font-size:11px;border-radius:99px;padding:2px 7px;background:#263447;color:var(--muted)}
@@ -224,9 +235,66 @@ const $=id=>document.getElementById(id);
 const esc=(x)=>String(x===undefined||x===null?"—":x);
 const roleLabel={core:"核心",main_axis:"主軸",skeleton:"骨架",module:"模組",detail:"細節",unassigned:"未指定"};
 const relationLabel={contains:"包含",depends_on:"依賴",precedes:"先於",causes:"造成",influences:"影響",triggers:"觸發",transfers_data_to:"傳遞資料",conflicts_with:"衝突",supersedes:"取代",explains:"解釋",supports:"支持",implements:"實作",derived_from:"衍生自",satisfies:"滿足",verified_by:"由…驗證",is_evidence_for:"作為…證據",refutes:"反駁"};
+const DETAIL_FIELD_MAP = {"node":["id","name","function","structural_role","entity_kind","review_status","evidence_status","claim_kind","provenance_refs","condition_refs","description","attributes"],"edge":["id","source_id","target_id","relation_type","description","review_status","evidence_status","provenance_refs","condition_refs","attributes"],"source":["id","source_type","label","locator","excerpt"],"condition":["id","name","description","expression"]};
+const DETAIL_TYPE_LABEL = {node:"節點",edge:"關係",source:"來源",condition:"條件"};
 function clone(o){return JSON.parse(JSON.stringify(o))}
 function el(tag, cls, text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
 function addKV(parent,k,v){const row=el("dl","kv"),dt=el("dt","",k),dd=el("dd","",Array.isArray(v)?(v.length?v.join(", "):"—"):(typeof v==="object"&&v!==null?JSON.stringify(v,null,2):esc(v)));row.append(dt,dd);parent.append(row)}
+function fieldMappingInventory(type,obj){
+ const mappedSet=new Set(DETAIL_FIELD_MAP[type]||[]);
+ const present=Object.keys(obj&&typeof obj==="object"?obj:{});
+ return {present:present,mapped:present.filter(key=>mappedSet.has(key)),unmapped:present.filter(key=>!mappedSet.has(key))};
+}
+function fieldValueState(value){
+ if(value===null)return "null（明確 null）";
+ if(value==="")return "空字串";
+ if(Array.isArray(value))return "陣列（"+value.length+" 項）"+(value.length===0?" · 空陣列":"");
+ if(typeof value==="object")return "物件（"+Object.keys(value).length+" 個頂層鍵）"+(Object.keys(value).length===0?" · 空物件":"");
+ if(typeof value==="string")return "字串（"+value.length+" 字元）";
+ if(typeof value==="number")return "數字";
+ if(typeof value==="boolean")return "布林值";
+ return typeof value;
+}
+function rawFieldText(value){
+ if(value===undefined)return "undefined";
+ try{const encoded=JSON.stringify(value,null,2);return encoded===undefined?String(value):encoded}
+ catch(error){return String(value)}
+}
+function appendFieldMappingAudit(parent,type,obj,index){
+ const inventory=fieldMappingInventory(type,obj);
+ const collection={node:"nodes",edge:"edges",source:"sources",condition:"conditions"}[type]||"objects";
+ const path=Number.isInteger(index)&&index>=0?collection+"["+index+"]":collection+"[位置未定]";
+ const audit=el("details","field-audit");
+ audit.append(el("summary","field-audit-summary",
+  "欄位盤點 · "+(DETAIL_TYPE_LABEL[type]||type)+" · "+path+
+  " · 載入 "+inventory.present.length+" 欄"+
+  "／專用映射 "+inventory.mapped.length+
+  "／原始欄位 "+inventory.unmapped.length));
+ const body=el("div","field-audit-body");
+ body.append(el("div","message",
+  "只盤點此物件的頂層 JSON 欄位。專用映射代表原型有明確的顯示／導覽規則；原始欄位仍保留原值供檢視，但原型不推定其語意。未出現在物件中的欄位不列為未映射欄位，也不在此判定是否必填。"));
+ const mappedGroup=el("div","field-audit-group");
+ mappedGroup.append(el("div","field-audit-heading","專用映射欄位（"+inventory.mapped.length+"）"));
+ if(inventory.mapped.length){
+  const keys=el("div","field-audit-key-list");
+  inventory.mapped.forEach(key=>keys.append(el("code","field-audit-key",key)));
+  mappedGroup.append(keys);
+ }else mappedGroup.append(el("div","message","本物件沒有命中原型的專用映射欄位。"));
+ body.append(mappedGroup);
+ const rawGroup=el("div","field-audit-group");
+ rawGroup.append(el("div","field-audit-heading","已載入、未做專用語意映射（"+inventory.unmapped.length+"）"));
+ if(inventory.unmapped.length){
+  inventory.unmapped.forEach(key=>{
+   const item=el("details","field-audit-raw");
+   item.append(el("summary","field-audit-raw-summary",key+" · "+fieldValueState(obj[key])));
+   item.append(el("pre","field-audit-value",rawFieldText(obj[key])));
+   rawGroup.append(item);
+  });
+ }else rawGroup.append(el("div","message","沒有額外的原始欄位。"));
+ body.append(rawGroup);
+ audit.append(body);
+ parent.append(audit);
+}
 function nodeById(id){return model.nodes.find(n=>n.id===id)}
 function edgeById(id){return model.edges.find(e=>e.id===id)}
 function sourceById(id){return model.sources.find(s=>s.id===id)}
@@ -623,8 +691,9 @@ function detailSource(source){
  sec.append(el("div","detail-title",source.label||source.id||"未命名來源"),el("div","detail-id",source.id||"(無 ID)"),el("div","detail-function",source.excerpt||source.locator||"未提供摘錄或定位"));
  appendDiagnosticContext(sec);root.append(sec);
  const fields=el("div","detail-section");
- Object.entries(source).forEach(([key,value])=>addKV(fields,key,value));
- root.append(fields);
+ DETAIL_FIELD_MAP.source.forEach(key=>{if(Object.prototype.hasOwnProperty.call(source,key))addKV(fields,key,source[key])});
+ if(fields.childElementCount)root.append(fields);
+ appendFieldMappingAudit(root,"source",source,model.sources.indexOf(source));
  appendReverseReferences(root,"source",source.id,model.sources.indexOf(source));
 }
 function detailCondition(condition){
@@ -634,22 +703,25 @@ function detailCondition(condition){
  sec.append(el("div","detail-title",condition.name||condition.id||"未命名條件"),el("div","detail-id",condition.id||"(無 ID)"),el("div","detail-function",condition.description||condition.expression||"未提供條件說明"));
  appendDiagnosticContext(sec);root.append(sec);
  const fields=el("div","detail-section");
- Object.entries(condition).forEach(([key,value])=>addKV(fields,key,value));
- root.append(fields);
+ DETAIL_FIELD_MAP.condition.forEach(key=>{if(Object.prototype.hasOwnProperty.call(condition,key))addKV(fields,key,condition[key])});
+ if(fields.childElementCount)root.append(fields);
+ appendFieldMappingAudit(root,"condition",condition,model.conditions.indexOf(condition));
  appendReverseReferences(root,"condition",condition.id,model.conditions.indexOf(condition));
 }
 function detailNode(n){
  const root=$("detailPanel");root.replaceChildren();if(!n){root.append(el("div","empty","找不到所選節點。"));return}
  const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));appendDiagnosticContext(sec);appendReferenceOrigin(sec);root.append(sec);
  const fields=el("div","detail-section");
- [["結構角色",roleLabel[n.structural_role]||n.structural_role],["物件類型",n.entity_kind],["審核狀態",n.review_status],["證據狀態",n.evidence_status],["來源引用",n.provenance_refs],["條件引用",n.condition_refs],["補充說明",n.description],["其他屬性",n.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});
+ [["結構角色",roleLabel[n.structural_role]||n.structural_role],["物件類型",n.entity_kind],["審核狀態",n.review_status],["證據狀態",n.evidence_status],["主張類型",n.claim_kind],["來源引用",n.provenance_refs],["條件引用",n.condition_refs],["補充說明",n.description],["其他屬性",n.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});
  root.append(fields);
+ appendFieldMappingAudit(root,"node",n,model.nodes.indexOf(n));
  const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源引用（點選查看完整紀錄）"));const sources=(Array.isArray(n.provenance_refs)?n.provenance_refs:[]).map(id=>({id,obj:sourceById(id)}));if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用；不能由此推定內容為真。"));sources.forEach(x=>{if(x.obj)refs.append(referenceButton("source",x.obj,model.sources.indexOf(x.obj),x.obj.label||x.id,(x.obj.source_type||"來源")+" · "+(x.obj.locator||x.id)),el("div","message",x.obj.excerpt||"未提供摘錄"));else refs.append(el("div","message","未解析來源引用："+x.id))});refs.append(el("div","fieldlabel","條件引用（點選查看完整紀錄）"));(Array.isArray(n.condition_refs)?n.condition_refs:[]).map(id=>({id,obj:condById(id)})).forEach(x=>{if(x.obj)refs.append(referenceButton("condition",x.obj,model.conditions.indexOf(x.obj),x.obj.name||x.id,"條件 · "+x.id),el("div","message",x.obj.description||"未提供條件說明"));else refs.append(el("div","message","未解析條件引用："+x.id))});root.append(refs);
 }
 function detailEdge(e){
  const root=$("detailPanel");root.replaceChildren();if(!e){root.append(el("div","empty","找不到所選關係。"));return}
  const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));appendDiagnosticContext(sec);appendReferenceOrigin(sec);root.append(sec);
  const fields=el("div","detail-section");[["來源端點",e.source_id],["目標端點",e.target_id],["關係類型",e.relation_type],["審核狀態",e.review_status],["證據狀態",e.evidence_status],["來源引用",e.provenance_refs],["條件引用",e.condition_refs],["其他屬性",e.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});root.append(fields);
+ appendFieldMappingAudit(root,"edge",e,model.edges.indexOf(e));
  const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源引用（點選查看完整紀錄）"));const sources=(Array.isArray(e.provenance_refs)?e.provenance_refs:[]).map(id=>({id,obj:sourceById(id)}));if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(x=>{if(x.obj)refs.append(referenceButton("source",x.obj,model.sources.indexOf(x.obj),x.obj.label||x.id,(x.obj.source_type||"來源")+" · "+(x.obj.locator||x.id)),el("div","message",x.obj.excerpt||"未提供摘錄"));else refs.append(el("div","message","未解析來源引用："+x.id))});refs.append(el("div","fieldlabel","條件引用（點選查看完整紀錄）"));(Array.isArray(e.condition_refs)?e.condition_refs:[]).map(id=>({id,obj:condById(id)})).forEach(x=>{if(x.obj)refs.append(referenceButton("condition",x.obj,model.conditions.indexOf(x.obj),x.obj.name||x.id,"條件 · "+x.id),el("div","message",x.obj.description||"未提供條件說明"));else refs.append(el("div","message","未解析條件引用："+x.id))});root.append(refs);
 }
 function renderDetail(){
