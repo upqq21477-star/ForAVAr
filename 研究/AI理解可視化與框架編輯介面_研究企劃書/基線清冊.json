@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, WU-C0-15 cross-view position identity and root entry, WU-C0-16 GitHub Pages reachability, WU-C0-17 read-only two-model version diff, WU-C0-18 registry-driven impact candidates, WU-C0-19 global ID collision diagnosis, and WU-C0-20 model contract compatibility / file-read recovery implemented. JavaScript COMPILE_OK. Local logic simulations: WU-C0-17 10/10, WU-C0-18 10/10, WU-C0-19 11/11, WU-C0-20 10/10. Browser interaction smoke test remains NOT_RUN; overall system E4 and user acceptance remain NOT_STARTED.",
+    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, WU-C0-15 cross-view position identity and root entry, WU-C0-16 GitHub Pages reachability, WU-C0-17 read-only two-model version diff, WU-C0-18 registry-driven impact candidates, WU-C0-19 global ID collision diagnosis, WU-C0-20 model contract compatibility/file-read recovery, WU-C0-21 nested JSON path diffs, and WU-C0-22 read-only three-way conflict analysis implemented. JavaScript COMPILE_OK. Local pure-logic simulations: WU-C0-17 10/10, WU-C0-18 10/10, WU-C0-19 11/11, WU-C0-20 10/10, WU-C0-21 11/11, WU-C0-22 20/20. Browser interaction smoke test remains NOT_RUN; full system E4 and user acceptance remain NOT_STARTED.",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -46,7 +46,7 @@
         "UNRESOLVED_CONDITION_REF",
         "CLAIM_WITHOUT_SOURCE"
       ],
-      "browser_interaction": "NOT_RUN; intentionally deferred until remaining read-only diff/impact functionality is implemented",
+      "browser_interaction": "NOT_RUN; intentionally deferred until the remaining read-only diff/impact functionality is implemented",
       "full_schema_validation": "BLOCKED / NOT_RUN",
       "cross_object_validation": "PARTIAL_LOCAL_DIAGNOSTICS_ONLY",
       "persistence_or_writeback": false,
@@ -101,7 +101,7 @@
       "visibility": "public",
       "public_scope_warning": "All tracked files in this public repository are publicly viewable, including docs/, runtime/, 研究/, and 進度/; not only the Pages homepage.",
       "no_cost_route": "GitHub Pages is enabled and reachable; no paid plan used.",
-      "next_action": "Continue remaining read-only version diff/impact functionality, including nested-field path precision, then perform one bounded real-browser smoke test. Browser actions must remain NOT_RUN until actually executed."
+      "next_action": "Continue remaining read-only diff result filtering and object navigation. Perform a bounded real-browser smoke test only after the remaining functionality is complete, and keep browser_interaction NOT_RUN until actual browser actions occur."
     },
     "version_diff": {
       "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
@@ -204,7 +204,15 @@
           "passed": 10,
           "total": 10
         },
-        "limitation": "These are local pure-logic simulations of helpers extracted from committed HTML, not browser interactions, full JSON Schema validation, runtime validator results or overall E4 acceptance."
+        "WU-C0-21": {
+          "passed": 11,
+          "total": 11
+        },
+        "WU-C0-22": {
+          "passed": 20,
+          "total": 20
+        },
+        "limitation": "These are local pure-logic simulations of helpers extracted from committed HTML, not browser interaction, complete Draft 2020-12 validation, runtime validator results or overall E4 acceptance."
       },
       "global_id_integrity": {
         "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
@@ -275,6 +283,100 @@
             "model_state difference is not treated as a validated transition"
           ]
         }
+      },
+      "nested_path_diff": {
+        "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
+        "source": "index.html",
+        "behavior": [
+          "Recursively reports exact JSON paths for nested object differences",
+          "Preserves array indexes and does not reorder or match array members by ID",
+          "Distinguishes missing fields, null, empty arrays, empty objects and type changes",
+          "Uses bracket-quoted path segments for keys containing special characters",
+          "Caps one field at 100 displayed leaf differences and depth 24, with explicit warnings"
+        ],
+        "e3_syntax": "COMPILE_OK",
+        "e3_local_simulation": {
+          "result": "PASS",
+          "passed": 11,
+          "total": 11,
+          "cases": [
+            "nested scalar exact path",
+            "nested field addition and absent-side state",
+            "null versus absent field",
+            "empty array versus absent field",
+            "empty object versus null",
+            "array order tracked by exact indexes",
+            "special-character JSON key path",
+            "unchanged nested values emit no differences",
+            "100 item output cap",
+            "nested depth cap",
+            "nested null versus missing leaf"
+          ]
+        },
+        "browser_interaction": "NOT_RUN"
+      },
+      "three_way_analysis": {
+        "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
+        "source": "index.html",
+        "blob_sha": "420f7427e0cd55ce9b0341aceafa81c47e0af2da",
+        "roles": {
+          "base": "comparison JSON",
+          "current": "current model JSON",
+          "alternative": "third candidate JSON"
+        },
+        "categories": [
+          "current-only change/addition/deletion",
+          "alternative-only change/addition/deletion",
+          "convergent changes/additions/deletions",
+          "independent non-overlapping changes",
+          "overlapping path conflicts",
+          "delete-vs-modify conflicts",
+          "global ID ambiguity and cross-collection type conflicts",
+          "missing IDs shown as unknown per input",
+          "model-level metadata conflicts"
+        ],
+        "safeguards": [
+          "No automatic merge or writeback",
+          "Global ID collisions in any of the three versions stop identity pairing",
+          "Array members are compared by array index",
+          "Nested conflict paths expose base/current/alternative values",
+          "Schema/model ID/rule-profile differences surface as warnings",
+          "Missing side paths are visibly marked absent"
+        ],
+        "e3_syntax": "COMPILE_OK",
+        "e3_local_simulation": {
+          "result": "PASS",
+          "passed": 20,
+          "total": 20,
+          "cases": [
+            "single-side current change",
+            "single-side alternative change",
+            "convergent changes",
+            "same-field divergent conflict",
+            "different-field independent edits",
+            "nested path conflict",
+            "nested independent edits",
+            "delete-versus-modify conflict",
+            "both-side deletion",
+            "identical addition",
+            "different same-ID additions",
+            "non-overlapping additions",
+            "cross-collection ID collision",
+            "moved ID/collection ambiguity",
+            "missing IDs not paired",
+            "top-level presentation keys ignored",
+            "model metadata participates",
+            "bounded conflict path expansion",
+            "input immutability",
+            "missing-side path explicit"
+          ]
+        },
+        "browser_interaction": "NOT_RUN",
+        "limitations": [
+          "Read-only analysis only; no automatic merge, writeback, or persistence",
+          "No formal legal-merge decision or full semantic validation",
+          "Three-way impact propagation is not computed; existing pairwise impact projection remains separate"
+        ]
       }
     }
   },
@@ -327,7 +429,7 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "09d687a11296a193610b622a3df1f60afd90c20b"
+      "sha": "a286e15e2b91312a70245bcb2409bbc49a14d159"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
@@ -347,12 +449,12 @@
     {
       "role": "read_only_visualization_prototype",
       "path": "index.html",
-      "sha": "21d215c3574abedc90bf1dc7881057b9e12de434"
+      "sha": "420f7427e0cd55ce9b0341aceafa81c47e0af2da"
     },
     {
       "role": "repository_entry_readme",
       "path": "README.md",
-      "sha": "7733fc4b0efb49a6c0387392ddf0fc7a6de347ec"
+      "sha": "5fee0d4b848b947a0853372705d94e1b7fa8f2a7"
     }
   ],
   "test_fixtures": {
