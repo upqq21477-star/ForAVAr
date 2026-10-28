@@ -2,13 +2,14 @@
 
 本頁是 forAVAr 系列工作的起始入口。**接手時先讀本 README，再只讀「目前交接文件」；不要整庫掃描、重讀歷史版本或尋找壓縮檔。** 交接文件會指出當前工作、證據、下一步、阻塞條件與必要檔案。
 
-## 框架可視化網頁入口與發布狀態
+## 框架可視化網頁入口與零成本發布
 
-- **原始檔：** [根目錄 index.html](./index.html)；已提交至 `main` 根目錄。
-- **預期 GitHub Pages 網址：** https://upqq21477-star.github.io/ForAVAr/
-- **目前狀態：BLOCKED／NOT_PUBLISHED。** 2026-10-28 讀取 GitHub repository metadata 得到 `has_pages=false`；對應站點根網址、大小寫變體及 `/index.html` 均實測回傳 HTTP 404。這表示目前沒有已啟用的可用 Pages 站點，不能把檔案已提交視為網站已發布。
-- repository 目前為 **private**。依 [GitHub Pages 方案限制](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)，GitHub Free 需使用 public repository；Pro／Team／Enterprise 才支援 private repository 的 Pages。不得為了讓網頁可開啟而擅自公開整個研究庫。
-- **解阻塞：** 由 repository 擁有者在 GitHub 的 **Settings → Pages** 確認帳號方案與發布可見性，再選擇 `main`／`/(root)` 作為 branch publishing source（若該方案允許）。啟用前不宣稱頁面可用；啟用後才做一次有限介面煙霧檢查。
+- **唯一原始檔：** [根目錄 index.html](./index.html)。不在研究目錄維護第二份 HTML。
+- **不需要購買 GitHub 方案。** 此 repository 是 private，GitHub Free 無法直接用 GitHub Pages 發布這個私有 repository；不得為了網站而付費，也不得擅自把整個研究庫改成 public。
+- **已準備免費靜態發布建置：** [scripts/build_static_site.sh](./scripts/build_static_site.sh) 只把根目錄 `index.html` 複製到產物目錄 `dist/index.html`，並檢查產物目錄恰好只有一個檔案。正式原始碼維持單一來源；研究文件不會被放入公開網站的部署產物。
+- **建議零成本發布路線：Cloudflare Pages Free。** 官方支援 GitHub repository 整合；靜態資產不收請求費。擁有者需登入／建立 Cloudflare 帳號，將 GitHub App 權限限定在本 repository，並設定：Framework preset `None`、Build command `sh scripts/build_static_site.sh`、Build output directory `dist`。官方文件：[Git 整合](https://developers.cloudflare.com/pages/configuration/git-integration/)、[免費方案限制與靜態資產說明](https://developers.cloudflare.com/pages/platform/limits/)。
+- **目前狀態：尚未發布。** GitHub Pages 的候選網址曾回傳 HTTP 404，repository metadata 的 `has_pages=false`；Cloudflare 帳號連接與部署尚未執行。不能把建置腳本已提交宣稱為網站已上線。
+- **隱私邊界：** Cloudflare 需要經擁有者授權才能讀取所選 GitHub repository 來建置，但公開部署產物應僅包含 `dist/index.html`。不要設定 repository root 為公開輸出目錄，也不要授權其他研究 repository。
 ## 目前工作狀態
 
 - **目前工作單元：** B27.11／T3-0「基線＋同名測試類別」。
