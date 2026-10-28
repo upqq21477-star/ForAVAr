@@ -295,6 +295,94 @@ function appendFieldMappingAudit(parent,type,obj,index){
  audit.append(body);
  parent.append(audit);
 }
+function objectCollection(type){
+ if(type==="node")return model.nodes;
+ if(type==="edge")return model.edges;
+ if(type==="source")return model.sources;
+ if(type==="condition")return model.conditions;
+ return [];
+}
+function objectPath(type,index){
+ const collection={node:"nodes",edge:"edges",source:"sources",condition:"conditions"}[type]||"objects";
+ return Number.isInteger(index)&&index>=0?collection+"["+index+"]":collection+"[位置未定]";
+}
+function objectsWithId(type,id){
+ return objectCollection(type).map((obj,index)=>({type:type,obj:obj,index:index,path:objectPath(type,index)}))
+  .filter(item=>item.obj&&item.obj.id===id);
+}
+function allIdOccurrences(id){
+ if(typeof id!=="string"||!id.trim())return [];
+ const types=["node","edge","source","condition"];
+ return types.flatMap(type=>objectsWithId(type,id));
+}
+function objectDisplayLabel(type,obj){
+ if(type==="node")return obj.name||obj.id||"未命名節點";
+ if(type==="edge")return obj.id||"未命名關係";
+ if(type==="source")return obj.label||obj.id||"未命名來源";
+ if(type==="condition")return obj.name||obj.id||"未命名條件";
+ return obj.id||"未命名物件";
+}
+function appendObjectIdentity(parent,type,obj,index){
+ const path=objectPath(type,index);
+ const validId=typeof obj.id==="string"&&Boolean(obj.id.trim());
+ parent.append(el("div","fieldlabel","物件定位"));
+ parent.append(el("div","detail-id",path+" · ID："+(validId?obj.id:"(缺失／非字串／空白)")));
+ if(!validId){
+  parent.append(el("div","message error","此物件沒有可用的字串 ID；本頁以集合位置定位，不會猜測或合成正式 ID。"));
+  return;
+ }
+ const matches=allIdOccurrences(obj.id);
+ if(matches.length>1){
+  parent.append(el("div","message error","ID「"+obj.id+"」在模型中出現 "+matches.length+" 次。引用只保存 ID，可能無法唯一解析；此處依集合位置辨識目前物件。"));
+  const others=matches.filter(item=>item.type!==type||item.index!==index);
+  others.forEach(item=>{
+   const title=objectDisplayLabel(item.type,item.obj);
+   parent.append(referenceButton(item.type,item.obj,item.index,title,"同 ID 候選 · "+item.path));
+  });
+ }
+}
+function appendReferenceTarget(parent,type,refId){
+ const matches=objectsWithId(type,refId);
+ const label=DETAIL_TYPE_LABEL[type]||type;
+ if(!matches.length){
+  parent.append(el("div","message error","未解析"+label+"引用："+String(refId)+"；沒有可對應的 "+(type==="source"?"sources[i]":"conditions[i]")+" 紀錄。"));
+  return;
+ }
+ if(matches.length>1){
+  parent.append(el("div","message error","引用值「"+String(refId)+"」對應 "+matches.length+" 筆"+label+"紀錄，無法由 ID 唯一判定。以下只列候選位置；點選只開啟該紀錄，不修改引用或表示已裁決。"));
+ }
+ matches.forEach(item=>{
+  const title=objectDisplayLabel(type,item.obj);
+  const meta=(matches.length>1?"歧義候選 · ":"引用目標 · ")+item.path;
+  parent.append(referenceButton(type,item.obj,item.index,title,meta));
+  if(type==="source"&&item.obj.excerpt)parent.append(el("div","message",item.obj.excerpt));
+  if(type==="condition"&&item.obj.description)parent.append(el("div","message",item.obj.description));
+ });
+}
+function endpointDisplayLabel(id){
+ if(typeof id!=="string"||!id.trim())return "端點 ID 缺失";
+ const matches=objectsWithId("node",id);
+ if(matches.length===0)return "未解析端點："+id;
+ if(matches.length>1)return "端點 ID 有歧義："+id;
+ return objectDisplayLabel("node",matches[0].obj);
+}
+function appendEdgeEndpointAudit(parent,edge){
+ const section=el("div","detail-section");
+ section.append(el("div","fieldlabel","端點定位（依 ID 解析；重複時必須人工選擇）"));
+ [["來源端點","source_id"],["目標端點","target_id"]].forEach(([label,field])=>{
+  const id=edge[field];
+  section.append(el("div","fieldlabel",label+" · "+field));
+  const matches=typeof id==="string"&&id.trim()?objectsWithId("node",id):[];
+  if(!matches.length){
+   section.append(el("div","message error","無法唯一定位：端點值為 "+String(id===undefined?"(缺失)":id)+"。"));
+   return;
+  }
+  if(matches.length>1)section.append(el("div","message error","此端點 ID 對應多個節點；請查看候選，不會自動選第一筆。"));
+  matches.forEach(item=>section.append(referenceButton("node",item.obj,item.index,objectDisplayLabel("node",item.obj),"端點候選 · "+item.path)));
+ });
+ parent.append(section);
+}
+
 function nodeById(id){return model.nodes.find(n=>n.id===id)}
 function edgeById(id){return model.edges.find(e=>e.id===id)}
 function sourceById(id){return model.sources.find(s=>s.id===id)}
@@ -689,7 +777,7 @@ function detailSource(source){
  if(!source){root.append(el("div","empty","找不到所選來源。"));return}
  const sec=el("div","detail-section");
  sec.append(el("div","detail-title",source.label||source.id||"未命名來源"),el("div","detail-id",source.id||"(無 ID)"),el("div","detail-function",source.excerpt||source.locator||"未提供摘錄或定位"));
- appendDiagnosticContext(sec);root.append(sec);
+ appendObjectIdentity(sec,"source",source,model.sources.indexOf(source));appendDiagnosticContext(sec);root.append(sec);
  const fields=el("div","detail-section");
  DETAIL_FIELD_MAP.source.forEach(key=>{if(Object.prototype.hasOwnProperty.call(source,key))addKV(fields,key,source[key])});
  if(fields.childElementCount)root.append(fields);
@@ -701,7 +789,7 @@ function detailCondition(condition){
  if(!condition){root.append(el("div","empty","找不到所選條件。"));return}
  const sec=el("div","detail-section");
  sec.append(el("div","detail-title",condition.name||condition.id||"未命名條件"),el("div","detail-id",condition.id||"(無 ID)"),el("div","detail-function",condition.description||condition.expression||"未提供條件說明"));
- appendDiagnosticContext(sec);root.append(sec);
+ appendObjectIdentity(sec,"condition",condition,model.conditions.indexOf(condition));appendDiagnosticContext(sec);root.append(sec);
  const fields=el("div","detail-section");
  DETAIL_FIELD_MAP.condition.forEach(key=>{if(Object.prototype.hasOwnProperty.call(condition,key))addKV(fields,key,condition[key])});
  if(fields.childElementCount)root.append(fields);
@@ -710,19 +798,50 @@ function detailCondition(condition){
 }
 function detailNode(n){
  const root=$("detailPanel");root.replaceChildren();if(!n){root.append(el("div","empty","找不到所選節點。"));return}
- const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));appendDiagnosticContext(sec);appendReferenceOrigin(sec);root.append(sec);
+ const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));appendObjectIdentity(sec,"node",n,model.nodes.indexOf(n));appendDiagnosticContext(sec);appendReferenceOrigin(sec);root.append(sec);
  const fields=el("div","detail-section");
  [["結構角色",roleLabel[n.structural_role]||n.structural_role],["物件類型",n.entity_kind],["審核狀態",n.review_status],["證據狀態",n.evidence_status],["主張類型",n.claim_kind],["來源引用",n.provenance_refs],["條件引用",n.condition_refs],["補充說明",n.description],["其他屬性",n.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});
  root.append(fields);
  appendFieldMappingAudit(root,"node",n,model.nodes.indexOf(n));
- const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源引用（點選查看完整紀錄）"));const sources=(Array.isArray(n.provenance_refs)?n.provenance_refs:[]).map(id=>({id,obj:sourceById(id)}));if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用；不能由此推定內容為真。"));sources.forEach(x=>{if(x.obj)refs.append(referenceButton("source",x.obj,model.sources.indexOf(x.obj),x.obj.label||x.id,(x.obj.source_type||"來源")+" · "+(x.obj.locator||x.id)),el("div","message",x.obj.excerpt||"未提供摘錄"));else refs.append(el("div","message","未解析來源引用："+x.id))});refs.append(el("div","fieldlabel","條件引用（點選查看完整紀錄）"));(Array.isArray(n.condition_refs)?n.condition_refs:[]).map(id=>({id,obj:condById(id)})).forEach(x=>{if(x.obj)refs.append(referenceButton("condition",x.obj,model.conditions.indexOf(x.obj),x.obj.name||x.id,"條件 · "+x.id),el("div","message",x.obj.description||"未提供條件說明"));else refs.append(el("div","message","未解析條件引用："+x.id))});root.append(refs);
+ const refs=el("div","detail-section");
+ refs.append(el("div","fieldlabel","來源引用（點選候選紀錄，不代表證據已成立）"));
+ if(n.provenance_refs!==undefined&&!Array.isArray(n.provenance_refs))refs.append(el("div","message error","provenance_refs 不是陣列，無法安全解析引用。"));
+ else{
+  const sourceRefs=Array.isArray(n.provenance_refs)?n.provenance_refs:[];
+  if(!sourceRefs.length)refs.append(el("div","message","沒有可定位的來源引用；不能由此推定內容為真。"));
+  sourceRefs.forEach(id=>appendReferenceTarget(refs,"source",id));
+ }
+ refs.append(el("div","fieldlabel","條件引用（點選候選紀錄）"));
+ if(n.condition_refs!==undefined&&!Array.isArray(n.condition_refs))refs.append(el("div","message error","condition_refs 不是陣列，無法安全解析引用。"));
+ else{
+  const conditionRefs=Array.isArray(n.condition_refs)?n.condition_refs:[];
+  if(!conditionRefs.length)refs.append(el("div","message","沒有可定位的條件引用。"));
+  conditionRefs.forEach(id=>appendReferenceTarget(refs,"condition",id));
+ }
+ root.append(refs);
 }
 function detailEdge(e){
  const root=$("detailPanel");root.replaceChildren();if(!e){root.append(el("div","empty","找不到所選關係。"));return}
- const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));appendDiagnosticContext(sec);appendReferenceOrigin(sec);root.append(sec);
+ const aTitle=endpointDisplayLabel(e.source_id),bTitle=endpointDisplayLabel(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",aTitle+" → "+bTitle),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));appendObjectIdentity(sec,"edge",e,model.edges.indexOf(e));appendDiagnosticContext(sec);appendReferenceOrigin(sec);root.append(sec);
  const fields=el("div","detail-section");[["來源端點",e.source_id],["目標端點",e.target_id],["關係類型",e.relation_type],["審核狀態",e.review_status],["證據狀態",e.evidence_status],["來源引用",e.provenance_refs],["條件引用",e.condition_refs],["其他屬性",e.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});root.append(fields);
  appendFieldMappingAudit(root,"edge",e,model.edges.indexOf(e));
- const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源引用（點選查看完整紀錄）"));const sources=(Array.isArray(e.provenance_refs)?e.provenance_refs:[]).map(id=>({id,obj:sourceById(id)}));if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(x=>{if(x.obj)refs.append(referenceButton("source",x.obj,model.sources.indexOf(x.obj),x.obj.label||x.id,(x.obj.source_type||"來源")+" · "+(x.obj.locator||x.id)),el("div","message",x.obj.excerpt||"未提供摘錄"));else refs.append(el("div","message","未解析來源引用："+x.id))});refs.append(el("div","fieldlabel","條件引用（點選查看完整紀錄）"));(Array.isArray(e.condition_refs)?e.condition_refs:[]).map(id=>({id,obj:condById(id)})).forEach(x=>{if(x.obj)refs.append(referenceButton("condition",x.obj,model.conditions.indexOf(x.obj),x.obj.name||x.id,"條件 · "+x.id),el("div","message",x.obj.description||"未提供條件說明"));else refs.append(el("div","message","未解析條件引用："+x.id))});root.append(refs);
+ appendEdgeEndpointAudit(root,e);
+ const refs=el("div","detail-section");
+ refs.append(el("div","fieldlabel","來源引用（點選候選紀錄，不代表證據已成立）"));
+ if(e.provenance_refs!==undefined&&!Array.isArray(e.provenance_refs))refs.append(el("div","message error","provenance_refs 不是陣列，無法安全解析引用。"));
+ else{
+  const sourceRefs=Array.isArray(e.provenance_refs)?e.provenance_refs:[];
+  if(!sourceRefs.length)refs.append(el("div","message","沒有可定位的來源引用。"));
+  sourceRefs.forEach(id=>appendReferenceTarget(refs,"source",id));
+ }
+ refs.append(el("div","fieldlabel","條件引用（點選候選紀錄）"));
+ if(e.condition_refs!==undefined&&!Array.isArray(e.condition_refs))refs.append(el("div","message error","condition_refs 不是陣列，無法安全解析引用。"));
+ else{
+  const conditionRefs=Array.isArray(e.condition_refs)?e.condition_refs:[];
+  if(!conditionRefs.length)refs.append(el("div","message","沒有可定位的條件引用。"));
+  conditionRefs.forEach(id=>appendReferenceTarget(refs,"condition",id));
+ }
+ root.append(refs);
 }
 function renderDetail(){
  if(selected.type==="edge"){const e=Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id);detailEdge(e)}
