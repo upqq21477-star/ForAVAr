@@ -70,6 +70,27 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .diag-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;font-weight:700}.diag-code{color:var(--muted);font:10px ui-monospace,monospace}.diag-message{font-size:12px;overflow-wrap:anywhere;margin-top:5px}.diag-path{color:var(--muted);font:10px ui-monospace,monospace;overflow-wrap:anywhere;margin-top:5px}
 @media(max-width:1100px){main{grid-template-columns:210px minmax(0,1fr)}.details{grid-column:1/-1}.details .panel-body{display:grid;grid-template-columns:1fr 1fr;gap:12px}.details .detail-section{margin-bottom:0}}
 @media(max-width:700px){header{padding:12px 13px 9px}main{display:flex;flex-direction:column;padding:8px;gap:8px}.center{order:1}.sidebar{order:2}.details{order:3}.panel-body{padding:11px}.view{padding:10px;min-height:300px}.details .panel-body{display:block}.details .detail-section{margin-bottom:14px}.actions{width:100%}.actions .btn{flex:1}.brand{font-size:16px}.notice{margin-top:8px;padding:7px 9px}.mobile-view-nav,.mobile-selection-summary{display:flex}.mobile-selection-summary{display:block}.center .mainhead{padding:8px 10px}.center .mainhead>.tabs{display:none}.model-tools{margin:9px 0}.sidebar .panel-head,.details .panel-head{padding:10px 12px}}
+
+.diff-intro{border:1px solid var(--line);background:#101a28;border-radius:9px;padding:11px;margin-bottom:12px;font-size:12px;color:var(--muted)}
+.diff-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px;margin:12px 0}
+.diff-stat{border:1px solid var(--line);border-radius:8px;background:#101a28;padding:9px;min-width:0}
+.diff-stat b{display:block;font-size:21px;line-height:1.3}.diff-stat span{font-size:11px;color:var(--muted)}
+.diff-group{margin:16px 0}.diff-group-title{font-weight:750;margin-bottom:8px}
+.diff-list{display:flex;flex-direction:column;gap:8px}
+.diff-item{border:1px solid var(--line);background:#101a28;border-radius:9px;overflow:hidden}
+.diff-item-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--line)}
+.diff-item-title{font-weight:700;overflow-wrap:anywhere}.diff-item-meta{font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.diff-badge{font-size:10px;border-radius:99px;border:1px solid var(--line);padding:2px 8px;white-space:nowrap}
+.diff-badge.added{color:var(--good);border-color:#31593a}.diff-badge.removed{color:var(--bad);border-color:#704040}
+.diff-badge.modified{color:var(--warn);border-color:#67562f}.diff-badge.ambiguous,.diff-badge.unknown{color:var(--bad);border-color:#704040}.diff-badge.presentation{color:var(--muted)}
+.diff-body{padding:10px 12px}.diff-field{border-top:1px solid var(--line);padding:9px 0}.diff-field:first-child{border-top:0}
+.diff-field-name{font-size:12px;font-weight:700;margin-bottom:5px}
+.diff-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.diff-value-wrap{min-width:0}
+.diff-value-label{font-size:10px;color:var(--muted);margin-bottom:4px}
+.diff-value{margin:0;padding:8px;background:#0d1724;border:1px solid var(--line);border-radius:6px;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:220px;overflow:auto}
+.diff-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.diff-impact{border:1px solid #67562f;background:#28251b;border-radius:9px;padding:10px 12px;font-size:12px;margin:10px 0}
+@media(max-width:520px){.diff-values{grid-template-columns:1fr}.diff-stat b{font-size:18px}}
 </style>
 </head>
 <body>
@@ -77,9 +98,11 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
   <div class="headrow">
     <div><div class="brand">ForAVAr <span style="color:var(--accent)">/ 框架可視化</span></div><div class="subtitle">人類理解與操作延伸層 · C0 唯讀原型</div></div>
     <div class="actions">
-      <label class="btn primary" for="filePicker">載入本機 JSON</label>
+      <label class="btn primary" for="filePicker">載入目前模型 JSON</label>
       <input id="filePicker" class="fileinput" type="file" accept=".json,application/json">
-      <button id="resetBtn" class="btn" type="button">重設示例</button>
+      <label class="btn" for="comparePicker">載入比較基準 JSON</label>
+      <input id="comparePicker" class="fileinput" type="file" accept=".json,application/json">
+      <button id="resetBtn" class="btn" type="button">重設目前示例</button>
     </div>
   </div>
   <div class="notice">唯讀預覽：載入的 JSON 僅留在本頁記憶體，不上傳、不寫回、不發布。這是瀏覽原型，不是正式編輯器或完整驗證器。</div>
@@ -103,6 +126,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
     <button class="tab" type="button" data-view="tree" role="tab" aria-selected="true">樹狀</button>
     <button class="tab" type="button" data-view="graph" role="tab" aria-selected="false">關係圖</button>
     <button class="tab" type="button" data-view="cards" role="tab" aria-selected="false">卡片</button>
+    <button class="tab" type="button" data-view="diff" role="tab" aria-selected="false">差異</button>
   </div>
   <div id="mobileSelectionSummary" class="mobile-selection-summary" aria-live="polite">尚未選取項目</div>
 </header>
@@ -159,6 +183,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 <div id="modelTitle" class="detail-title">示例模型</div>
       <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
 <div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
+      <div id="compareState" class="message">尚未載入比較基準；載入第二份 JSON 後可查看版本差異。</div>
     
     </div>
     <div class="foot">模型版本欄位與 Git commit 是不同概念。</div>
@@ -169,6 +194,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
         <button class="tab" type="button" data-view="tree" role="tab" aria-selected="true">樹狀結構</button>
         <button class="tab" type="button" data-view="graph" role="tab" aria-selected="false">關係圖</button>
         <button class="tab" type="button" data-view="cards" role="tab" aria-selected="false">節點卡片</button>
+        <button class="tab" type="button" data-view="diff" role="tab" aria-selected="false">版本差異</button>
       </div>
       <div id="viewCount" class="status"><span class="dot"></span><span>示例資料</span></div>
     </div>
@@ -192,7 +218,8 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
     <div id="treeView" class="view"></div>
     <div id="graphView" class="view" hidden></div>
     <div id="cardsView" class="view" hidden></div>
-    <div class="foot">不同視圖共用同一份載入模型；座標與展示狀態不成為第二份語意資料。</div>
+    <div id="diffView" class="view" hidden></div>
+    <div class="foot">不同視圖共用同一份目前模型；差異檢視以明確基準比較，唯讀且不寫回。</div>
   </section>
   <section class="panel details">
     <div class="panel-head">選取項目詳細資料</div>
@@ -230,7 +257,8 @@ const DEMO = {
     {id:"s-user",source_type:"user_input",label:"示意需求",locator:"內建示例",excerpt:"以低門檻視圖理解框架結構。",actor_type:"user",captured_at:"2026-10-28"}
   ]
 };
-let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id}, activeView="tree", filteredIds=null, referenceOrigin=null;
+let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id,index:0}, activeView="tree", filteredIds=null, referenceOrigin=null;
+let comparisonModel=null, comparisonFileName="";
 const $=id=>document.getElementById(id);
 const esc=(x)=>String(x===undefined||x===null?"—":x);
 const roleLabel={core:"核心",main_axis:"主軸",skeleton:"骨架",module:"模組",detail:"細節",unassigned:"未指定"};
@@ -887,7 +915,217 @@ function renderDetail(){
  else if(selected.type==="condition"){const x=Number.isInteger(selected.index)?model.conditions[selected.index]:condById(selected.id);detailCondition(x)}
  else{const n=Number.isInteger(selected.index)?model.nodes[selected.index]:nodeById(selected.id);detailNode(n)}
 }
-function render(){showModelStats();updateFilterSummary();renderDiagnostics();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphControls").hidden=activeView!=="graph";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail();renderSelectionNotice()}
+function render(){showModelStats();updateFilterSummary();renderDiagnostics();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphControls").hidden=activeView!=="graph";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";$("diffView").hidden=activeView!=="diff";renderTree();renderGraph();renderCards();renderDiff();renderDetail();renderSelectionNotice()}
+
+const DIFF_COLLECTIONS=[
+ {key:"nodes",label:"節點",type:"node"},
+ {key:"edges",label:"關係",type:"edge"},
+ {key:"conditions",label:"條件",type:"condition"},
+ {key:"sources",label:"來源",type:"source"}
+];
+const PRESENTATION_ONLY_KEYS=new Set(["x","y","layout","layout_state","viewport","zoom","collapsed","expanded","coordinates","graph_position","ui_state"]);
+function stableJsonValue(value){
+ if(Array.isArray(value))return value.map(stableJsonValue);
+ if(value&&typeof value==="object"){
+  const out={};Object.keys(value).sort().forEach(key=>{out[key]=stableJsonValue(value[key])});return out;
+ }
+ return value;
+}
+function stableJson(value){
+ const encoded=JSON.stringify(stableJsonValue(value));
+ return encoded===undefined?String(value):encoded;
+}
+function semanticJson(obj){
+ const out={};Object.keys(obj||{}).filter(key=>!PRESENTATION_ONLY_KEYS.has(key)).sort().forEach(key=>{out[key]=stableJsonValue(obj[key])});
+ return stableJson(out);
+}
+function validDiffId(obj){return Boolean(obj&&typeof obj.id==="string"&&obj.id.trim())}
+function diffPath(collection,index){return collection+"["+index+"]"}
+function displayDiffObject(type,obj){
+ if(!obj||typeof obj!=="object")return "未命名物件";
+ return objectDisplayLabel(type,obj);
+}
+function collectionIdMap(items){
+ const map=new Map();
+ items.forEach((obj,index)=>{
+  if(!validDiffId(obj))return;
+  const id=obj.id;if(!map.has(id))map.set(id,[]);
+  map.get(id).push({obj,index});
+ });
+ return map;
+}
+function diffTopFields(before,after,semanticOnly){
+ const keys=new Set([...Object.keys(before||{}),...Object.keys(after||{})]);
+ return Array.from(keys).filter(key=>!(semanticOnly&&PRESENTATION_ONLY_KEYS.has(key))).sort().filter(key=>{
+  const hasA=Boolean(before&&Object.prototype.hasOwnProperty.call(before,key));
+  const hasB=Boolean(after&&Object.prototype.hasOwnProperty.call(after,key));
+  if(hasA!==hasB)return true;
+  return hasA&&stableJson(before[key])!==stableJson(after[key]);
+ });
+}
+function compareCollection(collection,baseModel,currentModel){
+ const baseItems=baseModel[collection.key]||[],currentItems=currentModel[collection.key]||[];
+ const baseMap=collectionIdMap(baseItems),currentMap=collectionIdMap(currentItems);
+ const ids=new Set([...baseMap.keys(),...currentMap.keys()]);
+ const records=[];let unchanged=0,presentationOnly=0;
+ for(const id of ids){
+  const b=baseMap.get(id)||[],c=currentMap.get(id)||[];
+  if(b.length>1||c.length>1){
+   records.push({kind:collection.key,type:collection.type,status:"ambiguous",id,before:b,after:c,
+    beforePaths:b.map(x=>diffPath(collection.key,x.index)),afterPaths:c.map(x=>diffPath(collection.key,x.index))});
+   continue;
+  }
+  if(b.length===1&&c.length===0){
+   records.push({kind:collection.key,type:collection.type,status:"removed",id,before:b[0],after:null,
+    beforePaths:[diffPath(collection.key,b[0].index)],afterPaths:[]});continue;
+  }
+  if(b.length===0&&c.length===1){
+   records.push({kind:collection.key,type:collection.type,status:"added",id,before:null,after:c[0],
+    beforePaths:[],afterPaths:[diffPath(collection.key,c[0].index)]});continue;
+  }
+  if(b.length!==1||c.length!==1)continue;
+  const before=b[0],after=c[0],semA=semanticJson(before.obj),semB=semanticJson(after.obj);
+  const rawA=stableJson(before.obj),rawB=stableJson(after.obj);
+  if(semA===semB){
+   if(rawA!==rawB){
+    records.push({kind:collection.key,type:collection.type,status:"presentation",id,before,after,
+     fields:diffTopFields(before.obj,after.obj,false)});presentationOnly++;
+   }else unchanged++;
+   continue;
+  }
+  records.push({kind:collection.key,type:collection.type,status:"modified",id,before,after,
+   fields:diffTopFields(before.obj,after.obj,true)});
+ }
+ baseItems.forEach((obj,index)=>{
+  if(!validDiffId(obj))records.push({kind:collection.key,type:collection.type,status:"unknown",id:null,before:{obj,index},after:null,
+   beforePaths:[diffPath(collection.key,index)],afterPaths:[],reason:"基準版物件缺少可用的字串 ID"});
+ });
+ currentItems.forEach((obj,index)=>{
+  if(!validDiffId(obj))records.push({kind:collection.key,type:collection.type,status:"unknown",id:null,before:null,after:{obj,index},
+   beforePaths:[],afterPaths:[diffPath(collection.key,index)],reason:"目前版物件缺少可用的字串 ID"});
+ });
+ return {records,unchanged,presentationOnly,totalBase:baseItems.length,totalCurrent:currentItems.length};
+}
+function collectDirectReviewContext(diffResults,baseModel,currentModel){
+ const changedIds=new Set();
+ diffResults.forEach(result=>result.records.forEach(record=>{
+  if(["added","removed","modified","presentation"].includes(record.status)&&record.kind==="nodes"&&record.id)changedIds.add(record.id);
+  if(["added","removed","modified"].includes(record.status)&&record.kind==="edges"){
+   [record.before&&record.before.obj,record.after&&record.after.obj].filter(Boolean).forEach(edge=>{
+    if(typeof edge.source_id==="string"&&edge.source_id.trim())changedIds.add(edge.source_id);
+    if(typeof edge.target_id==="string"&&edge.target_id.trim())changedIds.add(edge.target_id);
+   });
+  }
+ }));
+ const output=[];
+ [["基準版",baseModel],["目前版",currentModel]].forEach(([side,source])=>{
+  (source.edges||[]).forEach((edge,index)=>{
+   if(!edge||(!changedIds.has(edge.source_id)&&!changedIds.has(edge.target_id)))return;
+   output.push({side,index,edge,changedEndpoints:[edge.source_id,edge.target_id].filter(id=>changedIds.has(id))});
+  });
+ });
+ const seen=new Set();
+ return output.filter(item=>{const key=item.side+"|"+item.index;if(seen.has(key))return false;seen.add(key);return true});
+}
+function diffStatusLabel(status){
+ return {added:"新增",removed:"刪除",modified:"語意欄位修改",presentation:"僅版面欄位變更",ambiguous:"身分歧義",unknown:"身分不明"}[status]||status;
+}
+function appendDiffValue(parent,label,value){
+ const wrap=el("div","diff-value-wrap");wrap.append(el("div","diff-value-label",label));
+ wrap.append(el("pre","diff-value",value===undefined?"(欄位不存在)":rawFieldText(value)));parent.append(wrap);
+}
+function appendDiffField(parent,key,before,after){
+ const field=el("div","diff-field");field.append(el("div","diff-field-name",key));
+ const values=el("div","diff-values");appendDiffValue(values,"基準版",before);appendDiffValue(values,"目前版",after);
+ field.append(values);parent.append(field);
+}
+function appendDiffRecord(parent,record){
+ const item=el("article","diff-item"),header=el("div","diff-item-head"),side=record.after||record.before,obj=side&&side.obj;
+ const title=obj?displayDiffObject(record.type,obj):("ID "+record.id);
+ header.append(el("div","diff-item-title",title||("ID "+record.id)),el("span","diff-badge "+record.status,diffStatusLabel(record.status)));
+ item.append(header);const body=el("div","diff-body");
+ body.append(el("div","diff-item-meta","集合："+record.kind+" · ID："+(record.id===null?"(缺失／無效)":record.id)+
+  " · 基準："+(record.beforePaths.length?record.beforePaths.join("、"):"—")+" · 目前："+(record.afterPaths.length?record.afterPaths.join("、"):"—")));
+ if(record.status==="ambiguous"){
+  body.append(el("div","message error","同一 ID 在至少一版出現多次，無法安全配對。此筆不計為新增或刪除；請先人工判定物件身分。"));
+  if(record.before.length)body.append(el("div","message","基準版候選："+record.beforePaths.join("、")));
+  if(record.after.length)body.append(el("div","message","目前版候選："+record.afterPaths.join("、")));
+ }else if(record.status==="unknown"){
+  body.append(el("div","message error",record.reason+"。此項保留為身分待判，不以陣列位置猜測版本間的對應。"));
+  if(record.before)appendDiffValue(body,"基準版原始物件",record.before.obj);
+  if(record.after)appendDiffValue(body,"目前版原始物件",record.after.obj);
+ }else if(record.status==="added")appendDiffValue(body,"新增物件",record.after.obj);
+ else if(record.status==="removed")appendDiffValue(body,"移除物件（基準版仍保留）",record.before.obj);
+ else{
+  body.append(el("div","message",record.status==="presentation"?
+   "排除明確的頂層版面欄位後，語意欄位相同；這是版面差異，不計入語意內容修改。":
+   "以下列出有變化的頂層欄位；巢狀值以完整 JSON 顯示。"));
+  (record.fields||[]).forEach(key=>appendDiffField(body,key,
+   record.before.obj&&Object.prototype.hasOwnProperty.call(record.before.obj,key)?record.before.obj[key]:undefined,
+   record.after.obj&&Object.prototype.hasOwnProperty.call(record.after.obj,key)?record.after.obj[key]:undefined));
+  const actions=el("div","diff-actions"),open=el("button","btn","定位目前版物件");open.type="button";
+  open.addEventListener("click",()=>{
+   if(!record.after)return;
+   selected={type:record.type,id:record.id,index:record.after.index};
+   activeView=record.type==="node"?"cards":record.type==="edge"?"graph":"diff";
+   render();
+  });
+  actions.append(open);body.append(actions);
+ }
+ item.append(body);parent.append(item);
+}
+function renderDiff(){
+ const root=$("diffView");root.replaceChildren();
+ root.append(el("div","detail-title","版本差異與直接關聯檢視"));
+ root.append(el("div","diff-intro","比較基準版與目前版的節點、關係、條件、來源。只以集合內唯一有效 ID 配對；重複／缺失 ID 不猜測配對。明確的頂層座標、版面、折疊與縮放欄位不算語意修改。此功能唯讀，不修改任一模型，也不是正式驗證或發布判定。"));
+ if(!comparisonModel){root.append(el("div","empty","尚未載入比較基準。先點頁面頂部「載入比較基準 JSON」；兩份模型都只存在本頁記憶體。"));return}
+ const results=DIFF_COLLECTIONS.map(collection=>Object.assign({},collection,compareCollection(collection,comparisonModel,model)));
+ const all=results.flatMap(result=>result.records);
+ const count=status=>all.filter(record=>record.status===status).length;
+ const statGrid=el("div","diff-stats");
+ [
+  ["基準版物件",DIFF_COLLECTIONS.reduce((n,c)=>n+(comparisonModel[c.key]||[]).length,0)],
+  ["目前版物件",DIFF_COLLECTIONS.reduce((n,c)=>n+(model[c.key]||[]).length,0)],
+  ["新增",count("added")],["刪除",count("removed")],["語意修改",count("modified")],
+  ["版面變更",count("presentation")],["身分歧義",count("ambiguous")],["身分不明",count("unknown")]
+ ].forEach(([label,value])=>{const card=el("div","diff-stat");card.append(el("b","",String(value)),el("span","",label));statGrid.append(card)});
+ root.append(statGrid);
+ root.append(el("div","message","基準版："+comparisonFileName+"。目前版："+(model.title||model.model_id||"目前載入模型")+
+  "。相同語意物件："+results.reduce((n,r)=>n+r.unchanged,0)+"；語意比較使用相同集合內唯一有效 ID。"));
+ const metadataChanged=diffTopFields(comparisonModel,model,true).filter(key=>!DIFF_COLLECTIONS.some(c=>c.key===key));
+ if(metadataChanged.length){
+  const group=el("section","diff-group");group.append(el("div","diff-group-title","模型層級欄位差異"));
+  const box=el("div","diff-item"),body=el("div","diff-body");
+  metadataChanged.forEach(key=>appendDiffField(body,key,comparisonModel[key],model[key]));
+  box.append(body);group.append(box);root.append(group);
+ }
+ results.forEach(result=>{
+  if(!result.records.length)return;
+  const group=el("section","diff-group");group.append(el("div","diff-group-title",result.label+" · "+result.records.length+" 項差異／待判"));
+  const list=el("div","diff-list");result.records.forEach(record=>appendDiffRecord(list,record));
+  group.append(list);root.append(group);
+ });
+ const direct=collectDirectReviewContext(results,comparisonModel,model);
+ const impact=el("section","diff-group");impact.append(el("div","diff-group-title","變更物件的直接關聯候選（非完整下游影響分析）"));
+ impact.append(el("div","diff-impact","此區只列出與變更節點 ID 直接相連的基準版／目前版關係，提示可能需要人工複核的相鄰項目。尚未依完整關係規則進行遞迴影響傳播，也不會自動改寫證據、審核或確認狀態。"));
+ if(!direct.length)impact.append(el("div","empty","沒有可由唯一身分變更項目定位的直接關聯候選；歧義／缺失 ID 不會用來推算影響。"));
+ else{
+  const list=el("div","diff-list");
+  direct.forEach(item=>{
+   const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
+   const from=item.edge.source_id===undefined?"(缺失)":String(item.edge.source_id);
+   const to=item.edge.target_id===undefined?"(缺失)":String(item.edge.target_id);
+   head.append(el("div","diff-item-title",item.side+" · edges["+item.index+"]"),el("span","diff-badge presentation","直接相連"));
+   body.append(el("div","detail-function",from+" → "+(relationLabel[item.edge.relation_type]||item.edge.relation_type||"未知關係")+" → "+to));
+   body.append(el("div","diff-item-meta","涉及變更端點："+item.changedEndpoints.join("、")+"；此為人工複核候選，不代表已證明下游失效。"));
+   card.append(head,body);list.append(card);
+  });
+  impact.append(list);
+ }
+ root.append(impact);
+ if(!all.length&&!metadataChanged.length)root.append(el("div","message","兩份模型在已識別的四個集合中未發現差異；這不等於正式 Schema 或完整跨物件驗證通過。"));
+}
+
 function minimalShape(x){
  if(!x||typeof x!=="object"||Array.isArray(x)||!Array.isArray(x.nodes)||!Array.isArray(x.edges)||!Array.isArray(x.conditions)||!Array.isArray(x.sources))throw new Error("檔案需包含 nodes、edges、conditions、sources 四個陣列。");
  for(const [key,items] of [["nodes",x.nodes],["edges",x.edges],["conditions",x.conditions],["sources",x.sources]])items.forEach((obj,index)=>{if(!obj||typeof obj!=="object"||Array.isArray(obj))throw new Error(key+"["+index+"] 必須是物件；原模型未被覆寫。")});
@@ -906,8 +1144,9 @@ $("refocusSelection").addEventListener("click",()=>{
  render();
 });
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
-$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id,index:0}:{type:"edge",id:model.edges.length?model.edges[0].id:"",index:0};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入本機檔案："+file.name+"。四個集合的基本結構已讀取；局部診斷不等同正式 Schema／完整跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
-$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id,index:0};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
+$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id,index:0}:{type:"edge",id:model.edges.length?model.edges[0].id:"",index:0};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入目前模型："+file.name+"。四個集合的基本結構已讀取；局部診斷不等同正式 Schema／完整跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。目前模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
+$("comparePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);comparisonModel=parsed;comparisonFileName=file.name;$("compareState").className="message";$("compareState").textContent="比較基準已載入："+file.name+"。載入失敗不會覆蓋目前模型；兩份資料仍只在本頁記憶體中。";activeView="diff";render()}catch(err){$("compareState").className="message error";$("compareState").textContent="比較基準載入失敗："+err.message+"。原比較基準未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
+$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id,index:0};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設目前模型為內建示例；這不是專案正式模型。已載入的比較基準會保留，可查看示例與基準的差異。";render()});
 render();
 })();
 </script>
