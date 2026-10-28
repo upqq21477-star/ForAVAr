@@ -4,18 +4,21 @@
 
 ## 框架可視化網頁（GitHub Pages 已可達）
 
-- **正式網址：** [https://upqq21477-star.github.io/ForAVAr/](https://upqq21477-star.github.io/ForAVAr/)（請保留路徑中的 `ForAVAr` 大小寫；其他大小寫變體本次回傳 404）。
-- **已實測：** 2026-10-28 GitHub repository metadata 顯示 `private=false`、`has_pages=true`；正式網址成功取得頁面，標題為「ForAVAr｜唯讀框架可視化原型」。回傳 HTML 包含本機 JSON 載入、重設示例、樹狀／關係圖／卡片切換、搜尋、狀態篩選、局部診斷及詳情面板。
-- **尚未完成：** 上述是網站可達與 HTML 介面結構確認；實際瀏覽器點擊、切換與本機 JSON 載入的互動 smoke test 仍為 `NOT_RUN`。不要把站點可達當作完整 UI 驗收或系統 E4。
-- **公開範圍提醒：** 目前整個 repository 已是 public。GitHub 上所有已追蹤檔案（包括 `docs/`、`runtime/`、`研究/`、`進度/` 等）都可被他人直接查看，不只公開網站首頁。這是 repository 可見性造成的結果；若只想公開網頁、不想公開研究原始檔，必須另行拆分發布來源或恢復私有來源後使用可讀取私有來源的免費部署方式。
-- 目前不需要付費方案。GitHub Pages 已開通；不再需要 Cloudflare fallback build script，避免同一靜態網站保留兩套發布路徑。
+- **正式網址：** [https://upqq21477-star.github.io/ForAVAr/](https://upqq21477-star.github.io/ForAVAr/)。路徑請保留 `ForAVAr` 的大小寫。
+- **已實測：** repository metadata 顯示 `private=false`、`has_pages=true`；正式網址可載入「ForAVAr｜唯讀框架可視化原型」。
+- **已交付功能：** 本機 JSON 載入、樹狀／關係圖／卡片、搜尋、狀態篩選、局部診斷、引用往返、位置優先的跨視圖選取，以及 WU-C0-17 雙模型唯讀差異檢視。
+- **WU-C0-17 局部證據：** JavaScript 編譯檢查 `COMPILE_OK`；10 項差異核心模擬符合預期，涵蓋唯一 ID 配對、新增／刪除／修改、重複／缺失 ID 歧義、版面差異、陣列順序及輸入不變性。這不是瀏覽器點擊測試或完整驗收。
+- **仍待完成：** 真實瀏覽器互動 smoke test（切換四視圖、搜尋／篩選、重設、載入有效與錯誤 JSON、載入比較基準及查看差異）仍為 `NOT_RUN`。按你的要求，先繼續補齊其他功能，將互動測試及完整系統 E4 留到最後。
+- **公開範圍提醒：** 整個 repository 是 public，所有已追蹤檔案（包括 `docs/`、`runtime/`、`研究/`、`進度/`）都可被他人查看，不只公開網站首頁。
+- 不需要付費部署；GitHub Pages 已可達。已移除不再需要的 Cloudflare fallback 建置腳本，避免同一網頁維護兩套發布路徑。
+
 ## 目前工作狀態
 
-- **目前工作單元：** B27.11／T3-0「基線＋同名測試類別」。
-- **狀態：** PARTIAL／NOT_RUN；已完成遠端檔案的靜態核對，實際 Python 執行與標準驗證尚未完成。
+- **施工主線：** WU-C0-17「雙模型唯讀版本差異檢視」已完成程式切片及局部模擬；下一步先完善差異與變更影響能力，再進行瀏覽器互動測試。
+- **網站狀態：** GitHub Pages 已可達，正式網址見上方；無需再次檢查相同發布設定。
+- **獨立驗證支線：** B27.11／T3-0 仍 PARTIAL／NOT_RUN；實際 Python 自比、unittest 載入數與 standard_verify 尚未執行。這只阻塞該驗證支線，不阻止唯讀 UI 施工。
 - **唯一目前交接：** [HANDOFF_B27_11.md](https://github.com/upqq21477-star/forAVArb1/blob/main/HANDOFF_B27_11.md)。
-- **下一步：** 依交接文件完成 T3-0 的實際自比、unittest 載入數核對及要求的驗證，將原始輸出與結果直接寫回 GitHub。**T3-0 未完成前不得進入 T3-1。**
-- **若執行環境不具備兩個專案的可讀工作目錄及 Python 執行能力：** 明確回報 BLOCKED／NOT_RUN；不得用靜態推論代替執行結果，不得將工作單元標為完成。
+- **四梯次原則：** E1 確認設計與判準；E2 檢查重複／衝突並重用既有機制；E3 代碼化及有限模擬；E4 完整系統實際驗收。網站可達或局部模擬不得冒充完整驗收。
 
 ## 接手流程（最低讀取路徑）
 
