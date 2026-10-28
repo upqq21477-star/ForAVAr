@@ -1622,8 +1622,10 @@ function renderThreeWayReport(root){
  group.append(el("div","message","基準檔："+comparisonFileName+" · 目前模型："+String(model.title||model.model_id||"目前模型")+" · 另一候選檔："+alternativeFileName+"。總變更／待判 "+allRecords.length+" 項；目前篩選顯示 "+records.length+" 項。這只是衝突候選分析，沒有驗證可合併性，也不會寫入模型。"));
  if(!allRecords.length){group.append(el("div","empty","三份輸入在本功能檢查範圍內沒有發現差異或衝突；不代表正式 Schema、關係規則或完整驗證已通過。"));root.append(group);return}
  if(!records.length){group.append(el("div","empty","目前篩選條件沒有符合項目；可改用「全部變更／待判」。"));root.append(group);return}
- const list=el("div","diff-list"),maxRecords=200;
- records.slice(0,maxRecords).forEach(record=>{
+ const list=el("div","diff-list"),maxRecords=120;
+ const triPriority={conflict:0,ambiguous:1,type_conflict:1,unknown:2,current_only_change:3,current_only_addition:3,current_only_deletion:3,alternative_only_change:4,alternative_only_addition:4,alternative_only_deletion:4,independent_changes:5,convergent_change:6,convergent_addition:6,convergent_deletion:6};
+ const orderedRecords=records.slice().sort((a,b)=>(triPriority[a.status]??7)-(triPriority[b.status]??7)||String(a.id??a.path??"").localeCompare(String(b.id??b.path??"")));
+ orderedRecords.slice(0,maxRecords).forEach(record=>{
   const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
   const label=record.kind==="model"?"模型欄位 "+record.id:record.kind==="identity"?"ID "+record.id:(record.id===null?record.side+" "+record.path:record.label+" · "+record.id);
   head.append(el("div","diff-item-title",label),el("span","diff-badge "+(record.status==="conflict"||record.status==="ambiguous"||record.status==="type_conflict"?"ambiguous":record.status.startsWith("current_only")||record.status.startsWith("alternative_only")?"modified":"presentation"),threeWayDisplayStatus(record.status)));
@@ -1663,7 +1665,7 @@ function renderThreeWayReport(root){
   card.append(head,body);list.append(card);
  });
  group.append(list);
- if(records.length>maxRecords)group.append(el("div","message error","三方差異超過 "+maxRecords+" 個項目；畫面只展開前 "+maxRecords+" 個，未自動合併或移除任何輸入。"));
+ if(records.length>maxRecords)group.append(el("div","message error","三方差異超過 "+maxRecords+" 個項目；優先展開衝突、身分歧義與 unknown，尚有 "+(records.length-maxRecords)+" 個項目未展開。原始三份輸入未被移除或合併。"));
  root.append(group);
 }
 
@@ -1704,7 +1706,8 @@ function renderDiff(){
   sideGroup.append(el("div","diff-group-title",side+" · "+collisions.length+" 個衝突 ID"));
   if(!collisions.length){sideGroup.append(el("div","empty","此版本未發現可用字串 ID 的全域重複。"));globalCollisionSection.append(sideGroup);return}
   const list=el("div","diff-list");
-  collisions.forEach(collision=>{
+  const maxCollisionIds=120;
+  collisions.slice().sort((a,b)=>Number(b.crossCollection)-Number(a.crossCollection)||a.id.localeCompare(b.id)).slice(0,maxCollisionIds).forEach(collision=>{
    const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
    head.append(el("div","diff-item-title","ID："+collision.id),el("span","diff-badge ambiguous",collision.kind));
    body.append(el("div","message error","共有 "+collision.items.length+" 筆使用此 ID；跨版本身分配對不能被視為確定。"));
@@ -1716,7 +1719,9 @@ function renderDiff(){
    });
    body.append(paths);card.append(head,body);list.append(card);
   });
-  sideGroup.append(list);globalCollisionSection.append(sideGroup);
+  sideGroup.append(list);
+  if(collisions.length>maxCollisionIds)sideGroup.append(el("div","message error","全域 ID 衝突清單達 "+maxCollisionIds+" 項顯示上限；尚有 "+(collisions.length-maxCollisionIds)+" 個衝突 ID 未展開。"));
+  globalCollisionSection.append(sideGroup);
  }
  appendCollisionSide("基準版",baselineGlobalCollisions);
  appendCollisionSide("目前版",currentGlobalCollisions);
@@ -1731,17 +1736,25 @@ function renderDiff(){
    Object.prototype.hasOwnProperty.call(comparisonModel,key),Object.prototype.hasOwnProperty.call(model,key)));
   box.append(body);group.append(box);root.append(group);
  }
- let pairwiseVisibleCount=0;
+ const maxPairwiseRows=120;
+ let pairwiseVisibleCount=0,pairwiseRenderedCount=0;
+ const pairwisePriority={ambiguous:0,unknown:1,modified:2,removed:3,added:4,presentation:5};
  results.forEach(result=>{
   if(!result.records.length)return;
-  const visibleRecords=result.records.filter(record=>pairwiseDiffMatchesFilter(record,diffResultFilter));
+  const visibleRecords=result.records.filter(record=>pairwiseDiffMatchesFilter(record,diffResultFilter))
+   .sort((a,b)=>(pairwisePriority[a.status]??6)-(pairwisePriority[b.status]??6));
   if(!visibleRecords.length)return;
   pairwiseVisibleCount+=visibleRecords.length;
-  const group=el("section","diff-group");group.append(el("div","diff-group-title",result.label+" · 顯示 "+visibleRecords.length+"／"+result.records.length+" 項"));
-  const list=el("div","diff-list");visibleRecords.forEach(record=>appendDiffRecord(list,record));
+  const remaining=Math.max(0,maxPairwiseRows-pairwiseRenderedCount);
+  const rendered=visibleRecords.slice(0,remaining);
+  if(!rendered.length)return;
+  pairwiseRenderedCount+=rendered.length;
+  const group=el("section","diff-group");group.append(el("div","diff-group-title",result.label+" · 顯示 "+rendered.length+"／篩選後 "+visibleRecords.length+" 項（原始 "+result.records.length+"）"));
+  const list=el("div","diff-list");rendered.forEach(record=>appendDiffRecord(list,record));
   group.append(list);root.append(group);
  });
  if(!pairwiseVisibleCount)root.append(el("div","empty","目前兩方差異篩選沒有符合項目；可改用「全部差異／待判」。"));
+ else if(pairwiseVisibleCount>pairwiseRenderedCount)root.append(el("div","message error","差異清單觸及畫面安全上限："+maxPairwiseRows+" 項。此處優先顯示身分歧義／未知與語意修改；尚有 "+(pairwiseVisibleCount-pairwiseRenderedCount)+" 項篩選符合結果未展開，原始模型及差異計算均未被刪除。"));
  const impact=el("section","diff-group");
  impact.append(el("div","diff-group-title","依關係規則登錄表推算的影響候選"));
  if(!relationRules){
@@ -1756,7 +1769,9 @@ function renderDiff(){
    else{
     const list=el("div","diff-list");
     const modePriority={transitive:0,direct:1,advisory:2};
-    result.candidates.sort((a,b)=>modePriority[a.mode]-modePriority[b.mode]||a.id.localeCompare(b.id)).forEach(candidate=>{
+    const orderedCandidates=result.candidates.slice().sort((a,b)=>modePriority[a.mode]-modePriority[b.mode]||a.id.localeCompare(b.id));
+    const maxImpactRows=120;
+    orderedCandidates.slice(0,maxImpactRows).forEach(candidate=>{
      const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
      const modeLabel={transitive:"遞迴依賴候選",direct:"直接複核候選",advisory:"建議複核候選"}[candidate.mode]||candidate.mode;
      head.append(el("div","diff-item-title",candidate.id),el("span","diff-badge "+(candidate.mode==="advisory"?"presentation":"modified"),modeLabel));
@@ -1765,6 +1780,7 @@ function renderDiff(){
      list.append(card);
     });
     group.append(list);
+    if(result.candidates.length>maxImpactRows)group.append(el("div","message error","影響候選達 "+maxImpactRows+" 個顯示上限；尚有 "+(result.candidates.length-maxImpactRows)+" 個候選未展開，計算結果未被刪除。"));
    }
    if(result.warnings.length){
     const warning=el("div","detail-section");warning.append(el("div","fieldlabel","未能傳播／需留意"));
@@ -1777,14 +1793,17 @@ function renderDiff(){
   if(computed.changedEdgeEndpoints.length){
    const group=el("section","diff-group");group.append(el("div","diff-group-title","修改關係的端點複核候選"));
    const list=el("div","diff-list");
-   computed.changedEdgeEndpoints.forEach(item=>{
+   const maxEndpointRows=120;
+   computed.changedEdgeEndpoints.slice(0,maxEndpointRows).forEach(item=>{
     const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
     head.append(el("div","diff-item-title",item.side+" · edges["+item.index+"] · "+item.field),el("span","diff-badge presentation","端點待複核"));
     body.append(el("div","detail-function",String(item.id)+" · relation="+String(item.relationType||"未知")+" · edge ID="+String(item.edgeId||"缺失")));
     body.append(el("div","diff-item-meta","此清單只標出被新增／刪除／語意修改關係的端點，不將其假定為節點語意已變更。"));
     card.append(head,body);list.append(card);
    });
-   group.append(list);impact.append(group);
+   group.append(list);
+   if(computed.changedEdgeEndpoints.length>maxEndpointRows)group.append(el("div","message error","關係端點複核清單達 "+maxEndpointRows+" 個顯示上限；尚有 "+(computed.changedEdgeEndpoints.length-maxEndpointRows)+" 個端點未展開。"));
+   impact.append(group);
   }
  }
  root.append(impact);
