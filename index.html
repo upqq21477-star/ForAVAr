@@ -1253,7 +1253,7 @@ function calculateRuleImpactForModel(side,source,seedIds,registry){
     const neighborCount=nodeCounts.get(neighborId)||0;
     if(neighborCount!==1){warnings.add("edges["+index+"] 的受影響端點「"+neighborId+"」在"+side+"無法唯一定位（匹配 "+neighborCount+" 筆）；未加入傳播。");return}
     if(seedIds.has(neighborId))return;
-    const mode=impactMode(policy),pathStep={edgeIndex:index,relationType:edge.relation_type,from:state.id,to:neighborId,policy:policy,mode:mode};
+    const mode=impactMode(policy),pathStep={edgeIndex:index,relationType:edge.relation_type,from:state.id,to:neighborId,policy:policy,mode:mode,direction:field==="source_changed"?"forward":"reverse"};
     let candidate=candidates.get(neighborId);
     if(!candidate){candidate={side:side,id:neighborId,mode:mode,depth:state.depth+1,paths:[],roots:[]};candidates.set(neighborId,candidate)}
     const priority={advisory:1,direct:2,transitive:3};
@@ -1634,7 +1634,10 @@ function impactPathEdgeIndex(step,source){
  if(!step||!Number.isInteger(step.edgeIndex)||!source||!Array.isArray(source.edges))return null;
  const edge=source.edges[step.edgeIndex];
  if(!edge||typeof edge!=="object")return null;
- if(edge.source_id!==step.from||edge.target_id!==step.to||edge.relation_type!==step.relationType)return null;
+ const endpointsMatch=step.direction==="reverse"
+  ?edge.source_id===step.to&&edge.target_id===step.from
+  :edge.source_id===step.from&&edge.target_id===step.to;
+ if(!endpointsMatch||edge.relation_type!==step.relationType)return null;
  return step.edgeIndex;
 }
 function appendImpactPathSteps(parent,path,side,currentModel){
@@ -1646,7 +1649,7 @@ function appendImpactPathSteps(parent,path,side,currentModel){
  steps.slice(0,maxVisibleSteps).forEach(step=>{
   const row=el("div","edge-row");
   const relationName=relationLabel[step.relationType]||step.relationType||"未知關係";
-  row.append(el("div","edge-path","edges["+step.edgeIndex+"] "+String(step.from)+" —"+String(relationName)+"→ "+String(step.to)));
+  row.append(el("div","edge-path","edges["+step.edgeIndex+"] 原始關係 "+String(step.direction==="reverse"?step.to:step.from)+" —"+String(relationName)+"→ "+String(step.direction==="reverse"?step.from:step.to)+" · 影響傳播："+String(step.from)+" → "+String(step.to)+(step.direction==="reverse"?"（反向依賴）":"（正向依賴）")));
   if(side==="目前版"){
    const edgeIndex=impactPathEdgeIndex(step,currentModel);
    if(Number.isInteger(edgeIndex)){
