@@ -25,9 +25,49 @@
 
 ## 目前施工交付物
 
-- **本輪實作：[唯讀框架可視化原型](./實驗/唯讀框架可視化原型.html)。** 支援載入本機 JSON、樹狀／關係圖／卡片視圖、跨節點／關係／來源／條件搜尋、節點審核與證據狀態篩選、上游／下游局部關係與深度控制，以及可定位的唯讀資料品質提示、從診斷跳至詳情和返回診斷的導覽，以及跨視圖選取追蹤、重新聚焦提示、手機快速切換視圖、圖形範圍／數量提示、關係方向／類型圖例，以及來源／條件反向引用導覽、實際欄位路徑與返回來源／條件的往返導覽。
+- **本輪實作：[唯讀框架可視化原型](./實驗/唯讀框架可視化原型.html)。** 支援載入本機 JSON、樹狀／關係圖／卡片視圖、跨節點／關係／來源／條件搜尋、節點審核與證據狀態篩選、上游／下游局部關係與深度控制、局部資料品質提示及其物件／欄位定位、跨視圖選取追蹤、手機快速切換、圖形範圍提示、關係圖例，以及來源／條件反向引用與返回導覽。詳細支援欄位、九類診斷及明確限制以本 README 的「WU-C0-12」節為準。
 - 原型使用同一份載入模型產生各視圖；不保存、不上傳、不修改語意資料，也不宣稱已通過 Schema 或跨物件驗證。
 - 當前只做一次範圍核對與 GitHub 讀回；瀏覽器互動測試尚未執行。這不阻塞其餘可獨立施工的唯讀功能。
+
+## WU-C0-12：原型資料契約與能力邊界
+
+原型是**本機、唯讀的瀏覽器呈現層**。其目的在協助人理解單一模型中的節點、關係、條件、來源與狀態；不是正式編輯器、Schema 驗證器、證據裁決器或發布器。
+
+### 載入契約
+
+- JSON 根值必須是物件，並包含四個陣列：`nodes`、`edges`、`conditions`、`sources`。
+- 四個陣列的每個元素都必須是非陣列物件。
+- 上述條件只代表檔案可以進入原型；不會驗證必填欄位、欄位型別、正式 Schema 版本、全部枚舉值或完整跨物件規則。
+- 載入後資料只保留於當前頁面的記憶體。原型不會上傳、寫回、持久化、匯出、發布或回傳既有認知核心。
+
+### 原型主要消費的欄位
+
+| 集合 | 主要消費欄位 |
+| --- | --- |
+| `nodes` | `id`、`name`、`function`、`description`、`structural_role`、`entity_kind`、`review_status`、`evidence_status`、`claim_kind`、`provenance_refs`、`condition_refs` |
+| `edges` | `id`、`source_id`、`target_id`、`relation_type`、`description`、狀態欄位、`provenance_refs`、`condition_refs` |
+| `conditions` | `id`、`name`、`description` |
+| `sources` | 通用來源物件；常用顯示欄位為 `id`、`source_type`、`label`、`locator`、`excerpt`、`actor_type`、`captured_at` |
+
+其他欄位不會一概拒絕，但不能假設它們已由原型完整呈現或處理。來源類型目前採通用物件顯示；原型不抓取外部來源、不驗證來源真實性，也不裁定引用內容是否真的支持主張。條件目前只供瀏覽與引用跳轉，不執行條件規則。
+
+原型認得的關係標籤為：`contains`、`depends_on`、`precedes`、`causes`、`influences`、`triggers`、`transfers_data_to`、`conflicts_with`、`supersedes`、`explains`、`supports`、`implements`、`derived_from`、`satisfies`、`verified_by`、`is_evidence_for`、`refutes`。樹狀視圖只用 `contains` 組成層級；其他關係應切換到關係圖。這份清單是原型的標籤映射，不取代正式關係登錄表，清單外類型也不能只憑原型警告判定正式無效。
+
+### 局部診斷範圍
+
+目前原型只輸出以下九類診斷：
+
+`MISSING_ID`、`DUPLICATE_ID`、`MISSING_EDGE_ENDPOINT`、`UNKNOWN_RELATION_TYPE`、`INVALID_PROVENANCE_REFS`、`UNRESOLVED_SOURCE_REF`、`INVALID_CONDITION_REFS`、`UNRESOLVED_CONDITION_REF`、`CLAIM_WITHOUT_SOURCE`。
+
+它們只檢查原型明確實作的部分：缺 ID、跨集合重複 ID、關係端點、已知關係標籤、來源／條件引用欄位及引用目標，以及特定 `claim_kind` 缺少來源的警告。沒有診斷項目**不等於**正式 Schema、完整跨物件規則、證據有效性、狀態機或發布門檻通過。
+
+### 明確不支援
+
+- 正式 JSON Schema 完整驗證及全量跨物件規則驗證。
+- 來源真實性檢查、外部 locator 抓取、證據與主張語意裁決。
+- 條件邏輯執行、所有狀態／類型枚舉驗證及完整未知欄位呈現。
+- 模型編輯、資料保存、差異提交、版本衝突處理、匯出／發布與核心回傳。
+- 瀏覽器互動驗收及實際使用者成效驗收（目前仍為 `NOT_RUN`／`NOT_STARTED`）。
 
 ## 現行技術與測試資產
 

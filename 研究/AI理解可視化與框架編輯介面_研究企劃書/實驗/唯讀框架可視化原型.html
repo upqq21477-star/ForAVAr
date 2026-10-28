@@ -11,6 +11,13 @@ button,input{font:inherit}button{cursor:pointer;color:inherit}button:focus-visib
 header{padding:18px 22px 14px;border-bottom:1px solid var(--line);background:#101a28;position:sticky;top:0;z-index:5}
 .headrow{display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}.brand{font-size:18px;font-weight:750;letter-spacing:.02em}.subtitle{font-size:12px;color:var(--muted);margin-top:2px}
 .notice{margin-top:12px;border:1px solid #67562f;background:#28251b;color:#f7dca4;border-radius:9px;padding:8px 11px;font-size:12px}
+.scope-contract{margin-top:8px;border:1px solid var(--line);border-radius:9px;background:#101a28;padding:0 10px;font-size:12px;color:var(--muted)}
+.scope-contract>summary{cursor:pointer;padding:9px 0;color:var(--text);font-weight:650}
+.scope-body{padding:0 0 10px;line-height:1.55}
+.scope-body p{margin:7px 0}
+.scope-body ul{margin:5px 0 9px;padding-left:20px}
+.scope-body li{margin:4px 0}
+.scope-body code{overflow-wrap:anywhere;color:var(--accent)}
 .mobile-view-nav,.mobile-selection-summary{display:none}
 .mobile-view-nav{gap:5px;margin-top:10px}
 .mobile-view-nav .tab{flex:1;text-align:center;padding:8px 5px;border:1px solid var(--line);background:#101a28;color:var(--muted);border-radius:8px;font-size:12px}
@@ -64,7 +71,23 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
       <button id="resetBtn" class="btn" type="button">重設示例</button>
     </div>
   </div>
-  <div class="notice">唯讀預覽：資料只留在本頁記憶體，不上傳、不寫回、不發布。此原型不執行完整 JSON Schema／跨物件驗證。</div>
+  <div class="notice">唯讀預覽：載入的 JSON 僅留在本頁記憶體，不上傳、不寫回、不發布。這是瀏覽原型，不是正式編輯器或完整驗證器。</div>
+  <details class="scope-contract">
+    <summary>本原型支援範圍／資料契約／限制</summary>
+    <div class="scope-body">
+      <p><strong>必要外層結構：</strong>JSON 根物件必須包含 <code>nodes</code>、<code>edges</code>、<code>conditions</code>、<code>sources</code> 四個陣列；陣列中的每一項必須是物件。這只是載入門檻，不代表內容符合正式 Schema。</p>
+      <p><strong>主要欄位映射：</strong></p>
+      <ul>
+        <li><code>nodes</code>：主要讀取 <code>id</code>、<code>name</code>、<code>function</code>、<code>description</code>、<code>structural_role</code>、<code>entity_kind</code>、<code>review_status</code>、<code>evidence_status</code>、<code>claim_kind</code>、<code>provenance_refs</code>、<code>condition_refs</code>。</li>
+        <li><code>edges</code>：主要讀取 <code>id</code>、<code>source_id</code>、<code>target_id</code>、<code>relation_type</code>、<code>description</code>、狀態欄位及來源／條件引用。</li>
+        <li><code>conditions</code>：目前以 <code>id</code>、<code>name</code>、<code>description</code> 為主要瀏覽欄位；不執行條件語意或規則。</li>
+        <li><code>sources</code>：以通用紀錄呈現；常用欄位包括 <code>id</code>、<code>source_type</code>、<code>label</code>、<code>locator</code>、<code>excerpt</code>、<code>actor_type</code>、<code>captured_at</code>。不會自動連線取得或核實外部來源。</li>
+      </ul>
+      <p><strong>關係類型標籤：</strong>原型內建標籤包含 <code>contains</code>、<code>depends_on</code>、<code>precedes</code>、<code>causes</code>、<code>influences</code>、<code>triggers</code>、<code>transfers_data_to</code>、<code>conflicts_with</code>、<code>supersedes</code>、<code>explains</code>、<code>supports</code>、<code>implements</code>、<code>derived_from</code>、<code>satisfies</code>、<code>verified_by</code>、<code>is_evidence_for</code>、<code>refutes</code>。樹狀視圖只用 <code>contains</code> 組成階層；其他關係需看關係圖。未列出的關係類型不會因此被正式規則判定為無效。</p>
+      <p><strong>局部診斷代碼：</strong><code>MISSING_ID</code>、<code>DUPLICATE_ID</code>、<code>MISSING_EDGE_ENDPOINT</code>、<code>UNKNOWN_RELATION_TYPE</code>、<code>INVALID_PROVENANCE_REFS</code>、<code>UNRESOLVED_SOURCE_REF</code>、<code>INVALID_CONDITION_REFS</code>、<code>UNRESOLVED_CONDITION_REF</code>、<code>CLAIM_WITHOUT_SOURCE</code>。這些僅是原型內建的局部提示，不涵蓋正式 Schema、所有跨物件規則、來源真實性、證據是否支持主張、狀態轉移或發布資格。</p>
+      <p><strong>限制：</strong>非必需的未知欄位可能保留在載入模型中，但不保證被視圖呈現；來源類型、節點類型及審核／證據狀態不做完整枚舉驗證；不儲存、不修改、不匯出、不發布，也不連接既有認知核心。沒有診斷項目只代表本次局部檢查未發現已列項目，不代表模型有效或證據成立。</p>
+    </div>
+  </details>
   <div class="mobile-view-nav" role="tablist" aria-label="手機快速切換視圖">
     <button class="tab" type="button" data-view="tree" role="tab" aria-selected="true">樹狀</button>
     <button class="tab" type="button" data-view="graph" role="tab" aria-selected="false">關係圖</button>
@@ -654,7 +677,7 @@ $("refocusSelection").addEventListener("click",()=>{
  render();
 });
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
-$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入："+file.name+"。只做基本讀取檢查，未執行完整 Schema／跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
+$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入本機檔案："+file.name+"。四個集合的基本結構已讀取；局部診斷不等同正式 Schema／完整跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
 $("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
 render();
 })();

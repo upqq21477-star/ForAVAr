@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.7",
+  "manifest_version": "3.8",
   "updated": "2026-10-28",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -21,12 +21,36 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "READ_ONLY_PROTOTYPE_IMPLEMENTED; browser interaction not tested",
+    "ui_implementation": "READ_ONLY_PROTOTYPE_WITH_EXPLICIT_SCOPE_CONTRACT_IMPLEMENTED; JavaScript syntax check performed; browser interaction not tested",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
     "final_closure": "REQUIRES candidate execution, user workflow definition, graph interaction prototype, core adapter integration, end-to-end simulation, human-task evaluation, and evidence/baseline synchronization.",
-    "schema_path_correction": "Schema blob c79d7f7535ac38f6046e1f6a67a94c3e6a24f848 now uses the canonical path. Re-run Draft 2020-12 meta-validation; do not transfer historical PASS from 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be."
+    "schema_path_correction": "Schema blob c79d7f7535ac38f6046e1f6a67a94c3e6a24f848 now uses the canonical path. Re-run Draft 2020-12 meta-validation; do not transfer historical PASS from 02b9b0a4ce30c279804f9ef1bfb279eecbd1b0be.",
+    "prototype_scope": {
+      "status": "DOCUMENTED",
+      "required_top_level_arrays": [
+        "nodes",
+        "edges",
+        "conditions",
+        "sources"
+      ],
+      "diagnostic_codes": [
+        "MISSING_ID",
+        "DUPLICATE_ID",
+        "MISSING_EDGE_ENDPOINT",
+        "UNKNOWN_RELATION_TYPE",
+        "INVALID_PROVENANCE_REFS",
+        "UNRESOLVED_SOURCE_REF",
+        "INVALID_CONDITION_REFS",
+        "UNRESOLVED_CONDITION_REF",
+        "CLAIM_WITHOUT_SOURCE"
+      ],
+      "browser_interaction": "NOT_RUN",
+      "full_schema_validation": "BLOCKED / NOT_RUN",
+      "cross_object_validation": "PARTIAL_LOCAL_DIAGNOSTICS_ONLY",
+      "persistence_or_writeback": false
+    }
   },
   "current_baseline": [
     {
@@ -77,7 +101,7 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "b45764d6b694184ef2dbfc91c03a4915868b0ab3"
+      "sha": "23163bdd9c6333281f6e0827d0df905e6819ad91"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
@@ -92,12 +116,12 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "8bd4f7b2559f4260b5293230a4a1d7cddf7ce912"
+      "sha": "65237da7ada229cef633a6f3e8385d6e62a994eb"
     },
     {
       "role": "read_only_visualization_prototype",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/實驗/唯讀框架可視化原型.html",
-      "sha": "77752f8bc8ee8c7e7e4f1edcc98dfce16df904be"
+      "sha": "cd273be0fd44a94b2ccbbda2fdf7b5961a5824a2"
     }
   ],
   "test_fixtures": {
