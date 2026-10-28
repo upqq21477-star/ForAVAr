@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, and WU-C0-15 position-first identity across tree/card/graph implemented; root index.html is the sole HTML entry; JavaScript COMPILE_OK; 7 local simulations match expectations; browser interaction and GitHub Pages serving NOT_RUN / NOT_VERIFIED",
+    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, and WU-C0-15 position-first identity across tree/card/graph implemented; root index.html is the sole HTML source. JavaScript COMPILE_OK; 7 local identity simulations match expectations. Free static-build script prepared to emit only dist/index.html; Cloudflare authorization, actual hosted response, and browser interaction remain NOT_RUN.",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -89,10 +89,10 @@
         "e4_browser_interaction": "NOT_RUN"
       }
     },
-    "website_entry": "index.html (committed at repository root; not yet published)",
-    "github_pages_deployment": "BLOCKED_NOT_ENABLED; GitHub API repository metadata has_pages=false; live checks of the canonical project URL, casing variants, and /index.html returned HTTP 404 on 2026-10-28. Repository visibility is private. Do not change visibility automatically; owner must choose an eligible Pages plan/source or explicitly authorize an alternative.",
+    "website_entry": "index.html (single authoritative source at repository root)",
+    "github_pages_deployment": "NOT_USED: private repository under current GitHub Free conditions; has_pages=false and tested Pages URL variants returned HTTP 404. No paid upgrade and no public-repository visibility change authorized.",
     "website_publish_blocker": {
-      "status": "OWNER_ACTION_REQUIRED",
+      "status": "WAITING_FOR_OWNER_ACCOUNT_AUTHORIZATION",
       "observed": [
         "GitHub repository API has_pages=false",
         "https://upqq21477-star.github.io/forAVAr/ returned HTTP 404",
@@ -101,9 +101,28 @@
         "https://upqq21477-star.github.io/forAVAr/index.html returned HTTP 404"
       ],
       "visibility": "private",
-      "plan_constraint_reference": "https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site",
-      "guardrail": "Do not make the repository public or create a paid/external deployment without explicit owner authorization.",
-      "next_action": "Owner checks Settings > Pages and account eligibility; if allowed, publish from main / (root). Only then perform one limited browser smoke check."
+      "no_cost_route": "Cloudflare Pages Free",
+      "build_command": "sh scripts/build_static_site.sh",
+      "output_directory": "dist",
+      "output_contract": "dist/index.html only; never publish repository root",
+      "guardrails": [
+        "Do not pay for GitHub Pages or another plan.",
+        "Do not make the private research repository public.",
+        "If enabling Cloudflare Git integration, scope GitHub App access to this repository only.",
+        "Browser smoke test remains NOT_RUN until a live deployment exists."
+      ],
+      "next_action": "Owner connects Cloudflare Pages Free to this repository and configures Framework preset None, build command `sh scripts/build_static_site.sh`, output directory `dist`; then verify the deployment contains only index.html and perform one limited browser smoke test."
+    },
+    "static_site_build": {
+      "status": "PREPARED_NOT_EXECUTED",
+      "source": "index.html",
+      "script": "scripts/build_static_site.sh",
+      "script_sha": "669bad4b96592b257574c478439ec2c0ebd362f6",
+      "output": "dist/index.html",
+      "expected_file_count": 1,
+      "provider_candidate": "Cloudflare Pages Free",
+      "provider_setup": "OWNER_ACTION_REQUIRED",
+      "runtime_verification": "NOT_RUN"
     }
   },
   "current_baseline": [
@@ -180,7 +199,12 @@
     {
       "role": "repository_entry_readme",
       "path": "README.md",
-      "sha": "f3e20cdba737dcb928f26d570918e3333f52854a"
+      "sha": "69a70be22af280d82bead7efdbfa981a4fac6b53"
+    },
+    {
+      "role": "static_site_build_script",
+      "path": "scripts/build_static_site.sh",
+      "sha": "669bad4b96592b257574c478439ec2c0ebd362f6"
     }
   ],
   "test_fixtures": {
