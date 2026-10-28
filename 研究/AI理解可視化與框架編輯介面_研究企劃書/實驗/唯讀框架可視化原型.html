@@ -280,11 +280,13 @@ function renderDiagnostics(){
   const item=el("button","diag-item "+(d.severity==="error"?"error":"warning"));item.type="button";
   item.append(el("div","diag-top",""),el("div","diag-message",text),el("div","diag-path",path));
   item.firstChild.append(el("span","",d.severity==="error"?"錯誤":"警告"),el("span","diag-code",d.code));
-  if(d.type==="node"||d.type==="edge")item.addEventListener("click",()=>{
+  if(["node","edge","source","condition"].includes(d.type))item.addEventListener("click",()=>{
    selected={type:d.type,id:d.id,index:d.index,path:d.field,diagnosticCode:d.code};
    $("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";
    $("graphScope").value="both";$("graphDepth").value="1";
-   activeView=d.type==="edge"?"graph":"cards";render();
+   if(d.type==="edge")activeView="graph";
+   else if(d.type==="node")activeView="cards";
+   render();
   });
   else{item.disabled=true;item.setAttribute("aria-label",text+"；定位："+path)}
   list.append(item);
@@ -297,16 +299,23 @@ function selectItem(type,id,index){
 }
 function currentSelectedObject(){
  if(selected.type==="edge")return Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id);
+ if(selected.type==="source")return Number.isInteger(selected.index)?model.sources[selected.index]:sourceById(selected.id);
+ if(selected.type==="condition")return Number.isInteger(selected.index)?model.conditions[selected.index]:condById(selected.id);
  return Number.isInteger(selected.index)?model.nodes[selected.index]:nodeById(selected.id);
 }
 function selectedObjectMatchesFilter(){
  const obj=currentSelectedObject();if(!obj)return false;
  const q=$("search").value.trim().toLowerCase();
  if(selected.type==="node")return nodePassesFilters(obj)&&(!q||nodeText(obj).includes(q));
- return !q||edgeText(obj).includes(q);
+ if(selected.type==="edge")return !q||edgeText(obj).includes(q);
+ const searchable=selected.type==="source"
+  ?[obj.id,obj.label,obj.locator,obj.excerpt,obj.source_type,obj.actor_type,obj.captured_at]
+  :[obj.id,obj.name,obj.description,obj.condition_type,obj.expression];
+ return !q||searchable.filter(x=>x!==undefined&&x!==null).join(" ").toLowerCase().includes(q);
 }
 function selectionIsVisible(){
  const obj=currentSelectedObject();if(!obj)return true;
+ if(selected.type==="source"||selected.type==="condition")return true;
  if(selected.type==="edge"){
   if(activeView!=="graph"||!selectedObjectMatchesFilter())return false;
   if($("graphScope").value==="upstream"&&obj.source_id!==obj.target_id)return false;
@@ -319,13 +328,15 @@ function selectionIsVisible(){
 }
 function renderSelectionNotice(){
  const current=currentSelectedObject();
- const summaryKind=selected.type==="edge"?"關係":"節點";
+ const selectionLabels={node:"節點",edge:"關係",source:"來源",condition:"條件"};
+ const summaryKind=selectionLabels[selected.type]||"項目";
  const summaryId=current&&current.id!==undefined?String(current.id):String(selected.id||"");
- $("mobileSelectionSummary").textContent=current?("目前選取："+summaryKind+" · "+(current.name||current.title||summaryId)+" · "+summaryId):"目前選取項目不存在於已載入模型";
+ const summaryName=current&&(current.name||current.label||current.title)||summaryId;
+ $("mobileSelectionSummary").textContent=current?("目前選取："+summaryKind+" · "+summaryName+" · "+summaryId):"目前選取項目不存在於已載入模型";
  const hidden=selectionIsVisible();
  $("selectionNotice").hidden=hidden;
  if(hidden)return;
- const kind=selected.type==="edge"?"關係":"節點";
+ const kind=selectionLabels[selected.type]||"項目";
  const obj=currentSelectedObject();
  $("selectionNoticeText").textContent="目前選取的"+kind+"（"+String(obj&&obj.id||selected.id||"無 ID")+"）不在目前視圖或篩選範圍；詳情仍保留。可重新聚焦以清除篩選並跳至合適視圖。";
 }
@@ -513,22 +524,79 @@ function appendDiagnosticContext(parent){
  back.addEventListener("click",()=>{$("diagnosticsPanel").hidden=false;$("diagToggle").setAttribute("aria-expanded","true");$("diagnosticsPanel").scrollIntoView({behavior:"smooth",block:"nearest"});$("diagToggle").focus()});
  parent.append(back);
 }
+function openReferencedItem(type,obj,index){
+ selected={type:type,id:obj&&obj.id,index:index};
+ if(type==="node")activeView="cards";
+ else if(type==="edge"){activeView="graph";$("graphScope").value="both";$("graphDepth").value="1"}
+ render();
+}
+function referenceButton(type,obj,index,title,meta){
+ const button=el("button","tree-node");button.type="button";
+ const label=el("span","tree-label");
+ label.append(el("span","tree-name",title||obj.id||"未命名"),el("span","tree-meta",meta||obj.id||""));
+ button.append(label);
+ button.addEventListener("click",()=>{
+  if(type==="node"||type==="edge")openReferencedItem(type,obj,index);
+  else selectItem(type,obj.id,index);
+ });
+ return button;
+}
+function appendReverseReferences(parent,kind,id){
+ const label=kind==="source"?"來源":"條件";
+ const field=kind==="source"?"provenance_refs":"condition_refs";
+ const nodes=model.nodes.map((obj,index)=>({obj,index})).filter(x=>Array.isArray(x.obj[field])&&x.obj[field].includes(id));
+ const edges=model.edges.map((obj,index)=>({obj,index})).filter(x=>Array.isArray(x.obj[field])&&x.obj[field].includes(id));
+ const section=el("div","detail-section");
+ section.append(el("div","fieldlabel","反向引用 · "+label+"（"+nodes.length+" 個節點、"+edges.length+" 條關係）"));
+ if(!nodes.length&&!edges.length)section.append(el("div","message","目前沒有節點或關係引用此"+label+"。"));
+ nodes.forEach(({obj,index})=>section.append(referenceButton("node",obj,index,obj.name||obj.id,"節點 · "+obj.id)));
+ edges.forEach(({obj,index})=>{
+  const from=nodeById(obj.source_id),to=nodeById(obj.target_id);
+  const title=(from?from.name:obj.source_id)+" → "+(relationLabel[obj.relation_type]||obj.relation_type)+" → "+(to?to.name:obj.target_id);
+  section.append(referenceButton("edge",obj,index,title,"關係 · "+obj.id));
+ });
+ parent.append(section);
+}
+function detailSource(source){
+ const root=$("detailPanel");root.replaceChildren();
+ if(!source){root.append(el("div","empty","找不到所選來源。"));return}
+ const sec=el("div","detail-section");
+ sec.append(el("div","detail-title",source.label||source.id||"未命名來源"),el("div","detail-id",source.id||"(無 ID)"),el("div","detail-function",source.excerpt||source.locator||"未提供摘錄或定位"));
+ appendDiagnosticContext(sec);root.append(sec);
+ const fields=el("div","detail-section");
+ Object.entries(source).forEach(([key,value])=>addKV(fields,key,value));
+ root.append(fields);
+ appendReverseReferences(root,"source",source.id);
+}
+function detailCondition(condition){
+ const root=$("detailPanel");root.replaceChildren();
+ if(!condition){root.append(el("div","empty","找不到所選條件。"));return}
+ const sec=el("div","detail-section");
+ sec.append(el("div","detail-title",condition.name||condition.id||"未命名條件"),el("div","detail-id",condition.id||"(無 ID)"),el("div","detail-function",condition.description||condition.expression||"未提供條件說明"));
+ appendDiagnosticContext(sec);root.append(sec);
+ const fields=el("div","detail-section");
+ Object.entries(condition).forEach(([key,value])=>addKV(fields,key,value));
+ root.append(fields);
+ appendReverseReferences(root,"condition",condition.id);
+}
 function detailNode(n){
  const root=$("detailPanel");root.replaceChildren();if(!n){root.append(el("div","empty","找不到所選節點。"));return}
  const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));appendDiagnosticContext(sec);root.append(sec);
  const fields=el("div","detail-section");
  [["結構角色",roleLabel[n.structural_role]||n.structural_role],["物件類型",n.entity_kind],["審核狀態",n.review_status],["證據狀態",n.evidence_status],["來源引用",n.provenance_refs],["條件引用",n.condition_refs],["補充說明",n.description],["其他屬性",n.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});
  root.append(fields);
- const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源內容"));const sources=(Array.isArray(n.provenance_refs)?n.provenance_refs:[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用；不能由此推定內容為真。"));sources.forEach(s=>{refs.append(el("div","tree-node",s.label||s.id),el("div","message",(s.excerpt||"")+" · "+(s.locator||s.id)))});(Array.isArray(n.condition_refs)?n.condition_refs:[]).map(condById).filter(Boolean).forEach(c=>{refs.append(el("div","fieldlabel","條件："+(c.name||c.id)),el("div","message",c.description||"未提供條件說明"))});root.append(refs);
+ const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源引用（點選查看完整紀錄）"));const sources=(Array.isArray(n.provenance_refs)?n.provenance_refs:[]).map(id=>({id,obj:sourceById(id)}));if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用；不能由此推定內容為真。"));sources.forEach(x=>{if(x.obj)refs.append(referenceButton("source",x.obj,model.sources.indexOf(x.obj),x.obj.label||x.id,(x.obj.source_type||"來源")+" · "+(x.obj.locator||x.id)),el("div","message",x.obj.excerpt||"未提供摘錄"));else refs.append(el("div","message","未解析來源引用："+x.id))});refs.append(el("div","fieldlabel","條件引用（點選查看完整紀錄）"));(Array.isArray(n.condition_refs)?n.condition_refs:[]).map(id=>({id,obj:condById(id)})).forEach(x=>{if(x.obj)refs.append(referenceButton("condition",x.obj,model.conditions.indexOf(x.obj),x.obj.name||x.id,"條件 · "+x.id),el("div","message",x.obj.description||"未提供條件說明"));else refs.append(el("div","message","未解析條件引用："+x.id))});root.append(refs);
 }
 function detailEdge(e){
  const root=$("detailPanel");root.replaceChildren();if(!e){root.append(el("div","empty","找不到所選關係。"));return}
  const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));appendDiagnosticContext(sec);root.append(sec);
  const fields=el("div","detail-section");[["來源端點",e.source_id],["目標端點",e.target_id],["關係類型",e.relation_type],["審核狀態",e.review_status],["證據狀態",e.evidence_status],["來源引用",e.provenance_refs],["條件引用",e.condition_refs],["其他屬性",e.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});root.append(fields);
- const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源／條件"));const sources=(Array.isArray(e.provenance_refs)?e.provenance_refs:[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(s=>refs.append(el("div","tree-node",s.label||s.id),el("div","message",s.excerpt||s.locator||s.id)));(Array.isArray(e.condition_refs)?e.condition_refs:[]).map(condById).filter(Boolean).forEach(c=>refs.append(el("div","fieldlabel",c.name||c.id),el("div","message",c.description||"")));root.append(refs);
+ const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源引用（點選查看完整紀錄）"));const sources=(Array.isArray(e.provenance_refs)?e.provenance_refs:[]).map(id=>({id,obj:sourceById(id)}));if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(x=>{if(x.obj)refs.append(referenceButton("source",x.obj,model.sources.indexOf(x.obj),x.obj.label||x.id,(x.obj.source_type||"來源")+" · "+(x.obj.locator||x.id)),el("div","message",x.obj.excerpt||"未提供摘錄"));else refs.append(el("div","message","未解析來源引用："+x.id))});refs.append(el("div","fieldlabel","條件引用（點選查看完整紀錄）"));(Array.isArray(e.condition_refs)?e.condition_refs:[]).map(id=>({id,obj:condById(id)})).forEach(x=>{if(x.obj)refs.append(referenceButton("condition",x.obj,model.conditions.indexOf(x.obj),x.obj.name||x.id,"條件 · "+x.id),el("div","message",x.obj.description||"未提供條件說明"));else refs.append(el("div","message","未解析條件引用："+x.id))});root.append(refs);
 }
 function renderDetail(){
  if(selected.type==="edge"){const e=Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id);detailEdge(e)}
+ else if(selected.type==="source"){const x=Number.isInteger(selected.index)?model.sources[selected.index]:sourceById(selected.id);detailSource(x)}
+ else if(selected.type==="condition"){const x=Number.isInteger(selected.index)?model.conditions[selected.index]:condById(selected.id);detailCondition(x)}
  else{const n=Number.isInteger(selected.index)?model.nodes[selected.index]:nodeById(selected.id);detailNode(n)}
 }
 function render(){showModelStats();updateFilterSummary();renderDiagnostics();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphControls").hidden=activeView!=="graph";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail();renderSelectionNotice()}
