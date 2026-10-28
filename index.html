@@ -1130,6 +1130,7 @@ function calculateRuleImpactForModel(side,source,seedIds,registry){
     if(neighborId===state.id){warnings.add("edges["+index+"] 為自我端點；影響傳播不繼續穿越此邊。");return}
     const neighborCount=nodeCounts.get(neighborId)||0;
     if(neighborCount!==1){warnings.add("edges["+index+"] 的受影響端點「"+neighborId+"」在"+side+"無法唯一定位（匹配 "+neighborCount+" 筆）；未加入傳播。");return}
+    if(seedIds.has(neighborId))return;
     const mode=impactMode(policy),pathStep={edgeIndex:index,relationType:edge.relation_type,from:state.id,to:neighborId,policy:policy,mode:mode};
     let candidate=candidates.get(neighborId);
     if(!candidate){candidate={side:side,id:neighborId,mode:mode,depth:state.depth+1,paths:[],roots:[]};candidates.set(neighborId,candidate)}
