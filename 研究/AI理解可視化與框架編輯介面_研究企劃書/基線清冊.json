@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, and WU-C0-15 position-first identity across tree/card/graph implemented; root index.html is the sole HTML entry. JavaScript COMPILE_OK; 7 local identity simulations match expectations. GitHub Pages site is live at https://upqq21477-star.github.io/ForAVAr/ and live HTML structure is confirmed; actual browser interaction smoke test remains NOT_RUN.",
+    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, WU-C0-15 cross-view position identity and root entry, WU-C0-16 GitHub Pages reachability, and WU-C0-17 read-only two-model version diff view implemented. JavaScript COMPILE_OK; 10 local diff-core simulations passed. Browser interaction smoke test remains NOT_RUN; overall system E4 and user acceptance remain NOT_STARTED.",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -46,7 +46,7 @@
         "UNRESOLVED_CONDITION_REF",
         "CLAIM_WITHOUT_SOURCE"
       ],
-      "browser_interaction": "NOT_RUN",
+      "browser_interaction": "NOT_RUN; deliberately deferred until remaining read-only functionality is implemented",
       "full_schema_validation": "BLOCKED / NOT_RUN",
       "cross_object_validation": "PARTIAL_LOCAL_DIAGNOSTICS_ONLY",
       "persistence_or_writeback": false,
@@ -92,22 +92,59 @@
     "website_entry": "index.html; live site https://upqq21477-star.github.io/ForAVAr/ (exact /ForAVAr/ path casing)",
     "github_pages_deployment": "PUBLISHED_AND_REACHABLE; GitHub repository metadata private=false and has_pages=true; live fetch on 2026-10-28 returned title `ForAVAr｜唯讀框架可視化原型` and the expected page controls. Lowercase path variants tested returned HTTP 404.",
     "website_publish_blocker": {
-      "status": "RESOLVED_SITE_REACHABLE_UI_SMOKE_PENDING",
-      "previous_observation": [
-        "Before owner enabled Pages, repository metadata had_pages=false and tested URL variants returned HTTP 404."
-      ],
+      "status": "RESOLVED_SITE_REACHABLE_INTERACTION_TEST_DEFERRED",
       "current_observation": [
         "GitHub repository metadata private=false",
         "GitHub repository metadata has_pages=true",
-        "https://upqq21477-star.github.io/ForAVAr/ returned page content successfully",
-        "The page title is `ForAVAr｜唯讀框架可視化原型`",
-        "Live HTML contains local JSON loading, reset, tree/graph/cards tabs, search, filters, diagnostics, and detail panel",
-        "Tested lowercase path variants returned HTTP 404"
+        "https://upqq21477-star.github.io/ForAVAr/ returns the expected page"
       ],
       "visibility": "public",
-      "public_scope_warning": "All tracked files in the public repository are publicly viewable, including docs/, runtime/, 研究/, and 進度/; not only the GitHub Pages homepage.",
+      "public_scope_warning": "All tracked files in this public repository are publicly viewable, including docs/, runtime/, 研究/, and 進度/; not only the Pages homepage.",
       "no_cost_route": "GitHub Pages is enabled and reachable; no paid plan used.",
-      "next_action": "Run a bounded real-browser interaction smoke test for tree/graph/cards switching, search/filter, reset, valid and invalid local JSON. Keep browser_interaction NOT_RUN until such actions are actually executed. If the entire repository was not intended to be public, separate the published site from private research sources."
+      "next_action": "Continue implementing remaining read-only diff/impact requirements first. Perform one bounded browser interaction smoke test after the remaining functionality is complete; keep browser_interaction NOT_RUN until actually executed."
+    },
+    "version_diff": {
+      "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
+      "source": "index.html",
+      "blob_sha": "5f2678ddc79bd53f81c21d7bf548cf028382f1fd",
+      "functions": [
+        "compareCollection",
+        "collectDirectReviewContext",
+        "renderDiff"
+      ],
+      "capabilities": [
+        "Loads comparison baseline separately from current model; both stay in page memory",
+        "Compares nodes, edges, conditions and sources by unique non-empty ID within each collection",
+        "Classifies additions, removals, semantic top-level field modifications and presentation-only top-level changes",
+        "Duplicate IDs are reported as ambiguous identity and are never auto-paired",
+        "Missing or invalid IDs are retained as unknown identity; no index-based cross-version guessing",
+        "Shows before/after values using safe text rendering and can locate current-version node or edge",
+        "Lists direct relations adjacent to changed node IDs as review candidates"
+      ],
+      "scope_limits": [
+        "Direct adjacency only; not a complete recursive impact-propagation calculation",
+        "Top-level presentation exclusions are x, y, layout, layout_state, viewport, zoom, collapsed, expanded, coordinates, graph_position and ui_state",
+        "No schema validation, edit/writeback, persistence, publish or core integration",
+        "Browser click/file-loader interaction remains NOT_RUN"
+      ],
+      "e3_syntax": "COMPILE_OK",
+      "e3_local_simulation": {
+        "result": "PASS",
+        "passed": 10,
+        "total": 10,
+        "cases": [
+          "unique ID unchanged",
+          "same ID semantic modification",
+          "unique addition",
+          "unique removal",
+          "duplicate ID ambiguity",
+          "missing ID unknown identity",
+          "top-level layout-only change",
+          "array order remains visible",
+          "input immutability",
+          "direct relation context includes base and current versions"
+        ]
+      }
     }
   },
   "current_baseline": [
@@ -159,7 +196,7 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "07d0aa172074a938174e537c7b4a6af25ec370fb"
+      "sha": "ca744c1df335a79241b4e1bc4c017bc218492b26"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
@@ -179,12 +216,12 @@
     {
       "role": "read_only_visualization_prototype",
       "path": "index.html",
-      "sha": "6e0ac6328d03bade69f1cc9478fa310eb63e1ab8"
+      "sha": "5f2678ddc79bd53f81c21d7bf548cf028382f1fd"
     },
     {
       "role": "repository_entry_readme",
       "path": "README.md",
-      "sha": "4f45e984fc8ad66a99f520be879ce55d41391480"
+      "sha": "5387275102ed1d3de278f30fe68e20fe1b9e8fba"
     }
   ],
   "test_fixtures": {
