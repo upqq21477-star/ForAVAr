@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.6",
+  "manifest_version": "3.7",
   "updated": "2026-10-28",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -16,13 +16,13 @@
     "human_interaction_layer": "圖形認知與固定引導流程是既有 AI 認知架構的人類使用者側延伸；允許獨立的視覺語法、互動狀態機與圖形表示模型，但語意變更須經版本化映射契約回饋核心。此層不替代機器認知核心，也不強制 AI 對所有任務採單一推理流程。"
   },
   "current_status": {
-    "overall": "RESEARCH_PLAN_CONSOLIDATED / CANDIDATE_EXECUTION_BLOCKED",
-    "plan_closure": "Human-facing interaction-layer position and end-to-end roadmap consolidated on 2026-10-28.",
+    "overall": "READ_ONLY_UI_PROTOTYPE_IN_PROGRESS / VALIDATOR_BLOCKED",
+    "plan_closure": "Human interaction-layer role and roadmap consolidated; authorized read-only viewer prototype has been implemented as a first construction slice.",
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
-    "ui_requirements_gate": "NOT_MET until current candidate validation stopping conditions pass",
-    "ui_implementation": "NOT_STARTED",
-    "integration_to_core": "NOT_STARTED; requires a versioned mapping/edit-event/feedback contract after gate A",
+    "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
+    "ui_implementation": "READ_ONLY_PROTOTYPE_IMPLEMENTED; browser interaction not tested",
+    "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
     "final_closure": "REQUIRES candidate execution, user workflow definition, graph interaction prototype, core adapter integration, end-to-end simulation, human-task evaluation, and evidence/baseline synchronization.",
@@ -32,7 +32,7 @@
     {
       "role": "main_proposal",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/AI理解可視化與框架編輯介面_研究企劃書.md",
-      "sha": "93417995b76ed544d92a1d400841640d2dab8d5f"
+      "sha": "b3cfe407bcca9ec7c2ae54a1ba9e7b945174f784"
     },
     {
       "role": "data_contract",
@@ -77,12 +77,12 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "4af8069352df599e03200d12eda630a63e4b5c0a"
+      "sha": "b45764d6b694184ef2dbfc91c03a4915868b0ab3"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/驗證/演進與驗收總結.md",
-      "sha": "b7d3359044e054b078e9d7605d1175ff7170683e"
+      "sha": "5fa8c31c53583107b035b210096e8b455d5c3c61"
     },
     {
       "role": "external_reference_index",
@@ -92,7 +92,12 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "af63923c7881d42116c7565b3d2fac7fe1d02af4"
+      "sha": "8bd4f7b2559f4260b5293230a4a1d7cddf7ce912"
+    },
+    {
+      "role": "read_only_visualization_prototype",
+      "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/實驗/唯讀框架可視化原型.html",
+      "sha": "b5314ce224fac9a83ec4caf1c9f9904c8fcce016"
     }
   ],
   "test_fixtures": {

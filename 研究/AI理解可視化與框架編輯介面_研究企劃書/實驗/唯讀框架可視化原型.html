@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ForAVAr｜唯讀框架可視化原型</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1420;--panel:#141f2e;--panel2:#19283a;--line:#2c4058;--text:#edf4fb;--muted:#9db0c4;--accent:#70d8d0;--warn:#f1c777;--bad:#f08e8e;--good:#9bd4a4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Noto Sans TC",sans-serif}
+button,input{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{padding:18px 22px 14px;border-bottom:1px solid var(--line);background:#101a28;position:sticky;top:0;z-index:5}
+.headrow{display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}.brand{font-size:18px;font-weight:750;letter-spacing:.02em}.subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+.notice{margin-top:12px;border:1px solid #67562f;background:#28251b;color:#f7dca4;border-radius:9px;padding:8px 11px;font-size:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:8px 12px}.btn.primary{background:#153b43;border-color:#287a78}.btn:hover{filter:brightness(1.15)}
+main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;padding:12px;max-width:1800px;margin:auto;min-height:calc(100vh - 110px)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;min-width:0;overflow:hidden}.panel-head{padding:13px 14px;border-bottom:1px solid var(--line);font-weight:700}.panel-body{padding:13px}
+.fieldlabel{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}input[type=search]{width:100%;background:#0d1724;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:10px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.stat{background:#101a28;border:1px solid var(--line);border-radius:9px;padding:10px}.stat b{display:block;font-size:22px}.stat span{font-size:11px;color:var(--muted)}
+.keylist{display:flex;flex-direction:column;gap:6px;margin-top:10px}.keyrow{display:flex;align-items:center;gap:8px;padding:8px;border-radius:7px;background:#101a28;font-size:12px;color:var(--muted)}.dot{width:8px;height:8px;background:var(--accent);border-radius:50%;flex:none}
+.mainhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{padding:8px 11px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--muted)}.tab[aria-selected=true]{background:#153b43;color:var(--text);border-color:#287a78}.view{padding:14px;min-height:450px;overflow:auto}.view[hidden]{display:none}
+.tree{display:flex;flex-direction:column;gap:7px}.tree-node{display:flex;align-items:center;gap:8px;text-align:left;background:#101a28;border:1px solid var(--line);border-radius:9px;padding:10px;width:100%;min-width:0}.tree-node:hover,.tree-node.selected{border-color:var(--accent);background:#15313b}.tree-label{min-width:0;flex:1}.tree-name{font-weight:650;display:block;overflow-wrap:anywhere}.tree-meta{display:block;color:var(--muted);font-size:11px;margin-top:2px}.indent{flex:none;width:var(--indent,0px);height:1px;border-top:1px dotted var(--line)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.nodecard{border:1px solid var(--line);background:#101a28;border-radius:10px;padding:13px;text-align:left;min-width:0}.nodecard.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.nodecard h3{font-size:15px;margin:8px 0}.nodecard p{color:var(--muted);font-size:13px;margin:0 0 10px}
+.badges{display:flex;gap:5px;flex-wrap:wrap}.badge{border:1px solid var(--line);border-radius:100px;padding:2px 7px;font-size:10px;color:var(--muted)}.badge.pending{color:var(--warn);border-color:#67562f}.badge.accepted{color:var(--good);border-color:#31593a}
+.graphwrap{overflow:auto;background:#0f1926;border:1px solid var(--line);border-radius:10px}.graph{display:block;min-width:600px;width:100%;height:auto}.graph-node{cursor:pointer}.graph-node rect{fill:#172638;stroke:#3b536e;stroke-width:1.5}.graph-node.selected rect{stroke:var(--accent);stroke-width:2.5;fill:#153b43}.graph-node text{fill:var(--text);font-size:13px;pointer-events:none}.graph-edge{stroke:#71879f;stroke-width:1.5;opacity:.7;fill:none;cursor:pointer}.graph-edge.selected{stroke:var(--accent);stroke-width:3;opacity:1}.edge-label{fill:var(--muted);font-size:10px;pointer-events:none}.graph-hint{color:var(--muted);font-size:12px;margin:0 0 10px}
+.edge-list{display:flex;flex-direction:column;gap:8px;margin-top:13px}.edge-row{width:100%;text-align:left;border:1px solid var(--line);background:#101a28;border-radius:8px;padding:10px}.edge-row.selected{border-color:var(--accent)}.edge-path{font-weight:650;font-size:13px}.edge-description{color:var(--muted);font-size:12px;margin-top:4px}
+.detail-section{margin-bottom:16px}.detail-title{font-size:17px;line-height:1.35;font-weight:750;overflow-wrap:anywhere}.detail-id{font:11px ui-monospace,monospace;color:var(--muted);overflow-wrap:anywhere;margin-top:5px}.detail-function{margin:12px 0;padding:10px;border-left:3px solid var(--accent);background:#101a28;border-radius:0 7px 7px 0}.kv{border-top:1px solid var(--line);padding:8px 0;display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}.empty{padding:36px 15px;text-align:center;color:var(--muted)}.foot{padding:10px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
+.status{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}.status .dot{background:var(--warn)}.message{font-size:12px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}.message.error{color:var(--bad)}.fileinput{display:none}
+@media(max-width:1100px){main{grid-template-columns:210px minmax(0,1fr)}.details{grid-column:1/-1}.details .panel-body{display:grid;grid-template-columns:1fr 1fr;gap:12px}.details .detail-section{margin-bottom:0}}
+@media(max-width:700px){header{padding:14px 13px}main{display:flex;flex-direction:column;padding:8px;gap:8px}.sidebar{order:1}.center{order:2}.details{order:3}.panel-body{padding:11px}.view{padding:10px;min-height:340px}.details .panel-body{display:block}.details .detail-section{margin-bottom:14px}.actions{width:100%}.actions .btn{flex:1}.brand{font-size:16px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="headrow">
+    <div><div class="brand">ForAVAr <span style="color:var(--accent)">/ 框架可視化</span></div><div class="subtitle">人類理解與操作延伸層 · C0 唯讀原型</div></div>
+    <div class="actions">
+      <label class="btn primary" for="filePicker">載入本機 JSON</label>
+      <input id="filePicker" class="fileinput" type="file" accept=".json,application/json">
+      <button id="resetBtn" class="btn" type="button">重設示例</button>
+    </div>
+  </div>
+  <div class="notice">唯讀預覽：資料只留在本頁記憶體，不上傳、不寫回、不發布。此原型不執行完整 JSON Schema／跨物件驗證。</div>
+</header>
+<main>
+  <section class="panel sidebar">
+    <div class="panel-head">模型與導覽</div>
+    <div class="panel-body">
+      <label class="fieldlabel" for="search">搜尋節點名稱、ID 或功能</label>
+      <input id="search" type="search" placeholder="輸入關鍵字…" autocomplete="off">
+      <div id="modelTitle" class="detail-title">示例模型</div>
+      <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
+      <div class="stats">
+        <div class="stat"><b id="nodeCount">0</b><span>節點</span></div>
+        <div class="stat"><b id="edgeCount">0</b><span>關係</span></div>
+        <div class="stat"><b id="conditionCount">0</b><span>條件</span></div>
+        <div class="stat"><b id="sourceCount">0</b><span>來源</span></div>
+      </div>
+      <div class="fieldlabel">狀態辨識</div>
+      <div class="keylist">
+        <div class="keyrow"><span class="dot"></span>節點／關係依正式 ID 識別</div>
+        <div class="keyrow"><span class="dot" style="background:var(--warn)"></span>審核狀態不等於證據狀態</div>
+        <div class="keyrow"><span class="dot" style="background:var(--bad)"></span>原型不替未知內容作裁決</div>
+      </div>
+      <div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
+    </div>
+    <div class="foot">模型版本欄位與 Git commit 是不同概念。</div>
+  </section>
+  <section class="panel center">
+    <div class="mainhead">
+      <div class="tabs" role="tablist" aria-label="檢視方式">
+        <button class="tab" type="button" data-view="tree" role="tab" aria-selected="true">樹狀結構</button>
+        <button class="tab" type="button" data-view="graph" role="tab" aria-selected="false">關係圖</button>
+        <button class="tab" type="button" data-view="cards" role="tab" aria-selected="false">節點卡片</button>
+      </div>
+      <div id="viewCount" class="status"><span class="dot"></span><span>示例資料</span></div>
+    </div>
+    <div id="treeView" class="view"></div>
+    <div id="graphView" class="view" hidden></div>
+    <div id="cardsView" class="view" hidden></div>
+    <div class="foot">不同視圖共用同一份載入模型；座標與展示狀態不成為第二份語意資料。</div>
+  </section>
+  <section class="panel details">
+    <div class="panel-head">選取項目詳細資料</div>
+    <div id="detailPanel" class="panel-body"><div class="empty">選取節點或關係以查看細節。</div></div>
+    <div class="foot">點選關係圖上的線或關係清單，可查看兩端點與關係描述。</div>
+  </section>
+</main>
+<script>
+(function(){
+"use strict";
+const DEMO = {
+  schema_version:"0.2.0", model_id:"foravar-visual-demo", title:"AI 理解框架（示意）",
+  purpose:"展示同一資料模型如何切換樹狀、關係與卡片視圖；不是正式藍圖，也不是驗證結果。",
+  model_state:"draft", rule_profile:"default-v1",
+  nodes:[
+    {id:"n-core",name:"可檢查的 AI 理解",function:"將目標、限制、假設、關係與未知以人類可理解的結構呈現。",structural_role:"core",entity_kind:"goal",review_status:"pending_review",evidence_status:"not_applicable",provenance_refs:["s-user"],condition_refs:[]},
+    {id:"n-axis",name:"主軸與目標",function:"呈現使用者目標、成功條件、限制與非目標。",structural_role:"main_axis",entity_kind:"requirement",review_status:"pending_review",evidence_status:"not_applicable",provenance_refs:["s-user"],condition_refs:["c-scope"]},
+    {id:"n-structure",name:"層級結構",function:"用樹狀視圖瀏覽核心、主軸、骨架與細節。",structural_role:"skeleton",entity_kind:"capability",review_status:"pending_review",evidence_status:"not_applicable",provenance_refs:["s-user"],condition_refs:[]},
+    {id:"n-rel",name:"關係與條件",function:"獨立呈現依賴、衝突、證據支持與流程關係。",structural_role:"module",entity_kind:"capability",review_status:"pending_review",evidence_status:"unverified",provenance_refs:[],condition_refs:["c-evidence"]},
+    {id:"n-review",name:"來源與狀態",function:"分開顯示來源、證據狀態、人工審核狀態及未知。",structural_role:"module",entity_kind:"capability",review_status:"needs_reconfirmation",evidence_status:"insufficient",provenance_refs:[],condition_refs:["c-evidence"]},
+    {id:"n-views",name:"多視圖瀏覽",function:"同一份模型以樹狀、關係圖與卡片呈現，不重複保存語意資料。",structural_role:"module",entity_kind:"function",review_status:"pending_review",evidence_status:"not_applicable",provenance_refs:["s-user"],condition_refs:[]}
+  ],
+  edges:[
+    {id:"e-core-axis",source_id:"n-core",target_id:"n-axis",relation_type:"contains",description:"目標與限制是理解模型的核心組成。",review_status:"pending_review",evidence_status:"not_applicable",provenance_refs:["s-user"],condition_refs:[]},
+    {id:"e-core-structure",source_id:"n-core",target_id:"n-structure",relation_type:"contains",description:"層級結構是呈現理解的視圖之一。",review_status:"pending_review",evidence_status:"not_applicable",provenance_refs:["s-user"],condition_refs:[]},
+    {id:"e-core-rel",source_id:"n-core",target_id:"n-rel",relation_type:"contains",description:"關係圖呈現節點之間的語意關係。",review_status:"pending_review",evidence_status:"not_applicable",provenance_refs:[],condition_refs:[]},
+    {id:"e-rel-review",source_id:"n-rel",target_id:"n-review",relation_type:"depends_on",description:"關係解讀需要查看來源與狀態，避免由畫線直接推定為真。",review_status:"pending_review",evidence_status:"unverified",provenance_refs:[],condition_refs:["c-evidence"]},
+    {id:"e-structure-views",source_id:"n-structure",target_id:"n-views",relation_type:"influences",description:"多視圖支援同一結構的不同閱讀方式。",review_status:"pending_review",evidence_status:"not_applicable",provenance_refs:["s-user"],condition_refs:[]}
+  ],
+  conditions:[
+    {id:"c-scope",name:"唯讀範圍",description:"不修改資料、不發布、不連接認知核心。"},
+    {id:"c-evidence",name:"證據分離",description:"人工審核狀態不等於證據狀態；來源存在不等於主張成立。"}
+  ],
+  sources:[
+    {id:"s-user",source_type:"user_input",label:"示意需求",locator:"內建示例",excerpt:"以低門檻視圖理解框架結構。",actor_type:"user",captured_at:"2026-10-28"}
+  ]
+};
+let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id}, activeView="tree", filteredIds=null;
+const $=id=>document.getElementById(id);
+const esc=(x)=>String(x===undefined||x===null?"—":x);
+const roleLabel={core:"核心",main_axis:"主軸",skeleton:"骨架",module:"模組",detail:"細節",unassigned:"未指定"};
+const relationLabel={contains:"包含",depends_on:"依賴",precedes:"先於",causes:"造成",influences:"影響",triggers:"觸發",transfers_data_to:"傳遞資料",conflicts_with:"衝突",supersedes:"取代",explains:"解釋",supports:"支持",implements:"實作",derived_from:"衍生自",satisfies:"滿足",verified_by:"由…驗證",is_evidence_for:"作為…證據",refutes:"反駁"};
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function el(tag, cls, text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+function addKV(parent,k,v){const row=el("dl","kv"),dt=el("dt","",k),dd=el("dd","",Array.isArray(v)?(v.length?v.join(", "):"—"):(typeof v==="object"&&v!==null?JSON.stringify(v,null,2):esc(v)));row.append(dt,dd);parent.append(row)}
+function nodeById(id){return model.nodes.find(n=>n.id===id)}
+function edgeById(id){return model.edges.find(e=>e.id===id)}
+function sourceById(id){return model.sources.find(s=>s.id===id)}
+function condById(id){return model.conditions.find(c=>c.id===id)}
+function nodeText(n){return [n.id,n.name,n.function,n.structural_role,n.entity_kind].join(" ").toLowerCase()}
+function matchingNodes(){const q=$("search").value.trim().toLowerCase();return model.nodes.filter(n=>!q||nodeText(n).includes(q))}
+function selectItem(type,id){selected={type:type,id:id};render()}
+function badge(text, cls){return el("span","badge "+(cls||""),text)}
+function badges(n){const box=el("div","badges");box.append(badge(roleLabel[n.structural_role]||n.structural_role),badge(n.entity_kind||"未分類"),badge(n.review_status||"審核未知",n.review_status==="accepted"?"accepted":"pending"),badge(n.evidence_status||"證據未知"));return box}
+function showModelStats(){ $("modelTitle").textContent=model.title||"未命名模型";$("modelPurpose").textContent=model.purpose||"未提供目的說明";$("nodeCount").textContent=model.nodes.length;$("edgeCount").textContent=model.edges.length;$("conditionCount").textContent=model.conditions.length;$("sourceCount").textContent=model.sources.length;$("viewCount").lastElementChild.textContent=model.model_id+" · "+model.model_state}
+function renderTree(){
+ const root=$("treeView");root.replaceChildren();
+ const allowed=new Set(matchingNodes().map(n=>n.id));
+ const parent=new Map(), children=new Map(model.nodes.map(n=>[n.id,[]]));
+ model.edges.filter(e=>e.relation_type==="contains"&&nodeById(e.source_id)&&nodeById(e.target_id)).forEach(e=>{if(!parent.has(e.target_id)){parent.set(e.target_id,e.source_id);children.get(e.source_id).push(e.target_id)}});
+ let roots=model.nodes.filter(n=>!parent.has(n.id));
+ if(!roots.length&&model.nodes.length) roots=[model.nodes[0]];
+ const visited=new Set();
+ function draw(n,depth,anc){
+  if(!allowed.has(n.id)&&!children.get(n.id).some(id=>allowed.has(id))) return;
+  const row=el("button","tree-node"+(selected.type==="node"&&selected.id===n.id?" selected":""),"");
+  row.type="button";row.style.setProperty("--indent",Math.min(depth,7)*15+"px");row.setAttribute("aria-label","選取節點 "+n.name);
+  row.append(el("span","indent"));
+  const info=el("span","tree-label");info.append(el("span","tree-name",n.name||n.id),el("span","tree-meta",(roleLabel[n.structural_role]||"未分類")+" · "+n.id));row.append(info,badge(n.review_status||"未知"));row.addEventListener("click",()=>selectItem("node",n.id));root.append(row);
+  if(anc.has(n.id)){root.append(el("div","message","偵測到循環：已停止展開 "+n.id));return}
+  visited.add(n.id);const next=new Set(anc);next.add(n.id);
+  (children.get(n.id)||[]).forEach(id=>{const child=nodeById(id);if(child)draw(child,depth+1,next)});
+ }
+ roots.forEach(n=>draw(n,0,new Set()));
+ model.nodes.filter(n=>!visited.has(n.id)&&allowed.has(n.id)).forEach(n=>{root.append(el("div","message","未掛在 contains 階層下的節點"));draw(n,0,new Set())});
+ if(!root.childElementCount)root.append(el("div","empty","沒有符合搜尋條件的節點。"));
+}
+function renderCards(){
+ const root=$("cardsView");root.replaceChildren();const grid=el("div","cards");
+ matchingNodes().forEach(n=>{const c=el("button","nodecard"+(selected.type==="node"&&selected.id===n.id?" selected":""));c.type="button";c.append(badges(n),el("h3","",n.name||n.id),el("p","",n.function||"尚無功能說明"),el("div","detail-id",n.id));c.addEventListener("click",()=>selectItem("node",n.id));grid.append(c)});
+ if(!grid.childElementCount)root.append(el("div","empty","沒有符合搜尋條件的節點。"));else root.append(grid);
+}
+function renderGraph(){
+ const root=$("graphView");root.replaceChildren();root.append(el("p","graph-hint","點節點看內容；點關係線或下方關係列看關係語意。包含關係用於估算層級，其他邊保留原始方向。"));
+ const nodes=matchingNodes();const nodeIds=new Set(nodes.map(n=>n.id));if(!nodes.length){root.append(el("div","empty","沒有符合搜尋條件的節點。"));return}
+ const parents=new Map(),depth=new Map();model.edges.filter(e=>e.relation_type==="contains"&&nodeIds.has(e.source_id)&&nodeIds.has(e.target_id)).forEach(e=>{if(!parents.has(e.target_id))parents.set(e.target_id,e.source_id)});
+ const roots=nodes.filter(n=>!parents.has(n.id));if(!roots.length)roots.push(nodes[0]);
+ roots.forEach(n=>depth.set(n.id,0));let changed=true;
+ for(let k=0;k<nodes.length&&changed;k++){changed=false;model.edges.filter(e=>e.relation_type==="contains").forEach(e=>{if(depth.has(e.source_id)&&nodeIds.has(e.target_id)&&!depth.has(e.target_id)){depth.set(e.target_id,Math.min(4,depth.get(e.source_id)+1));changed=true}})}
+ nodes.forEach(n=>{if(!depth.has(n.id))depth.set(n.id,0)});
+ const groups={};nodes.forEach(n=>{const d=depth.get(n.id);(groups[d]||(groups[d]=[])).push(n)});
+ const maxDepth=Math.max.apply(null,nodes.map(n=>depth.get(n.id))), colGap=250, rowGap=110, width=200+maxDepth*colGap+220, maxRows=Math.max.apply(null,Object.values(groups).map(g=>g.length)), height=Math.max(330,maxRows*rowGap+100);
+ const pos={};Object.keys(groups).forEach(d=>groups[d].forEach((n,i)=>{pos[n.id]={x:55+Number(d)*colGap,y:45+i*rowGap}}));
+ const ns="http://www.w3.org/2000/svg",svg=document.createElementNS(ns,"svg");svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("class","graph");svg.setAttribute("role","img");svg.setAttribute("aria-label","節點與關係圖");
+ const defs=document.createElementNS(ns,"defs"),marker=document.createElementNS(ns,"marker");marker.setAttribute("id","arrow");marker.setAttribute("markerWidth","8");marker.setAttribute("markerHeight","8");marker.setAttribute("refX","6");marker.setAttribute("refY","3");marker.setAttribute("orient","auto");const arrow=document.createElementNS(ns,"path");arrow.setAttribute("d","M0,0 L6,3 L0,6 Z");arrow.setAttribute("fill","#71879f");marker.append(arrow);defs.append(marker);svg.append(defs);
+ model.edges.filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id)).forEach(e=>{const a=pos[e.source_id],b=pos[e.target_id];if(!a||!b)return;const line=document.createElementNS(ns,"path");const sx=a.x+178,sy=a.y+38,tx=b.x,ty=b.y+38;line.setAttribute("d","M"+sx+" "+sy+" C"+(sx+35)+" "+sy+" "+(tx-35)+" "+ty+" "+tx+" "+ty);line.setAttribute("class","graph-edge"+(selected.type==="edge"&&selected.id===e.id?" selected":""));line.setAttribute("marker-end","url(#arrow)");line.setAttribute("stroke-width","12");line.setAttribute("stroke-linecap","round");line.setAttribute("stroke-opacity",selected.type==="edge"&&selected.id===e.id?"0.85":"0.001");line.addEventListener("click",()=>selectItem("edge",e.id));svg.append(line);const visible=document.createElementNS(ns,"path");visible.setAttribute("d",line.getAttribute("d"));visible.setAttribute("class","graph-edge"+(selected.type==="edge"&&selected.id===e.id?" selected":""));visible.setAttribute("marker-end","url(#arrow)");visible.addEventListener("click",()=>selectItem("edge",e.id));svg.append(visible);const label=document.createElementNS(ns,"text");label.setAttribute("x",(sx+tx)/2);label.setAttribute("y",(sy+ty)/2-7);label.setAttribute("class","edge-label");label.textContent=relationLabel[e.relation_type]||e.relation_type;svg.append(label)});
+ nodes.forEach(n=>{const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&selected.id===n.id?" selected":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);const rect=document.createElementNS(ns,"rect");rect.setAttribute("width","180");rect.setAttribute("height","76");rect.setAttribute("rx","9");g.append(rect);const title=document.createElementNS(ns,"text");title.setAttribute("x","10");title.setAttribute("y","24");title.textContent=(n.name||n.id).slice(0,19);g.append(title);const meta=document.createElementNS(ns,"text");meta.setAttribute("x","10");meta.setAttribute("y","46");meta.setAttribute("style","fill:#9db0c4;font-size:11px");meta.textContent=(roleLabel[n.structural_role]||"未指定")+" · "+(n.entity_kind||"未知");g.append(meta);g.addEventListener("click",()=>selectItem("node",n.id));g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("node",n.id)}});svg.append(g)});
+ const wrap=el("div","graphwrap");wrap.append(svg);root.append(wrap);
+ const edgeList=el("div","edge-list");model.edges.filter(e=>nodeIds.has(e.source_id)||nodeIds.has(e.target_id)).forEach(e=>{const row=el("button","edge-row"+(selected.type==="edge"&&selected.id===e.id?" selected":""));row.type="button";const a=nodeById(e.source_id),b=nodeById(e.target_id);row.append(el("div","edge-path",(a?a.name:e.source_id)+"  →  "+(relationLabel[e.relation_type]||e.relation_type)+"  →  "+(b?b.name:e.target_id)),el("div","edge-description",e.description||"未提供關係描述"));row.addEventListener("click",()=>selectItem("edge",e.id));edgeList.append(row)});if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前沒有關係資料。"));root.append(edgeList);
+}
+function detailNode(n){
+ const root=$("detailPanel");root.replaceChildren();if(!n){root.append(el("div","empty","找不到所選節點。"));return}
+ const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));root.append(sec);
+ const fields=el("div","detail-section");
+ [["結構角色",roleLabel[n.structural_role]||n.structural_role],["物件類型",n.entity_kind],["審核狀態",n.review_status],["證據狀態",n.evidence_status],["來源引用",n.provenance_refs],["條件引用",n.condition_refs],["補充說明",n.description],["其他屬性",n.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});
+ root.append(fields);
+ const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源內容"));const sources=(n.provenance_refs||[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用；不能由此推定內容為真。"));sources.forEach(s=>{refs.append(el("div","tree-node",s.label||s.id),el("div","message",(s.excerpt||"")+" · "+(s.locator||s.id)))});(n.condition_refs||[]).map(condById).filter(Boolean).forEach(c=>{refs.append(el("div","fieldlabel","條件："+(c.name||c.id)),el("div","message",c.description||"未提供條件說明"))});root.append(refs);
+}
+function detailEdge(e){
+ const root=$("detailPanel");root.replaceChildren();if(!e){root.append(el("div","empty","找不到所選關係。"));return}
+ const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));root.append(sec);
+ const fields=el("div","detail-section");[["來源端點",e.source_id],["目標端點",e.target_id],["關係類型",e.relation_type],["審核狀態",e.review_status],["證據狀態",e.evidence_status],["來源引用",e.provenance_refs],["條件引用",e.condition_refs],["其他屬性",e.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});root.append(fields);
+ const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源／條件"));const sources=(e.provenance_refs||[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(s=>refs.append(el("div","tree-node",s.label||s.id),el("div","message",s.excerpt||s.locator||s.id)));(e.condition_refs||[]).map(condById).filter(Boolean).forEach(c=>refs.append(el("div","fieldlabel",c.name||c.id),el("div","message",c.description||"")));root.append(refs);
+}
+function renderDetail(){if(selected.type==="edge")detailEdge(edgeById(selected.id));else detailNode(nodeById(selected.id))}
+function render(){showModelStats();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail()}
+function minimalShape(x){if(!x||typeof x!=="object"||!Array.isArray(x.nodes)||!Array.isArray(x.edges)||!Array.isArray(x.conditions)||!Array.isArray(x.sources))throw new Error("檔案需包含 nodes、edges、conditions、sources 四個陣列。");const ids=new Set();x.nodes.forEach(n=>{if(!n||typeof n.id!=="string"||!n.id||typeof n.name!=="string")throw new Error("每個節點至少要有字串 id 與 name。");if(ids.has(n.id))throw new Error("節點 ID 重複："+n.id);ids.add(n.id)});return true}
+$("search").addEventListener("input",()=>render());
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
+$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("loadMessage").className="message";$("loadMessage").textContent="已載入："+file.name+"。只做基本讀取檢查，未執行完整 Schema／跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
+$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
+render();
+})();
+</script>
+</body>
+</html>
