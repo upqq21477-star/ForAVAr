@@ -102,6 +102,8 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
       <input id="filePicker" class="fileinput" type="file" accept=".json,application/json">
       <label class="btn" for="comparePicker">載入比較基準 JSON</label>
       <input id="comparePicker" class="fileinput" type="file" accept=".json,application/json">
+      <label class="btn" for="alternativePicker">載入另一候選 JSON</label>
+      <input id="alternativePicker" class="fileinput" type="file" accept=".json,application/json">
       <button id="resetBtn" class="btn" type="button">重設目前示例</button>
     </div>
   </div>
@@ -184,6 +186,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
       <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
 <div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
       <div id="compareState" class="message">尚未載入比較基準；載入第二份 JSON 後可查看版本差異。</div>
+      <div id="alternativeState" class="message">尚未載入三方比較候選；此功能只診斷衝突，不自動合併。</div>
       <div id="rulesState" class="message">關係影響規則：尚未讀取。</div>
       <div id="schemaState" class="message">資料契約：尚未讀取。</div>
     
@@ -261,6 +264,7 @@ const DEMO = {
 };
 let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id,index:0}, activeView="tree", filteredIds=null, referenceOrigin=null;
 let comparisonModel=null, comparisonFileName="";
+let alternativeModel=null, alternativeFileName="";
 let relationRules=null, relationRulesStatus="尚未讀取關係規則";
 let modelSchema=null, modelSchemaStatus="尚未讀取資料契約";
 const $=id=>document.getElementById(id);
@@ -1342,10 +1346,260 @@ function renderModelContract(root,baseModel,currentModel){
  return report;
 }
 
+
+function threeWaySame(hasA,a,hasB,b){
+ return hasA===hasB&&(!hasA||stableJson(a)===stableJson(b));
+}
+function collectThreeWayConflictLeaves(baseExists,base,currentExists,current,alternativeExists,alternative,path,out,limits,depth=0){
+ if(out.length>=limits.maxItems){limits.truncated=true;return}
+ if(threeWaySame(currentExists,current,alternativeExists,alternative))return;
+ if(threeWaySame(baseExists,base,currentExists,current)||threeWaySame(baseExists,base,alternativeExists,alternative))return;
+ const isPlain=value=>Boolean(value&&typeof value==="object"&&!Array.isArray(value));
+ if(currentExists&&alternativeExists&&isPlain(current)&&isPlain(alternative)&&(!baseExists||isPlain(base))&&depth<limits.maxDepth){
+  const keys=Array.from(new Set([...(baseExists?Object.keys(base):[]),...Object.keys(current),...Object.keys(alternative)])).sort();
+  keys.forEach(key=>{
+   if(limits.truncated)return;
+   const bh=Boolean(baseExists&&Object.prototype.hasOwnProperty.call(base,key));
+   const ch=Object.prototype.hasOwnProperty.call(current,key);
+   const ah=Object.prototype.hasOwnProperty.call(alternative,key);
+   collectThreeWayConflictLeaves(bh,bh?base[key]:undefined,ch,ch?current[key]:undefined,ah,ah?alternative[key]:undefined,
+    jsonPathChild(path,key),out,limits,depth+1);
+  });
+  if(depth+1>=limits.maxDepth)limits.depthLimited=true;
+  return;
+ }
+ if(currentExists&&alternativeExists&&Array.isArray(current)&&Array.isArray(alternative)&&(!baseExists||Array.isArray(base))&&depth<limits.maxDepth){
+  const maxLength=Math.max(baseExists?base.length:0,current.length,alternative.length);
+  for(let index=0;index<maxLength;index++){
+   if(limits.truncated)break;
+   const bh=Boolean(baseExists&&index<base.length),ch=index<current.length,ah=index<alternative.length;
+   collectThreeWayConflictLeaves(bh?true:false,bh?base[index]:undefined,ch,ch?current[index]:undefined,ah,ah?alternative[index]:undefined,
+    path+"["+index+"]",out,limits,depth+1);
+  }
+  if(depth+1>=limits.maxDepth&&maxLength>0)limits.depthLimited=true;
+  return;
+ }
+ out.push({path:path,baseExists:baseExists,currentExists:currentExists,alternativeExists:alternativeExists,
+  base:base,current:current,alternative:alternative,depthLimited:depth>=limits.maxDepth});
+}
+function classifyThreeWayValues(baseExists,base,currentExists,current,alternativeExists,alternative,path){
+ const currentChanged=!threeWaySame(baseExists,base,currentExists,current);
+ const alternativeChanged=!threeWaySame(baseExists,base,alternativeExists,alternative);
+ let status="unchanged",conflicts=[],limits={maxItems:100,maxDepth:24,truncated:false,depthLimited:false};
+ if(!currentChanged&&!alternativeChanged)status="unchanged";
+ else if(currentChanged&&!alternativeChanged){
+  status=!baseExists&&currentExists?"current_only_addition":baseExists&&!currentExists?"current_only_deletion":"current_only_change";
+ }else if(!currentChanged&&alternativeChanged){
+  status=!baseExists&&alternativeExists?"alternative_only_addition":baseExists&&!alternativeExists?"alternative_only_deletion":"alternative_only_change";
+ }else if(threeWaySame(currentExists,current,alternativeExists,alternative)){
+  status=!baseExists&&currentExists?"convergent_addition":baseExists&&!currentExists?"convergent_deletion":"convergent_change";
+ }else{
+  collectThreeWayConflictLeaves(baseExists,base,currentExists,current,alternativeExists,alternative,path,conflicts,limits,0);
+  status=conflicts.length?"conflict":"independent_changes";
+ }
+ return {status:status,conflicts:conflicts,limits:limits,currentChanged:currentChanged,alternativeChanged:alternativeChanged};
+}
+function threeWaySemanticObject(entry){
+ if(!entry)return undefined;
+ return JSON.parse(semanticJson(entry.obj));
+}
+function threeWayEntry(source,side,id){
+ const usage=collectGlobalIdUsage(source);
+ const items=usage.get(id)||[];
+ if(items.length!==1)return null;
+ return Object.assign({side:side,exists:true},items[0]);
+}
+function threeWayDisplayStatus(status){
+ return {
+  conflict:"重疊修改衝突",
+  ambiguous:"全域 ID 身分歧義",
+  type_conflict:"跨集合類型衝突",
+  independent_changes:"兩側修改路徑不同",
+  current_only_change:"目前版單側修改",
+  alternative_only_change:"候選版單側修改",
+  current_only_addition:"目前版單側新增",
+  alternative_only_addition:"候選版單側新增",
+  current_only_deletion:"目前版單側刪除",
+  alternative_only_deletion:"候選版單側刪除",
+  convergent_change:"兩側相同修改",
+  convergent_addition:"兩側相同新增",
+  convergent_deletion:"兩側都刪除",
+  unchanged:"未變更",
+  unknown:"身分不明"
+ }[status]||status;
+}
+function threeWayPathForSide(entry,logicalPath){
+ if(!entry||!entry.path)return "—";
+ if(logicalPath==="object")return entry.path;
+ if(logicalPath.startsWith("object"))return entry.path+logicalPath.slice(6);
+ if(logicalPath==="model")return "model";
+ if(logicalPath.startsWith("model"))return "model"+logicalPath.slice(5);
+ return entry.path;
+}
+function threeWayValueRecord(entry,sidePath){
+ if(entry&&entry.exists!==false){
+  if(Object.prototype.hasOwnProperty.call(entry,"value"))return {exists:true,value:entry.value,path:entry.path||sidePath};
+  return {exists:true,value:entry.obj,path:entry.path||sidePath,collection:entry.collection,index:entry.index};
+ }
+ return {exists:false,value:undefined,path:sidePath||"—"};
+}
+function buildThreeWayAnalysis(baseModel,currentModel,alternative){
+ const baseUsage=collectGlobalIdUsage(baseModel),currentUsage=collectGlobalIdUsage(currentModel),altUsage=collectGlobalIdUsage(alternative);
+ const baseCollisionIds=new Set(collectGlobalIdCollisions(baseModel,"基準版").map(x=>x.id));
+ const currentCollisionIds=new Set(collectGlobalIdCollisions(currentModel,"目前版").map(x=>x.id));
+ const altCollisionIds=new Set(collectGlobalIdCollisions(alternative,"另一候選").map(x=>x.id));
+ const allIds=new Set([...baseUsage.keys(),...currentUsage.keys(),...altUsage.keys()]);
+ const records=[];
+ allIds.forEach(id=>{
+  const b=baseUsage.get(id)||[],c=currentUsage.get(id)||[],a=altUsage.get(id)||[];
+  if(baseCollisionIds.has(id)||currentCollisionIds.has(id)||altCollisionIds.has(id)){
+   records.push({kind:"identity",label:"物件身分",id,status:"ambiguous",baseItems:b,currentItems:c,alternativeItems:a,
+    reason:"至少一份模型中，此 ID 不是全域唯一身分；三方配對及衝突判定停止。"});
+   return;
+  }
+  const be=b[0]||null,ce=c[0]||null,ae=a[0]||null;
+  const present=[be,ce,ae].filter(Boolean);
+  const collections=new Set(present.map(x=>x.collection));
+  if(collections.size>1){
+   records.push({kind:"identity",label:"物件身分",id,status:"type_conflict",base:be,current:ce,alternative:ae,
+    reason:"同一 ID 在不同版本落入不同集合；原型不把跨集合移動猜作一般欄位修改。"});
+   return;
+  }
+  const bVal=threeWaySemanticObject(be),cVal=threeWaySemanticObject(ce),aVal=threeWaySemanticObject(ae);
+  const analysis=classifyThreeWayValues(Boolean(be),bVal,Boolean(ce),cVal,Boolean(ae),aVal,"object");
+  if(analysis.status==="unchanged")return;
+  records.push({kind:be?be.collection:ce?ce.collection:ae?ae.collection:"unknown",
+   label:be?be.label:ce?ce.label:ae?ae.label:"物件",type:be?be.type:ce?ce.type:ae?ae.type:"unknown",
+   id,status:analysis.status,base:be,current:ce,alternative:ae,conflicts:analysis.conflicts,limits:analysis.limits,
+   baseValue:bVal,currentValue:cVal,alternativeValue:aVal});
+ });
+ [["基準版",baseModel],["目前版",currentModel],["另一候選",alternative]].forEach(([side,source])=>{
+  DIFF_COLLECTIONS.forEach(collection=>(source[collection.key]||[]).forEach((obj,index)=>{
+   if(validDiffId(obj))return;
+   records.push({kind:collection.key,label:collection.label,type:collection.type,id:null,status:"unknown",side:side,
+    path:diffPath(collection.key,index),obj:obj,reason:side+"物件缺少可用的字串 ID；未用陣列位置嘗試跨版本配對。"});
+  }));
+ });
+ const metadataSets=[["基準版",baseModel],["目前版",currentModel],["另一候選",alternative]].map(([side,source])=>({
+  side:side,
+  source:source,
+  fields:Object.fromEntries(Object.keys(source||{}).filter(key=>!DIFF_COLLECTIONS.some(c=>c.key===key)&&!PRESENTATION_ONLY_KEYS.has(key)).map(key=>[key,source[key]]))
+ }));
+ const metadataKeys=new Set(metadataSets.flatMap(x=>Object.keys(x.fields)));
+ metadataKeys.forEach(key=>{
+  const b=metadataSets[0],c=metadataSets[1],a=metadataSets[2];
+  const bh=Object.prototype.hasOwnProperty.call(b.fields,key),ch=Object.prototype.hasOwnProperty.call(c.fields,key),ah=Object.prototype.hasOwnProperty.call(a.fields,key);
+  const bv=b.fields[key],cv=c.fields[key],av=a.fields[key];
+  const analysis=classifyThreeWayValues(bh,bv,ch,cv,ah,av,jsonPathChild("model",key));
+  if(analysis.status==="unchanged")return;
+  records.push({kind:"model",label:"模型欄位",type:"model",id:key,status:analysis.status,
+   base:{exists:bh,value:bv,path:jsonPathChild("model",key)},current:{exists:ch,value:cv,path:jsonPathChild("model",key)},
+   alternative:{exists:ah,value:av,path:jsonPathChild("model",key)},conflicts:analysis.conflicts,limits:analysis.limits,
+   baseValue:bv,currentValue:cv,alternativeValue:av});
+ });
+ const missingModelIds=[["基準版",baseModel],["目前版",currentModel],["另一候選",alternative]].map(([side,source])=>({side,id:source.model_id,schema:source.schema_version,profile:source.rule_profile,state:source.model_state}));
+ const modelWarnings=[];
+ const schemas=new Set(missingModelIds.map(x=>x.schema).filter(x=>typeof x==="string"&&x));
+ const modelIds=new Set(missingModelIds.map(x=>x.id).filter(x=>typeof x==="string"&&x));
+ const profiles=new Set(missingModelIds.map(x=>x.profile).filter(x=>typeof x==="string"&&x));
+ if(schemas.size>1)modelWarnings.push("三份模型的 schema_version 不一致；本原型不執行契約版本遷移。");
+ if(modelIds.size>1)modelWarnings.push("三份模型的 model_id 不一致；請視為跨模型比較，不代表同一模型的兩條修訂分支。");
+ if(profiles.size>1)modelWarnings.push("三份模型的 rule_profile 不一致；本三方檢視不計算三方影響傳播，也不自動套用任何一個 profile。");
+ if(!relationRules)modelWarnings.push("關係登錄表未載入；本三方檢視只比對內容，不提供三方影響推算。");
+ else missingModelIds.forEach(x=>{if(typeof x.profile!=="string"||x.profile!==relationRules.rule_profile)modelWarnings.push(x.side+" 的 rule_profile 與已載入登錄表不一致／缺失；不為三方候選計算影響路徑。")});
+ const statusCount={};records.forEach(record=>{statusCount[record.status]=(statusCount[record.status]||0)+1});
+ return {records:records,statusCount:statusCount,modelWarnings:modelWarnings,modelMetadata:missingModelIds};
+}
+function appendThreeWayConflictPath(parent,record,conflict){
+ const row=el("div","diff-item"),body=el("div","diff-body");
+ const bPath=threeWayPathForSide(record.base,conflict.path);
+ const cPath=threeWayPathForSide(record.current,conflict.path);
+ const aPath=threeWayPathForSide(record.alternative,conflict.path);
+ body.append(el("div","diff-item-meta","衝突路徑："+conflict.path+" · 基準："+bPath+" · 目前："+cPath+" · 另一候選："+aPath));
+ const values=el("div","diff-values");
+ appendDiffValue(values,conflict.baseExists?("基準版 · "+bPath):("基準版（欄位不存在） · "+bPath),conflict.baseExists?conflict.base:undefined);
+ appendDiffValue(values,conflict.currentExists?("目前版 · "+cPath):("目前版（欄位不存在） · "+cPath),conflict.currentExists?conflict.current:undefined);
+ appendDiffValue(values,conflict.alternativeExists?("另一候選 · "+aPath):("另一候選（欄位不存在） · "+aPath),conflict.alternativeExists?conflict.alternative:undefined);
+ body.append(values);row.append(body);parent.append(row);
+}
+function appendThreeWayPathSummaries(parent,record){
+ [["目前版",record.current],["另一候選",record.alternative]].forEach(([label,entry])=>{
+  if(!record.base||!record.base.obj||!entry||!entry.obj)return;
+  const baseSemantic=JSON.parse(semanticJson(record.base.obj)),sideSemantic=JSON.parse(semanticJson(entry.obj));
+  const diffs=[],limits={maxItems:30,maxDepth:24,truncated:false,depthLimited:false};
+  collectNestedValueDiffs(true,baseSemantic,true,sideSemantic,record.base.path,entry.path,diffs,limits,0);
+  if(!diffs.length)return;
+  parent.append(el("div","diff-item-meta",label+" 變更路徑："+diffs.map(d=>d.afterPath).slice(0,30).join("、")+(limits.truncated?"（路徑列表達 30 項上限）":"")));
+ });
+}
+function renderThreeWayReport(root){
+ const group=el("section","diff-group");
+ group.append(el("div","diff-group-title","三方變更／衝突檢視（唯讀，不自動合併）"));
+ if(!alternativeModel){
+  group.append(el("div","diff-intro","目前已有比較基準與目前模型。載入第三份「另一候選 JSON」後，可比較三者的變更路徑，分類重疊衝突、單側修改、相同修改、獨立修改與身分歧義。這一功能不會寫回或合併任何一份資料。"));
+  root.append(group);return;
+ }
+ group.append(el("div","diff-intro","三方角色固定為：基準版（比較基準 JSON）、目前版（目前模型 JSON）、另一候選（第三份 JSON）。同一路徑雙方修改成不同值時標為衝突；雙方改到不同路徑時只標為獨立變更，不自動合併。全域 ID 衝突、缺 ID 或跨集合身分變化會停止配對。"));
+ const analysis=buildThreeWayAnalysis(comparisonModel,model,alternativeModel);
+ const records=analysis.records.filter(record=>record.status!=="unchanged");
+ const counts=analysis.statusCount;
+ const stats=el("div","diff-stats");
+ [
+  ["衝突",counts.conflict||0],["身分歧義",counts.ambiguous||0],["跨集合衝突",counts.type_conflict||0],
+  ["目前版單側", (counts.current_only_change||0)+(counts.current_only_addition||0)+(counts.current_only_deletion||0)],
+  ["候選單側",(counts.alternative_only_change||0)+(counts.alternative_only_addition||0)+(counts.alternative_only_deletion||0)],
+  ["兩側一致",(counts.convergent_change||0)+(counts.convergent_addition||0)+(counts.convergent_deletion||0)],
+  ["獨立修改",counts.independent_changes||0],["身分不明",counts.unknown||0]
+ ].forEach(([label,value])=>{const card=el("div","diff-stat");card.append(el("b","",String(value)),el("span","",label));stats.append(card)});
+ group.append(stats);
+ analysis.modelWarnings.forEach(message=>group.append(el("div","message error",message)));
+ group.append(el("div","message","三方待檢視項目："+records.length+"；相同的三方語意狀態不逐項展開。這只是衝突候選分析，沒有驗證可合併性，也不會寫入模型。"));
+ if(!records.length){group.append(el("div","empty","三份輸入在本功能檢查範圍內沒有發現差異或衝突；不代表正式 Schema、關係規則或完整驗證已通過。"));root.append(group);return}
+ const list=el("div","diff-list"),maxRecords=200;
+ records.slice(0,maxRecords).forEach(record=>{
+  const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
+  const label=record.kind==="model"?"模型欄位 "+record.id:record.kind==="identity"?"ID "+record.id:(record.id===null?record.side+" "+record.path:record.label+" · "+record.id);
+  head.append(el("div","diff-item-title",label),el("span","diff-badge "+(record.status==="conflict"||record.status==="ambiguous"||record.status==="type_conflict"?"ambiguous":record.status.startsWith("current_only")||record.status.startsWith("alternative_only")?"modified":"presentation"),threeWayDisplayStatus(record.status)));
+  if(record.reason)body.append(el("div","message error",record.reason));
+  if(record.status==="ambiguous"){
+   [["基準版",record.baseItems],["目前版",record.currentItems],["另一候選",record.alternativeItems]].forEach(([side,items])=>{
+    if(!items||!items.length)return;
+    body.append(el("div","diff-item-meta",side+"："+items.map(x=>x.path+" · "+x.collection).join("、")));
+   });
+  }else if(record.status==="type_conflict"){
+   [["基準版",record.base],["目前版",record.current],["另一候選",record.alternative]].forEach(([side,entry])=>{
+    body.append(el("div","diff-item-meta",side+"："+(entry?entry.path+" · "+entry.collection:"—")));
+   });
+  }else if(record.status==="unknown"){
+   body.append(el("div","diff-item-meta",record.side+" · "+record.path));
+   appendDiffValue(body,"原始物件",record.obj);
+  }else{
+   [["基準版",record.base],["目前版",record.current],["另一候選",record.alternative]].forEach(([side,entry])=>{
+    body.append(el("div","diff-item-meta",side+"："+(entry&&entry.path||"—")));
+   });
+   if(record.conflicts&&record.conflicts.length){
+    record.conflicts.forEach(conflict=>appendThreeWayConflictPath(body,record,conflict));
+    if(record.limits&&record.limits.truncated)body.append(el("div","message error","衝突路徑超過 100 項，已達安全上限。"));
+    if(record.limits&&record.limits.depthLimited)body.append(el("div","message error","衝突路徑達到遞迴深度上限；深層內容作為整體值列出。"));
+   }else{
+    if(record.status==="independent_changes")body.append(el("div","message","兩側都變更此物件，但沒有發現重疊 JSON 路徑衝突。這不是自動合併結果。"));
+    else if(record.status.startsWith("convergent"))body.append(el("div","message","兩側對此物件的語意結果一致；仍不自動合併，也不代表審核／證據狀態已確認。"));
+    else body.append(el("div","message","此物件只有單側發生語意變更；三方檢視只提供差異線索，不做回寫。"));
+    appendThreeWayPathSummaries(body,record);
+   }
+   if(record.status==="conflict"&&!record.conflicts.length)body.append(el("div","message error","此物件存在衝突，但差異路徑已超出展開限制；需檢視三份原始物件。"));
+  }
+  card.append(head,body);list.append(card);
+ });
+ group.append(list);
+ if(records.length>maxRecords)group.append(el("div","message error","三方差異超過 "+maxRecords+" 個項目；畫面只展開前 "+maxRecords+" 個，未自動合併或移除任何輸入。"));
+ root.append(group);
+}
+
 function renderDiff(){
  const root=$("diffView");root.replaceChildren();
  root.append(el("div","detail-title","版本差異與直接關聯檢視"));
- root.append(el("div","diff-intro","比較基準版與目前版的節點、關係、條件、來源。只以集合內唯一有效 ID 配對；重複／缺失 ID 不猜測配對。明確的頂層座標、版面、折疊與縮放欄位不算語意修改。此功能唯讀，不修改任一模型，也不是正式驗證或發布判定。"));
+ root.append(el("div","diff-intro","比較基準版與目前版的節點、關係、條件、來源；載入第三份候選 JSON 後，另提供三方變更／衝突診斷。只以全域唯一有效 ID 配對；重複／缺失 ID 不猜測配對。明確的頂層座標、版面、折疊與縮放欄位不算語意修改。功能唯讀，不修改模型、不自動合併，也不是正式驗證或發布判定。"));
  if(!comparisonModel){root.append(el("div","empty","尚未載入比較基準。先點頁面頂部「載入比較基準 JSON」；兩份模型都只存在本頁記憶體。"));return}
  const globalAmbiguousIds=collectAmbiguousGlobalIds(comparisonModel,model);
  const baselineGlobalCollisions=collectGlobalIdCollisions(comparisonModel,"基準版");
@@ -1390,6 +1644,7 @@ function renderDiff(){
  appendCollisionSide("目前版",currentGlobalCollisions);
  root.append(globalCollisionSection);
  const contractReport=renderModelContract(root,comparisonModel,model);
+ renderThreeWayReport(root);
  const metadataChanged=diffTopFields(comparisonModel,model,true).filter(key=>!DIFF_COLLECTIONS.some(c=>c.key===key));
  if(metadataChanged.length){
   const group=el("section","diff-group");group.append(el("div","diff-group-title","模型層級欄位差異"));
@@ -1520,6 +1775,7 @@ $("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.ta
 
 $("comparePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);comparisonModel=parsed;comparisonFileName=file.name;$("compareState").className="message";$("compareState").textContent="比較基準已載入："+file.name+"。載入失敗不會覆蓋目前模型；兩份資料仍只在本頁記憶體中。";activeView="diff";render()}catch(err){$("compareState").className="message error";$("compareState").textContent="比較基準載入失敗："+err.message+"。原比較基準未被覆寫。"}};reader.onerror=()=>{$("compareState").className="message error";$("compareState").textContent="比較基準讀取失敗："+String(reader.error&&reader.error.message||"瀏覽器無法讀取此檔案")+"。原比較基準未被覆寫。"};reader.onabort=()=>{$("compareState").className="message error";$("compareState").textContent="比較基準讀取已中止；原比較基準未被覆寫。"};reader.readAsText(file,"utf-8");ev.target.value=""});
 
+$("alternativePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);alternativeModel=parsed;alternativeFileName=file.name;$("alternativeState").className="message";$("alternativeState").textContent="三方候選已載入："+file.name+"。只作衝突分析，不會自動合併或寫回。";activeView="diff";render()}catch(err){$("alternativeState").className="message error";$("alternativeState").textContent="三方候選載入失敗："+err.message+"。原候選未被覆寫。"}};reader.onerror=()=>{$("alternativeState").className="message error";$("alternativeState").textContent="三方候選讀取失敗："+String(reader.error&&reader.error.message||"瀏覽器無法讀取此檔案")+"。原候選未被覆寫。"};reader.onabort=()=>{$("alternativeState").className="message error";$("alternativeState").textContent="三方候選讀取已中止；原候選未被覆寫。"};reader.readAsText(file,"utf-8");ev.target.value=""});
 $("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id,index:0};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設目前模型為內建示例；這不是專案正式模型。已載入的比較基準會保留，可查看示例與基準的差異。";render()});
 render();
 loadRelationRules();
