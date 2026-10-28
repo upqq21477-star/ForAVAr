@@ -184,6 +184,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
       <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
 <div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
       <div id="compareState" class="message">尚未載入比較基準；載入第二份 JSON 後可查看版本差異。</div>
+      <div id="rulesState" class="message">關係影響規則：尚未讀取。</div>
     
     </div>
     <div class="foot">模型版本欄位與 Git commit 是不同概念。</div>
@@ -259,6 +260,7 @@ const DEMO = {
 };
 let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id,index:0}, activeView="tree", filteredIds=null, referenceOrigin=null;
 let comparisonModel=null, comparisonFileName="";
+let relationRules=null, relationRulesStatus="尚未讀取關係規則";
 const $=id=>document.getElementById(id);
 const esc=(x)=>String(x===undefined||x===null?"—":x);
 const roleLabel={core:"核心",main_axis:"主軸",skeleton:"骨架",module:"模組",detail:"細節",unassigned:"未指定"};
@@ -1074,6 +1076,89 @@ function appendDiffRecord(parent,record){
  }
  item.append(body);parent.append(item);
 }
+
+function collectRuleDiffSeeds(diffResults){
+ const nodeIds=new Set(),changedEdges=[];
+ diffResults.forEach(result=>(result.records||[]).forEach(record=>{
+  if(record.kind==="nodes"&&["added","removed","modified"].includes(record.status)&&typeof record.id==="string"&&record.id.trim())nodeIds.add(record.id);
+  if(record.kind==="edges"&&["added","removed","modified"].includes(record.status)){
+   if(record.before&&record.before.obj)changedEdges.push({side:"基準版",index:record.before.index,edge:record.before.obj,id:record.id});
+   if(record.after&&record.after.obj)changedEdges.push({side:"目前版",index:record.after.index,edge:record.after.obj,id:record.id});
+  }
+ }));
+ const seen=new Set(),edgeEndpoints=[];
+ changedEdges.forEach(item=>["source_id","target_id"].forEach(field=>{
+  const id=item.edge[field];if(typeof id!=="string"||!id.trim())return;
+  const key=item.side+"|"+item.index+"|"+field;if(seen.has(key))return;seen.add(key);
+  edgeEndpoints.push({side:item.side,index:item.index,field,id,edgeId:item.id,relationType:item.edge.relation_type});
+ }));
+ return {nodeIds,changedEdges,edgeEndpoints};
+}
+function impactMode(policy){
+ if(policy.includes("advisory"))return "advisory";
+ if(policy.includes("transitive"))return "transitive";
+ return "direct";
+}
+function calculateRuleImpactForModel(side,source,seedIds,registry){
+ const nodes=source.nodes||[],edges=source.edges||[],nodeCounts=new Map();
+ nodes.forEach(node=>{if(!validDiffId(node))return;nodeCounts.set(node.id,(nodeCounts.get(node.id)||0)+1)});
+ const candidates=new Map(),warnings=new Set(),queue=[];
+ seedIds.forEach(id=>queue.push({id,root:id,depth:0,transitiveOnly:false,path:[]}));
+ const visited=new Set(),maxStates=5000;let statesProcessed=0;
+ while(queue.length&&statesProcessed<maxStates){
+  const state=queue.shift(),visitKey=state.id+"|"+state.root+"|"+(state.transitiveOnly?"T":"D");
+  if(visited.has(visitKey))continue;visited.add(visitKey);statesProcessed++;
+  const count=nodeCounts.get(state.id)||0;
+  if(count===0)continue;
+  if(count!==1){warnings.add("節點 ID「"+state.id+"」在"+side+"有 "+count+" 筆，影響傳播停止於此歧義。");continue}
+  edges.forEach((edge,index)=>{
+   if(!edge||typeof edge!=="object")return;
+   const sourceMatch=edge.source_id===state.id,targetMatch=edge.target_id===state.id;
+   if(!sourceMatch&&!targetMatch)return;
+   const rule=registry&&registry.relations&&registry.relations[edge.relation_type];
+   if(!rule||!rule.impact){warnings.add("edges["+index+"] 關係類型「"+String(edge.relation_type)+"」在載入的登錄表沒有 impact 規則；未猜測其方向。");return}
+   const checkSide=(field,neighborId)=>{
+    const policy=rule.impact[field];
+    if(typeof policy!=="string"){warnings.add("edges["+index+"] 規則缺少 "+field+"；未猜測影響方向。");return}
+    if(policy==="none")return;
+    if(state.transitiveOnly&&!policy.includes("transitive"))return;
+    const directionMatches=field==="source_changed"
+      ?(policy.startsWith("forward")||policy.startsWith("both"))
+      :(policy.startsWith("reverse")||policy.startsWith("both"));
+    if(!directionMatches){warnings.add("edges["+index+"] 的 "+field+" 規則方向不一致（"+policy+"）；未用於傳播。");return}
+    if(typeof neighborId!=="string"||!neighborId.trim()){warnings.add("edges["+index+"] 的受影響端點缺少有效 ID；未猜測目標。");return}
+    if(neighborId===state.id){warnings.add("edges["+index+"] 為自我端點；影響傳播不繼續穿越此邊。");return}
+    const neighborCount=nodeCounts.get(neighborId)||0;
+    if(neighborCount!==1){warnings.add("edges["+index+"] 的受影響端點「"+neighborId+"」在"+side+"無法唯一定位（匹配 "+neighborCount+" 筆）；未加入傳播。");return}
+    const mode=impactMode(policy),pathStep={edgeIndex:index,relationType:edge.relation_type,from:state.id,to:neighborId,policy:policy,mode:mode};
+    let candidate=candidates.get(neighborId);
+    if(!candidate){candidate={side:side,id:neighborId,mode:mode,depth:state.depth+1,paths:[],roots:[]};candidates.set(neighborId,candidate)}
+    const priority={advisory:1,direct:2,transitive:3};
+    if(priority[mode]>priority[candidate.mode])candidate.mode=mode;
+    candidate.depth=Math.min(candidate.depth,state.depth+1);
+    if(!candidate.roots.includes(state.root))candidate.roots.push(state.root);
+    const path=[...state.path,pathStep];
+    const pathLabel=path.map(p=>"edges["+p.edgeIndex+"] "+p.from+" —"+p.relationType+"→ "+p.to).join(" / ");
+    if(!candidate.paths.some(p=>p.label===pathLabel))candidate.paths.push({label:pathLabel,steps:path});
+    if(policy.includes("transitive"))queue.push({id:neighborId,root:state.root,depth:state.depth+1,transitiveOnly:true,path:path});
+   };
+   if(sourceMatch)checkSide("source_changed",edge.target_id);
+   if(targetMatch)checkSide("target_changed",edge.source_id);
+  });
+ }
+ if(queue.length)warnings.add("影響傳播達到安全上限 "+maxStates+" 個狀態；結果不完整，不能視為完整影響分析。");
+ return {side:side,candidates:Array.from(candidates.values()),warnings:Array.from(warnings),statesProcessed:statesProcessed,truncated:queue.length>0};
+}
+function calculateRuleDrivenImpact(diffResults,baseModel,currentModel,registry){
+ const seeds=collectRuleDiffSeeds(diffResults);
+ return {
+  changedNodeIds:Array.from(seeds.nodeIds),
+  changedEdgeEndpoints:seeds.edgeEndpoints,
+  baseline:calculateRuleImpactForModel("基準版",baseModel,seeds.nodeIds,registry),
+  current:calculateRuleImpactForModel("目前版",currentModel,seeds.nodeIds,registry)
+ };
+}
+
 function renderDiff(){
  const root=$("diffView");root.replaceChildren();
  root.append(el("div","detail-title","版本差異與直接關聯檢視"));
@@ -1105,25 +1190,75 @@ function renderDiff(){
   const list=el("div","diff-list");result.records.forEach(record=>appendDiffRecord(list,record));
   group.append(list);root.append(group);
  });
- const direct=collectDirectReviewContext(results,comparisonModel,model);
- const impact=el("section","diff-group");impact.append(el("div","diff-group-title","變更物件的直接關聯候選（非完整下游影響分析）"));
- impact.append(el("div","diff-impact","此區只列出與變更節點 ID 直接相連的基準版／目前版關係，提示可能需要人工複核的相鄰項目。尚未依完整關係規則進行遞迴影響傳播，也不會自動改寫證據、審核或確認狀態。"));
- if(!direct.length)impact.append(el("div","empty","沒有可由唯一身分變更項目定位的直接關聯候選；歧義／缺失 ID 不會用來推算影響。"));
- else{
-  const list=el("div","diff-list");
-  direct.forEach(item=>{
-   const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
-   const from=item.edge.source_id===undefined?"(缺失)":String(item.edge.source_id);
-   const to=item.edge.target_id===undefined?"(缺失)":String(item.edge.target_id);
-   head.append(el("div","diff-item-title",item.side+" · edges["+item.index+"]"),el("span","diff-badge presentation","直接相連"));
-   body.append(el("div","detail-function",from+" → "+(relationLabel[item.edge.relation_type]||item.edge.relation_type||"未知關係")+" → "+to));
-   body.append(el("div","diff-item-meta","涉及變更端點："+item.changedEndpoints.join("、")+"；此為人工複核候選，不代表已證明下游失效。"));
-   card.append(head,body);list.append(card);
+ const impact=el("section","diff-group");
+ impact.append(el("div","diff-group-title","依關係規則登錄表推算的影響候選"));
+ if(!relationRules){
+  impact.append(el("div","diff-impact","目前未能讀取專案內的關係規則登錄表；不會硬編碼第二份規則或猜測影響方向。差異視圖仍可使用，但影響候選保持未計算。狀態："+relationRulesStatus));
+ }else{
+  impact.append(el("div","diff-impact","規則來源：relation-rules.default-v1.json · profile "+String(relationRules.rule_profile||"未標示")+" · contract "+String(relationRules.contract_version||"未標示")+" · 狀態 "+String(relationRules.status||"未標示")+"。這是登錄表規則導出的「需複核候選」，不是正式驗證器結果。只有規則標示 transitive 的方向會繼續傳播；其他關係只產生直接候選，advisory 會明確標記為建議。"));
+  const computed=calculateRuleDrivenImpact(results,comparisonModel,model,relationRules);
+  [["基準版",computed.baseline],["目前版",computed.current]].forEach(([side,result])=>{
+   const group=el("section","diff-group");
+   group.append(el("div","diff-group-title",side+" · 影響候選 "+result.candidates.length+" 個節點"));
+   if(!result.candidates.length)group.append(el("div","empty","此版本沒有可按已載入規則唯一定位的影響候選。"));
+   else{
+    const list=el("div","diff-list");
+    const modePriority={transitive:0,direct:1,advisory:2};
+    result.candidates.sort((a,b)=>modePriority[a.mode]-modePriority[b.mode]||a.id.localeCompare(b.id)).forEach(candidate=>{
+     const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
+     const modeLabel={transitive:"遞迴依賴候選",direct:"直接複核候選",advisory:"建議複核候選"}[candidate.mode]||candidate.mode;
+     head.append(el("div","diff-item-title",candidate.id),el("span","diff-badge "+(candidate.mode==="advisory"?"presentation":"modified"),modeLabel));
+     body.append(el("div","diff-item-meta","深度："+candidate.depth+" · 變更起點："+candidate.roots.join("、")));
+     candidate.paths.forEach(path=>body.append(el("div","message",path.label)));
+     list.append(card);
+    });
+    group.append(list);
+   }
+   if(result.warnings.length){
+    const warning=el("div","detail-section");warning.append(el("div","fieldlabel","未能傳播／需留意"));
+    result.warnings.forEach(message=>warning.append(el("div","message error",message)));
+    group.append(warning);
+   }
+   if(result.truncated)group.append(el("div","message error","影響傳播觸及安全上限，該版本結果不完整。"));
+   impact.append(group);
   });
-  impact.append(list);
+  if(computed.changedEdgeEndpoints.length){
+   const group=el("section","diff-group");group.append(el("div","diff-group-title","修改關係的端點複核候選"));
+   const list=el("div","diff-list");
+   computed.changedEdgeEndpoints.forEach(item=>{
+    const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
+    head.append(el("div","diff-item-title",item.side+" · edges["+item.index+"] · "+item.field),el("span","diff-badge presentation","端點待複核"));
+    body.append(el("div","detail-function",String(item.id)+" · relation="+String(item.relationType||"未知")+" · edge ID="+String(item.edgeId||"缺失")));
+    body.append(el("div","diff-item-meta","此清單只標出被新增／刪除／語意修改關係的端點，不將其假定為節點語意已變更。"));
+    card.append(head,body);list.append(card);
+   });
+   group.append(list);impact.append(group);
+  }
  }
  root.append(impact);
  if(!all.length&&!metadataChanged.length)root.append(el("div","message","兩份模型在已識別的四個集合中未發現差異；這不等於正式 Schema 或完整跨物件驗證通過。"));
+}
+
+
+async function loadRelationRules(){
+ const status=$("rulesState");
+ try{
+  if(!window.location||window.location.protocol==="file:")throw new Error("本機 file:// 模式無法可靠取得同源關係規則；影響傳播保持未計算。");
+  const registryPath="./研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/relation-rules.default-v1.json";
+  const response=await fetch(registryPath,{cache:"no-cache"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const parsed=await response.json();
+  if(!parsed||typeof parsed!=="object"||!parsed.relations||typeof parsed.relations!=="object")throw new Error("回應缺少 relations 物件");
+  const invalid=Object.entries(parsed.relations).filter(([type,rule])=>!rule||!rule.impact||typeof rule.impact!=="object");
+  if(invalid.length)throw new Error("有 "+invalid.length+" 個關係規則缺少 impact 欄位");
+  relationRules=parsed;
+  relationRulesStatus="已載入 "+String(parsed.rule_profile||"未命名 profile")+"（"+Object.keys(parsed.relations).length+" 類關係；"+String(parsed.status||"未標示")+"）";
+  status.className="message";status.textContent="關係影響規則："+relationRulesStatus+"。規則由同源登錄表讀取，不在頁面內複製。";
+ }catch(error){
+  relationRules=null;relationRulesStatus="未載入："+error.message;
+  status.className="message error";status.textContent="關係影響規則："+relationRulesStatus+"。版本差異仍可用；不猜測影響方向。";
+ }
+ if(comparisonModel)renderDiff();
 }
 
 function minimalShape(x){
@@ -1148,6 +1283,7 @@ $("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.ta
 $("comparePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);comparisonModel=parsed;comparisonFileName=file.name;$("compareState").className="message";$("compareState").textContent="比較基準已載入："+file.name+"。載入失敗不會覆蓋目前模型；兩份資料仍只在本頁記憶體中。";activeView="diff";render()}catch(err){$("compareState").className="message error";$("compareState").textContent="比較基準載入失敗："+err.message+"。原比較基準未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
 $("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id,index:0};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設目前模型為內建示例；這不是專案正式模型。已載入的比較基準會保留，可查看示例與基準的差異。";render()});
 render();
+loadRelationRules();
 })();
 </script>
 </body>
