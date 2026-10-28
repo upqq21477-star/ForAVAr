@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.8",
+  "manifest_version": "3.9",
   "updated": "2026-10-28",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "READ_ONLY_PROTOTYPE_WITH_EXPLICIT_SCOPE_CONTRACT_IMPLEMENTED; JavaScript syntax check performed; browser interaction not tested",
+    "ui_implementation": "WU-C0-13 field-mapping transparency implemented; JavaScript COMPILE_OK and four-type pure mapping simulation passed; browser interaction NOT_RUN",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -49,7 +49,21 @@
       "browser_interaction": "NOT_RUN",
       "full_schema_validation": "BLOCKED / NOT_RUN",
       "cross_object_validation": "PARTIAL_LOCAL_DIAGNOSTICS_ONLY",
-      "persistence_or_writeback": false
+      "persistence_or_writeback": false,
+      "field_mapping_audit": {
+        "status": "IMPLEMENTED",
+        "object_types": [
+          "node",
+          "edge",
+          "source",
+          "condition"
+        ],
+        "classification": "top-level keys only; specialized mapping vs loaded raw fields without dedicated semantic mapping",
+        "raw_values": "safe text/JSON rendering; does not mutate loaded model",
+        "e3_syntax_check": "COMPILE_OK",
+        "e3_simulation": "4/4 field-mapping cases passed",
+        "e4_browser_interaction": "NOT_RUN"
+      }
     }
   },
   "current_baseline": [
@@ -101,7 +115,7 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "23163bdd9c6333281f6e0827d0df905e6819ad91"
+      "sha": "c46adc150c068bc142e0c5b7880ff050b6e293bd"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
@@ -116,12 +130,12 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "65237da7ada229cef633a6f3e8385d6e62a994eb"
+      "sha": "21e5b17c60711dc591aea8b30d96a346fb1a80a5"
     },
     {
       "role": "read_only_visualization_prototype",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/實驗/唯讀框架可視化原型.html",
-      "sha": "cd273be0fd44a94b2ccbbda2fdf7b5961a5824a2"
+      "sha": "cff062a8ee2a580eb69601b946fff77be7f5492f"
     }
   ],
   "test_fixtures": {
