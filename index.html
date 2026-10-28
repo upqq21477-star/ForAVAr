@@ -1609,6 +1609,16 @@ function capImpactCandidates(candidates,maxItems=120){
  const ordered=candidates.slice().sort((a,b)=>(priority[a.mode]??3)-(priority[b.mode]??3)||a.id.localeCompare(b.id));
  return {items:ordered.slice(0,maxItems),total:ordered.length,omitted:Math.max(0,ordered.length-maxItems)};
 }
+
+function impactNavigationIndex(source,id){
+ if(typeof id!=="string"||!id.trim())return null;
+ if(collectGlobalIdCollisions(source,"目前版").some(collision=>collision.id===id))return null;
+ const matches=[];
+ (source&&Array.isArray(source.nodes)?source.nodes:[]).forEach((node,index)=>{
+  if(validDiffId(node)&&node.id===id)matches.push(index);
+ });
+ return matches.length===1?matches[0]:null;
+}
 function capReviewCandidates(items,maxItems=120){
  return {items:items.slice(0,maxItems),total:items.length,omitted:Math.max(0,items.length-maxItems)};
 }
@@ -1803,13 +1813,11 @@ function renderDiff(){
      const maxPathsPerCandidate=20;
      candidate.paths.slice(0,maxPathsPerCandidate).forEach(path=>body.append(el("div","message",path.label)));
      if(candidate.paths.length>maxPathsPerCandidate)body.append(el("div","message error","此節點有 "+candidate.paths.length+" 條候選路徑；為限制畫面負載只顯示前 "+maxPathsPerCandidate+" 條，未展開 "+(candidate.paths.length-maxPathsPerCandidate)+" 條。"));
-     if(side==="目前版"&&!collectGlobalIdCollisions(model,"目前版").some(collision=>collision.id===candidate.id)){
-      const nodeIndexes=nodeIndexesForId(candidate.id);
-      if(nodeIndexes.length===1){
-       const focus=el("button","btn diff-nav-button","定位目前版節點");focus.type="button";
-       focus.addEventListener("click",()=>{selected={type:"node",id:candidate.id,index:nodeIndexes[0]};activeView="cards";render()});
-       body.append(focus);
-      }
+     const focusIndex=impactNavigationIndex(model,candidate.id);
+     if(Number.isInteger(focusIndex)){
+      const focus=el("button","btn diff-nav-button","定位目前版節點");focus.type="button";
+      focus.addEventListener("click",()=>{selected={type:"node",id:candidate.id,index:focusIndex};activeView="cards";render()});
+      body.append(focus);
      }
      list.append(card);
     });
