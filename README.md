@@ -2,12 +2,13 @@
 
 本頁是 forAVAr 系列工作的起始入口。**接手時先讀本 README，再只讀「目前交接文件」；不要整庫掃描、重讀歷史版本或尋找壓縮檔。** 交接文件會指出當前工作、證據、下一步、阻塞條件與必要檔案。
 
-## 可直接開啟的框架可視化網頁
+## 框架可視化網頁入口與發布狀態
 
-- **網頁入口：** [index.html](./index.html)
-- **GitHub Pages 預期網址：** https://upqq21477-star.github.io/forAVAr/
-- 此網頁使用專案根目錄的 \`index.html\` 作為唯一入口；不再維護研究資料夾中的第二份 HTML。網站是否已由 GitHub Pages 發布，以實際站點回應為準，不能只由檔案存在推定已部署。
-
+- **原始檔：** [根目錄 index.html](./index.html)；已提交至 `main` 根目錄。
+- **預期 GitHub Pages 網址：** https://upqq21477-star.github.io/ForAVAr/
+- **目前狀態：BLOCKED／NOT_PUBLISHED。** 2026-10-28 讀取 GitHub repository metadata 得到 `has_pages=false`；對應站點根網址、大小寫變體及 `/index.html` 均實測回傳 HTTP 404。這表示目前沒有已啟用的可用 Pages 站點，不能把檔案已提交視為網站已發布。
+- repository 目前為 **private**。依 [GitHub Pages 方案限制](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)，GitHub Free 需使用 public repository；Pro／Team／Enterprise 才支援 private repository 的 Pages。不得為了讓網頁可開啟而擅自公開整個研究庫。
+- **解阻塞：** 由 repository 擁有者在 GitHub 的 **Settings → Pages** 確認帳號方案與發布可見性，再選擇 `main`／`/(root)` 作為 branch publishing source（若該方案允許）。啟用前不宣稱頁面可用；啟用後才做一次有限介面煙霧檢查。
 ## 目前工作狀態
 
 - **目前工作單元：** B27.11／T3-0「基線＋同名測試類別」。
