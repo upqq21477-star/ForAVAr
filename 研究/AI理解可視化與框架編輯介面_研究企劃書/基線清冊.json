@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, and WU-C0-15 position-first identity across tree/card/graph implemented; root index.html is the sole HTML source. JavaScript COMPILE_OK; 7 local identity simulations match expectations. Free static-build script prepared to emit only dist/index.html; Cloudflare authorization, actual hosted response, and browser interaction remain NOT_RUN.",
+    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, and WU-C0-15 position-first identity across tree/card/graph implemented; root index.html is the sole HTML entry. JavaScript COMPILE_OK; 7 local identity simulations match expectations. GitHub Pages site is live at https://upqq21477-star.github.io/ForAVAr/ and live HTML structure is confirmed; actual browser interaction smoke test remains NOT_RUN.",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -89,45 +89,25 @@
         "e4_browser_interaction": "NOT_RUN"
       }
     },
-    "website_entry": "index.html (single authoritative source at repository root)",
-    "github_pages_deployment": "NOT_USED: private repository under current GitHub Free conditions; has_pages=false and tested Pages URL variants returned HTTP 404. No paid upgrade and no public-repository visibility change authorized.",
+    "website_entry": "index.html; live site https://upqq21477-star.github.io/ForAVAr/ (exact /ForAVAr/ path casing)",
+    "github_pages_deployment": "PUBLISHED_AND_REACHABLE; GitHub repository metadata private=false and has_pages=true; live fetch on 2026-10-28 returned title `ForAVAr｜唯讀框架可視化原型` and the expected page controls. Lowercase path variants tested returned HTTP 404.",
     "website_publish_blocker": {
-      "status": "WAITING_FOR_OWNER_ACCOUNT_AUTHORIZATION",
-      "observed": [
-        "GitHub repository API has_pages=false",
-        "https://upqq21477-star.github.io/forAVAr/ returned HTTP 404",
-        "https://upqq21477-star.github.io/ForAVAr/ returned HTTP 404",
-        "https://upqq21477-star.github.io/foravar/ returned HTTP 404",
-        "https://upqq21477-star.github.io/forAVAr/index.html returned HTTP 404"
+      "status": "RESOLVED_SITE_REACHABLE_UI_SMOKE_PENDING",
+      "previous_observation": [
+        "Before owner enabled Pages, repository metadata had_pages=false and tested URL variants returned HTTP 404."
       ],
-      "visibility": "private",
-      "no_cost_route": "Cloudflare Pages Free",
-      "build_command": "sh scripts/build_static_site.sh",
-      "output_directory": "dist",
-      "output_contract": "dist/index.html only; never publish repository root",
-      "guardrails": [
-        "Do not pay for GitHub Pages or another plan.",
-        "Do not make the private research repository public.",
-        "If enabling Cloudflare Git integration, scope GitHub App access to this repository only.",
-        "Browser smoke test remains NOT_RUN until a live deployment exists."
+      "current_observation": [
+        "GitHub repository metadata private=false",
+        "GitHub repository metadata has_pages=true",
+        "https://upqq21477-star.github.io/ForAVAr/ returned page content successfully",
+        "The page title is `ForAVAr｜唯讀框架可視化原型`",
+        "Live HTML contains local JSON loading, reset, tree/graph/cards tabs, search, filters, diagnostics, and detail panel",
+        "Tested lowercase path variants returned HTTP 404"
       ],
-      "next_action": "Owner connects Cloudflare Pages Free to this repository and configures Framework preset None, build command `sh scripts/build_static_site.sh`, output directory `dist`; then verify the deployment contains only index.html and perform one limited browser smoke test."
-    },
-    "static_site_build": {
-      "status": "PREPARED_NOT_EXECUTED",
-      "source": "index.html",
-      "script": "scripts/build_static_site.sh",
-      "script_sha": "669bad4b96592b257574c478439ec2c0ebd362f6",
-      "output": "dist/index.html",
-      "expected_file_count": 1,
-      "provider_candidate": "Cloudflare Pages Free",
-      "provider_setup": "OWNER_ACTION_REQUIRED",
-      "runtime_verification": "NOT_RUN",
-      "isolated_fixture_test": {
-        "status": "PASS",
-        "evidence": "The exact build-script body was run in a temporary fixture checkout; `sh -n` passed, output was `STATIC_BUILD_OK`, dist contained exactly one file named index.html, and the output was byte-identical to the source fixture.",
-        "limitation": "This was not executed from a full live GitHub repository checkout and is not a Cloudflare build or live-site verification."
-      }
+      "visibility": "public",
+      "public_scope_warning": "All tracked files in the public repository are publicly viewable, including docs/, runtime/, 研究/, and 進度/; not only the GitHub Pages homepage.",
+      "no_cost_route": "GitHub Pages is enabled and reachable; no paid plan used.",
+      "next_action": "Run a bounded real-browser interaction smoke test for tree/graph/cards switching, search/filter, reset, valid and invalid local JSON. Keep browser_interaction NOT_RUN until such actions are actually executed. If the entire repository was not intended to be public, separate the published site from private research sources."
     }
   },
   "current_baseline": [
@@ -204,12 +184,7 @@
     {
       "role": "repository_entry_readme",
       "path": "README.md",
-      "sha": "69a70be22af280d82bead7efdbfa981a4fac6b53"
-    },
-    {
-      "role": "static_site_build_script",
-      "path": "scripts/build_static_site.sh",
-      "sha": "669bad4b96592b257574c478439ec2c0ebd362f6"
+      "sha": "4f45e984fc8ad66a99f520be879ce55d41391480"
     }
   ],
   "test_fixtures": {
