@@ -2248,10 +2248,12 @@ loadModelSchema();
   const mainLink=document.getElementById("navMain");
   const frameworkLink=document.getElementById("navFramework");
   function syncSection(){
-    const section=window.location.hash==="#framework"?"framework":"main";
+    const hash=window.location.hash;
+    const section=hash==="#framework"?"framework":"main";
     body.dataset.section=section;
     if(mainLink)mainLink.setAttribute("aria-current",section==="main"?"page":"false");
     if(frameworkLink)frameworkLink.setAttribute("aria-current",section==="framework"?"page":"false");
+    if(hash==="#main"||hash==="#framework")window.scrollTo(0,0);
   }
   window.addEventListener("hashchange",syncSection);
   syncSection();
