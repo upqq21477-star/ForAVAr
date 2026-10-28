@@ -1428,8 +1428,13 @@ function threeWayDisplayStatus(status){
   unknown:"身分不明"
  }[status]||status;
 }
-function threeWayPathForSide(entry,logicalPath){
- if(!entry||!entry.path)return "—";
+function threeWayPathForSide(entry,logicalPath,sideLabel){
+ if(!entry||!entry.path){
+  const side=sideLabel||"該版本";
+  if(logicalPath==="object")return side+"（物件不存在）";
+  if(logicalPath.startsWith("object"))return side+"（物件不存在）"+logicalPath.slice(6);
+  return side+"（欄位／物件不存在）";
+ }
  if(logicalPath==="object")return entry.path;
  if(logicalPath.startsWith("object"))return entry.path+logicalPath.slice(6);
  if(logicalPath==="model")return "model";
@@ -1502,6 +1507,8 @@ function buildThreeWayAnalysis(baseModel,currentModel,alternative){
  const schemas=new Set(missingModelIds.map(x=>x.schema).filter(x=>typeof x==="string"&&x));
  const modelIds=new Set(missingModelIds.map(x=>x.id).filter(x=>typeof x==="string"&&x));
  const profiles=new Set(missingModelIds.map(x=>x.profile).filter(x=>typeof x==="string"&&x));
+ if(missingModelIds.some(x=>typeof x.schema!=="string"||!x.schema))modelWarnings.push("至少一份模型缺少 schema_version；契約版本相容性未能完整判定。");
+ if(missingModelIds.some(x=>typeof x.id!=="string"||!x.id))modelWarnings.push("至少一份模型缺少 model_id；無法完整判定三份輸入是否屬同一模型譜系。");
  if(schemas.size>1)modelWarnings.push("三份模型的 schema_version 不一致；本原型不執行契約版本遷移。");
  if(modelIds.size>1)modelWarnings.push("三份模型的 model_id 不一致；請視為跨模型比較，不代表同一模型的兩條修訂分支。");
  if(profiles.size>1)modelWarnings.push("三份模型的 rule_profile 不一致；本三方檢視不計算三方影響傳播，也不自動套用任何一個 profile。");
@@ -1512,9 +1519,9 @@ function buildThreeWayAnalysis(baseModel,currentModel,alternative){
 }
 function appendThreeWayConflictPath(parent,record,conflict){
  const row=el("div","diff-item"),body=el("div","diff-body");
- const bPath=threeWayPathForSide(record.base,conflict.path);
- const cPath=threeWayPathForSide(record.current,conflict.path);
- const aPath=threeWayPathForSide(record.alternative,conflict.path);
+ const bPath=threeWayPathForSide(record.base,conflict.path,"基準版");
+ const cPath=threeWayPathForSide(record.current,conflict.path,"目前版");
+ const aPath=threeWayPathForSide(record.alternative,conflict.path,"另一候選");
  body.append(el("div","diff-item-meta","衝突路徑："+conflict.path+" · 基準："+bPath+" · 目前："+cPath+" · 另一候選："+aPath));
  const values=el("div","diff-values");
  appendDiffValue(values,conflict.baseExists?("基準版 · "+bPath):("基準版（欄位不存在） · "+bPath),conflict.baseExists?conflict.base:undefined);
@@ -1553,7 +1560,7 @@ function renderThreeWayReport(root){
  ].forEach(([label,value])=>{const card=el("div","diff-stat");card.append(el("b","",String(value)),el("span","",label));stats.append(card)});
  group.append(stats);
  analysis.modelWarnings.forEach(message=>group.append(el("div","message error",message)));
- group.append(el("div","message","三方待檢視項目："+records.length+"；相同的三方語意狀態不逐項展開。這只是衝突候選分析，沒有驗證可合併性，也不會寫入模型。"));
+ group.append(el("div","message","基準檔："+comparisonFileName+" · 目前模型："+String(model.title||model.model_id||"目前模型")+" · 另一候選檔："+alternativeFileName+"。三方待檢視項目："+records.length+"；相同的三方語意狀態不逐項展開。這只是衝突候選分析，沒有驗證可合併性，也不會寫入模型。"));
  if(!records.length){group.append(el("div","empty","三份輸入在本功能檢查範圍內沒有發現差異或衝突；不代表正式 Schema、關係規則或完整驗證已通過。"));root.append(group);return}
  const list=el("div","diff-list"),maxRecords=200;
  records.slice(0,maxRecords).forEach(record=>{
