@@ -1800,7 +1800,17 @@ function renderDiff(){
      const modeLabel={transitive:"遞迴依賴候選",direct:"直接複核候選",advisory:"建議複核候選"}[candidate.mode]||candidate.mode;
      head.append(el("div","diff-item-title",candidate.id),el("span","diff-badge "+(candidate.mode==="advisory"?"presentation":"modified"),modeLabel));
      body.append(el("div","diff-item-meta","深度："+candidate.depth+" · 變更起點："+candidate.roots.join("、")));
-     candidate.paths.forEach(path=>body.append(el("div","message",path.label)));
+     const maxPathsPerCandidate=20;
+     candidate.paths.slice(0,maxPathsPerCandidate).forEach(path=>body.append(el("div","message",path.label)));
+     if(candidate.paths.length>maxPathsPerCandidate)body.append(el("div","message error","此節點有 "+candidate.paths.length+" 條候選路徑；為限制畫面負載只顯示前 "+maxPathsPerCandidate+" 條，未展開 "+(candidate.paths.length-maxPathsPerCandidate)+" 條。"));
+     if(side==="目前版"&&!collectGlobalIdCollisions(model,"目前版").some(collision=>collision.id===candidate.id)){
+      const nodeIndexes=nodeIndexesForId(candidate.id);
+      if(nodeIndexes.length===1){
+       const focus=el("button","btn diff-nav-button","定位目前版節點");focus.type="button";
+       focus.addEventListener("click",()=>{selected={type:"node",id:candidate.id,index:nodeIndexes[0]};activeView="cards";render()});
+       body.append(focus);
+      }
+     }
      list.append(card);
     });
     group.append(list);
