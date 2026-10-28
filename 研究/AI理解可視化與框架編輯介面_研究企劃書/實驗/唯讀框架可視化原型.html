@@ -11,6 +11,17 @@ button,input{font:inherit}button{cursor:pointer;color:inherit}button:focus-visib
 header{padding:18px 22px 14px;border-bottom:1px solid var(--line);background:#101a28;position:sticky;top:0;z-index:5}
 .headrow{display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}.brand{font-size:18px;font-weight:750;letter-spacing:.02em}.subtitle{font-size:12px;color:var(--muted);margin-top:2px}
 .notice{margin-top:12px;border:1px solid #67562f;background:#28251b;color:#f7dca4;border-radius:9px;padding:8px 11px;font-size:12px}
+.mobile-view-nav,.mobile-selection-summary{display:none}
+.mobile-view-nav{gap:5px;margin-top:10px}
+.mobile-view-nav .tab{flex:1;text-align:center;padding:8px 5px;border:1px solid var(--line);background:#101a28;color:var(--muted);border-radius:8px;font-size:12px}
+.mobile-view-nav .tab[aria-selected=true]{background:#153b43;color:var(--text);border-color:#287a78}
+.mobile-selection-summary{font-size:11px;color:var(--muted);padding-top:7px;overflow-wrap:anywhere}
+.model-tools{border:1px solid var(--line);border-radius:9px;background:#101a28;margin:12px 0;padding:0 10px}
+.model-tools>summary{cursor:pointer;list-style:none;padding:10px 0;font-size:12px;font-weight:650;color:var(--text)}
+.model-tools>summary::-webkit-details-marker{display:none}
+.model-tools>summary:after{content:"＋";float:right;color:var(--accent)}
+.model-tools[open]>summary:after{content:"−"}
+.model-tools-body{padding:0 0 10px}
 .actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:8px 12px}.btn.primary{background:#153b43;border-color:#287a78}.btn:hover{filter:brightness(1.15)}
 main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;padding:12px;max-width:1800px;margin:auto;min-height:calc(100vh - 110px)}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;min-width:0;overflow:hidden}.panel-head{padding:13px 14px;border-bottom:1px solid var(--line);font-weight:700}.panel-body{padding:13px}
@@ -35,7 +46,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .diag-list{display:flex;flex-direction:column;gap:7px;margin-top:9px}.diag-item{width:100%;text-align:left;border:1px solid var(--line);border-radius:8px;background:#101a28;padding:9px;min-width:0}.diag-item.error{border-left:3px solid var(--bad)}.diag-item.warning{border-left:3px solid var(--warn)}.diag-item:disabled{cursor:default;opacity:.85}
 .diag-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;font-weight:700}.diag-code{color:var(--muted);font:10px ui-monospace,monospace}.diag-message{font-size:12px;overflow-wrap:anywhere;margin-top:5px}.diag-path{color:var(--muted);font:10px ui-monospace,monospace;overflow-wrap:anywhere;margin-top:5px}
 @media(max-width:1100px){main{grid-template-columns:210px minmax(0,1fr)}.details{grid-column:1/-1}.details .panel-body{display:grid;grid-template-columns:1fr 1fr;gap:12px}.details .detail-section{margin-bottom:0}}
-@media(max-width:700px){header{padding:14px 13px}main{display:flex;flex-direction:column;padding:8px;gap:8px}.sidebar{order:1}.center{order:2}.details{order:3}.panel-body{padding:11px}.view{padding:10px;min-height:340px}.details .panel-body{display:block}.details .detail-section{margin-bottom:14px}.actions{width:100%}.actions .btn{flex:1}.brand{font-size:16px}}
+@media(max-width:700px){header{padding:12px 13px 9px}main{display:flex;flex-direction:column;padding:8px;gap:8px}.center{order:1}.sidebar{order:2}.details{order:3}.panel-body{padding:11px}.view{padding:10px;min-height:300px}.details .panel-body{display:block}.details .detail-section{margin-bottom:14px}.actions{width:100%}.actions .btn{flex:1}.brand{font-size:16px}.notice{margin-top:8px;padding:7px 9px}.mobile-view-nav,.mobile-selection-summary{display:flex}.mobile-selection-summary{display:block}.center .mainhead{padding:8px 10px}.center .mainhead>.tabs{display:none}.model-tools{margin:9px 0}.sidebar .panel-head,.details .panel-head{padding:10px 12px}}
 </style>
 </head>
 <body>
@@ -49,6 +60,12 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
     </div>
   </div>
   <div class="notice">唯讀預覽：資料只留在本頁記憶體，不上傳、不寫回、不發布。此原型不執行完整 JSON Schema／跨物件驗證。</div>
+  <div class="mobile-view-nav" role="tablist" aria-label="手機快速切換視圖">
+    <button class="tab" type="button" data-view="tree" role="tab" aria-selected="true">樹狀</button>
+    <button class="tab" type="button" data-view="graph" role="tab" aria-selected="false">關係圖</button>
+    <button class="tab" type="button" data-view="cards" role="tab" aria-selected="false">卡片</button>
+  </div>
+  <div id="mobileSelectionSummary" class="mobile-selection-summary" aria-live="polite">尚未選取項目</div>
 </header>
 <main>
   <section class="panel sidebar">
@@ -56,7 +73,10 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
     <div class="panel-body">
       <label class="fieldlabel" for="search">搜尋節點、關係、來源或條件</label>
       <input id="search" type="search" placeholder="名稱、ID、關係類型或描述…" autocomplete="off">
-      <div class="filter-grid">
+      <details id="modelTools" class="model-tools">
+        <summary>模型資訊與狀態篩選</summary>
+        <div class="model-tools-body">
+<div class="filter-grid">
         <label class="fieldlabel" for="reviewFilter">節點審核狀態</label>
         <select id="reviewFilter">
           <option value="">全部審核狀態</option>
@@ -78,26 +98,29 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
         </select>
         <div class="filter-actions"><button id="clearFilters" class="btn" type="button">清除篩選</button></div>
       </div>
-      <div id="filterSummary" class="message" aria-live="polite">顯示全部節點與關係。</div>
-      <button id="diagToggle" class="diag-toggle" type="button" aria-expanded="false" aria-controls="diagnosticsPanel">
-        <span>資料品質提示（局部診斷）</span><span id="diagCount" class="diag-count">0</span>
-      </button>
-      <div id="diagnosticsPanel" hidden><div id="diagnosticsList" class="diag-list"></div></div>
-      <div id="modelTitle" class="detail-title">示例模型</div>
-      <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
-      <div class="stats">
+<div class="stats">
         <div class="stat"><b id="nodeCount">0</b><span>節點</span></div>
         <div class="stat"><b id="edgeCount">0</b><span>關係</span></div>
         <div class="stat"><b id="conditionCount">0</b><span>條件</span></div>
         <div class="stat"><b id="sourceCount">0</b><span>來源</span></div>
       </div>
-      <div class="fieldlabel">狀態辨識</div>
+<div class="fieldlabel">狀態辨識</div>
       <div class="keylist">
         <div class="keyrow"><span class="dot"></span>節點／關係依正式 ID 識別</div>
         <div class="keyrow"><span class="dot" style="background:var(--warn)"></span>審核狀態不等於證據狀態</div>
         <div class="keyrow"><span class="dot" style="background:var(--bad)"></span>原型不替未知內容作裁決</div>
       </div>
-      <div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
+        </div>
+      </details>
+<div id="filterSummary" class="message" aria-live="polite">顯示全部節點與關係。</div>
+      <button id="diagToggle" class="diag-toggle" type="button" aria-expanded="false" aria-controls="diagnosticsPanel">
+        <span>資料品質提示（局部診斷）</span><span id="diagCount" class="diag-count">0</span>
+      </button>
+      <div id="diagnosticsPanel" hidden><div id="diagnosticsList" class="diag-list"></div></div>
+<div id="modelTitle" class="detail-title">示例模型</div>
+      <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
+<div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
+    
     </div>
     <div class="foot">模型版本欄位與 Git commit 是不同概念。</div>
   </section>
@@ -289,6 +312,10 @@ function selectionIsVisible(){
  return Boolean(q&&matchingEdges().some(e=>e.source_id===obj.id||e.target_id===obj.id));
 }
 function renderSelectionNotice(){
+ const current=currentSelectedObject();
+ const summaryKind=selected.type==="edge"?"關係":"節點";
+ const summaryId=current&&current.id!==undefined?String(current.id):String(selected.id||"");
+ $("mobileSelectionSummary").textContent=current?("目前選取："+summaryKind+" · "+(current.name||current.title||summaryId)+" · "+summaryId):"目前選取項目不存在於已載入模型";
  const hidden=selectionIsVisible();
  $("selectionNotice").hidden=hidden;
  if(hidden)return;
