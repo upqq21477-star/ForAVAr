@@ -196,7 +196,7 @@ const DEMO = {
     {id:"s-user",source_type:"user_input",label:"示意需求",locator:"內建示例",excerpt:"以低門檻視圖理解框架結構。",actor_type:"user",captured_at:"2026-10-28"}
   ]
 };
-let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id}, activeView="tree", filteredIds=null;
+let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id}, activeView="tree", filteredIds=null, referenceOrigin=null;
 const $=id=>document.getElementById(id);
 const esc=(x)=>String(x===undefined||x===null?"—":x);
 const roleLabel={core:"核心",main_axis:"主軸",skeleton:"骨架",module:"模組",detail:"細節",unassigned:"未指定"};
@@ -293,6 +293,7 @@ function renderDiagnostics(){
  });
 }
 function selectItem(type,id,index){
+ referenceOrigin=null;
  selected={type:type,id:id};
  if(Number.isInteger(index)&&index>=0)selected.index=index;
  render();
@@ -530,18 +531,39 @@ function openReferencedItem(type,obj,index){
  else if(type==="edge"){activeView="graph";$("graphScope").value="both";$("graphDepth").value="1"}
  render();
 }
-function referenceButton(type,obj,index,title,meta){
+function referenceButton(type,obj,index,title,meta,origin=null){
  const button=el("button","tree-node");button.type="button";
  const label=el("span","tree-label");
  label.append(el("span","tree-name",title||obj.id||"未命名"),el("span","tree-meta",meta||obj.id||""));
  button.append(label);
  button.addEventListener("click",()=>{
-  if(type==="node"||type==="edge")openReferencedItem(type,obj,index);
-  else selectItem(type,obj.id,index);
+  if(type==="node"||type==="edge"){
+   referenceOrigin=origin;
+   openReferencedItem(type,obj,index);
+  }else{
+   referenceOrigin=null;
+   selectItem(type,obj.id,index);
+  }
  });
  return button;
 }
-function appendReverseReferences(parent,kind,id){
+function appendReferenceOrigin(parent){
+ if(!referenceOrigin||!["source","condition"].includes(referenceOrigin.type))return;
+ const obj=referenceOrigin.type==="source"
+  ?(Number.isInteger(referenceOrigin.index)?model.sources[referenceOrigin.index]:sourceById(referenceOrigin.id))
+  :(Number.isInteger(referenceOrigin.index)?model.conditions[referenceOrigin.index]:condById(referenceOrigin.id));
+ const title=referenceOrigin.type==="source"?(obj&&obj.label||referenceOrigin.id):(obj&&obj.name||referenceOrigin.id);
+ const block=el("div","detail-section");
+ block.append(el("div","fieldlabel","引用導覽來源"),el("div","detail-function",title+" · "+referenceOrigin.id));
+ addKV(block,"引用欄位路徑",referenceOrigin.fieldPath||"未提供");
+ const back=el("button","btn","返回來源／條件紀錄");back.type="button";
+ back.addEventListener("click",()=>{
+  selected={type:referenceOrigin.type,id:referenceOrigin.id,index:referenceOrigin.index};
+  render();
+ });
+ block.append(back);parent.append(block);
+}
+function appendReverseReferences(parent,kind,id,originIndex){
  const label=kind==="source"?"來源":"條件";
  const field=kind==="source"?"provenance_refs":"condition_refs";
  const nodes=model.nodes.map((obj,index)=>({obj,index})).filter(x=>Array.isArray(x.obj[field])&&x.obj[field].includes(id));
@@ -549,11 +571,25 @@ function appendReverseReferences(parent,kind,id){
  const section=el("div","detail-section");
  section.append(el("div","fieldlabel","反向引用 · "+label+"（"+nodes.length+" 個節點、"+edges.length+" 條關係）"));
  if(!nodes.length&&!edges.length)section.append(el("div","message","目前沒有節點或關係引用此"+label+"。"));
- nodes.forEach(({obj,index})=>section.append(referenceButton("node",obj,index,obj.name||obj.id,"節點 · "+obj.id)));
+ nodes.forEach(({obj,index})=>{
+  const refs=Array.isArray(obj[field])?obj[field]:[];
+  refs.forEach((ref,ri)=>{
+   if(ref!==id)return;
+   const fieldPath="nodes["+index+"]."+field+"["+ri+"]";
+   const origin={type:kind,id:id,index:originIndex,fieldPath:fieldPath};
+   section.append(referenceButton("node",obj,index,obj.name||obj.id,"欄位："+fieldPath,origin));
+  });
+ });
  edges.forEach(({obj,index})=>{
-  const from=nodeById(obj.source_id),to=nodeById(obj.target_id);
-  const title=(from?from.name:obj.source_id)+" → "+(relationLabel[obj.relation_type]||obj.relation_type)+" → "+(to?to.name:obj.target_id);
-  section.append(referenceButton("edge",obj,index,title,"關係 · "+obj.id));
+  const refs=Array.isArray(obj[field])?obj[field]:[];
+  refs.forEach((ref,ri)=>{
+   if(ref!==id)return;
+   const from=nodeById(obj.source_id),to=nodeById(obj.target_id);
+   const title=(from?from.name:obj.source_id)+" → "+(relationLabel[obj.relation_type]||obj.relation_type)+" → "+(to?to.name:obj.target_id);
+   const fieldPath="edges["+index+"]."+field+"["+ri+"]";
+   const origin={type:kind,id:id,index:originIndex,fieldPath:fieldPath};
+   section.append(referenceButton("edge",obj,index,title,"欄位："+fieldPath,origin));
+  });
  });
  parent.append(section);
 }
@@ -566,7 +602,7 @@ function detailSource(source){
  const fields=el("div","detail-section");
  Object.entries(source).forEach(([key,value])=>addKV(fields,key,value));
  root.append(fields);
- appendReverseReferences(root,"source",source.id);
+ appendReverseReferences(root,"source",source.id,model.sources.indexOf(source));
 }
 function detailCondition(condition){
  const root=$("detailPanel");root.replaceChildren();
@@ -577,11 +613,11 @@ function detailCondition(condition){
  const fields=el("div","detail-section");
  Object.entries(condition).forEach(([key,value])=>addKV(fields,key,value));
  root.append(fields);
- appendReverseReferences(root,"condition",condition.id);
+ appendReverseReferences(root,"condition",condition.id,model.conditions.indexOf(condition));
 }
 function detailNode(n){
  const root=$("detailPanel");root.replaceChildren();if(!n){root.append(el("div","empty","找不到所選節點。"));return}
- const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));appendDiagnosticContext(sec);root.append(sec);
+ const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));appendDiagnosticContext(sec);appendReferenceOrigin(sec);root.append(sec);
  const fields=el("div","detail-section");
  [["結構角色",roleLabel[n.structural_role]||n.structural_role],["物件類型",n.entity_kind],["審核狀態",n.review_status],["證據狀態",n.evidence_status],["來源引用",n.provenance_refs],["條件引用",n.condition_refs],["補充說明",n.description],["其他屬性",n.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});
  root.append(fields);
@@ -589,7 +625,7 @@ function detailNode(n){
 }
 function detailEdge(e){
  const root=$("detailPanel");root.replaceChildren();if(!e){root.append(el("div","empty","找不到所選關係。"));return}
- const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));appendDiagnosticContext(sec);root.append(sec);
+ const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));appendDiagnosticContext(sec);appendReferenceOrigin(sec);root.append(sec);
  const fields=el("div","detail-section");[["來源端點",e.source_id],["目標端點",e.target_id],["關係類型",e.relation_type],["審核狀態",e.review_status],["證據狀態",e.evidence_status],["來源引用",e.provenance_refs],["條件引用",e.condition_refs],["其他屬性",e.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});root.append(fields);
  const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源引用（點選查看完整紀錄）"));const sources=(Array.isArray(e.provenance_refs)?e.provenance_refs:[]).map(id=>({id,obj:sourceById(id)}));if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(x=>{if(x.obj)refs.append(referenceButton("source",x.obj,model.sources.indexOf(x.obj),x.obj.label||x.id,(x.obj.source_type||"來源")+" · "+(x.obj.locator||x.id)),el("div","message",x.obj.excerpt||"未提供摘錄"));else refs.append(el("div","message","未解析來源引用："+x.id))});refs.append(el("div","fieldlabel","條件引用（點選查看完整紀錄）"));(Array.isArray(e.condition_refs)?e.condition_refs:[]).map(id=>({id,obj:condById(id)})).forEach(x=>{if(x.obj)refs.append(referenceButton("condition",x.obj,model.conditions.indexOf(x.obj),x.obj.name||x.id,"條件 · "+x.id),el("div","message",x.obj.description||"未提供條件說明"));else refs.append(el("div","message","未解析條件引用："+x.id))});root.append(refs);
 }
