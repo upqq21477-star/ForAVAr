@@ -148,6 +148,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
         <option value="all">不限制</option>
       </select></div>
       <div id="graphScopeSummary" class="message" aria-live="polite" style="grid-column:1/-1">以上游與下游各一層顯示。</div>
+      <div id="graphScaleNotice" class="message" aria-live="polite" style="grid-column:1/-1"></div>
     </div>
     <div id="treeView" class="view"></div>
     <div id="graphView" class="view" hidden></div>
@@ -425,9 +426,21 @@ function renderGraph(){
  }
  const nodeIds=new Set(visibleNodes.map(n=>n.id));
  visibleEdges=visibleEdges.filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id));
- if(!visibleNodes.length){root.append(el("div","empty","沒有符合目前搜尋、狀態與關係範圍的節點。"));$("graphScopeSummary").textContent="此條件組合沒有可顯示的節點。";return}
+ if(!visibleNodes.length){
+  root.append(el("div","empty","沒有符合目前搜尋、狀態與關係範圍的節點。"));
+  $("graphScopeSummary").textContent="此條件組合沒有可顯示的節點。";
+  $("graphScaleNotice").textContent="調整搜尋、狀態篩選、關係方向或深度後可重新顯示；原始模型不會被修改。";
+  return;
+ }
  const scopeLabel={all:"全部關係",upstream:"上游",downstream:"下游",both:"上游＋下游"}[scope]||scope;
- $("graphScopeSummary").textContent="目前範圍："+scopeLabel+"；深度："+(rawDepth==="all"?"不限制":rawDepth+" 層")+"；顯示 "+visibleNodes.length+" 個節點、"+visibleEdges.length+" 條關係。"+(focusId?" 聚焦："+((nodeById(focusId)||{}).name||focusId):"");
+ const placeholderCount=visibleNodes.filter(n=>n&&n.__diagnosticPlaceholder).length;
+ const actualVisibleNodes=visibleNodes.length-placeholderCount;
+ const totalNodes=model.nodes.length,totalEdges=model.edges.length;
+ const queryActive=Boolean(q),statusActive=Boolean($("reviewFilter").value||$("evidenceFilter").value);
+ const isSubset=scope!=="all"||rawDepth!=="all"||queryActive||statusActive||actualVisibleNodes<totalNodes||visibleEdges.length<totalEdges;
+ $("graphScopeSummary").textContent="範圍："+scopeLabel+"；深度："+(rawDepth==="all"?"不限":rawDepth+" 層")+"；畫面節點 "+actualVisibleNodes+"／"+totalNodes+(placeholderCount?"（另含 "+placeholderCount+" 個未解析端點佔位）":"")+"；畫面關係 "+visibleEdges.length+"／"+totalEdges+"。"+(focusId?" 聚焦："+((nodeById(focusId)||{}).name||focusId):"");
+ $("graphScaleNotice").textContent=(isSubset?"目前為局部／篩選後視圖，不能視為完整模型。":"目前顯示所有可定位的節點與關係；這不代表資料契約或證據已通過驗證。")+
+  ((visibleNodes.length>80||visibleEdges.length>120||scope==="all"||rawDepth==="all")?" 提示：目前圖面範圍較大或未設深度上限，手機閱讀可能較擁擠；可改用上下游範圍或降低深度。此提示不阻擋瀏覽。":"");
  const depth=new Map(),parents=new Map();
  visibleEdges.filter(e=>e.relation_type==="contains").forEach(e=>{if(!parents.has(e.target_id))parents.set(e.target_id,e.source_id)});
  let roots=visibleNodes.filter(n=>!parents.has(n.id)||!nodeIds.has(parents.get(n.id)));if(!roots.length)roots=[visibleNodes[0]];
