@@ -22,7 +22,8 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .tree{display:flex;flex-direction:column;gap:7px}.tree-node{display:flex;align-items:center;gap:8px;text-align:left;background:#101a28;border:1px solid var(--line);border-radius:9px;padding:10px;width:100%;min-width:0}.tree-node:hover,.tree-node.selected{border-color:var(--accent);background:#15313b}.tree-label{min-width:0;flex:1}.tree-name{font-weight:650;display:block;overflow-wrap:anywhere}.tree-meta{display:block;color:var(--muted);font-size:11px;margin-top:2px}.indent{flex:none;width:var(--indent,0px);height:1px;border-top:1px dotted var(--line)}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.nodecard{border:1px solid var(--line);background:#101a28;border-radius:10px;padding:13px;text-align:left;min-width:0}.nodecard.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.nodecard h3{font-size:15px;margin:8px 0}.nodecard p{color:var(--muted);font-size:13px;margin:0 0 10px}
 .badges{display:flex;gap:5px;flex-wrap:wrap}.badge{border:1px solid var(--line);border-radius:100px;padding:2px 7px;font-size:10px;color:var(--muted)}.badge.pending{color:var(--warn);border-color:#67562f}.badge.accepted{color:var(--good);border-color:#31593a}
-.graphwrap{overflow:auto;background:#0f1926;border:1px solid var(--line);border-radius:10px}.graph{display:block;min-width:600px;width:100%;height:auto}.graph-node{cursor:pointer}.graph-node rect{fill:#172638;stroke:#3b536e;stroke-width:1.5}.graph-node.selected rect{stroke:var(--accent);stroke-width:2.5;fill:#153b43}.graph-node.missing rect{stroke:var(--bad);stroke-width:2;stroke-dasharray:5 4}.graph-node text{fill:var(--text);font-size:13px;pointer-events:none}.graph-edge{stroke:#71879f;stroke-width:1.5;opacity:.7;fill:none;cursor:pointer}.graph-edge.selected{stroke:var(--accent);stroke-width:3;opacity:1}.edge-label{fill:var(--muted);font-size:10px;pointer-events:none}.graph-hint{color:var(--muted);font-size:12px;margin:0 0 10px}
+.graphwrap{overflow:auto;background:#0f1926;border:1px solid var(--line);border-radius:10px}.graph{display:block;min-width:600px;width:100%;height:auto}.graph-node{cursor:pointer}.graph-node rect{fill:#172638;stroke:#3b536e;stroke-width:1.5}.graph-node.selected rect{stroke:var(--accent);stroke-width:2.5;fill:#153b43}.graph-node.missing rect{stroke:var(--bad);stroke-width:2;stroke-dasharray:5 4}.graph-node.missing rect{stroke:var(--bad);stroke-width:2;stroke-dasharray:5 4}.graph-node text{fill:var(--text);font-size:13px;pointer-events:none}.graph-edge{stroke:#71879f;stroke-width:1.5;opacity:.7;fill:none;cursor:pointer}.graph-edge.selected{stroke:var(--accent);stroke-width:3;opacity:1}.edge-label{fill:var(--muted);font-size:10px;pointer-events:none}.graph-hint{color:var(--muted);font-size:12px;margin:0 0 10px}
+.selection-notice{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;background:#2a251b;border-bottom:1px solid #67562f;color:#f7dca4;font-size:12px}.selection-notice .btn{padding:6px 9px}
 .graph-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 14px;background:#101a28;border-bottom:1px solid var(--line)}
 .graph-control{min-width:0}.graph-control label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.graph-control select{width:100%;background:#0d1724;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px}
 @media(max-width:520px){.graph-controls{grid-template-columns:1fr}}
@@ -109,6 +110,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
       </div>
       <div id="viewCount" class="status"><span class="dot"></span><span>示例資料</span></div>
     </div>
+    <div id="selectionNotice" class="selection-notice" hidden><span id="selectionNoticeText"></span><button id="refocusSelection" class="btn" type="button">清除篩選並重新聚焦</button></div>
     <div id="graphControls" class="graph-controls" hidden>
       <div class="graph-control"><label for="graphScope">關係方向與範圍</label><select id="graphScope">
         <option value="both">上游＋下游</option>
@@ -259,7 +261,41 @@ function renderDiagnostics(){
   list.append(item);
  });
 }
-function selectItem(type,id){selected={type:type,id:id};render()}
+function selectItem(type,id,index){
+ selected={type:type,id:id};
+ if(Number.isInteger(index)&&index>=0)selected.index=index;
+ render();
+}
+function currentSelectedObject(){
+ if(selected.type==="edge")return Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id);
+ return Number.isInteger(selected.index)?model.nodes[selected.index]:nodeById(selected.id);
+}
+function selectedObjectMatchesFilter(){
+ const obj=currentSelectedObject();if(!obj)return false;
+ const q=$("search").value.trim().toLowerCase();
+ if(selected.type==="node")return nodePassesFilters(obj)&&(!q||nodeText(obj).includes(q));
+ return !q||edgeText(obj).includes(q);
+}
+function selectionIsVisible(){
+ const obj=currentSelectedObject();if(!obj)return true;
+ if(selected.type==="edge"){
+  if(activeView!=="graph"||!selectedObjectMatchesFilter())return false;
+  if($("graphScope").value==="upstream"&&obj.source_id!==obj.target_id)return false;
+  return true;
+ }
+ if(activeView==="tree"||activeView==="cards")return selectedObjectMatchesFilter();
+ if(selectedObjectMatchesFilter())return true;
+ const q=$("search").value.trim().toLowerCase();
+ return Boolean(q&&matchingEdges().some(e=>e.source_id===obj.id||e.target_id===obj.id));
+}
+function renderSelectionNotice(){
+ const hidden=selectionIsVisible();
+ $("selectionNotice").hidden=hidden;
+ if(hidden)return;
+ const kind=selected.type==="edge"?"關係":"節點";
+ const obj=currentSelectedObject();
+ $("selectionNoticeText").textContent="目前選取的"+kind+"（"+String(obj&&obj.id||selected.id||"無 ID")+"）不在目前視圖或篩選範圍；詳情仍保留。可重新聚焦以清除篩選並跳至合適視圖。";
+}
 function badge(text, cls){return el("span","badge "+(cls||""),text)}
 function badges(n){const box=el("div","badges");box.append(badge(roleLabel[n.structural_role]||n.structural_role),badge(n.entity_kind||"未分類"),badge(n.review_status||"審核未知",n.review_status==="accepted"?"accepted":"pending"),badge(n.evidence_status||"證據未知"));return box}
 function showModelStats(){ $("modelTitle").textContent=model.title||"未命名模型";$("modelPurpose").textContent=model.purpose||"未提供目的說明";$("nodeCount").textContent=model.nodes.length;$("edgeCount").textContent=model.edges.length;$("conditionCount").textContent=model.conditions.length;$("sourceCount").textContent=model.sources.length;$("viewCount").lastElementChild.textContent=model.model_id+" · "+model.model_state}
@@ -285,13 +321,13 @@ function renderTree(){
   if(visited.has(n.id)){return}
   if(!branchHasMatch(n.id,new Set())) return;
   visited.add(n.id);
-  const row=el("button","tree-node"+(selected.type==="node"&&selected.id===n.id?" selected":""));
+  const row=el("button","tree-node"+(selected.type==="node"&&(Number.isInteger(selected.index)?model.nodes[selected.index]===n:selected.id===n.id)?" selected":""));
   row.type="button";row.style.setProperty("--indent",Math.min(depth,7)*15+"px");row.setAttribute("aria-label","選取節點 "+n.name);
   row.append(el("span","indent"));
   const info=el("span","tree-label");info.append(el("span","tree-name",n.name||n.id),el("span","tree-meta",(roleLabel[n.structural_role]||"未分類")+" · "+n.id));row.append(info,badge(n.review_status||"未知"));
   const parentCount=(allParents.get(n.id)||[]).length;
   if(parentCount>1) row.append(badge("多父節點 "+parentCount));
-  row.addEventListener("click",()=>selectItem("node",n.id));root.append(row);
+  row.addEventListener("click",()=>selectItem("node",n.id,model.nodes.indexOf(n)));root.append(row);
   const next=new Set(anc);next.add(n.id);
   (children.get(n.id)||[]).forEach(id=>{const child=nodeById(id);if(child)draw(child,depth+1,next)});
  }
@@ -301,7 +337,7 @@ function renderTree(){
 }
 function renderCards(){
  const root=$("cardsView");root.replaceChildren();const grid=el("div","cards");
- matchingNodes().forEach(n=>{const c=el("button","nodecard"+(selected.type==="node"&&selected.id===n.id?" selected":""));c.type="button";c.append(badges(n),el("h3","",n.name||n.id),el("p","",n.function||"尚無功能說明"),el("div","detail-id",n.id));c.addEventListener("click",()=>selectItem("node",n.id));grid.append(c)});
+ matchingNodes().forEach(n=>{const c=el("button","nodecard"+(selected.type==="node"&&(Number.isInteger(selected.index)?model.nodes[selected.index]===n:selected.id===n.id)?" selected":""));c.type="button";c.append(badges(n),el("h3","",n.name||n.id),el("p","",n.function||"尚無功能說明"),el("div","detail-id",n.id));c.addEventListener("click",()=>selectItem("node",n.id,model.nodes.indexOf(n)));grid.append(c)});
  if(!grid.childElementCount)root.append(el("div","empty","沒有符合搜尋條件的節點。"));else root.append(grid);
 }
 function renderGraph(){
@@ -379,21 +415,21 @@ function renderGraph(){
  visibleEdges.forEach(e=>{
   const a=pos[e.source_id],b=pos[e.target_id];if(!a||!b)return;
   const d="M"+(a.x+178)+" "+(a.y+38)+" C"+(a.x+213)+" "+(a.y+38)+" "+(b.x-35)+" "+(b.y+38)+" "+b.x+" "+(b.y+38);
-  const visible=document.createElementNS(ns,"path");visible.setAttribute("d",d);visible.setAttribute("class","graph-edge"+(selected.type==="edge"&&selected.id===e.id?" selected":""));visible.setAttribute("marker-end","url(#arrow)");visible.setAttribute("pointer-events","none");svg.append(visible);
-  const hit=document.createElementNS(ns,"path");hit.setAttribute("d",d);hit.setAttribute("fill","none");hit.setAttribute("stroke","transparent");hit.setAttribute("stroke-width","16");hit.setAttribute("tabindex","0");hit.setAttribute("role","button");hit.setAttribute("aria-label","選取關係："+(relationLabel[e.relation_type]||e.relation_type));hit.style.cursor="pointer";hit.addEventListener("click",()=>selectItem("edge",e.id));hit.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("edge",e.id)}});svg.append(hit);
+  const visible=document.createElementNS(ns,"path");visible.setAttribute("d",d);visible.setAttribute("class","graph-edge"+(selected.type==="edge"&&(Number.isInteger(selected.index)?model.edges[selected.index]===e:selected.id===e.id)?" selected":""));visible.setAttribute("marker-end","url(#arrow)");visible.setAttribute("pointer-events","none");svg.append(visible);
+  const hit=document.createElementNS(ns,"path");hit.setAttribute("d",d);hit.setAttribute("fill","none");hit.setAttribute("stroke","transparent");hit.setAttribute("stroke-width","16");hit.setAttribute("tabindex","0");hit.setAttribute("role","button");hit.setAttribute("aria-label","選取關係："+(relationLabel[e.relation_type]||e.relation_type));hit.style.cursor="pointer";hit.addEventListener("click",()=>selectItem("edge",e.id,model.edges.indexOf(e)));hit.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("edge",e.id,model.edges.indexOf(e))}});svg.append(hit);
   const label=document.createElementNS(ns,"text");label.setAttribute("x",(a.x+178+b.x)/2);label.setAttribute("y",(a.y+38+b.y+38)/2-7);label.setAttribute("class","edge-label");label.textContent=relationLabel[e.relation_type]||e.relation_type;svg.append(label);
  });
  visibleNodes.forEach(n=>{
-  const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&selected.id===n.id?" selected":"")+(n.__diagnosticPlaceholder?" missing":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);
+  const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&(Number.isInteger(selected.index)?model.nodes[selected.index]===n:selected.id===n.id)?" selected":"")+(n.__diagnosticPlaceholder?" missing":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);
   const rect=document.createElementNS(ns,"rect");rect.setAttribute("width","180");rect.setAttribute("height","76");rect.setAttribute("rx","9");g.append(rect);
   const title=document.createElementNS(ns,"text");title.setAttribute("x","10");title.setAttribute("y","24");title.textContent=(n.name||n.id).slice(0,19);g.append(title);
   const meta=document.createElementNS(ns,"text");meta.setAttribute("x","10");meta.setAttribute("y","46");meta.setAttribute("style","fill:#9db0c4;font-size:11px");meta.textContent=(roleLabel[n.structural_role]||"未指定")+" · "+(n.entity_kind||"未知");g.append(meta);
-  const chooseGraphNode=()=>{if(n.__diagnosticPlaceholder){const p=n.__diagnosticPlaceholder,e=model.edges[p.edgeIndex];selected={type:"edge",id:e&&e.id,index:p.edgeIndex,path:"edges["+p.edgeIndex+"]."+p.field,diagnosticCode:"MISSING_EDGE_ENDPOINT"};render()}else selectItem("node",n.id)};
+  const chooseGraphNode=()=>{if(n.__diagnosticPlaceholder){const p=n.__diagnosticPlaceholder,e=model.edges[p.edgeIndex];selected={type:"edge",id:e&&e.id,index:p.edgeIndex,path:"edges["+p.edgeIndex+"]."+p.field,diagnosticCode:"MISSING_EDGE_ENDPOINT"};render()}else selectItem("node",n.id,model.nodes.indexOf(n))};
   g.addEventListener("click",chooseGraphNode);g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();chooseGraphNode()}});svg.append(g);
  });
  const wrap=el("div","graphwrap");wrap.append(svg);root.append(wrap);
  const edgeList=el("div","edge-list");
- visibleEdges.forEach(e=>{const row=el("button","edge-row"+(selected.type==="edge"&&selected.id===e.id?" selected":""));row.type="button";const a=nodeById(e.source_id),b=nodeById(e.target_id);row.append(el("div","edge-path",(a?a.name:e.source_id)+"  →  "+(relationLabel[e.relation_type]||e.relation_type)+"  →  "+(b?b.name:e.target_id)),el("div","edge-description",e.description||"未提供關係描述"));row.addEventListener("click",()=>selectItem("edge",e.id));edgeList.append(row)});
+ visibleEdges.forEach(e=>{const row=el("button","edge-row"+(selected.type==="edge"&&(Number.isInteger(selected.index)?model.edges[selected.index]===e:selected.id===e.id)?" selected":""));row.type="button";const a=nodeById(e.source_id),b=nodeById(e.target_id);row.append(el("div","edge-path",(a?a.name:e.source_id)+"  →  "+(relationLabel[e.relation_type]||e.relation_type)+"  →  "+(b?b.name:e.target_id)),el("div","edge-description",e.description||"未提供關係描述"));row.addEventListener("click",()=>selectItem("edge",e.id,model.edges.indexOf(e)));edgeList.append(row)});
  if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前深度／方向範圍內沒有可顯示的關係。"));
  root.append(edgeList);
 }
@@ -423,7 +459,7 @@ function renderDetail(){
  if(selected.type==="edge"){const e=Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id);detailEdge(e)}
  else{const n=Number.isInteger(selected.index)?model.nodes[selected.index]:nodeById(selected.id);detailNode(n)}
 }
-function render(){showModelStats();updateFilterSummary();renderDiagnostics();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphControls").hidden=activeView!=="graph";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail()}
+function render(){showModelStats();updateFilterSummary();renderDiagnostics();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphControls").hidden=activeView!=="graph";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail();renderSelectionNotice()}
 function minimalShape(x){
  if(!x||typeof x!=="object"||Array.isArray(x)||!Array.isArray(x.nodes)||!Array.isArray(x.edges)||!Array.isArray(x.conditions)||!Array.isArray(x.sources))throw new Error("檔案需包含 nodes、edges、conditions、sources 四個陣列。");
  for(const [key,items] of [["nodes",x.nodes],["edges",x.edges],["conditions",x.conditions],["sources",x.sources]])items.forEach((obj,index)=>{if(!obj||typeof obj!=="object"||Array.isArray(obj))throw new Error(key+"["+index+"] 必須是物件；原模型未被覆寫。")});
@@ -436,6 +472,11 @@ $("clearFilters").addEventListener("click",()=>{$("search").value="";$("reviewFi
 $("graphScope").addEventListener("change",()=>render());
 $("graphDepth").addEventListener("change",()=>render());
 $("diagToggle").addEventListener("click",()=>{const open=$("diagnosticsPanel").hidden;$("diagnosticsPanel").hidden=!open;$("diagToggle").setAttribute("aria-expanded",String(open))});
+$("refocusSelection").addEventListener("click",()=>{
+ $("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";
+ if(selected.type==="edge"){activeView="graph";$("graphScope").value="both";$("graphDepth").value="1"}else activeView="cards";
+ render();
+});
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
 $("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入："+file.name+"。只做基本讀取檢查，未執行完整 Schema／跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
 $("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
