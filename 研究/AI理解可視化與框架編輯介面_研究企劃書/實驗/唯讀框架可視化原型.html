@@ -22,7 +22,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .tree{display:flex;flex-direction:column;gap:7px}.tree-node{display:flex;align-items:center;gap:8px;text-align:left;background:#101a28;border:1px solid var(--line);border-radius:9px;padding:10px;width:100%;min-width:0}.tree-node:hover,.tree-node.selected{border-color:var(--accent);background:#15313b}.tree-label{min-width:0;flex:1}.tree-name{font-weight:650;display:block;overflow-wrap:anywhere}.tree-meta{display:block;color:var(--muted);font-size:11px;margin-top:2px}.indent{flex:none;width:var(--indent,0px);height:1px;border-top:1px dotted var(--line)}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.nodecard{border:1px solid var(--line);background:#101a28;border-radius:10px;padding:13px;text-align:left;min-width:0}.nodecard.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.nodecard h3{font-size:15px;margin:8px 0}.nodecard p{color:var(--muted);font-size:13px;margin:0 0 10px}
 .badges{display:flex;gap:5px;flex-wrap:wrap}.badge{border:1px solid var(--line);border-radius:100px;padding:2px 7px;font-size:10px;color:var(--muted)}.badge.pending{color:var(--warn);border-color:#67562f}.badge.accepted{color:var(--good);border-color:#31593a}
-.graphwrap{overflow:auto;background:#0f1926;border:1px solid var(--line);border-radius:10px}.graph{display:block;min-width:600px;width:100%;height:auto}.graph-node{cursor:pointer}.graph-node rect{fill:#172638;stroke:#3b536e;stroke-width:1.5}.graph-node.selected rect{stroke:var(--accent);stroke-width:2.5;fill:#153b43}.graph-node text{fill:var(--text);font-size:13px;pointer-events:none}.graph-edge{stroke:#71879f;stroke-width:1.5;opacity:.7;fill:none;cursor:pointer}.graph-edge.selected{stroke:var(--accent);stroke-width:3;opacity:1}.edge-label{fill:var(--muted);font-size:10px;pointer-events:none}.graph-hint{color:var(--muted);font-size:12px;margin:0 0 10px}
+.graphwrap{overflow:auto;background:#0f1926;border:1px solid var(--line);border-radius:10px}.graph{display:block;min-width:600px;width:100%;height:auto}.graph-node{cursor:pointer}.graph-node rect{fill:#172638;stroke:#3b536e;stroke-width:1.5}.graph-node.selected rect{stroke:var(--accent);stroke-width:2.5;fill:#153b43}.graph-node.missing rect{stroke:var(--bad);stroke-width:2;stroke-dasharray:5 4}.graph-node text{fill:var(--text);font-size:13px;pointer-events:none}.graph-edge{stroke:#71879f;stroke-width:1.5;opacity:.7;fill:none;cursor:pointer}.graph-edge.selected{stroke:var(--accent);stroke-width:3;opacity:1}.edge-label{fill:var(--muted);font-size:10px;pointer-events:none}.graph-hint{color:var(--muted);font-size:12px;margin:0 0 10px}
 .graph-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 14px;background:#101a28;border-bottom:1px solid var(--line)}
 .graph-control{min-width:0}.graph-control label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.graph-control select{width:100%;background:#0d1724;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px}
 @media(max-width:520px){.graph-controls{grid-template-columns:1fr}}
@@ -249,7 +249,12 @@ function renderDiagnostics(){
   const item=el("button","diag-item "+(d.severity==="error"?"error":"warning"));item.type="button";
   item.append(el("div","diag-top",""),el("div","diag-message",text),el("div","diag-path",path));
   item.firstChild.append(el("span","",d.severity==="error"?"錯誤":"警告"),el("span","diag-code",d.code));
-  if(d.type==="node"||d.type==="edge")item.addEventListener("click",()=>{selected={type:d.type,id:d.id,index:d.index};activeView=d.type==="edge"?"graph":"cards";render()});
+  if(d.type==="node"||d.type==="edge")item.addEventListener("click",()=>{
+   selected={type:d.type,id:d.id,index:d.index,path:d.field,diagnosticCode:d.code};
+   $("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";
+   $("graphScope").value="both";$("graphDepth").value="1";
+   activeView=d.type==="edge"?"graph":"cards";render();
+  });
   else{item.disabled=true;item.setAttribute("aria-label",text+"；定位："+path)}
   list.append(item);
  });
@@ -312,6 +317,16 @@ function renderGraph(){
  else if(q) {const ids=new Set(candidateNodes.map(n=>n.id));baseEdges=model.edges.filter(e=>ids.has(e.source_id)||ids.has(e.target_id))}
  else baseEdges=model.edges.filter(e=>{const a=nodeById(e.source_id),b=nodeById(e.target_id);return a&&b&&nodePassesFilters(a)&&nodePassesFilters(b)});
  const selectedEdge=selected.type==="edge"?(Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id)):null;
+ if(selectedEdge&&!baseEdges.includes(selectedEdge))baseEdges=[selectedEdge,...baseEdges];
+ const missingEndpointNodes=new Map();
+ baseEdges.forEach(e=>["source_id","target_id"].forEach(field=>{
+  const id=e[field],resolved=typeof id==="string"&&id.trim()&&model.nodes.some(n=>n&&n.id===id);
+  if(!resolved&&!missingEndpointNodes.has(id)){
+   const index=model.edges.indexOf(e),shown=String(id===undefined||id===null||id===""?"(missing)":id);
+   missingEndpointNodes.set(id,{id:id,name:"未解析端點："+shown,function:"此端點未對應到 nodes 陣列中的節點；僅作唯讀視覺佔位。",structural_role:"unassigned",entity_kind:"concept",review_status:"needs_reconfirmation",evidence_status:"insufficient",provenance_refs:[],condition_refs:[],__diagnosticPlaceholder:{edgeIndex:index,field:field}});
+  }
+ }));
+ const graphNode=id=>(typeof id==="string"&&id.trim()?model.nodes.find(n=>n&&n.id===id):undefined)||missingEndpointNodes.get(id);
  let focusId=selected.type==="edge"?(selectedEdge||{}).source_id:selected.id;
  if(q&&edgeMatches.length&&!edgeMatches.some(e=>e.source_id===focusId||e.target_id===focusId))focusId=edgeMatches[0].source_id;
  if(!candidateMap.has(focusId)&&!baseEdges.some(e=>e.source_id===focusId||e.target_id===focusId))focusId=baseEdges.length?baseEdges[0].source_id:(candidateNodes[0]||{}).id;
@@ -338,12 +353,12 @@ function renderGraph(){
   }
   visibleEdges=baseEdges.filter(e=>edgeSet.has(e));
   const ids=new Set(distance.keys());
-  visibleNodes=Array.from(ids).map(id=>nodeById(id)).filter(Boolean);
-  if(!visibleNodes.length&&nodeById(focusId))visibleNodes=[nodeById(focusId)];
+  visibleNodes=Array.from(ids).map(id=>graphNode(id)).filter(Boolean);
+  if(!visibleNodes.length&&graphNode(focusId))visibleNodes=[graphNode(focusId)];
  }else if(scope==="all"){
   const ids=new Set(candidateNodes.map(n=>n.id));
-  visibleEdges=baseEdges.filter(e=>nodeById(e.source_id)&&nodeById(e.target_id));
-  visibleEdges.forEach(e=>{const a=nodeById(e.source_id),b=nodeById(e.target_id);if(a&&!ids.has(a.id)){ids.add(a.id);visibleNodes.push(a)}if(b&&!ids.has(b.id)){ids.add(b.id);visibleNodes.push(b)}});
+  visibleEdges=baseEdges.filter(e=>graphNode(e.source_id)&&graphNode(e.target_id));
+  visibleEdges.forEach(e=>{const a=graphNode(e.source_id),b=graphNode(e.target_id);if(a&&!ids.has(a.id)){ids.add(a.id);visibleNodes.push(a)}if(b&&!ids.has(b.id)){ids.add(b.id);visibleNodes.push(b)}});
  }
  const nodeIds=new Set(visibleNodes.map(n=>n.id));
  visibleEdges=visibleEdges.filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id));
@@ -369,11 +384,12 @@ function renderGraph(){
   const label=document.createElementNS(ns,"text");label.setAttribute("x",(a.x+178+b.x)/2);label.setAttribute("y",(a.y+38+b.y+38)/2-7);label.setAttribute("class","edge-label");label.textContent=relationLabel[e.relation_type]||e.relation_type;svg.append(label);
  });
  visibleNodes.forEach(n=>{
-  const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&selected.id===n.id?" selected":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);
+  const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&selected.id===n.id?" selected":"")+(n.__diagnosticPlaceholder?" missing":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);
   const rect=document.createElementNS(ns,"rect");rect.setAttribute("width","180");rect.setAttribute("height","76");rect.setAttribute("rx","9");g.append(rect);
   const title=document.createElementNS(ns,"text");title.setAttribute("x","10");title.setAttribute("y","24");title.textContent=(n.name||n.id).slice(0,19);g.append(title);
   const meta=document.createElementNS(ns,"text");meta.setAttribute("x","10");meta.setAttribute("y","46");meta.setAttribute("style","fill:#9db0c4;font-size:11px");meta.textContent=(roleLabel[n.structural_role]||"未指定")+" · "+(n.entity_kind||"未知");g.append(meta);
-  g.addEventListener("click",()=>selectItem("node",n.id));g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("node",n.id)}});svg.append(g);
+  const chooseGraphNode=()=>{if(n.__diagnosticPlaceholder){const p=n.__diagnosticPlaceholder,e=model.edges[p.edgeIndex];selected={type:"edge",id:e&&e.id,index:p.edgeIndex,path:"edges["+p.edgeIndex+"]."+p.field,diagnosticCode:"MISSING_EDGE_ENDPOINT"};render()}else selectItem("node",n.id)};
+  g.addEventListener("click",chooseGraphNode);g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();chooseGraphNode()}});svg.append(g);
  });
  const wrap=el("div","graphwrap");wrap.append(svg);root.append(wrap);
  const edgeList=el("div","edge-list");
@@ -381,9 +397,17 @@ function renderGraph(){
  if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前深度／方向範圍內沒有可顯示的關係。"));
  root.append(edgeList);
 }
+function appendDiagnosticContext(parent){
+ if(!selected.path)return;
+ addKV(parent,"診斷代碼",selected.diagnosticCode||"UNKNOWN");
+ addKV(parent,"診斷欄位",selected.path);
+ const back=el("button","btn","返回資料品質提示");back.type="button";
+ back.addEventListener("click",()=>{$("diagnosticsPanel").hidden=false;$("diagToggle").setAttribute("aria-expanded","true");$("diagnosticsPanel").scrollIntoView({behavior:"smooth",block:"nearest"});$("diagToggle").focus()});
+ parent.append(back);
+}
 function detailNode(n){
  const root=$("detailPanel");root.replaceChildren();if(!n){root.append(el("div","empty","找不到所選節點。"));return}
- const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));root.append(sec);
+ const sec=el("div","detail-section");sec.append(el("div","detail-title",n.name||n.id),el("div","detail-id",n.id),el("div","detail-function",n.function||"尚無功能說明"),badges(n));appendDiagnosticContext(sec);root.append(sec);
  const fields=el("div","detail-section");
  [["結構角色",roleLabel[n.structural_role]||n.structural_role],["物件類型",n.entity_kind],["審核狀態",n.review_status],["證據狀態",n.evidence_status],["來源引用",n.provenance_refs],["條件引用",n.condition_refs],["補充說明",n.description],["其他屬性",n.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});
  root.append(fields);
@@ -391,7 +415,7 @@ function detailNode(n){
 }
 function detailEdge(e){
  const root=$("detailPanel");root.replaceChildren();if(!e){root.append(el("div","empty","找不到所選關係。"));return}
- const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));root.append(sec);
+ const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));appendDiagnosticContext(sec);root.append(sec);
  const fields=el("div","detail-section");[["來源端點",e.source_id],["目標端點",e.target_id],["關係類型",e.relation_type],["審核狀態",e.review_status],["證據狀態",e.evidence_status],["來源引用",e.provenance_refs],["條件引用",e.condition_refs],["其他屬性",e.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});root.append(fields);
  const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源／條件"));const sources=(Array.isArray(e.provenance_refs)?e.provenance_refs:[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(s=>refs.append(el("div","tree-node",s.label||s.id),el("div","message",s.excerpt||s.locator||s.id)));(Array.isArray(e.condition_refs)?e.condition_refs:[]).map(condById).filter(Boolean).forEach(c=>refs.append(el("div","fieldlabel",c.name||c.id),el("div","message",c.description||"")));root.append(refs);
 }
