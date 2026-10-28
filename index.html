@@ -91,6 +91,12 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .diff-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
 .diff-impact{border:1px solid #67562f;background:#28251b;border-radius:9px;padding:10px 12px;font-size:12px;margin:10px 0}
 @media(max-width:520px){.diff-values{grid-template-columns:1fr}.diff-stat b{font-size:18px}}
+
+.diff-filter-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;border:1px solid var(--line);border-radius:9px;background:#101a28;padding:9px 11px;margin:10px 0}
+.diff-filter-row label{font-size:12px;color:var(--muted);font-weight:650}
+.diff-filter-row select{width:auto;min-width:180px;max-width:100%;margin:0;flex:1}
+.diff-filter-count{font-size:11px;color:var(--muted)}
+.diff-nav-button{margin-top:8px}
 </style>
 </head>
 <body>
@@ -265,6 +271,7 @@ const DEMO = {
 let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id,index:0}, activeView="tree", filteredIds=null, referenceOrigin=null;
 let comparisonModel=null, comparisonFileName="";
 let alternativeModel=null, alternativeFileName="";
+let diffResultFilter="all", threeWayResultFilter="all";
 let relationRules=null, relationRulesStatus="尚未讀取關係規則";
 let modelSchema=null, modelSchemaStatus="尚未讀取資料契約";
 const $=id=>document.getElementById(id);
@@ -1175,13 +1182,10 @@ function appendDiffRecord(parent,record){
    record.beforePaths[0],record.afterPaths[0],
    Boolean(record.before.obj&&Object.prototype.hasOwnProperty.call(record.before.obj,key)),
    Boolean(record.after.obj&&Object.prototype.hasOwnProperty.call(record.after.obj,key))));
+ }
+ if(record.after&&!Array.isArray(record.after)&&Number.isInteger(record.after.index)&&record.after.obj){
   const actions=el("div","diff-actions"),open=el("button","btn","定位目前版物件");open.type="button";
-  open.addEventListener("click",()=>{
-   if(!record.after)return;
-   selected={type:record.type,id:record.id,index:record.after.index};
-   activeView=record.type==="node"?"cards":record.type==="edge"?"graph":"diff";
-   render();
-  });
+  open.addEventListener("click",()=>focusCurrentObject(record.type,record.after.index,record.after.obj.id));
   actions.append(open);body.append(actions);
  }
  item.append(body);parent.append(item);
@@ -1539,6 +1543,51 @@ function appendThreeWayPathSummaries(parent,record){
   parent.append(el("div","diff-item-meta",label+" 變更路徑："+diffs.map(d=>d.afterPath).slice(0,30).join("、")+(limits.truncated?"（路徑列表達 30 項上限）":"")));
  });
 }
+
+function pairwiseDiffMatchesFilter(record,filter){
+ if(filter==="all")return true;
+ if(filter==="identity")return ["ambiguous","unknown"].includes(record.status);
+ if(filter==="added_removed")return ["added","removed"].includes(record.status);
+ if(filter==="semantic")return record.status==="modified";
+ if(filter==="presentation")return record.status==="presentation";
+ return true;
+}
+function threeWayMatchesFilter(record,filter){
+ if(filter==="all")return true;
+ if(filter==="conflicts")return ["conflict","ambiguous","type_conflict"].includes(record.status);
+ if(filter==="current_only")return record.status.startsWith("current_only");
+ if(filter==="alternative_only")return record.status.startsWith("alternative_only");
+ if(filter==="convergent")return record.status.startsWith("convergent");
+ if(filter==="independent")return record.status==="independent_changes";
+ if(filter==="unknown")return record.status==="unknown";
+ return true;
+}
+function appendDiffFilter(root,id,label,value,options,onChange){
+ const row=el("div","diff-filter-row");
+ row.append(el("label","",label));
+ const select=el("select","");select.id=id;
+ options.forEach(([optionValue,optionLabel])=>{
+  const option=el("option","",optionLabel);option.value=optionValue;select.append(option);
+ });
+ select.value=value;
+ select.addEventListener("change",()=>onChange(select.value));
+ row.append(select);root.append(row);
+ return row;
+}
+function focusCurrentObject(type,index,id){
+ if(!Number.isInteger(index))return;
+ selected={type:type,id:id,index:index};
+ activeView=type==="node"?"cards":type==="edge"?"graph":"diff";
+ render();
+}
+function appendCurrentEntryNavigation(parent,entry,label){
+ if(!entry||!Number.isInteger(entry.index)||!entry.collection||!entry.obj)return;
+ const type=entry.type||DIFF_COLLECTIONS.find(c=>c.key===entry.collection)?.type;
+ if(!type)return;
+ const button=el("button","btn diff-nav-button",label||"定位目前版物件");button.type="button";
+ button.addEventListener("click",()=>focusCurrentObject(type,entry.index,entry.obj.id));
+ parent.append(button);
+}
 function renderThreeWayReport(root){
  const group=el("section","diff-group");
  group.append(el("div","diff-group-title","三方變更／衝突檢視（唯讀，不自動合併）"));
@@ -1548,7 +1597,8 @@ function renderThreeWayReport(root){
  }
  group.append(el("div","diff-intro","三方角色固定為：基準版（比較基準 JSON）、目前版（目前模型 JSON）、另一候選（第三份 JSON）。同一路徑雙方修改成不同值時標為衝突；雙方改到不同路徑時只標為獨立變更，不自動合併。全域 ID 衝突、缺 ID 或跨集合身分變化會停止配對。"));
  const analysis=buildThreeWayAnalysis(comparisonModel,model,alternativeModel);
- const records=analysis.records.filter(record=>record.status!=="unchanged");
+ const allRecords=analysis.records.filter(record=>record.status!=="unchanged");
+ const records=allRecords.filter(record=>threeWayMatchesFilter(record,threeWayResultFilter));
  const counts=analysis.statusCount;
  const stats=el("div","diff-stats");
  [
@@ -1560,8 +1610,18 @@ function renderThreeWayReport(root){
  ].forEach(([label,value])=>{const card=el("div","diff-stat");card.append(el("b","",String(value)),el("span","",label));stats.append(card)});
  group.append(stats);
  analysis.modelWarnings.forEach(message=>group.append(el("div","message error",message)));
- group.append(el("div","message","基準檔："+comparisonFileName+" · 目前模型："+String(model.title||model.model_id||"目前模型")+" · 另一候選檔："+alternativeFileName+"。三方待檢視項目："+records.length+"；相同的三方語意狀態不逐項展開。這只是衝突候選分析，沒有驗證可合併性，也不會寫入模型。"));
- if(!records.length){group.append(el("div","empty","三份輸入在本功能檢查範圍內沒有發現差異或衝突；不代表正式 Schema、關係規則或完整驗證已通過。"));root.append(group);return}
+ appendDiffFilter(group,"threeWayResultFilter","三方結果篩選",threeWayResultFilter,[
+  ["all","全部變更／待判"],
+  ["conflicts","衝突／身分歧義"],
+  ["current_only","目前版單側變更"],
+  ["alternative_only","另一候選單側變更"],
+  ["convergent","兩側相同結果"],
+  ["independent","不同路徑的獨立修改"],
+  ["unknown","身分不明"]
+ ],value=>{threeWayResultFilter=value;renderDiff()});
+ group.append(el("div","message","基準檔："+comparisonFileName+" · 目前模型："+String(model.title||model.model_id||"目前模型")+" · 另一候選檔："+alternativeFileName+"。總變更／待判 "+allRecords.length+" 項；目前篩選顯示 "+records.length+" 項。這只是衝突候選分析，沒有驗證可合併性，也不會寫入模型。"));
+ if(!allRecords.length){group.append(el("div","empty","三份輸入在本功能檢查範圍內沒有發現差異或衝突；不代表正式 Schema、關係規則或完整驗證已通過。"));root.append(group);return}
+ if(!records.length){group.append(el("div","empty","目前篩選條件沒有符合項目；可改用「全部變更／待判」。"));root.append(group);return}
  const list=el("div","diff-list"),maxRecords=200;
  records.slice(0,maxRecords).forEach(record=>{
   const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
@@ -1572,6 +1632,7 @@ function renderThreeWayReport(root){
    [["基準版",record.baseItems],["目前版",record.currentItems],["另一候選",record.alternativeItems]].forEach(([side,items])=>{
     if(!items||!items.length)return;
     body.append(el("div","diff-item-meta",side+"："+items.map(x=>x.path+" · "+x.collection).join("、")));
+    if(side==="目前版")items.forEach(item=>appendCurrentEntryNavigation(body,item,"定位目前版候選 · "+item.path));
    });
   }else if(record.status==="type_conflict"){
    [["基準版",record.base],["目前版",record.current],["另一候選",record.alternative]].forEach(([side,entry])=>{
@@ -1595,6 +1656,9 @@ function renderThreeWayReport(root){
     appendThreeWayPathSummaries(body,record);
    }
    if(record.status==="conflict"&&!record.conflicts.length)body.append(el("div","message error","此物件存在衝突，但差異路徑已超出展開限制；需檢視三份原始物件。"));
+  }
+  if(record.current&&record.current.collection&&Number.isInteger(record.current.index)&&record.current.obj){
+   appendCurrentEntryNavigation(body,record.current,"定位目前版物件 · "+record.current.path);
   }
   card.append(head,body);list.append(card);
  });
@@ -1625,6 +1689,13 @@ function renderDiff(){
  root.append(statGrid);
  root.append(el("div","message","基準版："+comparisonFileName+"。目前版："+(model.title||model.model_id||"目前載入模型")+
   "。相同語意物件："+results.reduce((n,r)=>n+r.unchanged,0)+"；語意比較使用相同集合內唯一有效 ID。"));
+ appendDiffFilter(root,"diffResultFilter","兩方差異篩選",diffResultFilter,[
+  ["all","全部差異／待判"],
+  ["identity","身分歧義／未知"],
+  ["added_removed","新增／刪除"],
+  ["semantic","語意欄位修改"],
+  ["presentation","僅版面變更"]
+ ],value=>{diffResultFilter=value;renderDiff()});
  const globalCollisionSection=el("section","diff-group");
  globalCollisionSection.append(el("div","diff-group-title","全域 ID 唯一性診斷"));
  globalCollisionSection.append(el("div","diff-impact","正式契約的物件身分必須全域可辨識，不只是在同一集合中唯一。若任一版本存在跨集合重複或同集合重複，該 ID 在兩版本之間一律不作可靠配對，相關新增／刪除判定降為「身分歧義」。本診斷只報告，不修正或重新編號物件。"));
@@ -1660,12 +1731,17 @@ function renderDiff(){
    Object.prototype.hasOwnProperty.call(comparisonModel,key),Object.prototype.hasOwnProperty.call(model,key)));
   box.append(body);group.append(box);root.append(group);
  }
+ let pairwiseVisibleCount=0;
  results.forEach(result=>{
   if(!result.records.length)return;
-  const group=el("section","diff-group");group.append(el("div","diff-group-title",result.label+" · "+result.records.length+" 項差異／待判"));
-  const list=el("div","diff-list");result.records.forEach(record=>appendDiffRecord(list,record));
+  const visibleRecords=result.records.filter(record=>pairwiseDiffMatchesFilter(record,diffResultFilter));
+  if(!visibleRecords.length)return;
+  pairwiseVisibleCount+=visibleRecords.length;
+  const group=el("section","diff-group");group.append(el("div","diff-group-title",result.label+" · 顯示 "+visibleRecords.length+"／"+result.records.length+" 項"));
+  const list=el("div","diff-list");visibleRecords.forEach(record=>appendDiffRecord(list,record));
   group.append(list);root.append(group);
  });
+ if(!pairwiseVisibleCount)root.append(el("div","empty","目前兩方差異篩選沒有符合項目；可改用「全部差異／待判」。"));
  const impact=el("section","diff-group");
  impact.append(el("div","diff-group-title","依關係規則登錄表推算的影響候選"));
  if(!relationRules){
