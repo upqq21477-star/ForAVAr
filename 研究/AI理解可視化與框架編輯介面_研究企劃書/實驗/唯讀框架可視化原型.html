@@ -23,6 +23,9 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.nodecard{border:1px solid var(--line);background:#101a28;border-radius:10px;padding:13px;text-align:left;min-width:0}.nodecard.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.nodecard h3{font-size:15px;margin:8px 0}.nodecard p{color:var(--muted);font-size:13px;margin:0 0 10px}
 .badges{display:flex;gap:5px;flex-wrap:wrap}.badge{border:1px solid var(--line);border-radius:100px;padding:2px 7px;font-size:10px;color:var(--muted)}.badge.pending{color:var(--warn);border-color:#67562f}.badge.accepted{color:var(--good);border-color:#31593a}
 .graphwrap{overflow:auto;background:#0f1926;border:1px solid var(--line);border-radius:10px}.graph{display:block;min-width:600px;width:100%;height:auto}.graph-node{cursor:pointer}.graph-node rect{fill:#172638;stroke:#3b536e;stroke-width:1.5}.graph-node.selected rect{stroke:var(--accent);stroke-width:2.5;fill:#153b43}.graph-node text{fill:var(--text);font-size:13px;pointer-events:none}.graph-edge{stroke:#71879f;stroke-width:1.5;opacity:.7;fill:none;cursor:pointer}.graph-edge.selected{stroke:var(--accent);stroke-width:3;opacity:1}.edge-label{fill:var(--muted);font-size:10px;pointer-events:none}.graph-hint{color:var(--muted);font-size:12px;margin:0 0 10px}
+.graph-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 14px;background:#101a28;border-bottom:1px solid var(--line)}
+.graph-control{min-width:0}.graph-control label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.graph-control select{width:100%;background:#0d1724;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px}
+@media(max-width:520px){.graph-controls{grid-template-columns:1fr}}
 .edge-list{display:flex;flex-direction:column;gap:8px;margin-top:13px}.edge-row{width:100%;text-align:left;border:1px solid var(--line);background:#101a28;border-radius:8px;padding:10px}.edge-row.selected{border-color:var(--accent)}.edge-path{font-weight:650;font-size:13px}.edge-description{color:var(--muted);font-size:12px;margin-top:4px}
 .detail-section{margin-bottom:16px}.detail-title{font-size:17px;line-height:1.35;font-weight:750;overflow-wrap:anywhere}.detail-id{font:11px ui-monospace,monospace;color:var(--muted);overflow-wrap:anywhere;margin-top:5px}.detail-function{margin:12px 0;padding:10px;border-left:3px solid var(--accent);background:#101a28;border-radius:0 7px 7px 0}.kv{border-top:1px solid var(--line);padding:8px 0;display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}.empty{padding:36px 15px;text-align:center;color:var(--muted)}.foot{padding:10px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
 .status{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}.status .dot{background:var(--warn)}.message{font-size:12px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}.message.error{color:var(--bad)}.fileinput{display:none}
@@ -97,6 +100,21 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
         <button class="tab" type="button" data-view="cards" role="tab" aria-selected="false">節點卡片</button>
       </div>
       <div id="viewCount" class="status"><span class="dot"></span><span>示例資料</span></div>
+    </div>
+    <div id="graphControls" class="graph-controls" hidden>
+      <div class="graph-control"><label for="graphScope">關係方向與範圍</label><select id="graphScope">
+        <option value="both">上游＋下游</option>
+        <option value="upstream">只看上游</option>
+        <option value="downstream">只看下游</option>
+        <option value="all">顯示全部關係</option>
+      </select></div>
+      <div class="graph-control"><label for="graphDepth">最大關係深度</label><select id="graphDepth">
+        <option value="1">1 層（最局部）</option>
+        <option value="2">2 層</option>
+        <option value="3">3 層</option>
+        <option value="all">不限制</option>
+      </select></div>
+      <div id="graphScopeSummary" class="message" aria-live="polite" style="grid-column:1/-1">以上游與下游各一層顯示。</div>
     </div>
     <div id="treeView" class="view"></div>
     <div id="graphView" class="view" hidden></div>
@@ -227,24 +245,62 @@ function renderCards(){
 }
 function renderGraph(){
  const root=$("graphView");root.replaceChildren();
- root.append(el("p","graph-hint","可搜尋節點或關係。選取節點查看屬性；選取關係線或關係列查看端點、條件與來源。關係結果可保留端點作為閱讀脈絡。"));
+ root.append(el("p","graph-hint","選取節點後，可切換只看上游、只看下游或雙向關係，並控制展開層數。搜尋關係時，相關端點會保留作為脈絡。"));
  const q=$("search").value.trim().toLowerCase();
  const directNodes=matchingNodes(), edgeMatches=matchingEdges();
- const nodeMap=new Map(directNodes.map(n=>[n.id,n]));
- if(q&&edgeMatches.length){
-  edgeMatches.forEach(e=>[e.source_id,e.target_id].forEach(id=>{const n=nodeById(id);if(n&&!nodeMap.has(id))nodeMap.set(id,n)}));
+ const candidateMap=new Map(directNodes.map(n=>[n.id,n]));
+ if(q&&edgeMatches.length) edgeMatches.forEach(e=>[e.source_id,e.target_id].forEach(id=>{const n=nodeById(id);if(n&&!candidateMap.has(id))candidateMap.set(id,n)}));
+ const candidateNodes=Array.from(candidateMap.values());
+ let baseEdges;
+ if(q&&edgeMatches.length) baseEdges=edgeMatches;
+ else if(q) {const ids=new Set(candidateNodes.map(n=>n.id));baseEdges=model.edges.filter(e=>ids.has(e.source_id)||ids.has(e.target_id))}
+ else baseEdges=model.edges.filter(e=>{const a=nodeById(e.source_id),b=nodeById(e.target_id);return a&&b&&nodePassesFilters(a)&&nodePassesFilters(b)});
+ let focusId=selected.type==="edge"?(edgeById(selected.id)||{}).source_id:selected.id;
+ if(q&&edgeMatches.length&&!edgeMatches.some(e=>e.source_id===focusId||e.target_id===focusId))focusId=edgeMatches[0].source_id;
+ if(!candidateMap.has(focusId)&&!baseEdges.some(e=>e.source_id===focusId||e.target_id===focusId))focusId=baseEdges.length?baseEdges[0].source_id:(candidateNodes[0]||{}).id;
+ const scope=$("graphScope").value, rawDepth=$("graphDepth").value;
+ const depthLimit=rawDepth==="all"?Number.POSITIVE_INFINITY:Math.max(1,Number(rawDepth)||1);
+ let visibleEdges=baseEdges.slice(), visibleNodes=candidateNodes.slice();
+ if(scope!=="all"&&focusId){
+  const distance=new Map([[focusId,0]]), queue=[focusId], edgeSet=new Set();
+  while(queue.length){
+   const current=queue.shift(), d=distance.get(current);
+   if(d>=depthLimit)continue;
+   baseEdges.forEach(e=>{
+    let next=null;
+    if(scope==="upstream"&&e.target_id===current)next=e.source_id;
+    else if(scope==="downstream"&&e.source_id===current)next=e.target_id;
+    else if(scope==="both"){
+     if(e.source_id===current)next=e.target_id;
+     else if(e.target_id===current)next=e.source_id;
+    }
+    if(next===null)return;
+    edgeSet.add(e);
+    if(!distance.has(next)){distance.set(next,d+1);queue.push(next)}
+   });
+  }
+  visibleEdges=baseEdges.filter(e=>edgeSet.has(e));
+  const ids=new Set(distance.keys());
+  visibleNodes=Array.from(ids).map(id=>nodeById(id)).filter(Boolean);
+  if(!visibleNodes.length&&nodeById(focusId))visibleNodes=[nodeById(focusId)];
+ }else if(scope==="all"){
+  const ids=new Set(candidateNodes.map(n=>n.id));
+  visibleEdges=baseEdges.filter(e=>nodeById(e.source_id)&&nodeById(e.target_id));
+  visibleEdges.forEach(e=>{const a=nodeById(e.source_id),b=nodeById(e.target_id);if(a&&!ids.has(a.id)){ids.add(a.id);visibleNodes.push(a)}if(b&&!ids.has(b.id)){ids.add(b.id);visibleNodes.push(b)}});
  }
- const nodes=Array.from(nodeMap.values()),nodeIds=new Set(nodes.map(n=>n.id));
- if(!nodes.length){root.append(el("div","empty","沒有符合目前搜尋與狀態篩選的節點或可定位關係。"));return}
- const visibleEdges=(q&&edgeMatches.length?edgeMatches:model.edges.filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id))).filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id));
- const depth=new Map(), containsChildren=new Map(nodes.map(n=>[n.id,[]])), parents=new Map();
- model.edges.filter(e=>e.relation_type==="contains"&&nodeById(e.source_id)&&nodeById(e.target_id)).forEach(e=>{if(!parents.has(e.target_id))parents.set(e.target_id,e.source_id);if(containsChildren.has(e.source_id))containsChildren.get(e.source_id).push(e.target_id)});
- let roots=nodes.filter(n=>!parents.has(n.id)||!nodeIds.has(parents.get(n.id)));if(!roots.length)roots=[nodes[0]];
+ const nodeIds=new Set(visibleNodes.map(n=>n.id));
+ visibleEdges=visibleEdges.filter(e=>nodeIds.has(e.source_id)&&nodeIds.has(e.target_id));
+ if(!visibleNodes.length){root.append(el("div","empty","沒有符合目前搜尋、狀態與關係範圍的節點。"));$("graphScopeSummary").textContent="此條件組合沒有可顯示的節點。";return}
+ const scopeLabel={all:"全部關係",upstream:"上游",downstream:"下游",both:"上游＋下游"}[scope]||scope;
+ $("graphScopeSummary").textContent="目前範圍："+scopeLabel+"；深度："+(rawDepth==="all"?"不限制":rawDepth+" 層")+"；顯示 "+visibleNodes.length+" 個節點、"+visibleEdges.length+" 條關係。"+(focusId?" 聚焦："+((nodeById(focusId)||{}).name||focusId):"");
+ const depth=new Map(),parents=new Map();
+ visibleEdges.filter(e=>e.relation_type==="contains").forEach(e=>{if(!parents.has(e.target_id))parents.set(e.target_id,e.source_id)});
+ let roots=visibleNodes.filter(n=>!parents.has(n.id)||!nodeIds.has(parents.get(n.id)));if(!roots.length)roots=[visibleNodes[0]];
  roots.forEach(n=>depth.set(n.id,0));let changed=true;
- for(let k=0;k<nodes.length&&changed;k++){changed=false;model.edges.filter(e=>e.relation_type==="contains").forEach(e=>{if(depth.has(e.source_id)&&nodeIds.has(e.target_id)&&!depth.has(e.target_id)){depth.set(e.target_id,Math.min(4,depth.get(e.source_id)+1));changed=true}})}
- nodes.forEach(n=>{if(!depth.has(n.id))depth.set(n.id,0)});
- const groups={};nodes.forEach(n=>{const d=depth.get(n.id);(groups[d]||(groups[d]=[])).push(n)});
- const maxDepth=Math.max.apply(null,nodes.map(n=>depth.get(n.id))),colGap=250,rowGap=110,width=200+maxDepth*colGap+220,maxRows=Math.max.apply(null,Object.values(groups).map(g=>g.length)),height=Math.max(330,maxRows*rowGap+100);
+ for(let k=0;k<visibleNodes.length&&changed;k++){changed=false;visibleEdges.filter(e=>e.relation_type==="contains").forEach(e=>{if(depth.has(e.source_id)&&nodeIds.has(e.target_id)&&!depth.has(e.target_id)){depth.set(e.target_id,Math.min(4,depth.get(e.source_id)+1));changed=true}})}
+ visibleNodes.forEach(n=>{if(!depth.has(n.id))depth.set(n.id,0)});
+ const groups={};visibleNodes.forEach(n=>{const d=depth.get(n.id);(groups[d]||(groups[d]=[])).push(n)});
+ const maxDepth=Math.max.apply(null,visibleNodes.map(n=>depth.get(n.id))),colGap=250,rowGap=110,width=200+maxDepth*colGap+220,maxRows=Math.max.apply(null,Object.values(groups).map(g=>g.length)),height=Math.max(330,maxRows*rowGap+100);
  const pos={};Object.keys(groups).forEach(d=>groups[d].forEach((n,i)=>{pos[n.id]={x:55+Number(d)*colGap,y:45+i*rowGap}}));
  const ns="http://www.w3.org/2000/svg",svg=document.createElementNS(ns,"svg");svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("class","graph");svg.setAttribute("role","group");svg.setAttribute("aria-label","可互動節點與關係圖");
  const defs=document.createElementNS(ns,"defs"),marker=document.createElementNS(ns,"marker");marker.setAttribute("id","arrow");marker.setAttribute("markerWidth","8");marker.setAttribute("markerHeight","8");marker.setAttribute("refX","6");marker.setAttribute("refY","3");marker.setAttribute("orient","auto");const arrow=document.createElementNS(ns,"path");arrow.setAttribute("d","M0,0 L6,3 L0,6 Z");arrow.setAttribute("fill","#71879f");marker.append(arrow);defs.append(marker);svg.append(defs);
@@ -255,7 +311,7 @@ function renderGraph(){
   const hit=document.createElementNS(ns,"path");hit.setAttribute("d",d);hit.setAttribute("fill","none");hit.setAttribute("stroke","transparent");hit.setAttribute("stroke-width","16");hit.setAttribute("tabindex","0");hit.setAttribute("role","button");hit.setAttribute("aria-label","選取關係："+(relationLabel[e.relation_type]||e.relation_type));hit.style.cursor="pointer";hit.addEventListener("click",()=>selectItem("edge",e.id));hit.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectItem("edge",e.id)}});svg.append(hit);
   const label=document.createElementNS(ns,"text");label.setAttribute("x",(a.x+178+b.x)/2);label.setAttribute("y",(a.y+38+b.y+38)/2-7);label.setAttribute("class","edge-label");label.textContent=relationLabel[e.relation_type]||e.relation_type;svg.append(label);
  });
- nodes.forEach(n=>{
+ visibleNodes.forEach(n=>{
   const p=pos[n.id],g=document.createElementNS(ns,"g");g.setAttribute("class","graph-node"+(selected.type==="node"&&selected.id===n.id?" selected":""));g.setAttribute("transform","translate("+p.x+" "+p.y+")");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","選取 "+n.name);
   const rect=document.createElementNS(ns,"rect");rect.setAttribute("width","180");rect.setAttribute("height","76");rect.setAttribute("rx","9");g.append(rect);
   const title=document.createElementNS(ns,"text");title.setAttribute("x","10");title.setAttribute("y","24");title.textContent=(n.name||n.id).slice(0,19);g.append(title);
@@ -265,7 +321,7 @@ function renderGraph(){
  const wrap=el("div","graphwrap");wrap.append(svg);root.append(wrap);
  const edgeList=el("div","edge-list");
  visibleEdges.forEach(e=>{const row=el("button","edge-row"+(selected.type==="edge"&&selected.id===e.id?" selected":""));row.type="button";const a=nodeById(e.source_id),b=nodeById(e.target_id);row.append(el("div","edge-path",(a?a.name:e.source_id)+"  →  "+(relationLabel[e.relation_type]||e.relation_type)+"  →  "+(b?b.name:e.target_id)),el("div","edge-description",e.description||"未提供關係描述"));row.addEventListener("click",()=>selectItem("edge",e.id));edgeList.append(row)});
- if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前範圍內沒有可顯示的關係。"));
+ if(!edgeList.childElementCount)edgeList.append(el("div","empty","目前深度／方向範圍內沒有可顯示的關係。"));
  root.append(edgeList);
 }
 function detailNode(n){
@@ -283,15 +339,17 @@ function detailEdge(e){
  const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源／條件"));const sources=(e.provenance_refs||[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(s=>refs.append(el("div","tree-node",s.label||s.id),el("div","message",s.excerpt||s.locator||s.id)));(e.condition_refs||[]).map(condById).filter(Boolean).forEach(c=>refs.append(el("div","fieldlabel",c.name||c.id),el("div","message",c.description||"")));root.append(refs);
 }
 function renderDetail(){if(selected.type==="edge")detailEdge(edgeById(selected.id));else detailNode(nodeById(selected.id))}
-function render(){showModelStats();updateFilterSummary();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail()}
+function render(){showModelStats();updateFilterSummary();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphControls").hidden=activeView!=="graph";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail()}
 function minimalShape(x){if(!x||typeof x!=="object"||!Array.isArray(x.nodes)||!Array.isArray(x.edges)||!Array.isArray(x.conditions)||!Array.isArray(x.sources))throw new Error("檔案需包含 nodes、edges、conditions、sources 四個陣列。");const ids=new Set();x.nodes.forEach(n=>{if(!n||typeof n.id!=="string"||!n.id||typeof n.name!=="string")throw new Error("每個節點至少要有字串 id 與 name。");if(ids.has(n.id))throw new Error("節點 ID 重複："+n.id);ids.add(n.id)});return true}
 $("search").addEventListener("input",()=>render());
 $("reviewFilter").addEventListener("change",()=>render());
 $("evidenceFilter").addEventListener("change",()=>render());
 $("clearFilters").addEventListener("click",()=>{$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";render()});
+$("graphScope").addEventListener("change",()=>render());
+$("graphDepth").addEventListener("change",()=>render());
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
-$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("loadMessage").className="message";$("loadMessage").textContent="已載入："+file.name+"。只做基本讀取檢查，未執行完整 Schema／跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
-$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
+$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入："+file.name+"。只做基本讀取檢查，未執行完整 Schema／跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
+$("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
 render();
 })();
 </script>
