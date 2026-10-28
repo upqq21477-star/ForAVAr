@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, WU-C0-15 cross-view position identity and root entry, WU-C0-16 GitHub Pages reachability, WU-C0-17 read-only two-model version diff, and WU-C0-18 registry-driven impact candidates implemented. JavaScript COMPILE_OK; WU-C0-17 diff core 10/10 local simulations passed and WU-C0-18 impact core 10/10 local simulations passed. Browser interaction smoke test remains NOT_RUN; overall system E4 and user acceptance remain NOT_STARTED.",
+    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, WU-C0-15 cross-view position identity and root entry, WU-C0-16 GitHub Pages reachability, WU-C0-17 read-only two-model version diff, WU-C0-18 registry-driven impact candidates, WU-C0-19 global ID collision diagnosis, and WU-C0-20 model contract compatibility / file-read recovery implemented. JavaScript COMPILE_OK. Local logic simulations: WU-C0-17 10/10, WU-C0-18 10/10, WU-C0-19 11/11, WU-C0-20 10/10. Browser interaction smoke test remains NOT_RUN; overall system E4 and user acceptance remain NOT_STARTED.",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -46,7 +46,7 @@
         "UNRESOLVED_CONDITION_REF",
         "CLAIM_WITHOUT_SOURCE"
       ],
-      "browser_interaction": "NOT_RUN; deliberately deferred until remaining read-only functionality is implemented",
+      "browser_interaction": "NOT_RUN; intentionally deferred until remaining read-only diff/impact functionality is implemented",
       "full_schema_validation": "BLOCKED / NOT_RUN",
       "cross_object_validation": "PARTIAL_LOCAL_DIAGNOSTICS_ONLY",
       "persistence_or_writeback": false,
@@ -101,7 +101,7 @@
       "visibility": "public",
       "public_scope_warning": "All tracked files in this public repository are publicly viewable, including docs/, runtime/, 研究/, and 進度/; not only the Pages homepage.",
       "no_cost_route": "GitHub Pages is enabled and reachable; no paid plan used.",
-      "next_action": "Continue remaining read-only diff/impact functionality first. Perform a bounded real-browser smoke test only after those functional slices are complete; keep browser_interaction NOT_RUN until actual browser actions are executed."
+      "next_action": "Continue remaining read-only version diff/impact functionality, including nested-field path precision, then perform one bounded real-browser smoke test. Browser actions must remain NOT_RUN until actually executed."
     },
     "version_diff": {
       "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
@@ -185,6 +185,96 @@
             "changed edge endpoints remain separately flagged for review"
           ]
         }
+      },
+      "e3_simulation_summary": {
+        "status": "LOCAL_SIMULATION_PASS",
+        "WU-C0-17": {
+          "passed": 10,
+          "total": 10
+        },
+        "WU-C0-18": {
+          "passed": 10,
+          "total": 10
+        },
+        "WU-C0-19": {
+          "passed": 11,
+          "total": 11
+        },
+        "WU-C0-20": {
+          "passed": 10,
+          "total": 10
+        },
+        "limitation": "These are local pure-logic simulations of helpers extracted from committed HTML, not browser interactions, full JSON Schema validation, runtime validator results or overall E4 acceptance."
+      },
+      "global_id_integrity": {
+        "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
+        "source": "index.html",
+        "blob_sha": "294bc221a40aeba3441e5124bb89336a7efa50fa",
+        "behavior": [
+          "Collects valid string IDs across nodes, edges, conditions and sources in each model",
+          "Reports same-collection duplicate IDs and cross-collection ID reuse with every collection path",
+          "If either baseline or current model has a global ID collision, affected identities are no longer classified as confident additions/removals/modifications",
+          "Does not renumber, merge or mutate records"
+        ],
+        "e3_syntax": "COMPILE_OK",
+        "e3_local_simulation": {
+          "result": "PASS",
+          "passed": 11,
+          "total": 11,
+          "cases": [
+            "cross-collection ID collision and all paths",
+            "cross-collection collision prevents confident semantic pairing",
+            "colliding source identity also ambiguous",
+            "baseline-only collision retained",
+            "same-collection duplicates recognized",
+            "unique global ID pairs normally",
+            "normal unique-ID change remains modified",
+            "missing IDs remain unknown",
+            "duplicate current version is not called an addition",
+            "multiple collection paths preserved",
+            "source model immutability"
+          ]
+        }
+      },
+      "model_contract_compatibility": {
+        "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
+        "source": "index.html",
+        "blob_sha": "21d215c3574abedc90bf1dc7881057b9e12de434",
+        "schema_path": "研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/ai-understanding-model.schema.json",
+        "schema_sha": "c79d7f7535ac38f6046e1f6a67a94c3e6a24f848",
+        "checks": [
+          "Loads existing JSON Schema from the same origin and derives required/top-level type/enum reminders instead of duplicating the metadata contract in the UI",
+          "Warns on missing required metadata and incorrect top-level type/enum",
+          "Highlights schema_version mismatch without attempting migration",
+          "Highlights model_id mismatch as likely cross-model comparison, not proof of same-model revision history",
+          "Highlights model_state changes without deciding whether the state transition is authorized",
+          "Warns and blocks per-model impact calculation if rule_profile is missing or mismatched with the loaded registry",
+          "Current-model and comparison-baseline FileReader error/abort paths report failure without overwriting the previous loaded model"
+        ],
+        "limitations": [
+          "Not complete Draft 2020-12 validation",
+          "Not full cross-object validation",
+          "No model migration or edit/writeback",
+          "Schema / rule-registry fetching and real file-picker behavior remain browser smoke-test NOT_RUN"
+        ],
+        "e3_syntax": "COMPILE_OK",
+        "e3_local_simulation": {
+          "result": "PASS",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            "matching contract metadata",
+            "schema version mismatch warning",
+            "different model IDs warning",
+            "missing required metadata",
+            "invalid model_state enum",
+            "rule_profile mismatch warning",
+            "missing rule_profile blocks impact calculation",
+            "profile mismatch blocks impact calculation",
+            "matching profile permits impact calculation",
+            "model_state difference is not treated as a validated transition"
+          ]
+        }
       }
     }
   },
@@ -237,7 +327,7 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "ca744c1df335a79241b4e1bc4c017bc218492b26"
+      "sha": "09d687a11296a193610b622a3df1f60afd90c20b"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
@@ -257,12 +347,12 @@
     {
       "role": "read_only_visualization_prototype",
       "path": "index.html",
-      "sha": "61e94ad29dfd0216330c25f7a36e836cb07e9a7b"
+      "sha": "21d215c3574abedc90bf1dc7881057b9e12de434"
     },
     {
       "role": "repository_entry_readme",
       "path": "README.md",
-      "sha": "254fed794f5497c225c0e70f5fa2cac8b38abbc0"
+      "sha": "7733fc4b0efb49a6c0387392ddf0fc7a6de347ec"
     }
   ],
   "test_fixtures": {
