@@ -1225,7 +1225,7 @@ function calculateRuleImpactForModel(side,source,seedIds,registry){
  const nodes=source.nodes||[],edges=source.edges||[],nodeCounts=new Map();
  nodes.forEach(node=>{if(!validDiffId(node))return;nodeCounts.set(node.id,(nodeCounts.get(node.id)||0)+1)});
  const candidates=new Map(),warnings=new Set(),queue=[];
- seedIds.forEach(id=>queue.push({id,root:id,depth:0,transitiveOnly:false,path:[]}));
+ seedIds.forEach(id=>queue.push({id,root:id,depth:0,transitiveOnly:false,path:[],pathTruncated:false}));
  const visited=new Set(),maxStates=5000;let statesProcessed=0;
  while(queue.length&&statesProcessed<maxStates){
   const state=queue.shift(),visitKey=state.id+"|"+state.root+"|"+(state.transitiveOnly?"T":"D");
@@ -1260,10 +1260,16 @@ function calculateRuleImpactForModel(side,source,seedIds,registry){
     if(priority[mode]>priority[candidate.mode])candidate.mode=mode;
     candidate.depth=Math.min(candidate.depth,state.depth+1);
     if(!candidate.roots.includes(state.root))candidate.roots.push(state.root);
-    const path=[...state.path,pathStep];
-    const pathLabel=path.map(p=>"edges["+p.edgeIndex+"] "+p.from+" —"+p.relationType+"→ "+p.to).join(" / ");
-    if(!candidate.paths.some(p=>p.label===pathLabel))candidate.paths.push({label:pathLabel,steps:path});
-    if(policy.includes("transitive"))queue.push({id:neighborId,root:state.root,depth:state.depth+1,transitiveOnly:true,path:path});
+    const maxStoredPathSteps=20,maxStoredPathsPerCandidate=20;
+    let path=[...state.path,pathStep];
+    const pathTruncated=Boolean(state.pathTruncated||path.length>maxStoredPathSteps);
+    if(path.length>maxStoredPathSteps)path=path.slice(-maxStoredPathSteps);
+    const pathLabel=(pathTruncated?"…前段省略… / ":"")+path.map(p=>"edges["+p.edgeIndex+"] "+p.from+" —"+p.relationType+"→ "+p.to).join(" / ");
+    if(!candidate.paths.some(p=>p.label===pathLabel)){
+     if(candidate.paths.length<maxStoredPathsPerCandidate)candidate.paths.push({label:pathLabel,steps:path,truncated:pathTruncated});
+     else candidate.pathsOmitted=true;
+    }
+    if(policy.includes("transitive"))queue.push({id:neighborId,root:state.root,depth:state.depth+1,transitiveOnly:true,path:path,pathTruncated:pathTruncated});
    };
    if(sourceMatch)checkSide("source_changed",edge.target_id);
    if(targetMatch)checkSide("target_changed",edge.source_id);
@@ -1623,6 +1629,41 @@ function capReviewCandidates(items,maxItems=120){
  return {items:items.slice(0,maxItems),total:items.length,omitted:Math.max(0,items.length-maxItems)};
 }
 
+
+function impactPathEdgeIndex(step,source){
+ if(!step||!Number.isInteger(step.edgeIndex)||!source||!Array.isArray(source.edges))return null;
+ const edge=source.edges[step.edgeIndex];
+ if(!edge||typeof edge!=="object")return null;
+ if(edge.source_id!==step.from||edge.target_id!==step.to||edge.relation_type!==step.relationType)return null;
+ return step.edgeIndex;
+}
+function appendImpactPathSteps(parent,path,side,currentModel){
+ const steps=Array.isArray(path&&path.steps)?path.steps:[];
+ if(!steps.length){parent.append(el("div","message",path&&path.label||"未提供可定位路徑"));return}
+ const block=el("div","diff-item"),body=el("div","diff-body");
+ body.append(el("div","diff-item-meta",(side==="目前版"?"目前版候選路徑":"基準版候選路徑")+" · "+steps.length+" 個保留步驟"+(path.truncated?" · 前段路徑已省略":"")));
+ const maxVisibleSteps=8;
+ steps.slice(0,maxVisibleSteps).forEach(step=>{
+  const row=el("div","edge-row");
+  const relationName=relationLabel[step.relationType]||step.relationType||"未知關係";
+  row.append(el("div","edge-path","edges["+step.edgeIndex+"] "+String(step.from)+" —"+String(relationName)+"→ "+String(step.to)));
+  if(side==="目前版"){
+   const edgeIndex=impactPathEdgeIndex(step,currentModel);
+   if(Number.isInteger(edgeIndex)){
+    const button=el("button","btn diff-nav-button","定位這條目前版關係");button.type="button";
+    button.addEventListener("click",()=>{
+     const edge=currentModel.edges[edgeIndex];
+     selected={type:"edge",id:edge.id,index:edgeIndex};activeView="graph";render();
+    });
+    row.append(button);
+   }
+  }
+  body.append(row);
+ });
+ if(steps.length>maxVisibleSteps)body.append(el("div","message error","此路徑保留 "+steps.length+" 個步驟；為限制畫面負載只展開前 "+maxVisibleSteps+" 步，仍有 "+(steps.length-maxVisibleSteps)+" 步未展開。"));
+ block.append(body);parent.append(block);
+}
+
 function renderThreeWayReport(root){
  const group=el("section","diff-group");
  group.append(el("div","diff-group-title","三方變更／衝突檢視（唯讀，不自動合併）"));
@@ -1810,9 +1851,9 @@ function renderDiff(){
      const modeLabel={transitive:"遞迴依賴候選",direct:"直接複核候選",advisory:"建議複核候選"}[candidate.mode]||candidate.mode;
      head.append(el("div","diff-item-title",candidate.id),el("span","diff-badge "+(candidate.mode==="advisory"?"presentation":"modified"),modeLabel));
      body.append(el("div","diff-item-meta","深度："+candidate.depth+" · 變更起點："+candidate.roots.join("、")));
-     const maxPathsPerCandidate=20;
-     candidate.paths.slice(0,maxPathsPerCandidate).forEach(path=>body.append(el("div","message",path.label)));
-     if(candidate.paths.length>maxPathsPerCandidate)body.append(el("div","message error","此節點有 "+candidate.paths.length+" 條候選路徑；為限制畫面負載只顯示前 "+maxPathsPerCandidate+" 條，未展開 "+(candidate.paths.length-maxPathsPerCandidate)+" 條。"));
+     const maxPathsPerCandidate=1;
+     candidate.paths.slice(0,maxPathsPerCandidate).forEach(path=>appendImpactPathSteps(body,path,side,model));
+     if(candidate.paths.length>maxPathsPerCandidate||candidate.pathsOmitted)body.append(el("div","message error","影響計算保留了多條路徑，但為限制記憶體與畫面負載只展開一條代表路徑；其他路徑未完整保存或顯示。"));
      const focusIndex=impactNavigationIndex(model,candidate.id);
      if(Number.isInteger(focusIndex)){
       const focus=el("button","btn diff-nav-button","定位目前版節點");focus.type="button";
