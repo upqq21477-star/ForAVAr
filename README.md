@@ -2,14 +2,13 @@
 
 本頁是 forAVAr 系列工作的起始入口。**接手時先讀本 README，再只讀「目前交接文件」；不要整庫掃描、重讀歷史版本或尋找壓縮檔。** 交接文件會指出當前工作、證據、下一步、阻塞條件與必要檔案。
 
-## 框架可視化網頁入口與零成本發布
+## 框架可視化網頁（GitHub Pages 已可達）
 
-- **唯一原始檔：** [根目錄 index.html](./index.html)。不在研究目錄維護第二份 HTML。
-- **不需要購買 GitHub 方案。** 此 repository 是 private，GitHub Free 無法直接用 GitHub Pages 發布這個私有 repository；不得為了網站而付費，也不得擅自把整個研究庫改成 public。
-- **已準備免費靜態發布建置：** [scripts/build_static_site.sh](./scripts/build_static_site.sh) 只把根目錄 `index.html` 複製到產物目錄 `dist/index.html`，並檢查產物目錄恰好只有一個檔案。正式原始碼維持單一來源；研究文件不會被放入公開網站的部署產物。
-- **建議零成本發布路線：Cloudflare Pages Free。** 官方支援 GitHub repository 整合；靜態資產不收請求費。擁有者需登入／建立 Cloudflare 帳號，將 GitHub App 權限限定在本 repository，並設定：Framework preset `None`、Build command `sh scripts/build_static_site.sh`、Build output directory `dist`。官方文件：[Git 整合](https://developers.cloudflare.com/pages/configuration/git-integration/)、[免費方案限制與靜態資產說明](https://developers.cloudflare.com/pages/platform/limits/)。
-- **目前狀態：尚未發布。** GitHub Pages 的候選網址曾回傳 HTTP 404，repository metadata 的 `has_pages=false`；Cloudflare 帳號連接與部署尚未執行。不能把建置腳本已提交宣稱為網站已上線。
-- **隱私邊界：** Cloudflare 需要經擁有者授權才能讀取所選 GitHub repository 來建置，但公開部署產物應僅包含 `dist/index.html`。不要設定 repository root 為公開輸出目錄，也不要授權其他研究 repository。
+- **正式網址：** [https://upqq21477-star.github.io/ForAVAr/](https://upqq21477-star.github.io/ForAVAr/)（請保留路徑中的 `ForAVAr` 大小寫；其他大小寫變體本次回傳 404）。
+- **已實測：** 2026-10-28 GitHub repository metadata 顯示 `private=false`、`has_pages=true`；正式網址成功取得頁面，標題為「ForAVAr｜唯讀框架可視化原型」。回傳 HTML 包含本機 JSON 載入、重設示例、樹狀／關係圖／卡片切換、搜尋、狀態篩選、局部診斷及詳情面板。
+- **尚未完成：** 上述是網站可達與 HTML 介面結構確認；實際瀏覽器點擊、切換與本機 JSON 載入的互動 smoke test 仍為 `NOT_RUN`。不要把站點可達當作完整 UI 驗收或系統 E4。
+- **公開範圍提醒：** 目前整個 repository 已是 public。GitHub 上所有已追蹤檔案（包括 `docs/`、`runtime/`、`研究/`、`進度/` 等）都可被他人直接查看，不只公開網站首頁。這是 repository 可見性造成的結果；若只想公開網頁、不想公開研究原始檔，必須另行拆分發布來源或恢復私有來源後使用可讀取私有來源的免費部署方式。
+- 目前不需要付費方案。GitHub Pages 已開通；不再需要 Cloudflare fallback build script，避免同一靜態網站保留兩套發布路徑。
 ## 目前工作狀態
 
 - **目前工作單元：** B27.11／T3-0「基線＋同名測試類別」。
