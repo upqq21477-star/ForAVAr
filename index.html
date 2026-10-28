@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ForAVAr｜唯讀框架可視化原型</title>
+<title>forAVAr｜主軸與框架</title>
+<meta name="description" content="先理解 forAVAr 的核心主軸，再透過樹狀結構、關係圖、節點卡片與版本差異探索 AI 框架。">
+<meta name="theme-color" content="#101a28">
 <style>
 :root{color-scheme:dark;--bg:#0d1420;--panel:#141f2e;--panel2:#19283a;--line:#2c4058;--text:#edf4fb;--muted:#9db0c4;--accent:#70d8d0;--warn:#f1c777;--bad:#f08e8e;--good:#9bd4a4}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Noto Sans TC",sans-serif}
@@ -97,23 +99,208 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .diff-filter-row select{width:auto;min-width:180px;max-width:100%;margin:0;flex:1}
 .diff-filter-count{font-size:11px;color:var(--muted)}
 .diff-nav-button{margin-top:8px}
+
+/* Main/Framework information architecture */
+.site-nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:64px;padding:0 clamp(16px,4vw,56px);background:rgba(16,26,40,.96);border-bottom:1px solid #2c4058;backdrop-filter:blur(16px)}
+.site-brand{display:inline-flex;align-items:center;gap:10px;color:#edf4fb;text-decoration:none;font-size:17px;font-weight:780;letter-spacing:-.03em}
+.brand-mark{display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:#70d8d0;color:#11252c;font-size:20px;font-weight:850;font-family:Georgia,serif}
+.site-nav-links{display:flex;align-items:center;gap:6px}
+.site-nav-link{position:relative;padding:10px 17px;color:#aebccc;text-decoration:none;border-radius:9px;font-size:14px;font-weight:650;transition:background .18s ease,color .18s ease}
+.site-nav-link:hover{color:#fff;background:#19283a}
+.site-nav-link[aria-current=page]{color:#f5faf9;background:#153b43}
+.site-nav-link[aria-current=page]:after{content:"";position:absolute;left:18px;right:18px;bottom:-13px;height:2px;background:#70d8d0;border-radius:4px}
+body[data-section=main] header{display:none}
+body[data-section=main] #frameworkIntro,body[data-section=main] #frameworkPage{display:none}
+body[data-section=main] #overviewPage{display:block}
+body[data-section=framework] #overviewPage{display:none}
+body[data-section=framework] #frameworkIntro{display:flex}
+body[data-section=framework] #frameworkPage{display:grid}
+#frameworkHeader{display:block}
+header{position:relative;top:auto;padding:12px clamp(12px,2vw,22px) 10px;z-index:5}
+header .headrow{gap:14px}
+header .notice{margin-top:8px}
+header .scope-contract{margin-top:7px}
+header .mobile-view-nav{margin-top:8px}
+.header-advanced{position:relative}
+.header-advanced>summary{list-style:none;white-space:nowrap}
+.header-advanced>summary::-webkit-details-marker{display:none}
+.header-advanced-body{position:absolute;right:0;top:calc(100% + 8px);z-index:20;display:flex;flex-direction:column;gap:7px;min-width:230px;padding:10px;background:#101a28;border:1px solid var(--line);border-radius:11px;box-shadow:0 14px 34px rgba(0,0,0,.3)}
+.header-advanced-body .btn{display:block;width:100%;text-align:left}
+.header-advanced[open]>summary{border-color:var(--accent)}
+.framework-intro{max-width:1760px;margin:0 auto;padding:24px clamp(16px,3vw,38px) 12px;align-items:flex-end;justify-content:space-between;gap:28px}
+.framework-intro h1{font-size:clamp(26px,3vw,36px);letter-spacing:-.04em;line-height:1.1;margin:0 0 9px}
+.framework-intro p:not(.eyebrow){max-width:740px;color:#b9c7d5;margin:0;font-size:14px;line-height:1.7}
+.eyebrow{margin:0 0 11px;color:#247e73;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.framework-intro .eyebrow{color:var(--accent)}
+.framework-intro-side{display:flex;align-items:center;gap:8px;flex:none;color:#b9c7d5;font-size:12px;padding:10px 12px;border:1px solid #2c4058;background:#101a28;border-radius:999px}
+.status-mark{width:8px;height:8px;background:#70d8a1;border-radius:50%;box-shadow:0 0 0 4px rgba(112,216,161,.11);flex:none}
+#frameworkPage{margin-top:10px}
+.sidebar .panel-body>.model-info{margin:12px 0 0}
+.model-info .model-tools-body{display:block}
+#filterSummary{margin:7px 0;color:#aebccc}
+.sidebar .foot{line-height:1.5}
+.panel-head{letter-spacing:-.01em}
+.panel,.nodecard,.stat,.tree-node,.edge-row,.diag-item,.diff-item{box-shadow:0 3px 12px rgba(0,0,0,.07)}
+.overview-page{min-height:calc(100vh - 64px);background:#f4f3ec;color:#18262d;padding:0 clamp(18px,5vw,70px) 30px}
+.overview-shell{max-width:1260px;margin:0 auto}
+.overview-hero{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(360px,.94fr);align-items:center;gap:clamp(34px,6vw,84px);padding:clamp(42px,7vw,86px) 0 60px}
+.hero-copy{max-width:660px}
+.hero-copy .eyebrow{color:#287b70}
+.hero-copy h1{font-size:clamp(39px,5.5vw,68px);font-weight:760;letter-spacing:-.065em;line-height:1.13;margin:0 0 22px;color:#18262d}
+.hero-copy h1 span{color:#277a6e}
+.hero-lead{max-width:600px;color:#526169;font-size:clamp(15px,1.25vw,18px);line-height:1.9;margin:0}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:28px}
+.cta-primary,.cta-secondary{display:inline-flex;align-items:center;justify-content:center;gap:14px;min-height:45px;padding:0 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:750;transition:transform .18s ease,background .18s ease}
+.cta-primary{background:#1d645b;color:#fff;box-shadow:0 8px 20px rgba(29,100,91,.17)}
+.cta-primary:hover{background:#174e47;transform:translateY(-1px)}
+.cta-secondary{color:#34464a;border:1px solid #cfd7d2;background:rgba(255,255,255,.52)}
+.cta-secondary:hover{background:#fff}
+.hero-status{display:flex;align-items:center;gap:10px;color:#68777a;font-size:12px;margin-top:27px}
+.hero-status .status-mark{width:7px;height:7px;background:#398b68;box-shadow:0 0 0 4px rgba(57,139,104,.1)}
+.hero-visual{position:relative;overflow:hidden;border-radius:18px;background:#121f2c;color:#edf4fb;padding:19px 22px 17px;box-shadow:0 22px 55px rgba(24,38,45,.13);isolation:isolate}
+.hero-visual:before{content:"";position:absolute;z-index:-1;width:330px;height:330px;right:-110px;top:-170px;border-radius:50%;background:radial-gradient(circle,rgba(112,216,208,.16),transparent 68%)}
+.visual-topline{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:14px;border-bottom:1px solid #2c4058;color:#9eb2c2;font-size:10px;letter-spacing:.07em}
+.visual-map{position:relative;height:300px;max-width:440px;margin:0 auto}
+.visual-lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.visual-lines path{fill:none;stroke:#4a7c7b;stroke-width:1.4;stroke-dasharray:3 5}
+.visual-lines path.cross-line{stroke:#637a98;stroke-dasharray:2 6;opacity:.75}
+.visual-lines circle{fill:#70d8d0}
+.visual-node{position:absolute;z-index:2;display:flex;align-items:center;gap:9px;min-width:125px;padding:10px 11px;border:1px solid #385063;border-radius:10px;background:#1a2c3b;box-shadow:0 8px 18px rgba(0,0,0,.15)}
+.visual-node b,.visual-node small{display:block}
+.visual-node b{font-size:12px;font-weight:750;white-space:nowrap}
+.visual-node small{font-size:10px;color:#a6b9c6;margin-top:3px;white-space:nowrap}
+.node-symbol{display:grid;place-items:center;flex:none;width:27px;height:27px;border-radius:7px;background:#224b4c;color:#8ae3d7;font-size:10px;font-weight:800}
+.visual-root{left:50%;top:20px;transform:translateX(-50%);min-width:165px;border-color:#3e817b;background:#19363c}
+.visual-child{top:135px;min-width:0;width:31%;padding:9px 6px;gap:6px}
+.visual-child .node-symbol{width:22px;height:22px;font-size:9px}
+.visual-child b{font-size:10px}
+.visual-child small{font-size:9px}
+.child-one{left:0}
+.child-two{left:50%;transform:translateX(-50%)}
+.child-three{right:0}
+.visual-note{position:absolute;bottom:0;left:0;right:0;text-align:center;color:#8fa4b3;font-size:10px}
+.purpose-band{display:grid;grid-template-columns:190px minmax(0,1fr);align-items:start;gap:28px;padding:23px 26px;border:1px solid #dbe0d8;border-radius:13px;background:#eaece4}
+.purpose-label{font-size:11px;font-weight:800;color:#24796d;letter-spacing:.06em}
+.purpose-label span{color:#abb8ad;padding:0 5px}
+.purpose-band p{max-width:840px;margin:0;color:#344448;font-size:clamp(15px,1.5vw,19px);font-weight:580;line-height:1.8;letter-spacing:-.015em}
+.overview-section{padding:72px 0 68px}
+.section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:26px}
+.section-heading .eyebrow{margin-bottom:9px}
+.section-heading h2,.how-section h2{margin:0;font-size:clamp(27px,3.2vw,39px);line-height:1.25;letter-spacing:-.045em;color:#1d2d31}
+.overview-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.overview-card{padding:23px 22px 24px;border:1px solid #dfe3dc;border-radius:13px;background:rgba(255,255,255,.72);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.overview-card:hover{transform:translateY(-3px);border-color:#b4cec5;box-shadow:0 12px 30px rgba(24,38,45,.06)}
+.card-index{color:#74847f;font-size:10px;font-weight:800;letter-spacing:.12em}
+.card-icon{display:grid;place-items:center;width:38px;height:38px;margin-top:25px;border-radius:10px;background:#e3eee8;color:#24796d;font-size:20px}
+.overview-card h3{margin:16px 0 8px;font-size:18px;letter-spacing:-.025em;color:#1d2d31}
+.overview-card p{margin:0;color:#63716f;line-height:1.8;font-size:13px}
+.how-section{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:54px;padding:37px 0 62px;border-top:1px solid #d9ded7}
+.how-section h2{max-width:410px}
+.how-intro{max-width:390px;color:#64726f;font-size:13px;line-height:1.8;margin:14px 0 0}
+.how-steps{display:flex;flex-direction:column}
+.how-step{display:flex;gap:15px;padding:13px 0;border-bottom:1px solid #dfe3dc}
+.how-step:first-child{padding-top:0}
+.how-step:last-child{border-bottom:0}
+.how-step>span{display:grid;place-items:center;width:30px;height:30px;flex:none;border:1px solid #cbd9d1;border-radius:50%;color:#24796d;font-size:12px;font-weight:800}
+.how-step b{font-size:13px;color:#253538}
+.how-step p{margin:4px 0 0;color:#687673;font-size:12px;line-height:1.65}
+.overview-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:19px 0 10px;border-top:1px solid #d9ded7}
+.overview-footer p{margin:0;color:#6c7873;font-size:11px;line-height:1.7}
+.overview-footer p b{color:#334642}
+.overview-footer a{display:inline-flex;align-items:center;gap:9px;flex:none;color:#27776c;text-decoration:none;font-weight:750;font-size:12px}
+.overview-footer a:hover{text-decoration:underline}
+.mobile-break{display:none}
+@media(max-width:960px){
+ .overview-hero{grid-template-columns:1fr;gap:34px;padding-top:45px}
+ .hero-copy{max-width:760px}
+ .hero-visual{max-width:620px;width:100%;justify-self:center}
+ .framework-intro{align-items:flex-start;flex-direction:column;gap:12px}
+}
+@media(max-width:700px){
+ .site-nav{min-height:58px;padding:0 13px}
+ .site-brand{font-size:15px;gap:8px}
+ .brand-mark{width:26px;height:26px}
+ .site-nav-links{gap:2px}
+ .site-nav-link{padding:9px 12px;font-size:12px}
+ .site-nav-link[aria-current=page]:after{left:12px;right:12px;bottom:-11px}
+ header{padding:10px 12px 9px}
+ header .headrow{align-items:flex-start}
+ header .headrow .actions{width:auto}
+ .header-advanced-body{right:0;min-width:210px}
+ .framework-intro{padding:19px 13px 8px}
+ body[data-section=framework] #frameworkPage{padding:8px;display:flex!important}
+ .overview-page{padding:0 17px 25px}
+ .overview-hero{padding:39px 0 34px;gap:27px}
+ .hero-copy h1{font-size:clamp(38px,10vw,52px);line-height:1.17}
+ .hero-lead{font-size:14px;line-height:1.85}
+ .hero-actions{margin-top:21px;gap:8px}
+ .cta-primary,.cta-secondary{padding:0 13px;min-height:43px;font-size:12px}
+ .hero-visual{padding:15px 12px 13px;border-radius:14px}
+ .visual-map{height:260px}
+ .visual-node{padding:8px 6px}
+ .visual-root{min-width:148px}
+ .visual-child{width:32%;padding:8px 4px;gap:4px}
+ .visual-child .node-symbol{width:18px;height:18px}
+ .visual-child b{font-size:9px}
+ .visual-child small{font-size:8px}
+ .purpose-band{grid-template-columns:1fr;gap:9px;padding:17px}
+ .purpose-band p{font-size:15px;line-height:1.8}
+ .overview-section{padding:49px 0}
+ .section-heading{display:block;margin-bottom:20px}
+ .section-heading h2,.how-section h2{font-size:29px}
+ .mobile-break{display:block}
+ .overview-cards{grid-template-columns:1fr;gap:9px}
+ .overview-card{padding:18px}
+ .card-icon{margin-top:15px}
+ .overview-card h3{margin-top:12px}
+ .how-section{grid-template-columns:1fr;gap:23px;padding:29px 0 39px}
+ .overview-footer{align-items:flex-start;flex-direction:column;gap:13px}
+ .framework-intro h1{font-size:28px}
+ .framework-intro p:not(.eyebrow){font-size:13px}
+ .framework-intro-side{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .site-nav-link,.cta-primary,.cta-secondary,.overview-card{transition:none}
+}
+
 </style>
 </head>
-<body>
+<body data-section="main">
+  <nav id="siteNav" class="site-nav" aria-label="主要頁面">
+    <a class="site-brand" href="#main" aria-label="forAVAr 主軸首頁"><span class="brand-mark" aria-hidden="true">f</span><span>forAVAr</span></a>
+    <div class="site-nav-links" role="navigation" aria-label="頁面切換">
+      <a id="navMain" class="site-nav-link" href="#main" aria-current="page">主軸</a>
+      <a id="navFramework" class="site-nav-link" href="#framework">框架</a>
+    </div>
+  </nav>
+  <section id="frameworkIntro" class="framework-intro" aria-labelledby="frameworkHeading">
+    <div>
+      <p class="eyebrow">探索區 · 唯讀工作區</p>
+      <h1 id="frameworkHeading">框架探索</h1>
+      <p>用樹狀圖看階層、用關係圖看連結、用卡片理解單一節點，再以明確的基準查看版本差異。搜尋與篩選用於定位，其他診斷與契約細節按需展開。</p>
+    </div>
+    <div class="framework-intro-side"><span class="status-mark"></span><span>資料只在本頁記憶體中處理</span></div>
+  </section>
 <header>
+  <div id="frameworkHeader">
   <div class="headrow">
-    <div><div class="brand">ForAVAr <span style="color:var(--accent)">/ 框架可視化</span></div><div class="subtitle">人類理解與操作延伸層 · C0 唯讀原型</div></div>
+    <div><div class="brand">forAVAr <span style="color:var(--accent)">/ 框架工作區</span></div><div class="subtitle">從結構理解組成、關係與差異</div></div>
     <div class="actions">
-      <label class="btn primary" for="filePicker">載入目前模型 JSON</label>
+      <label class="btn primary" for="filePicker">載入模型 JSON</label>
       <input id="filePicker" class="fileinput" type="file" accept=".json,application/json">
-      <label class="btn" for="comparePicker">載入比較基準 JSON</label>
-      <input id="comparePicker" class="fileinput" type="file" accept=".json,application/json">
-      <label class="btn" for="alternativePicker">載入另一候選 JSON</label>
-      <input id="alternativePicker" class="fileinput" type="file" accept=".json,application/json">
-      <button id="resetBtn" class="btn" type="button">重設目前示例</button>
+      <details class="header-advanced">
+        <summary class="btn">比較／進階</summary>
+        <div class="header-advanced-body">
+          <label class="btn" for="comparePicker">載入比較基準 JSON</label>
+          <input id="comparePicker" class="fileinput" type="file" accept=".json,application/json">
+          <label class="btn" for="alternativePicker">載入另一候選 JSON</label>
+          <input id="alternativePicker" class="fileinput" type="file" accept=".json,application/json">
+          <button id="resetBtn" class="btn" type="button">重設目前示例</button>
+        </div>
+      </details>
     </div>
   </div>
-  <div class="notice">唯讀預覽：載入的 JSON 僅留在本頁記憶體，不上傳、不寫回、不發布。這是瀏覽原型，不是正式編輯器或完整驗證器。</div>
+  <div class="notice">唯讀預覽：載入的 JSON 只保留在本頁記憶體，不上傳、不寫回、不發布。本頁是瀏覽原型，不是正式編輯器或完整驗證器。</div>
   <details class="scope-contract">
     <summary>本原型支援範圍／資料契約／限制</summary>
     <div class="scope-body">
@@ -137,10 +324,88 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
     <button class="tab" type="button" data-view="diff" role="tab" aria-selected="false">差異</button>
   </div>
   <div id="mobileSelectionSummary" class="mobile-selection-summary" aria-live="polite">尚未選取項目</div>
+  </div>
 </header>
-<main>
+<section id="overviewPage" class="overview-page" aria-labelledby="overviewHeading">
+  <div class="overview-shell">
+    <section class="overview-hero">
+      <div class="hero-copy">
+        <p class="eyebrow">讓複雜結構變得可理解</p>
+        <h1 id="overviewHeading">先理解主軸，<br><span>再探索整個框架。</span></h1>
+        <p class="hero-lead">forAVAr 是整理 AI 框架、功能分工與彼此關係的專案。這個網站把結構轉成可瀏覽、可比較的視圖，讓人先理解系統要做什麼，再深入細節。</p>
+        <div class="hero-actions">
+          <a class="cta-primary" href="#framework">探索框架 <span aria-hidden="true">↗</span></a>
+          <a class="cta-secondary" href="#how-it-works">了解使用方式 <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-status"><span class="status-mark"></span><span>目前提供唯讀瀏覽原型</span></div>
+      </div>
+      <div class="hero-visual" aria-label="框架層級與關係的概念示意">
+        <div class="visual-topline"><span>結構示意</span><span>核心 · 組成 · 關係</span></div>
+        <div class="visual-map">
+          <svg class="visual-lines" viewBox="0 0 440 300" aria-hidden="true">
+            <path d="M220 72 V112 M220 112 L92 162 M220 112 V162 M220 112 L348 162" />
+            <path d="M92 207 L220 246 L348 207" class="cross-line"/>
+            <circle cx="220" cy="112" r="4"/><circle cx="92" cy="162" r="4"/><circle cx="220" cy="162" r="4"/><circle cx="348" cy="162" r="4"/>
+          </svg>
+          <div class="visual-node visual-root"><span class="node-symbol">◎</span><span><b>核心主軸</b><small>目標與原則</small></span></div>
+          <div class="visual-node visual-child child-one"><span class="node-symbol">01</span><span><b>功能分工</b><small>誰負責什麼</small></span></div>
+          <div class="visual-node visual-child child-two"><span class="node-symbol">02</span><span><b>條件與證據</b><small>依據是否清楚</small></span></div>
+          <div class="visual-node visual-child child-three"><span class="node-symbol">03</span><span><b>關係連結</b><small>如何互相影響</small></span></div>
+          <div class="visual-note">概念示意，不代表已載入的正式模型</div>
+        </div>
+      </div>
+    </section>
+    <section class="purpose-band">
+      <div class="purpose-label">設計主張 <span>／</span> 先理解，再操作</div>
+      <p>好的框架介面不應把所有細節一次攤開；它應先交代目的，再讓結構逐層顯現，讓人看懂每個部分，也看懂部分之間的關係。</p>
+    </section>
+    <section class="overview-section" aria-labelledby="whatHeading">
+      <div class="section-heading">
+        <p class="eyebrow">這個網站能做什麼</p>
+        <h2 id="whatHeading">從理解到探索，<br class="mobile-break">每一步都有清楚目的。</h2>
+      </div>
+      <div class="overview-cards">
+        <article class="overview-card">
+          <span class="card-index">01 / 理解</span>
+          <div class="card-icon" aria-hidden="true">◉</div>
+          <h3>看清整體結構</h3>
+          <p>先從樹狀視圖理解層級與組成，不必先讀完所有欄位或技術規則。</p>
+        </article>
+        <article class="overview-card">
+          <span class="card-index">02 / 探索</span>
+          <div class="card-icon" aria-hidden="true">⌘</div>
+          <h3>理解節點與關係</h3>
+          <p>透過關係圖、節點卡片與選取詳情，追蹤組件如何連結、依賴或衝突。</p>
+        </article>
+        <article class="overview-card">
+          <span class="card-index">03 / 比較</span>
+          <div class="card-icon" aria-hidden="true">⇄</div>
+          <h3>看見版本變更</h3>
+          <p>載入明確的比較基準，辨識差異與需要複核的項目；不會自動合併或寫回。</p>
+        </article>
+      </div>
+    </section>
+    <section id="how-it-works" class="how-section" aria-labelledby="howHeading">
+      <div>
+        <p class="eyebrow">使用方式</p>
+        <h2 id="howHeading">三步開始，不必先懂全部細節。</h2>
+        <p class="how-intro">先理解方向，再使用適合的視圖；只有需要追查時，才展開進階資訊。</p>
+      </div>
+      <div class="how-steps">
+        <div class="how-step"><span>1</span><div><b>從主軸理解目的</b><p>先知道這個框架在整理什麼。</p></div></div>
+        <div class="how-step"><span>2</span><div><b>切換框架視圖</b><p>依問題選擇樹狀、關係圖、卡片或差異。</p></div></div>
+        <div class="how-step"><span>3</span><div><b>按需查看細節</b><p>點選節點，再看描述、來源與局部診斷。</p></div></div>
+      </div>
+    </section>
+    <div class="overview-footer">
+      <p><b>資料使用原則</b>　載入的 JSON 只在目前頁面的記憶體中處理，不會上傳或寫回。</p>
+      <a href="#framework">進入框架工作區 <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</section>
+<main id="frameworkPage">
   <section class="panel sidebar">
-    <div class="panel-head">模型與導覽</div>
+    <div class="panel-head">尋找與篩選</div>
     <div class="panel-body">
       <label class="fieldlabel" for="search">搜尋節點、關係、來源或條件</label>
       <input id="search" type="search" placeholder="名稱、ID、關係類型或描述…" autocomplete="off">
@@ -188,13 +453,18 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
         <span>資料品質提示（局部診斷）</span><span id="diagCount" class="diag-count">0</span>
       </button>
       <div id="diagnosticsPanel" hidden><div id="diagnosticsList" class="diag-list"></div></div>
-<div id="modelTitle" class="detail-title">示例模型</div>
-      <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
-<div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
-      <div id="compareState" class="message">尚未載入比較基準；載入第二份 JSON 後可查看版本差異。</div>
-      <div id="alternativeState" class="message">尚未載入三方比較候選；此功能只診斷衝突，不自動合併。</div>
-      <div id="rulesState" class="message">關係影響規則：尚未讀取。</div>
-      <div id="schemaState" class="message">資料契約：尚未讀取。</div>
+<details id="modelInfo" class="model-tools model-info">
+        <summary>模型資訊與載入狀態</summary>
+        <div class="model-tools-body">
+          <div id="modelTitle" class="detail-title">示例模型</div>
+          <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
+          <div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
+          <div id="compareState" class="message">尚未載入比較基準；載入第二份 JSON 後可查看版本差異。</div>
+          <div id="alternativeState" class="message">尚未載入三方比較候選；此功能只診斷衝突，不自動合併。</div>
+          <div id="rulesState" class="message">關係影響規則：尚未讀取。</div>
+          <div id="schemaState" class="message">資料契約：尚未讀取。</div>
+        </div>
+      </details>
     
     </div>
     <div class="foot">模型版本欄位與 Git commit 是不同概念。</div>
@@ -1971,5 +2241,22 @@ loadRelationRules();
 loadModelSchema();
 })();
 </script>
+
+<script>
+(function(){
+  const body=document.body;
+  const mainLink=document.getElementById("navMain");
+  const frameworkLink=document.getElementById("navFramework");
+  function syncSection(){
+    const section=window.location.hash==="#framework"?"framework":"main";
+    body.dataset.section=section;
+    if(mainLink)mainLink.setAttribute("aria-current",section==="main"?"page":"false");
+    if(frameworkLink)frameworkLink.setAttribute("aria-current",section==="framework"?"page":"false");
+  }
+  window.addEventListener("hashchange",syncSection);
+  syncSection();
+})();
+</script>
+
 </body>
 </html>
