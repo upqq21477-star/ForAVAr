@@ -1,6 +1,6 @@
 {
   "project": "AI理解可視化與框架編輯介面",
-  "manifest_version": "3.9",
+  "manifest_version": "4.0",
   "updated": "2026-10-28",
   "repository": "upqq21477-star/forAVAr",
   "authoritative_folder": "研究/AI理解可視化與框架編輯介面_研究企劃書/",
@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "WU-C0-13 field-mapping transparency implemented; JavaScript COMPILE_OK and four-type pure mapping simulation passed; browser interaction NOT_RUN",
+    "ui_implementation": "WU-C0-13 field-mapping transparency and WU-C0-14 positional identity / ambiguity navigation implemented; JavaScript COMPILE_OK; local simulations passed; browser interaction NOT_RUN",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -63,6 +63,20 @@
         "e3_syntax_check": "COMPILE_OK",
         "e3_simulation": "4/4 field-mapping cases passed",
         "e4_browser_interaction": "NOT_RUN"
+      },
+      "positional_identity": {
+        "status": "IMPLEMENTED",
+        "behavior": [
+          "detail panes display collection index for node, edge, source and condition",
+          "missing or invalid IDs remain navigable by collection index",
+          "duplicate IDs present same-ID candidate positions without rewriting the model",
+          "ambiguous source and condition references expose all candidate records",
+          "ambiguous or unresolved edge endpoints are visibly identified"
+        ],
+        "e3_syntax_check": "COMPILE_OK",
+        "e3_simulation": "5 local positional / ambiguity classification cases passed",
+        "e4_browser_interaction": "NOT_RUN",
+        "data_mutation": false
       }
     }
   },
@@ -115,7 +129,7 @@
     {
       "role": "finite_acceptance_plan",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/下一輪有限驗收計畫.md",
-      "sha": "c46adc150c068bc142e0c5b7880ff050b6e293bd"
+      "sha": "b13b6559cf507bea2dbd18784caedbd3f2cc8e5f"
     },
     {
       "role": "consolidated_evolution_and_test_summary",
@@ -130,12 +144,12 @@
     {
       "role": "readme",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/README.md",
-      "sha": "21e5b17c60711dc591aea8b30d96a346fb1a80a5"
+      "sha": "cacb582c3b8b08abdc160f634120763273afbb9c"
     },
     {
       "role": "read_only_visualization_prototype",
       "path": "研究/AI理解可視化與框架編輯介面_研究企劃書/實驗/唯讀框架可視化原型.html",
-      "sha": "cff062a8ee2a580eb69601b946fff77be7f5492f"
+      "sha": "aa87d899ae33e7563e126cbbaa6fb0fd8a6a2998"
     }
   ],
   "test_fixtures": {
