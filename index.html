@@ -185,6 +185,7 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 <div id="loadMessage" class="message">已載入內建示例；這不是專案正式模型。</div>
       <div id="compareState" class="message">尚未載入比較基準；載入第二份 JSON 後可查看版本差異。</div>
       <div id="rulesState" class="message">關係影響規則：尚未讀取。</div>
+      <div id="schemaState" class="message">資料契約：尚未讀取。</div>
     
     </div>
     <div class="foot">模型版本欄位與 Git commit 是不同概念。</div>
@@ -261,6 +262,7 @@ const DEMO = {
 let model=clone(DEMO), selected={type:"node",id:model.nodes[0].id,index:0}, activeView="tree", filteredIds=null, referenceOrigin=null;
 let comparisonModel=null, comparisonFileName="";
 let relationRules=null, relationRulesStatus="尚未讀取關係規則";
+let modelSchema=null, modelSchemaStatus="尚未讀取資料契約";
 const $=id=>document.getElementById(id);
 const esc=(x)=>String(x===undefined||x===null?"—":x);
 const roleLabel={core:"核心",main_axis:"主軸",skeleton:"骨架",module:"模組",detail:"細節",unassigned:"未指定"};
@@ -1139,6 +1141,14 @@ function impactMode(policy){
  return "direct";
 }
 function calculateRuleImpactForModel(side,source,seedIds,registry){
+ const sourceProfile=source&&source.rule_profile;
+ const registeredProfile=registry&&registry.rule_profile;
+ if(typeof sourceProfile!=="string"||!sourceProfile.trim()){
+  return {side:side,candidates:[],warnings:[side+"缺少有效 rule_profile；不按猜測規則計算影響。"],statesProcessed:0,truncated:false,blocked:true};
+ }
+ if(typeof registeredProfile!=="string"||sourceProfile!==registeredProfile){
+  return {side:side,candidates:[],warnings:[side+"使用的 rule_profile「"+sourceProfile+"」與已載入登錄表 profile「"+String(registeredProfile||"未載入")+"」不一致；不使用錯配規則計算影響。"],statesProcessed:0,truncated:false,blocked:true};
+ }
  const nodes=source.nodes||[],edges=source.edges||[],nodeCounts=new Map();
  nodes.forEach(node=>{if(!validDiffId(node))return;nodeCounts.set(node.id,(nodeCounts.get(node.id)||0)+1)});
  const candidates=new Map(),warnings=new Set(),queue=[];
@@ -1199,6 +1209,74 @@ function calculateRuleDrivenImpact(diffResults,baseModel,currentModel,registry){
  };
 }
 
+
+function assessModelContract(baseModel,currentModel){
+ const findings=[],contractReady=Boolean(modelSchema&&Array.isArray(modelSchema.required)&&modelSchema.properties);
+ if(!contractReady){
+  return {status:"CONTRACT_SOURCE_UNAVAILABLE",findings:[{level:"warning",message:"無法讀取現行 JSON Schema；差異仍可瀏覽，但未能檢查模型層級欄位契約。狀態："+modelSchemaStatus}]};
+ }
+ const sides=[["基準版",baseModel],["目前版",currentModel]];
+ sides.forEach(([side,source])=>{
+  (modelSchema.required||[]).forEach(key=>{
+   if(!Object.prototype.hasOwnProperty.call(source,key)){
+    findings.push({level:"error",message:side+"缺少 Schema 必填欄位「"+key+"」。目前仍允許唯讀比較，但模型契約相容性不完整。",field:key,side:side});
+    return;
+   }
+   const rule=modelSchema.properties[key]||{};
+   const value=source[key];
+   const expected=rule.type;
+   const typeOk=!expected||
+    (expected==="array"?Array.isArray(value):
+     expected==="object"?Boolean(value&&typeof value==="object"&&!Array.isArray(value)):
+     expected==="string"?typeof value==="string":
+     expected==="number"?typeof value==="number":
+     expected==="integer"?Number.isInteger(value):
+     expected==="boolean"?typeof value==="boolean":true);
+   if(!typeOk)findings.push({level:"error",message:side+"欄位「"+key+"」型別不符合 Schema 宣告 "+expected+"。",field:key,side:side});
+   if(Array.isArray(rule.enum)&&!rule.enum.includes(value)){
+    findings.push({level:"error",message:side+"欄位「"+key+"」的值「"+String(value)+"」不在現行 Schema 列舉範圍。",field:key,side:side});
+   }
+  });
+ });
+ const fields=["schema_version","model_id","title","model_state","rule_profile"];
+ fields.forEach(key=>{
+  const hasBase=Object.prototype.hasOwnProperty.call(baseModel,key),hasCurrent=Object.prototype.hasOwnProperty.call(currentModel,key);
+  if(!hasBase||!hasCurrent)return;
+  if(stableJson(baseModel[key])===stableJson(currentModel[key]))return;
+  let message="模型層級欄位「"+key+"」不同：基準版="+String(baseModel[key])+"；目前版="+String(currentModel[key])+"。";
+  if(key==="schema_version")message+="資料契約版本不同；本原型只作欄位差異比較，不執行版本遷移或相容性證明。";
+  else if(key==="model_id")message+="兩份資料的 model_id 不同，應視為不同模型間比較，不保證是同一模型的版本演進。";
+  else if(key==="rule_profile")message+="關係影響候選會按各自模型的 profile 檢查目前已載入登錄表；profile 不一致時該側影響傳播會停止。";
+  else if(key==="model_state")message+="模型生命週期狀態不同；本原型不裁決該狀態轉換是否合法。";
+  findings.push({level:"warning",message:message,field:key});
+ });
+ [["基準版",baseModel],["目前版",currentModel]].forEach(([side,source])=>{
+  const profile=source.rule_profile;
+  if(typeof profile!=="string"||!profile.trim()){
+   findings.push({level:"error",message:side+"的 rule_profile 缺失／無效；無法確認關係影響規則是否適用。",field:"rule_profile",side:side});
+  }else if(!relationRules){
+   findings.push({level:"warning",message:side+"的 rule_profile 為「"+profile+"」，但關係登錄表未載入；影響分析不會猜測政策。",field:"rule_profile",side:side});
+  }else if(profile!==relationRules.rule_profile){
+   findings.push({level:"error",message:side+"的 rule_profile「"+profile+"」與已載入登錄表「"+relationRules.rule_profile+"」不一致；此側影響傳播會被阻止。",field:"rule_profile",side:side});
+  }
+ });
+ return {status:findings.some(x=>x.level==="error")?"WARNINGS_OR_MISMATCH":"FIELDS_CONSISTENT_WITH_LIMITS",findings:findings};
+}
+function renderModelContract(root,baseModel,currentModel){
+ const report=assessModelContract(baseModel,currentModel);
+ const group=el("section","diff-group");
+ group.append(el("div","diff-group-title","模型契約與比較範圍"));
+ const box=el("div","diff-item"),body=el("div","diff-body");
+ body.append(el("div","diff-impact","Schema 來源："+String(modelSchema&&modelSchema.$id||"未載入")+" · SHA：目前由同源 GitHub Pages 讀取。此區僅檢查現行 Schema 的 required／頂層型別／enum 及模型間重要中繼欄位，不是完整 Draft 2020-12 驗證或跨物件驗證。"));
+ if(!report.findings.length){
+  body.append(el("div","message","兩份模型的已檢查必填欄位與型別符合現行 Schema 的這一小段契約；這不表示完整 Schema、關係規則或跨物件驗證已通過。"));
+ }else{
+  report.findings.forEach(item=>body.append(el("div",item.level==="error"?"message error":"message",item.message)));
+ }
+ box.append(body);group.append(box);root.append(group);
+ return report;
+}
+
 function renderDiff(){
  const root=$("diffView");root.replaceChildren();
  root.append(el("div","detail-title","版本差異與直接關聯檢視"));
@@ -1246,6 +1324,7 @@ function renderDiff(){
  appendCollisionSide("基準版",baselineGlobalCollisions);
  appendCollisionSide("目前版",currentGlobalCollisions);
  root.append(globalCollisionSection);
+ const contractReport=renderModelContract(root,comparisonModel,model);
  const metadataChanged=diffTopFields(comparisonModel,model,true).filter(key=>!DIFF_COLLECTIONS.some(c=>c.key===key));
  if(metadataChanged.length){
   const group=el("section","diff-group");group.append(el("div","diff-group-title","模型層級欄位差異"));
@@ -1330,6 +1409,29 @@ async function loadRelationRules(){
  if(comparisonModel)renderDiff();
 }
 
+
+async function loadModelSchema(){
+ const status=$("schemaState");
+ try{
+  if(!window.location||window.location.protocol==="file:")throw new Error("本機 file:// 模式無法可靠取得同源 JSON Schema。");
+  const schemaPath="./研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/ai-understanding-model.schema.json";
+  const response=await fetch(schemaPath,{cache:"no-cache"});
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const parsed=await response.json();
+  if(!parsed||typeof parsed!=="object"||!Array.isArray(parsed.required)||!parsed.properties||typeof parsed.properties!=="object")throw new Error("回應不含可讀的 required／properties 結構");
+  modelSchema=parsed;
+  modelSchemaStatus="已載入 "+String(parsed.title||parsed.$id||"Schema")+"（"+parsed.required.length+" 個 required 欄位）";
+  status.className="message";
+  status.textContent="資料契約："+modelSchemaStatus+"。只用於中繼欄位相容性提醒，不代表完整 Schema 已驗證。";
+ }catch(error){
+  modelSchema=null;
+  modelSchemaStatus="未載入："+error.message;
+  status.className="message error";
+  status.textContent="資料契約："+modelSchemaStatus+"。差異仍可查看，但不宣稱契約相容。";
+ }
+ if(comparisonModel)renderDiff();
+}
+
 function minimalShape(x){
  if(!x||typeof x!=="object"||Array.isArray(x)||!Array.isArray(x.nodes)||!Array.isArray(x.edges)||!Array.isArray(x.conditions)||!Array.isArray(x.sources))throw new Error("檔案需包含 nodes、edges、conditions、sources 四個陣列。");
  for(const [key,items] of [["nodes",x.nodes],["edges",x.edges],["conditions",x.conditions],["sources",x.sources]])items.forEach((obj,index)=>{if(!obj||typeof obj!=="object"||Array.isArray(obj))throw new Error(key+"["+index+"] 必須是物件；原模型未被覆寫。")});
@@ -1348,11 +1450,14 @@ $("refocusSelection").addEventListener("click",()=>{
  render();
 });
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
-$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id,index:0}:{type:"edge",id:model.edges.length?model.edges[0].id:"",index:0};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入目前模型："+file.name+"。四個集合的基本結構已讀取；局部診斷不等同正式 Schema／完整跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。目前模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
-$("comparePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);comparisonModel=parsed;comparisonFileName=file.name;$("compareState").className="message";$("compareState").textContent="比較基準已載入："+file.name+"。載入失敗不會覆蓋目前模型；兩份資料仍只在本頁記憶體中。";activeView="diff";render()}catch(err){$("compareState").className="message error";$("compareState").textContent="比較基準載入失敗："+err.message+"。原比較基準未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
+$("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id,index:0}:{type:"edge",id:model.edges.length?model.edges[0].id:"",index:0};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入目前模型："+file.name+"。四個集合的基本結構已讀取；局部診斷不等同正式 Schema／完整跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。目前模型未被覆寫。"}};reader.onerror=()=>{$("loadMessage").className="message error";$("loadMessage").textContent="目前模型讀取失敗："+String(reader.error&&reader.error.message||"瀏覽器無法讀取此檔案")+"。原目前模型未被覆寫。"};reader.onabort=()=>{$("loadMessage").className="message error";$("loadMessage").textContent="目前模型讀取已中止；原目前模型未被覆寫。"};reader.readAsText(file,"utf-8");ev.target.value=""});
+
+$("comparePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);comparisonModel=parsed;comparisonFileName=file.name;$("compareState").className="message";$("compareState").textContent="比較基準已載入："+file.name+"。載入失敗不會覆蓋目前模型；兩份資料仍只在本頁記憶體中。";activeView="diff";render()}catch(err){$("compareState").className="message error";$("compareState").textContent="比較基準載入失敗："+err.message+"。原比較基準未被覆寫。"}};reader.onerror=()=>{$("compareState").className="message error";$("compareState").textContent="比較基準讀取失敗："+String(reader.error&&reader.error.message||"瀏覽器無法讀取此檔案")+"。原比較基準未被覆寫。"};reader.onabort=()=>{$("compareState").className="message error";$("compareState").textContent="比較基準讀取已中止；原比較基準未被覆寫。"};reader.readAsText(file,"utf-8");ev.target.value=""});
+
 $("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id,index:0};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設目前模型為內建示例；這不是專案正式模型。已載入的比較基準會保留，可查看示例與基準的差異。";render()});
 render();
 loadRelationRules();
+loadModelSchema();
 })();
 </script>
 </body>
