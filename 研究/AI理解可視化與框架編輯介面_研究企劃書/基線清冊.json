@@ -122,7 +122,12 @@
       "expected_file_count": 1,
       "provider_candidate": "Cloudflare Pages Free",
       "provider_setup": "OWNER_ACTION_REQUIRED",
-      "runtime_verification": "NOT_RUN"
+      "runtime_verification": "NOT_RUN",
+      "isolated_fixture_test": {
+        "status": "PASS",
+        "evidence": "The exact build-script body was run in a temporary fixture checkout; `sh -n` passed, output was `STATIC_BUILD_OK`, dist contained exactly one file named index.html, and the output was byte-identical to the source fixture.",
+        "limitation": "This was not executed from a full live GitHub repository checkout and is not a Cloudflare build or live-site verification."
+      }
     }
   },
   "current_baseline": [
