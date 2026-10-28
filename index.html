@@ -1077,10 +1077,72 @@ function appendDiffValue(parent,label,value){
  const wrap=el("div","diff-value-wrap");wrap.append(el("div","diff-value-label",label));
  wrap.append(el("pre","diff-value",value===undefined?"(欄位不存在)":rawFieldText(value)));parent.append(wrap);
 }
-function appendDiffField(parent,key,before,after){
- const field=el("div","diff-field");field.append(el("div","diff-field-name",key));
- const values=el("div","diff-values");appendDiffValue(values,"基準版",before);appendDiffValue(values,"目前版",after);
- field.append(values);parent.append(field);
+
+function jsonPathChild(parentPath,key){
+ const root=parentPath||"$";
+ return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key)?root+"."+key:root+"["+JSON.stringify(key)+"]";
+}
+function collectNestedValueDiffs(beforeExists,before,afterExists,after,beforePath,afterPath,out,limits,depth=0){
+ if(out.length>=limits.maxItems){limits.truncated=true;return}
+ if(beforeExists!==afterExists){
+  out.push({beforeExists,afterExists,before,after,beforePath,afterPath});return;
+ }
+ if(!beforeExists)return;
+ if(stableJson(before)===stableJson(after))return;
+ const beforeObject=Boolean(before&&typeof before==="object"&&!Array.isArray(before));
+ const afterObject=Boolean(after&&typeof after==="object"&&!Array.isArray(after));
+ if(beforeObject&&afterObject&&depth<limits.maxDepth){
+  const keys=Array.from(new Set([...Object.keys(before),...Object.keys(after)])).sort();
+  keys.forEach(key=>{
+   if(limits.truncated)return;
+   const hasBefore=Object.prototype.hasOwnProperty.call(before,key);
+   const hasAfter=Object.prototype.hasOwnProperty.call(after,key);
+   collectNestedValueDiffs(hasBefore,before[key],hasAfter,after[key],
+    jsonPathChild(beforePath,key),jsonPathChild(afterPath,key),out,limits,depth+1);
+  });
+  if(depth+1>=limits.maxDepth&&stableJson(before)!==stableJson(after))limits.depthLimited=true;
+  return;
+ }
+ if(Array.isArray(before)&&Array.isArray(after)&&depth<limits.maxDepth){
+  const maxLength=Math.max(before.length,after.length);
+  for(let index=0;index<maxLength;index++){
+   if(limits.truncated)break;
+   const hasBefore=index<before.length,hasAfter=index<after.length;
+   collectNestedValueDiffs(hasBefore,before[index],hasAfter,after[index],
+    beforePath+"["+index+"]",afterPath+"["+index+"]",out,limits,depth+1);
+  }
+  if(depth+1>=limits.maxDepth&&before.length&&after.length)limits.depthLimited=true;
+  return;
+ }
+ out.push({beforeExists,afterExists,before,after,beforePath,afterPath,depthLimited:depth>=limits.maxDepth});
+}
+function appendDiffField(parent,key,before,after,beforeBasePath,afterBasePath,beforeExists,afterExists){
+ if(beforeExists===undefined)beforeExists=before!==undefined;
+ if(afterExists===undefined)afterExists=after!==undefined;
+ const beforeRoot=jsonPathChild(beforeBasePath||"基準版",key);
+ const afterRoot=jsonPathChild(afterBasePath||"目前版",key);
+ const differences=[],limits={maxItems:100,maxDepth:24,truncated:false,depthLimited:false};
+ collectNestedValueDiffs(beforeExists,before,afterExists,after,beforeRoot,afterRoot,differences,limits,0);
+ const field=el("div","diff-field");
+ field.append(el("div","diff-field-name",key+" · "+differences.length+" 個精確路徑差異"));
+ if(!differences.length){
+  field.append(el("div","message","此欄位沒有可列出的差異路徑；請確認來源值是否可序列化。"));
+  parent.append(field);return;
+ }
+ if(differences.length>1)field.append(el("div","message","巢狀物件按鍵名遞迴比較；陣列按索引比較，不自動重排或配對陣列內物件。缺欄位與 null 分開處理。"));
+ const valuesList=el("div","diff-list");
+ differences.forEach(change=>{
+  const row=el("div","diff-item"),body=el("div","diff-body");
+  body.append(el("div","diff-item-meta","基準路徑："+change.beforePath+" · 目前路徑："+change.afterPath));
+  const values=el("div","diff-values");
+  appendDiffValue(values,change.beforeExists?change.beforePath:"基準版（欄位不存在）："+change.beforePath,change.beforeExists?change.before:undefined);
+  appendDiffValue(values,change.afterExists?change.afterPath:"目前版（欄位不存在）："+change.afterPath,change.afterExists?change.after:undefined);
+  body.append(values);row.append(body);valuesList.append(row);
+ });
+ field.append(valuesList);
+ if(limits.truncated)field.append(el("div","message error","精確差異超過 100 項；僅顯示前 100 項。其餘差異未省略於模型，只是本次畫面不全部展開。"));
+ if(limits.depthLimited)field.append(el("div","message error","巢狀深度達 24 層上限；深層值以該路徑整體顯示，避免遞迴過深。"));
+ parent.append(field);
 }
 function appendDiffRecord(parent,record){
  const item=el("article","diff-item"),header=el("div","diff-item-head"),side=record.after||record.before,obj=side&&side.obj;
@@ -1105,7 +1167,10 @@ function appendDiffRecord(parent,record){
    "以下列出有變化的頂層欄位；巢狀值以完整 JSON 顯示。"));
   (record.fields||[]).forEach(key=>appendDiffField(body,key,
    record.before.obj&&Object.prototype.hasOwnProperty.call(record.before.obj,key)?record.before.obj[key]:undefined,
-   record.after.obj&&Object.prototype.hasOwnProperty.call(record.after.obj,key)?record.after.obj[key]:undefined));
+   record.after.obj&&Object.prototype.hasOwnProperty.call(record.after.obj,key)?record.after.obj[key]:undefined,
+   record.beforePaths[0],record.afterPaths[0],
+   Boolean(record.before.obj&&Object.prototype.hasOwnProperty.call(record.before.obj,key)),
+   Boolean(record.after.obj&&Object.prototype.hasOwnProperty.call(record.after.obj,key))));
   const actions=el("div","diff-actions"),open=el("button","btn","定位目前版物件");open.type="button";
   open.addEventListener("click",()=>{
    if(!record.after)return;
@@ -1329,7 +1394,8 @@ function renderDiff(){
  if(metadataChanged.length){
   const group=el("section","diff-group");group.append(el("div","diff-group-title","模型層級欄位差異"));
   const box=el("div","diff-item"),body=el("div","diff-body");
-  metadataChanged.forEach(key=>appendDiffField(body,key,comparisonModel[key],model[key]));
+  metadataChanged.forEach(key=>appendDiffField(body,key,comparisonModel[key],model[key],"model","model",
+   Object.prototype.hasOwnProperty.call(comparisonModel,key),Object.prototype.hasOwnProperty.call(model,key)));
   box.append(body);group.append(box);root.append(group);
  }
  results.forEach(result=>{
