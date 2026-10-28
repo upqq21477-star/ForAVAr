@@ -29,6 +29,10 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
 .edge-list{display:flex;flex-direction:column;gap:8px;margin-top:13px}.edge-row{width:100%;text-align:left;border:1px solid var(--line);background:#101a28;border-radius:8px;padding:10px}.edge-row.selected{border-color:var(--accent)}.edge-path{font-weight:650;font-size:13px}.edge-description{color:var(--muted);font-size:12px;margin-top:4px}
 .detail-section{margin-bottom:16px}.detail-title{font-size:17px;line-height:1.35;font-weight:750;overflow-wrap:anywhere}.detail-id{font:11px ui-monospace,monospace;color:var(--muted);overflow-wrap:anywhere;margin-top:5px}.detail-function{margin:12px 0;padding:10px;border-left:3px solid var(--accent);background:#101a28;border-radius:0 7px 7px 0}.kv{border-top:1px solid var(--line);padding:8px 0;display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}.empty{padding:36px 15px;text-align:center;color:var(--muted)}.foot{padding:10px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
 .status{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}.status .dot{background:var(--warn)}.message{font-size:12px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}.message.error{color:var(--bad)}.fileinput{display:none}
+.diag-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#101a28;text-align:left;font-weight:650}
+.diag-count{font-size:11px;border-radius:99px;padding:2px 7px;background:#263447;color:var(--muted)}
+.diag-list{display:flex;flex-direction:column;gap:7px;margin-top:9px}.diag-item{width:100%;text-align:left;border:1px solid var(--line);border-radius:8px;background:#101a28;padding:9px;min-width:0}.diag-item.error{border-left:3px solid var(--bad)}.diag-item.warning{border-left:3px solid var(--warn)}.diag-item:disabled{cursor:default;opacity:.85}
+.diag-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;font-weight:700}.diag-code{color:var(--muted);font:10px ui-monospace,monospace}.diag-message{font-size:12px;overflow-wrap:anywhere;margin-top:5px}.diag-path{color:var(--muted);font:10px ui-monospace,monospace;overflow-wrap:anywhere;margin-top:5px}
 @media(max-width:1100px){main{grid-template-columns:210px minmax(0,1fr)}.details{grid-column:1/-1}.details .panel-body{display:grid;grid-template-columns:1fr 1fr;gap:12px}.details .detail-section{margin-bottom:0}}
 @media(max-width:700px){header{padding:14px 13px}main{display:flex;flex-direction:column;padding:8px;gap:8px}.sidebar{order:1}.center{order:2}.details{order:3}.panel-body{padding:11px}.view{padding:10px;min-height:340px}.details .panel-body{display:block}.details .detail-section{margin-bottom:14px}.actions{width:100%}.actions .btn{flex:1}.brand{font-size:16px}}
 </style>
@@ -74,6 +78,10 @@ main{display:grid;grid-template-columns:240px minmax(0,1fr) 285px;gap:12px;paddi
         <div class="filter-actions"><button id="clearFilters" class="btn" type="button">清除篩選</button></div>
       </div>
       <div id="filterSummary" class="message" aria-live="polite">顯示全部節點與關係。</div>
+      <button id="diagToggle" class="diag-toggle" type="button" aria-expanded="false" aria-controls="diagnosticsPanel">
+        <span>資料品質提示（局部診斷）</span><span id="diagCount" class="diag-count">0</span>
+      </button>
+      <div id="diagnosticsPanel" hidden><div id="diagnosticsList" class="diag-list"></div></div>
       <div id="modelTitle" class="detail-title">示例模型</div>
       <div id="modelPurpose" class="message">示意資料，非正式藍圖。</div>
       <div class="stats">
@@ -170,18 +178,18 @@ function edgeById(id){return model.edges.find(e=>e.id===id)}
 function sourceById(id){return model.sources.find(s=>s.id===id)}
 function condById(id){return model.conditions.find(c=>c.id===id)}
 function nodeText(n){
- const sources=(n.provenance_refs||[]).map(sourceById).filter(Boolean).flatMap(s=>[s.label,s.excerpt,s.locator,s.id]);
- const conditions=(n.condition_refs||[]).map(condById).filter(Boolean).flatMap(c=>[c.name,c.description,c.id]);
+ const sources=(Array.isArray(n.provenance_refs)?n.provenance_refs:[]).map(sourceById).filter(Boolean).flatMap(s=>[s.label,s.excerpt,s.locator,s.id]);
+ const conditions=(Array.isArray(n.condition_refs)?n.condition_refs:[]).map(condById).filter(Boolean).flatMap(c=>[c.name,c.description,c.id]);
  return [n.id,n.name,n.function,n.description,n.structural_role,n.entity_kind,n.review_status,n.evidence_status,...sources,...conditions].join(" ").toLowerCase();
 }
 function edgeText(e){
- const a=nodeById(e.source_id), b=nodeById(e.target_id);
- const sources=(e.provenance_refs||[]).map(sourceById).filter(Boolean).flatMap(s=>[s.label,s.excerpt,s.locator,s.id]);
- const conditions=(e.condition_refs||[]).map(condById).filter(Boolean).flatMap(c=>[c.name,c.description,c.id]);
+ const a=nodeById(e.source_id),b=nodeById(e.target_id);
+ const sources=(Array.isArray(e.provenance_refs)?e.provenance_refs:[]).map(sourceById).filter(Boolean).flatMap(s=>[s.label,s.excerpt,s.locator,s.id]);
+ const conditions=(Array.isArray(e.condition_refs)?e.condition_refs:[]).map(condById).filter(Boolean).flatMap(c=>[c.name,c.description,c.id]);
  return [e.id,e.relation_type,relationLabel[e.relation_type],e.description,e.review_status,e.evidence_status,e.source_id,e.target_id,a&&a.name,a&&a.function,b&&b.name,b&&b.function,...sources,...conditions].join(" ").toLowerCase();
 }
 function nodePassesFilters(n){
- const review=$("reviewFilter").value, evidence=$("evidenceFilter").value;
+ const review=$("reviewFilter").value,evidence=$("evidenceFilter").value;
  return (!review||n.review_status===review)&&(!evidence||n.evidence_status===evidence);
 }
 function matchingNodes(){
@@ -193,10 +201,58 @@ function matchingEdges(){
  return model.edges.filter(e=>!q||edgeText(e).includes(q));
 }
 function updateFilterSummary(){
- const n=matchingNodes().length, e=matchingEdges().length, q=$("search").value.trim();
+ const n=matchingNodes().length,e=matchingEdges().length,q=$("search").value.trim();
  const active=Boolean(q||$("reviewFilter").value||$("evidenceFilter").value);
  $("filterSummary").textContent=active?("符合節點篩選："+n+"／"+model.nodes.length+"；搜尋符合關係："+e+"／"+model.edges.length+"。狀態篩選只套用於節點；關係搜尋會保留端點作為脈絡。"):"顯示全部節點與關係："+model.nodes.length+" 個節點、"+model.edges.length+" 條關係。";
  $("viewCount").lastElementChild.textContent=n+" 節點符合 · "+e+" 關係匹配";
+}
+function collectDiagnostics(){
+ const found=[],buckets=[["node","nodes"],["edge","edges"],["condition","conditions"],["source","sources"]];
+ const add=(severity,code,type,index,id,field,message,locations=[])=>found.push({severity,code,type,index,id,field,message,locations});
+ const globalIDs=new Map();
+ for(const [type,key] of buckets)model[key].forEach((obj,index)=>{
+  const id=obj&&typeof obj.id==="string"?obj.id.trim():"";
+  if(!id){add("error","MISSING_ID",type,index,id,key+"["+index+"].id","物件缺少可用的字串 ID；唯讀瀏覽仍可繼續。");return}
+  if(!globalIDs.has(id))globalIDs.set(id,[]);
+  globalIDs.get(id).push({type,index,path:key+"["+index+"].id"});
+ });
+ globalIDs.forEach((locations,id)=>{if(locations.length>1)locations.forEach(loc=>add("error","DUPLICATE_ID",loc.type,loc.index,id,loc.path,"全域 ID 重複："+id+"；共出現 "+locations.length+" 次。",locations.map(x=>x.path)))});
+ const nodeIds=new Set(model.nodes.map(n=>n&&n.id).filter(id=>typeof id==="string"&&id.trim()));
+ const sourceIds=new Set(model.sources.map(s=>s&&s.id).filter(id=>typeof id==="string"&&id.trim()));
+ const conditionIds=new Set(model.conditions.map(c=>c&&c.id).filter(id=>typeof id==="string"&&id.trim()));
+ [["node",model.nodes,"nodes"],["edge",model.edges,"edges"]].forEach(([type,items,key])=>items.forEach((obj,index)=>{
+  const id=obj&&obj.id;
+  if(type==="edge"){
+   ["source_id","target_id"].forEach(field=>{const endpoint=obj[field];if(typeof endpoint!=="string"||!nodeIds.has(endpoint))add("error","MISSING_EDGE_ENDPOINT",type,index,id,key+"["+index+"]."+field,"關係端點無法對應到現有節點："+String(endpoint===undefined?"(missing)":endpoint))});
+   if(typeof obj.relation_type!=="string"||!Object.prototype.hasOwnProperty.call(relationLabel,obj.relation_type))add("warning","UNKNOWN_RELATION_TYPE",type,index,id,key+"["+index+"].relation_type","關係類型缺失或不在原型已知清單中："+String(obj.relation_type===undefined?"(missing)":obj.relation_type));
+  }
+  const provenance=obj.provenance_refs;
+  if(provenance!==undefined&&!Array.isArray(provenance))add("error","INVALID_PROVENANCE_REFS",type,index,id,key+"["+index+"].provenance_refs","來源引用欄位不是陣列。");
+  else (Array.isArray(provenance)?provenance:[]).forEach((ref,ri)=>{if(typeof ref!=="string"||!sourceIds.has(ref))add("error","UNRESOLVED_SOURCE_REF",type,index,id,key+"["+index+"].provenance_refs["+ri+"]","來源引用找不到對應來源："+String(ref))});
+  const conditionRefs=obj.condition_refs;
+  if(conditionRefs!==undefined&&!Array.isArray(conditionRefs))add("error","INVALID_CONDITION_REFS",type,index,id,key+"["+index+"].condition_refs","條件引用欄位不是陣列。");
+  else (Array.isArray(conditionRefs)?conditionRefs:[]).forEach((ref,ri)=>{if(typeof ref!=="string"||!conditionIds.has(ref))add("error","UNRESOLVED_CONDITION_REF",type,index,id,key+"["+index+"].condition_refs["+ri+"]","條件引用找不到對應條件："+String(ref))});
+  if(type==="node"&&["external_fact_claim","model_inference","hypothesis"].includes(obj.claim_kind)&&!(Array.isArray(provenance)&&provenance.length))add("warning","CLAIM_WITHOUT_SOURCE",type,index,id,key+"["+index+"].provenance_refs","此類主張沒有附來源引用；不能將其當作已證實內容。");
+ }));
+ return found;
+}
+function renderDiagnostics(){
+ const list=$("diagnosticsList"),items=collectDiagnostics();list.replaceChildren();
+ const errors=items.filter(x=>x.severity==="error").length,warnings=items.length-errors;
+ $("diagCount").textContent=items.length?errors+" 錯／"+warnings+" 警":"0";
+ $("diagCount").setAttribute("aria-label",errors+" 個錯誤提示，"+warnings+" 個警告提示");
+ if(!items.length){list.append(el("div","message","這次局部診斷沒有發現上述類型的問題；這不等於完整 Schema 或跨物件驗證通過。"));return}
+ list.append(el("div","message","共 "+errors+" 個錯誤提示、"+warnings+" 個警告提示。點選節點／關係項目可查看細節；此清單不是完整驗證器。"));
+ items.forEach(d=>{
+  const path=d.locations.length?d.locations.join(" · "):d.field;
+  const text=(d.type==="node"?"節點":d.type==="edge"?"關係":d.type==="source"?"來源":"條件")+" "+(d.id||"(無 ID)")+" · "+d.message;
+  const item=el("button","diag-item "+(d.severity==="error"?"error":"warning"));item.type="button";
+  item.append(el("div","diag-top",""),el("div","diag-message",text),el("div","diag-path",path));
+  item.firstChild.append(el("span","",d.severity==="error"?"錯誤":"警告"),el("span","diag-code",d.code));
+  if(d.type==="node"||d.type==="edge")item.addEventListener("click",()=>{selected={type:d.type,id:d.id,index:d.index};activeView=d.type==="edge"?"graph":"cards";render()});
+  else{item.disabled=true;item.setAttribute("aria-label",text+"；定位："+path)}
+  list.append(item);
+ });
 }
 function selectItem(type,id){selected={type:type,id:id};render()}
 function badge(text, cls){return el("span","badge "+(cls||""),text)}
@@ -255,7 +311,8 @@ function renderGraph(){
  if(q&&edgeMatches.length) baseEdges=edgeMatches;
  else if(q) {const ids=new Set(candidateNodes.map(n=>n.id));baseEdges=model.edges.filter(e=>ids.has(e.source_id)||ids.has(e.target_id))}
  else baseEdges=model.edges.filter(e=>{const a=nodeById(e.source_id),b=nodeById(e.target_id);return a&&b&&nodePassesFilters(a)&&nodePassesFilters(b)});
- let focusId=selected.type==="edge"?(edgeById(selected.id)||{}).source_id:selected.id;
+ const selectedEdge=selected.type==="edge"?(Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id)):null;
+ let focusId=selected.type==="edge"?(selectedEdge||{}).source_id:selected.id;
  if(q&&edgeMatches.length&&!edgeMatches.some(e=>e.source_id===focusId||e.target_id===focusId))focusId=edgeMatches[0].source_id;
  if(!candidateMap.has(focusId)&&!baseEdges.some(e=>e.source_id===focusId||e.target_id===focusId))focusId=baseEdges.length?baseEdges[0].source_id:(candidateNodes[0]||{}).id;
  const scope=$("graphScope").value, rawDepth=$("graphDepth").value;
@@ -330,23 +387,31 @@ function detailNode(n){
  const fields=el("div","detail-section");
  [["結構角色",roleLabel[n.structural_role]||n.structural_role],["物件類型",n.entity_kind],["審核狀態",n.review_status],["證據狀態",n.evidence_status],["來源引用",n.provenance_refs],["條件引用",n.condition_refs],["補充說明",n.description],["其他屬性",n.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});
  root.append(fields);
- const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源內容"));const sources=(n.provenance_refs||[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用；不能由此推定內容為真。"));sources.forEach(s=>{refs.append(el("div","tree-node",s.label||s.id),el("div","message",(s.excerpt||"")+" · "+(s.locator||s.id)))});(n.condition_refs||[]).map(condById).filter(Boolean).forEach(c=>{refs.append(el("div","fieldlabel","條件："+(c.name||c.id)),el("div","message",c.description||"未提供條件說明"))});root.append(refs);
+ const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源內容"));const sources=(Array.isArray(n.provenance_refs)?n.provenance_refs:[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用；不能由此推定內容為真。"));sources.forEach(s=>{refs.append(el("div","tree-node",s.label||s.id),el("div","message",(s.excerpt||"")+" · "+(s.locator||s.id)))});(Array.isArray(n.condition_refs)?n.condition_refs:[]).map(condById).filter(Boolean).forEach(c=>{refs.append(el("div","fieldlabel","條件："+(c.name||c.id)),el("div","message",c.description||"未提供條件說明"))});root.append(refs);
 }
 function detailEdge(e){
  const root=$("detailPanel");root.replaceChildren();if(!e){root.append(el("div","empty","找不到所選關係。"));return}
  const a=nodeById(e.source_id),b=nodeById(e.target_id);const sec=el("div","detail-section");sec.append(el("div","detail-title",(a?a.name:e.source_id)+" → "+(b?b.name:e.target_id)),el("div","detail-id",e.id),el("div","detail-function",e.description||"尚無關係描述"),badge(relationLabel[e.relation_type]||e.relation_type));root.append(sec);
  const fields=el("div","detail-section");[["來源端點",e.source_id],["目標端點",e.target_id],["關係類型",e.relation_type],["審核狀態",e.review_status],["證據狀態",e.evidence_status],["來源引用",e.provenance_refs],["條件引用",e.condition_refs],["其他屬性",e.attributes]].forEach(([k,v])=>{if(v!==undefined)addKV(fields,k,v)});root.append(fields);
- const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源／條件"));const sources=(e.provenance_refs||[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(s=>refs.append(el("div","tree-node",s.label||s.id),el("div","message",s.excerpt||s.locator||s.id)));(e.condition_refs||[]).map(condById).filter(Boolean).forEach(c=>refs.append(el("div","fieldlabel",c.name||c.id),el("div","message",c.description||"")));root.append(refs);
+ const refs=el("div","detail-section");refs.append(el("div","fieldlabel","來源／條件"));const sources=(Array.isArray(e.provenance_refs)?e.provenance_refs:[]).map(sourceById).filter(Boolean);if(!sources.length)refs.append(el("div","message","沒有可定位的來源引用。"));sources.forEach(s=>refs.append(el("div","tree-node",s.label||s.id),el("div","message",s.excerpt||s.locator||s.id)));(Array.isArray(e.condition_refs)?e.condition_refs:[]).map(condById).filter(Boolean).forEach(c=>refs.append(el("div","fieldlabel",c.name||c.id),el("div","message",c.description||"")));root.append(refs);
 }
-function renderDetail(){if(selected.type==="edge")detailEdge(edgeById(selected.id));else detailNode(nodeById(selected.id))}
-function render(){showModelStats();updateFilterSummary();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphControls").hidden=activeView!=="graph";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail()}
-function minimalShape(x){if(!x||typeof x!=="object"||!Array.isArray(x.nodes)||!Array.isArray(x.edges)||!Array.isArray(x.conditions)||!Array.isArray(x.sources))throw new Error("檔案需包含 nodes、edges、conditions、sources 四個陣列。");const ids=new Set();x.nodes.forEach(n=>{if(!n||typeof n.id!=="string"||!n.id||typeof n.name!=="string")throw new Error("每個節點至少要有字串 id 與 name。");if(ids.has(n.id))throw new Error("節點 ID 重複："+n.id);ids.add(n.id)});return true}
+function renderDetail(){
+ if(selected.type==="edge"){const e=Number.isInteger(selected.index)?model.edges[selected.index]:edgeById(selected.id);detailEdge(e)}
+ else{const n=Number.isInteger(selected.index)?model.nodes[selected.index]:nodeById(selected.id);detailNode(n)}
+}
+function render(){showModelStats();updateFilterSummary();renderDiagnostics();document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===activeView)));$("treeView").hidden=activeView!=="tree";$("graphControls").hidden=activeView!=="graph";$("graphView").hidden=activeView!=="graph";$("cardsView").hidden=activeView!=="cards";renderTree();renderGraph();renderCards();renderDetail()}
+function minimalShape(x){
+ if(!x||typeof x!=="object"||Array.isArray(x)||!Array.isArray(x.nodes)||!Array.isArray(x.edges)||!Array.isArray(x.conditions)||!Array.isArray(x.sources))throw new Error("檔案需包含 nodes、edges、conditions、sources 四個陣列。");
+ for(const [key,items] of [["nodes",x.nodes],["edges",x.edges],["conditions",x.conditions],["sources",x.sources]])items.forEach((obj,index)=>{if(!obj||typeof obj!=="object"||Array.isArray(obj))throw new Error(key+"["+index+"] 必須是物件；原模型未被覆寫。")});
+ return true;
+}
 $("search").addEventListener("input",()=>render());
 $("reviewFilter").addEventListener("change",()=>render());
 $("evidenceFilter").addEventListener("change",()=>render());
 $("clearFilters").addEventListener("click",()=>{$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";render()});
 $("graphScope").addEventListener("change",()=>render());
 $("graphDepth").addEventListener("change",()=>render());
+$("diagToggle").addEventListener("click",()=>{const open=$("diagnosticsPanel").hidden;$("diagnosticsPanel").hidden=!open;$("diagToggle").setAttribute("aria-expanded",String(open))});
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{activeView=b.dataset.view;render()}));
 $("filePicker").addEventListener("change",ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));minimalShape(parsed);model=parsed;selected=model.nodes.length?{type:"node",id:model.nodes[0].id}:{type:"edge",id:model.edges.length?model.edges[0].id:""};$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已載入："+file.name+"。只做基本讀取檢查，未執行完整 Schema／跨物件驗證。";render()}catch(err){$("loadMessage").className="message error";$("loadMessage").textContent="載入失敗："+err.message+"。原模型未被覆寫。"}};reader.readAsText(file,"utf-8");ev.target.value=""});
 $("resetBtn").addEventListener("click",()=>{model=clone(DEMO);selected={type:"node",id:model.nodes[0].id};activeView="tree";$("search").value="";$("reviewFilter").value="";$("evidenceFilter").value="";$("graphScope").value="both";$("graphDepth").value="1";$("loadMessage").className="message";$("loadMessage").textContent="已重設內建示例；這不是專案正式模型。";render()});
