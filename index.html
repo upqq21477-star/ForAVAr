@@ -965,13 +965,52 @@ function diffTopFields(before,after,semanticOnly){
   return hasA&&stableJson(before[key])!==stableJson(after[key]);
  });
 }
-function compareCollection(collection,baseModel,currentModel){
+
+function collectGlobalIdUsage(source){
+ const usage=new Map();
+ DIFF_COLLECTIONS.forEach(collection=>{
+  (source&&Array.isArray(source[collection.key])?source[collection.key]:[]).forEach((obj,index)=>{
+   if(!validDiffId(obj))return;
+   const id=obj.id;
+   if(!usage.has(id))usage.set(id,[]);
+   usage.get(id).push({
+    collection:collection.key,label:collection.label,type:collection.type,obj,index,
+    path:diffPath(collection.key,index),display:displayDiffObject(collection.type,obj)
+   });
+  });
+ });
+ return usage;
+}
+function collectGlobalIdCollisions(source,side){
+ const usage=collectGlobalIdUsage(source),collisions=[];
+ usage.forEach((items,id)=>{
+  if(items.length<2)return;
+  const types=new Set(items.map(item=>item.collection));
+  collisions.push({side:side,id:id,items:items.slice(),crossCollection:types.size>1,
+   kind:types.size>1?"跨集合 ID 衝突":"同集合 ID 重複"});
+ });
+ return collisions.sort((a,b)=>a.id.localeCompare(b.id));
+}
+function collectAmbiguousGlobalIds(baseModel,currentModel){
+ const ambiguous=new Set();
+ [baseModel,currentModel].forEach(source=>{
+  collectGlobalIdCollisions(source,"").forEach(item=>ambiguous.add(item.id));
+ });
+ return ambiguous;
+}
+function compareCollection(collection,baseModel,currentModel,globalAmbiguousIds=new Set()){
  const baseItems=baseModel[collection.key]||[],currentItems=currentModel[collection.key]||[];
  const baseMap=collectionIdMap(baseItems),currentMap=collectionIdMap(currentItems);
  const ids=new Set([...baseMap.keys(),...currentMap.keys()]);
  const records=[];let unchanged=0,presentationOnly=0;
  for(const id of ids){
   const b=baseMap.get(id)||[],c=currentMap.get(id)||[];
+  if(globalAmbiguousIds.has(id)&&(b.length||c.length)){
+   records.push({kind:collection.key,type:collection.type,status:"ambiguous",id,before:b,after:c,
+    beforePaths:b.map(x=>diffPath(collection.key,x.index)),afterPaths:c.map(x=>diffPath(collection.key,x.index)),
+    reason:"此 ID 在至少一版的四個集合中不是全域唯一身分"});
+   continue;
+  }
   if(b.length>1||c.length>1){
    records.push({kind:collection.key,type:collection.type,status:"ambiguous",id,before:b,after:c,
     beforePaths:b.map(x=>diffPath(collection.key,x.index)),afterPaths:c.map(x=>diffPath(collection.key,x.index))});
@@ -1049,7 +1088,7 @@ function appendDiffRecord(parent,record){
  body.append(el("div","diff-item-meta","集合："+record.kind+" · ID："+(record.id===null?"(缺失／無效)":record.id)+
   " · 基準："+(record.beforePaths.length?record.beforePaths.join("、"):"—")+" · 目前："+(record.afterPaths.length?record.afterPaths.join("、"):"—")));
  if(record.status==="ambiguous"){
-  body.append(el("div","message error","同一 ID 在至少一版出現多次，無法安全配對。此筆不計為新增或刪除；請先人工判定物件身分。"));
+  body.append(el("div","message error",record.reason||"同一 ID 在至少一版出現多次，無法安全配對。此筆不計為新增或刪除；請先人工判定物件身分。"));
   if(record.before.length)body.append(el("div","message","基準版候選："+record.beforePaths.join("、")));
   if(record.after.length)body.append(el("div","message","目前版候選："+record.afterPaths.join("、")));
  }else if(record.status==="unknown"){
@@ -1165,7 +1204,10 @@ function renderDiff(){
  root.append(el("div","detail-title","版本差異與直接關聯檢視"));
  root.append(el("div","diff-intro","比較基準版與目前版的節點、關係、條件、來源。只以集合內唯一有效 ID 配對；重複／缺失 ID 不猜測配對。明確的頂層座標、版面、折疊與縮放欄位不算語意修改。此功能唯讀，不修改任一模型，也不是正式驗證或發布判定。"));
  if(!comparisonModel){root.append(el("div","empty","尚未載入比較基準。先點頁面頂部「載入比較基準 JSON」；兩份模型都只存在本頁記憶體。"));return}
- const results=DIFF_COLLECTIONS.map(collection=>Object.assign({},collection,compareCollection(collection,comparisonModel,model)));
+ const globalAmbiguousIds=collectAmbiguousGlobalIds(comparisonModel,model);
+ const baselineGlobalCollisions=collectGlobalIdCollisions(comparisonModel,"基準版");
+ const currentGlobalCollisions=collectGlobalIdCollisions(model,"目前版");
+ const results=DIFF_COLLECTIONS.map(collection=>Object.assign({},collection,compareCollection(collection,comparisonModel,model,globalAmbiguousIds)));
  const all=results.flatMap(result=>result.records);
  const count=status=>all.filter(record=>record.status===status).length;
  const statGrid=el("div","diff-stats");
@@ -1173,11 +1215,37 @@ function renderDiff(){
   ["基準版物件",DIFF_COLLECTIONS.reduce((n,c)=>n+(comparisonModel[c.key]||[]).length,0)],
   ["目前版物件",DIFF_COLLECTIONS.reduce((n,c)=>n+(model[c.key]||[]).length,0)],
   ["新增",count("added")],["刪除",count("removed")],["語意修改",count("modified")],
-  ["版面變更",count("presentation")],["身分歧義",count("ambiguous")],["身分不明",count("unknown")]
+  ["版面變更",count("presentation")],["身分歧義",count("ambiguous")],["身分不明",count("unknown")],
+  ["基準全域 ID 衝突",baselineGlobalCollisions.length],["目前全域 ID 衝突",currentGlobalCollisions.length]
  ].forEach(([label,value])=>{const card=el("div","diff-stat");card.append(el("b","",String(value)),el("span","",label));statGrid.append(card)});
  root.append(statGrid);
  root.append(el("div","message","基準版："+comparisonFileName+"。目前版："+(model.title||model.model_id||"目前載入模型")+
   "。相同語意物件："+results.reduce((n,r)=>n+r.unchanged,0)+"；語意比較使用相同集合內唯一有效 ID。"));
+ const globalCollisionSection=el("section","diff-group");
+ globalCollisionSection.append(el("div","diff-group-title","全域 ID 唯一性診斷"));
+ globalCollisionSection.append(el("div","diff-impact","正式契約的物件身分必須全域可辨識，不只是在同一集合中唯一。若任一版本存在跨集合重複或同集合重複，該 ID 在兩版本之間一律不作可靠配對，相關新增／刪除判定降為「身分歧義」。本診斷只報告，不修正或重新編號物件。"));
+ function appendCollisionSide(side,collisions){
+  const sideGroup=el("section","diff-group");
+  sideGroup.append(el("div","diff-group-title",side+" · "+collisions.length+" 個衝突 ID"));
+  if(!collisions.length){sideGroup.append(el("div","empty","此版本未發現可用字串 ID 的全域重複。"));globalCollisionSection.append(sideGroup);return}
+  const list=el("div","diff-list");
+  collisions.forEach(collision=>{
+   const card=el("article","diff-item"),head=el("div","diff-item-head"),body=el("div","diff-body");
+   head.append(el("div","diff-item-title","ID："+collision.id),el("span","diff-badge ambiguous",collision.kind));
+   body.append(el("div","message error","共有 "+collision.items.length+" 筆使用此 ID；跨版本身分配對不能被視為確定。"));
+   const paths=el("div","diff-list");
+   collision.items.forEach(item=>{
+    const row=el("div","edge-row");
+    row.append(el("div","edge-path",item.path+" · "+item.display),el("div","edge-description",item.collection+" · ID "+collision.id));
+    paths.append(row);
+   });
+   body.append(paths);card.append(head,body);list.append(card);
+  });
+  sideGroup.append(list);globalCollisionSection.append(sideGroup);
+ }
+ appendCollisionSide("基準版",baselineGlobalCollisions);
+ appendCollisionSide("目前版",currentGlobalCollisions);
+ root.append(globalCollisionSection);
  const metadataChanged=diffTopFields(comparisonModel,model,true).filter(key=>!DIFF_COLLECTIONS.some(c=>c.key===key));
  if(metadataChanged.length){
   const group=el("section","diff-group");group.append(el("div","diff-group-title","模型層級欄位差異"));
