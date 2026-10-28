@@ -21,7 +21,7 @@
     "static_checks": "7/7 PASS applies to the pre-correction baseline on 2026-10-27 only. Current Schema $id path has been corrected and must be revalidated before these checks can be treated as current.",
     "candidate_execution": "BLOCKED / NOT_RUN",
     "ui_requirements_gate": "READ_ONLY_PROTOTYPE_AUTHORIZED; edit/write/publish/core integration remain gated",
-    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, WU-C0-15 cross-view position identity and root entry, WU-C0-16 GitHub Pages reachability, and WU-C0-17 read-only two-model version diff view implemented. JavaScript COMPILE_OK; 10 local diff-core simulations passed. Browser interaction smoke test remains NOT_RUN; overall system E4 and user acceptance remain NOT_STARTED.",
+    "ui_implementation": "WU-C0-13 field mapping transparency, WU-C0-14 positional identity / ambiguous reference navigation, WU-C0-15 cross-view position identity and root entry, WU-C0-16 GitHub Pages reachability, WU-C0-17 read-only two-model version diff, and WU-C0-18 registry-driven impact candidates implemented. JavaScript COMPILE_OK; WU-C0-17 diff core 10/10 local simulations passed and WU-C0-18 impact core 10/10 local simulations passed. Browser interaction smoke test remains NOT_RUN; overall system E4 and user acceptance remain NOT_STARTED.",
     "integration_to_core": "NOT_STARTED; read-only prototype has no writeback or core adapter",
     "user_acceptance": "NOT_STARTED",
     "fixture_gap": "8 located: 2 valid/evidence + 6 negative; one historically mentioned negative fixture is unlocated.",
@@ -101,7 +101,7 @@
       "visibility": "public",
       "public_scope_warning": "All tracked files in this public repository are publicly viewable, including docs/, runtime/, 研究/, and 進度/; not only the Pages homepage.",
       "no_cost_route": "GitHub Pages is enabled and reachable; no paid plan used.",
-      "next_action": "Continue implementing remaining read-only diff/impact requirements first. Perform one bounded browser interaction smoke test after the remaining functionality is complete; keep browser_interaction NOT_RUN until actually executed."
+      "next_action": "Continue remaining read-only diff/impact functionality first. Perform a bounded real-browser smoke test only after those functional slices are complete; keep browser_interaction NOT_RUN until actual browser actions are executed."
     },
     "version_diff": {
       "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
@@ -144,6 +144,47 @@
           "input immutability",
           "direct relation context includes base and current versions"
         ]
+      },
+      "impact_analysis": {
+        "status": "IMPLEMENTED_LOCAL_E3_SIMULATIONS",
+        "source": "index.html",
+        "blob_sha": "61e94ad29dfd0216330c25f7a36e836cb07e9a7b",
+        "registry_path": "研究/AI理解可視化與框架編輯介面_研究企劃書/規格草案/relation-rules.default-v1.json",
+        "registry_sha": "291087a0902f4b0f590fe16c666bf6b3fc1e1ed2",
+        "registry_status": "draft_not_runtime_validated",
+        "loading": "Fetched from same-origin repository path; no duplicate hardcoded relation-impact table in the UI. If fetch fails (including file:// use), impact propagation is not calculated and an explicit status is shown.",
+        "behavior": [
+          "Derives source/target impact direction from the existing relation registry only",
+          "Uses reverse_transitive/forward_transitive only where the registry explicitly declares transitive behavior",
+          "Labels direct, advisory and transitive candidates separately",
+          "Stops propagation through duplicate or unresolvable node IDs and reports warnings",
+          "Unknown/missing rule profiles do not trigger guessed impact directions",
+          "Detects cycles through visited-state tracking and has a 5000-state safety cap",
+          "Relationship additions/deletions/semantic changes separately flag their endpoints for review without pretending the endpoints themselves semantically changed"
+        ],
+        "boundaries": [
+          "Impact output is a review-candidate projection, not formal validation, an approval decision or a proof that a downstream item is invalid",
+          "The registry is still a draft and explicitly not runtime validated",
+          "Browser fetching and actual interface interactions remain NOT_RUN"
+        ],
+        "e3_syntax": "COMPILE_OK",
+        "e3_local_simulation": {
+          "result": "PASS",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            "depends_on target change propagates in reverse transitively",
+            "transitive path and depth are preserved",
+            "contains source change flags direct child",
+            "causes produces advisory candidate without recursion",
+            "conflicts_with works from either endpoint",
+            "unknown relation does not guess impact direction",
+            "duplicate node ID stops impact frontier",
+            "dependency cycle terminates without listing changed root as impacted",
+            "impact calculation does not mutate either model",
+            "changed edge endpoints remain separately flagged for review"
+          ]
+        }
       }
     }
   },
@@ -216,12 +257,12 @@
     {
       "role": "read_only_visualization_prototype",
       "path": "index.html",
-      "sha": "5f2678ddc79bd53f81c21d7bf548cf028382f1fd"
+      "sha": "61e94ad29dfd0216330c25f7a36e836cb07e9a7b"
     },
     {
       "role": "repository_entry_readme",
       "path": "README.md",
-      "sha": "5387275102ed1d3de278f30fe68e20fe1b9e8fba"
+      "sha": "254fed794f5497c225c0e70f5fa2cac8b38abbc0"
     }
   ],
   "test_fixtures": {
